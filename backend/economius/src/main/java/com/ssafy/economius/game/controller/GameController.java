@@ -24,83 +24,83 @@ public class GameController {
     }
 
     @MessageMapping(value = "/{roomId}/buyStock")
-    public void buyStock(){
+    public void buyStock() {
         template.convertAndSend("");
     }
 
     @MessageMapping(value = "/{roomId}/sellStock")
-    public void sellStock(){
+    public void sellStock() {
         template.convertAndSend("");
     }
 
     @MessageMapping(value = "/{roomId}/buyItem")
-    public void buyItem(){
+    public void buyItem() {
         template.convertAndSend("");
     }
 
     @MessageMapping(value = "/{roomId}/selectStock")
-    public void selectStock(){
+    public void selectStock() {
         template.convertAndSend("");
     }
 
     @MessageMapping(value = "/{roomId}/joinSavings")
-    public void joinSavings(){
+    public void joinSavings() {
         template.convertAndSend("");
     }
 
 
     @MessageMapping(value = "/{roomId}/stopSavings")
-    public void earlyFinishSavings(){
+    public void earlyFinishSavings() {
         template.convertAndSend("");
     }
 
     @MessageMapping(value = "/{roomId}/joinInsurance")
-    public void joinInsurance(){
+    public void joinInsurance() {
         template.convertAndSend("");
     }
 
     @MessageMapping(value = "/{roomId}/finishInsurance")
-    public void finishInsurance(){
+    public void finishInsurance() {
         template.convertAndSend("");
     }
 
     @MessageMapping(value = "/{roomId}/payFee")
-    public void payFee(){
+    public void payFee() {
         template.convertAndSend("");
     }
 
     @MessageMapping(value = "/{roomId}/buyBuildings")
-    public void buyBuildings(){
+    public void buyBuildings() {
         template.convertAndSend("");
     }
 
     @MessageMapping(value = "/{roomId}/sellBuildings")
-    public void sellBuildings(){
+    public void sellBuildings() {
         template.convertAndSend("");
     }
 
     @MessageMapping(value = "/{roomId}/selectBuilding")
-    public void selectBuilding(){
+    public void selectBuilding() {
         template.convertAndSend("");
     }
 
     @MessageMapping(value = "/{roomId}/buyGolds")
-    public void buyGolds(){
+    public void buyGolds() {
         template.convertAndSend("");
     }
 
     @MessageMapping(value = "/{roomId}/sellGolds")
-    public void sellGolds(){
+    public void sellGolds() {
         template.convertAndSend("");
     }
 
     @MessageMapping(value = "/{roomId}/selectGolds")
-    public void selectGolds(){
+    public void selectGolds() {
         template.convertAndSend("");
     }
 
     @MessageMapping(value = "/{roomId}/companyDetail")
-    public void companyDetail(){
+    public void companyDetail() {
         template.convertAndSend("");
     }
 
