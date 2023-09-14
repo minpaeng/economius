@@ -1,4 +1,4 @@
-### 🔑Commit Convention 
+### 🔑 Commit Convention 
 |태그|설명|예시|
 |:--:|:--:|:--:|
 |Feat|새로운 기능 추가|Feat: 특정 기능 추가|
@@ -10,7 +10,7 @@
 |Test|테스트|Test: 회원가입 테스트|
 |Chore|기타 변경사항|Chore: 공백 제거|
 
-### 🔑Branch
+### 🔑 Branch
 - develop/be : 백엔드 프로젝트 배포<br>
 - develop/fe  : 프론트엔드 프로젝트 배포<br>
 - feature/be/[기능명] : 백엔드 기능 개발
