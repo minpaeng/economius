@@ -1,4 +1,4 @@
-package com.ssafy.economius.game.controller.dto;
+package com.ssafy.economius.game.controller.dto.request;
 
 public class CalculateRequest {
 
