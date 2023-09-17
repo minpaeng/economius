@@ -42,13 +42,25 @@ pipeline {
             }
         }
 
+
+        stage("image cleaning") {
+            steps{
+                sh "docker images ${IMAGE_NAME_BE} -q | xargs -r docker rmi -f"
+                sh "docker images ${IMAGE_NAME_FE} -q | xargs -r docker rmi -f"
+            }
+        }
+
         stage("Docker Image Build") {
             steps {
                 dir("${PROJECT_DIR_BE}") {
-                    sh "docker build --no-cache -t ${IMAGE_NAME_BE} ."
+                    script {
+                        sh "docker build --no-cache -t ${IMAGE_NAME_BE} ."
+                    } 
                 }
                 dir("${PROJECT_DIR_FE}") {
-                    sh "docker build --no-cache -t ${IMAGE_NAME_FE} ."
+                    script {
+                        sh "docker build --no-cache -t ${IMAGE_NAME_FE} ."
+                    } 
                 }
             }
         }
