@@ -4,6 +4,7 @@ import { Canvas, useLoader, useFrame } from '@react-three/fiber';
 import { OrbitControls, OrthographicCamera } from '@react-three/drei';
 import Map from '/src/Map';
 import Characters from '/src/Characters';
+import Dice from './Dice';
 import Controller from '/src/Controller';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
                 <ambientLight intensity={3} />
                 <Map />
                 <Characters />
+                <Dice />
             </Canvas>
 
             <Controller />
