@@ -4,13 +4,13 @@ pipeline {
         stage("Set Variable") {
             steps {
                 script {
-                    IMAGE_NAME_BE = "economis-backend"
-                    IMAGE_NAME_FE = "economis-frontend"
-                    APPLICATION_YML_PATH = "/var/jenkins_home/workspace/settings/application.yml" 
-                    CONTAINER_NAME_BE = "economis_be"
-                    CONTAINER_NAME_FE = "economis_fe"
-                    PROJECT_DIR_BE = "backend/economis"
-                    PROJECT_DIR_FE = "frontend/economis"
+                    IMAGE_NAME_BE = "economius-backend"
+                    IMAGE_NAME_FE = "economius-frontend"
+                    APPLICATION_YML_PATH = "settings/application.yml" 
+                    CONTAINER_NAME_BE = "economius_be"
+                    CONTAINER_NAME_FE = "economius_fe"
+                    PROJECT_DIR_BE = "backend/economius"
+                    PROJECT_DIR_FE = "frontend/economius"
                 }
             }
         }
