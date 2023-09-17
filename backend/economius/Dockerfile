@@ -1,6 +1,6 @@
 FROM openjdk:11-jdk
 
-COPY build/libs/*.jar application.jar
+COPY build/libs/*SNAPSHOT.jar application.jar
 
 EXPOSE 8080
 
