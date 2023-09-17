@@ -26,7 +26,7 @@ FROM nginx:1.21.3-alpine
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copy built app to nginx web root directory
-COPY --from=build /build /usr/share/nginx/html  
+COPY --from=build /frontend/dist /usr/share/nginx/html
 
 # Expose port 3000
 EXPOSE 3000
