@@ -9,17 +9,19 @@ import org.springframework.stereotype.Controller;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-public class GameController {
+public class SavingsController {
 
     private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
 
-    @MessageMapping(value = "/{roomId}/enter")
-    public void enter() {
+
+    @MessageMapping(value = "/{roomId}/joinSavings")
+    public void joinSavings() {
         template.convertAndSend("");
     }
 
-    @MessageMapping(value = "/{roomId}/calculate")
-    public void calculate() {
+
+    @MessageMapping(value = "/{roomId}/stopSavings")
+    public void earlyFinishSavings() {
         template.convertAndSend("");
     }
 
