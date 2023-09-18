@@ -23,6 +23,7 @@ public class Stock {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stock_industry_id")
     private StockIndustry stockIndustry;
+    private String type;
     private String company;
     private Integer initialValue;
 }

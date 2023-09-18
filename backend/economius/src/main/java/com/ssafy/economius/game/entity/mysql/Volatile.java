@@ -8,24 +8,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Issue {
+public class Volatile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer issueId;
+    private Integer volatileId;
     private String name;
-    private byte type;
-    private String country;
-    private String year;
-    private String description;
-    @OneToMany(mappedBy = "issue")
-    private List<IssueStock> issueStocks;
-    @OneToMany(mappedBy = "issue")
-    private List<PrevIssue> prevIssues;
+    private String type;
+    private Integer initialValue;
 }
