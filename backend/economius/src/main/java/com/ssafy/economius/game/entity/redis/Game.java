@@ -19,9 +19,9 @@ public class Game {
     @Id
     private int roomId;
     // 0번 index 가 호스트
-    private List<String> players;
+    private List<Long> players;
     private int gameTurn;
-    private Map<String, Portfolio> portfolios;
+    private Map<Long, Portfolio> portfolios;
 
     // 경제 asset
     private Gold gold;

@@ -2,8 +2,8 @@ package com.ssafy.economius.game.dto.response;
 
 public class BuyItemResponse {
 
-    private String player;
+    private Long player;
     private String itemCost;
-    private String money;
+    private int money;
 }
 

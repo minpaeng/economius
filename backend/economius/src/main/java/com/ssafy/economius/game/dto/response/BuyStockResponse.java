@@ -4,7 +4,7 @@ import com.ssafy.economius.game.dto.StocksDto;
 
 public class BuyStockResponse {
 
-    private String player;
+    private Long player;
     private int money;
     private StocksDto stocks;
 }

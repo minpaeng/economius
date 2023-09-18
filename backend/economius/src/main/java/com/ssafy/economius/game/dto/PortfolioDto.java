@@ -2,7 +2,7 @@ package com.ssafy.economius.game.dto;
 
 public class PortfolioDto {
 
-    private String memberId;
+    private Long player;
     private int money;
     private GoldDto gold;
     private SavingsDto saving;

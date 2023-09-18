@@ -5,7 +5,7 @@ import com.ssafy.economius.game.dto.ReceiptDto;
 
 public class CalculateResponse {
 
-    private String player;
+    private Long player;
     private ReceiptDto receipt;
     private PortfolioDto portfolio;
 }

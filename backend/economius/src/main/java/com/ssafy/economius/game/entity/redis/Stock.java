@@ -23,7 +23,7 @@ public class Stock {
     @Indexed
     private String companySubCategory;
     // 아이디, 보유량
-    private Map<String, Integer> owners;
+    private Map<Long, Integer> owners;
     private int price;
     private int rate;
     private List<Integer> priceHistory;
