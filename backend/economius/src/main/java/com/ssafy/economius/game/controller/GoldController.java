@@ -9,18 +9,24 @@ import org.springframework.stereotype.Controller;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-public class GameController {
+public class GoldController {
 
     private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
 
-    @MessageMapping(value = "/{roomId}/enter")
-    public void enter() {
+    @MessageMapping(value = "/{roomId}/buyGolds")
+    public void buyGolds() {
         template.convertAndSend("");
     }
 
-    @MessageMapping(value = "/{roomId}/calculate")
-    public void calculate() {
+    @MessageMapping(value = "/{roomId}/sellGolds")
+    public void sellGolds() {
         template.convertAndSend("");
     }
+
+    @MessageMapping(value = "/{roomId}/selectGolds")
+    public void selectGolds() {
+        template.convertAndSend("");
+    }
+
 
 }

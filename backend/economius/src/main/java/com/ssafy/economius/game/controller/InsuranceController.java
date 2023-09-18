@@ -4,22 +4,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
 
 @Slf4j
-@Controller
+@org.springframework.stereotype.Controller
 @RequiredArgsConstructor
-public class GameController {
+public class InsuranceController {
 
     private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
 
-    @MessageMapping(value = "/{roomId}/enter")
-    public void enter() {
+    @MessageMapping(value = "/{roomId}/joinInsurance")
+    public void joinInsurance() {
         template.convertAndSend("");
     }
 
-    @MessageMapping(value = "/{roomId}/calculate")
-    public void calculate() {
+    @MessageMapping(value = "/{roomId}/finishInsurance")
+    public void finishInsurance() {
         template.convertAndSend("");
     }
 
