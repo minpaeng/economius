@@ -1,4 +1,4 @@
-package com.ssafy.economius.game.entity;
+package com.ssafy.economius.game.entity.redis;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

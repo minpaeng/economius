@@ -1,4 +1,4 @@
-package com.ssafy.economius.game.entity;
+package com.ssafy.economius.game.entity.redis;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class PortfolioStocks {
+public class PortfolioBuildings {
 
     private int totalPrice;
     private int earningRate;
     private int earningPrice;
     private int amount;
 
-    private List<PortfolioStock> stocks;
+    private List<PortfolioBuilding> building;
 }

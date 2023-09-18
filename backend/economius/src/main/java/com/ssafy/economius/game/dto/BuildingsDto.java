@@ -1,6 +1,6 @@
 package com.ssafy.economius.game.dto;
 
-import com.ssafy.economius.game.entity.PortfolioBuilding;
+import com.ssafy.economius.game.entity.redis.PortfolioBuilding;
 import java.util.List;
 
 public class BuildingsDto {
