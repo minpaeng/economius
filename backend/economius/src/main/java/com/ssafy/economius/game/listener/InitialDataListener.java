@@ -145,7 +145,7 @@ public class InitialDataListener {
             com.ssafy.economius.game.constant.Issue tmp = new com.ssafy.economius.game.constant.Issue();
             tmp.setIssueId(issue.getIssueId());
             tmp.setName(issue.getName());
-            tmp.setType(byteToboolean(issue.getType()));
+            tmp.setType(issue.typeByteToBoolean());
             tmp.setCountry(issue.getCountry());
             tmp.setYear(issue.getYear());
             tmp.setDescription(issue.getDescription());
@@ -214,9 +214,5 @@ public class InitialDataListener {
             tmp.setTypeName(insuranceType.getTypeName());
             InitialData.insuranceTypes.add(tmp);
         }
-    }
-
-    private boolean byteToboolean(byte type) {
-        return type != (byte) 0;
     }
 }

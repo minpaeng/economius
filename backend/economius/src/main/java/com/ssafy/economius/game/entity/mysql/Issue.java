@@ -28,4 +28,8 @@ public class Issue {
     private List<IssueStock> issueStocks;
     @OneToMany(mappedBy = "issue")
     private List<PrevIssue> prevIssues;
+
+    public boolean typeByteToBoolean() {
+        return this.type != (byte) 0;
+    }
 }
