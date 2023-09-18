@@ -1,14 +1,11 @@
-package com.ssafy.economius.game.constant;
+package com.ssafy.economius.game.dto.mysql;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter
 @Setter
-public class StockIndustry {
+public class StockIndustryDto {
 
     private Integer stockIndustryId;
     private String industry;

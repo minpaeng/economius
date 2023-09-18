@@ -1,4 +1,4 @@
-package com.ssafy.economius.game.constant;
+package com.ssafy.economius.game.dto.mysql;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class Issue {
+public class IssueDto {
 
     private Integer issueId;
     private String name;
@@ -16,6 +16,6 @@ public class Issue {
     private String country;
     private String year;
     private String description;
-    private List<IssueStock> issueStocks = new ArrayList<>();
-    private List<PrevIssue> prevIssues = new ArrayList<>();
+    private List<IssueStockDto> issueStockDtos = new ArrayList<>();
+    private List<PrevIssueDto> prevIssueDtos = new ArrayList<>();
 }

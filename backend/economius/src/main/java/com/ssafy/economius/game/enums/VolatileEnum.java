@@ -1,0 +1,19 @@
+package com.ssafy.economius.game.enums;
+
+import lombok.Getter;
+
+@Getter
+public enum VolatileEnum {
+
+    RESTAURANT("식사"),
+    SHOP("쇼핑"),
+    HOTEL("호텔"),
+    GOLD("금"),
+    INTEREST_RATE("금리");
+
+    private final String value;
+
+    VolatileEnum(String value) {
+        this.value = value;
+    }
+}

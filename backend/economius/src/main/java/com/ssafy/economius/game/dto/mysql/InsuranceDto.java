@@ -1,11 +1,11 @@
-package com.ssafy.economius.game.constant;
+package com.ssafy.economius.game.dto.mysql;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Insurance {
+public class InsuranceDto {
 
     private Integer insuranceId;
     private Integer insuranceTypeId;
