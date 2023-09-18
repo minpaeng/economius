@@ -1,5 +1,6 @@
 package com.ssafy.economius.game.controller;
 
+import com.ssafy.economius.game.dto.request.CreateRoomRequest;
 import com.ssafy.economius.game.dto.response.CreateRoomResponse;
 import com.ssafy.economius.game.service.GameRoomService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,8 @@ public class GameRoomController {
     private final GameRoomService gameRoomService;
 
     @GetMapping("/create")
-    public CreateRoomResponse createRoom(String memberId){
-        return gameRoomService.createRoom(memberId);
+    public CreateRoomResponse createRoom(CreateRoomRequest createRoomRequest){
+        return gameRoomService.createRoom(createRoomRequest.getPlayer());
     }
+
 }
