@@ -1,5 +1,6 @@
 package com.ssafy.economius.game.service;
 
+import static com.ssafy.economius.game.enums.RateEnum.*;
 import static com.ssafy.economius.game.enums.VolatileEnum.GOLD;
 import static com.ssafy.economius.game.enums.VolatileEnum.HOTEL;
 import static com.ssafy.economius.game.enums.VolatileEnum.RESTAURANT;
@@ -33,7 +34,6 @@ public class GameRoomService {
 
     private final GameRepository gameRepository;
 
-    private static final int INITIAL_INTEREST_RATE = 3;
 
     public CreateRoomResponse createRoom(Long player) {
         // Redis에서 현제 키값들을 다 불러오는 기능
@@ -69,7 +69,7 @@ public class GameRoomService {
 
     private InterestRate makeInterestRate() {
         return InterestRate.builder()
-            .rate(INITIAL_INTEREST_RATE)
+            .rate(INITIAL_INTEREST_RATE.getValue())
             .rateHistory(new ArrayList<>())
             .build();
     }
@@ -80,13 +80,14 @@ public class GameRoomService {
         return Gold.builder()
             .price(gold.getInitialValue())
             .priceHistory(new ArrayList<>())
-            .rate(0)
+            .rate(INITIAL_RATE.getValue())
             .rateHistory(new ArrayList<>())
             .build();
     }
 
     private List<Stock> makeStocks() {
         ArrayList<Stock> stocks = new ArrayList<>();
+
         for (StockDto stock : InitialData.STOCKS) {
             Stock tmpStock = Stock.builder()
                 .name(stock.getCompany())
@@ -94,7 +95,7 @@ public class GameRoomService {
                 .companySubCategory(stock.getType())
                 .owners(new HashMap<>())
                 .rateHistory(new ArrayList<>())
-                .rate(0)
+                .rate(INITIAL_RATE.getValue())
                 .priceHistory(new ArrayList<>())
                 .price(stock.getInitialValue())
                 .build();
@@ -152,11 +153,11 @@ public class GameRoomService {
         for (VolatileDto building : tmpBuildings) {
             Building tmpBuilding = Building.builder()
                 .name(building.getName())
-                .ownerId(0L)
+                .ownerId(null)
                 .priceHistory(new ArrayList<>())
                 .rateHistory(new ArrayList<>())
                 .price(building.getInitialValue())
-                .rate(0)
+                .rate(INITIAL_RATE.getValue())
                 .build();
 
             buildings.add(tmpBuilding);
