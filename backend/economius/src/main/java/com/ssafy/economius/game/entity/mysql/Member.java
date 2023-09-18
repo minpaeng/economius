@@ -1,6 +1,7 @@
 package com.ssafy.economius.game.entity.mysql;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -26,4 +27,10 @@ public class Member {
     private LocalDateTime joinDate;
     @LastModifiedDate
     private LocalDateTime editDate;
+
+    @Builder
+    public Member(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
 }
