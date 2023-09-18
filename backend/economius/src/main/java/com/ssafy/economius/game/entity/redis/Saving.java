@@ -1,14 +1,14 @@
 package com.ssafy.economius.game.entity.redis;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.RedisHash;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
-@RedisHash
+@Builder
+@AllArgsConstructor
 public class Saving {
 
-    @Id
-    private String code;
     private String name;
     private int rate;
     private int price;
+    private int finishCount;
 }

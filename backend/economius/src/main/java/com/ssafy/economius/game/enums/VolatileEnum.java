@@ -7,7 +7,7 @@ public enum VolatileEnum {
 
     RESTAURANT("식사"),
     SHOP("쇼핑"),
-    HOTEL("호텔"),
+    HOTEL("숙박"),
     GOLD("금"),
     INTEREST_RATE("금리");
 
