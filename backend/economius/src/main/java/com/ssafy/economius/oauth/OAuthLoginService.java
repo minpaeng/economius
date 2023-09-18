@@ -2,8 +2,11 @@ package com.ssafy.economius.oauth;
 
 import com.ssafy.economius.game.entity.mysql.Member;
 import com.ssafy.economius.game.repository.mysql.MemberRepository;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +34,7 @@ public class OAuthLoginService {
         Member member = Member.builder()
                 .name(oAuthInfoResponse.getNickname())
                 .email(oAuthInfoResponse.getEmail())
+                .nickname("oauth")
                 .build();
 
         return memberRepository.save(member).getMemberId();
