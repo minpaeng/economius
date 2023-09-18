@@ -2,7 +2,7 @@ package com.ssafy.economius.game.listener;
 
 import com.ssafy.economius.game.dto.mysql.EventMoneyDto;
 import com.ssafy.economius.game.dto.mysql.EventStockDto;
-import com.ssafy.economius.game.dto.mysql.InitialDataDto;
+import com.ssafy.economius.game.enums.InitialData;
 import com.ssafy.economius.game.dto.mysql.InsuranceDto;
 import com.ssafy.economius.game.dto.mysql.InsuranceTypeDto;
 import com.ssafy.economius.game.dto.mysql.IssueDto;
@@ -64,22 +64,22 @@ public class InitialDataListener {
     @EventListener
     public void setInitialData(ContextRefreshedEvent event) {
         setSavings();
-        log.info(InitialDataDto.savings.size() + " savings loaded.");
+        log.info(InitialData.SAVINGS.size() + " savings loaded.");
         setVolatiles();
-        log.info(InitialDataDto.volatileDtos.size() + " volaties loaded.");
+        log.info(InitialData.VOLATILES.size() + " volaties loaded.");
         setEvents();
-        log.info(InitialDataDto.events.getEventStockDtos().size() + " stock events loaded.");
-        log.info(InitialDataDto.events.getEventMonies().size() + " money events loaded.");
+        log.info(InitialData.EVENTS.getEventStockDtos().size() + " stock events loaded.");
+        log.info(InitialData.EVENTS.getEventMonies().size() + " money events loaded.");
         setInsurances();
-        log.info(InitialDataDto.insuranceDtos.size() + " insurances loaded.");
+        log.info(InitialData.INSURANCES.size() + " insurances loaded.");
         setIssues();
-        log.info(InitialDataDto.issueDtos.size() + " issues loaded.");
+        log.info(InitialData.ISSUES.size() + " issues loaded.");
         setStockIndustries();
-        log.info(InitialDataDto.stockIndustries.size() + " stock industry loaded.");
+        log.info(InitialData.STOCK_INDUSTRIES.size() + " stock industry loaded.");
         setStocks();
-        log.info(InitialDataDto.stockDtos.size() + " stocks loaded.");
+        log.info(InitialData.STOCKS.size() + " stocks loaded.");
         setInsuranceTypes();
-        log.info(InitialDataDto.insuranceTypeDtos.size() + " insurance types loaded.");
+        log.info(InitialData.INSURANCE_TYPE.size() + " insurance types loaded.");
     }
 
     private void setSavings() {
@@ -91,7 +91,7 @@ public class InitialDataListener {
             tmp.setMonthlyDeposit(saving.getMonthlyDeposit());
             tmp.setFinishCount(saving.getFinishCount());
             tmp.setFinishRate(saving.getFinishRate());
-            InitialDataDto.savings.add(tmp);
+            InitialData.SAVINGS.add(tmp);
         }
     }
 
@@ -103,7 +103,7 @@ public class InitialDataListener {
             tmp.setName(vol.getName());
             tmp.setType(vol.getType());
             tmp.setInitialValue(vol.getInitialValue());
-            InitialDataDto.volatileDtos.put(tmp.getName(), tmp);
+            InitialData.VOLATILES.put(tmp.getType(), tmp);
         }
     }
 
@@ -117,7 +117,7 @@ public class InitialDataListener {
             tmp.setName(eventStock.getName());
             tmp.setDescription(eventStock.getDescription());
             tmp.setRate(eventStock.getRate());
-            InitialDataDto.events.getEventStockDtos().add(tmp);
+            InitialData.EVENTS.getEventStockDtos().add(tmp);
         }
 
         List<EventMoney> eventMoneys = eventMoneyRepository.findAllWithInsuranceType();
@@ -130,7 +130,7 @@ public class InitialDataListener {
             tmp.setName(eventMoney.getName());
             tmp.setDescription(eventMoney.getDescription());
             tmp.setMoney(eventMoney.getMoney());
-            InitialDataDto.events.getEventMonies().add(tmp);
+            InitialData.EVENTS.getEventMonies().add(tmp);
         }
     }
 
@@ -146,7 +146,7 @@ public class InitialDataListener {
             tmp.setProductName(insurance.getProductName());
             tmp.setMonthlyDeposit(insurance.getMonthlyDeposit());
             tmp.setGuaranteeRate(insurance.getGuaranteeRate());
-            InitialDataDto.insuranceDtos.add(tmp);
+            InitialData.INSURANCES.add(tmp);
         }
     }
 
@@ -162,7 +162,7 @@ public class InitialDataListener {
             tmp.setDescription(issue.getDescription());
             setIssueStocks(tmp);
             setPrevIssues(tmp);
-            InitialDataDto.issueDtos.add(tmp);
+            InitialData.ISSUES.add(tmp);
         }
     }
 
@@ -198,7 +198,7 @@ public class InitialDataListener {
             StockIndustryDto tmp = new StockIndustryDto();
             tmp.setStockIndustryId(StockIndustry.getStockIndustryId());
             tmp.setIndustry(StockIndustry.getIndustry());
-            InitialDataDto.stockIndustries.add(tmp);
+            InitialData.STOCK_INDUSTRIES.add(tmp);
         }
     }
 
@@ -212,7 +212,7 @@ public class InitialDataListener {
             tmp.setType(stock.getType());
             tmp.setCompany(stock.getCompany());
             tmp.setInitialValue(stock.getInitialValue());
-            InitialDataDto.stockDtos.add(tmp);
+            InitialData.STOCKS.add(tmp);
         }
     }
 
@@ -223,7 +223,7 @@ public class InitialDataListener {
             tmp.setInsuranceTypeId(insuranceType.getInsuranceTypeId());
             tmp.setTypeCode(insuranceType.getTypeCode());
             tmp.setTypeName(insuranceType.getTypeName());
-            InitialDataDto.insuranceTypeDtos.add(tmp);
+            InitialData.INSURANCE_TYPE.add(tmp);
         }
     }
 }

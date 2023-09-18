@@ -14,10 +14,8 @@ import org.springframework.data.redis.core.RedisHash;
 @Builder
 public class Building {
 
-    private String buildingCode;
-    private String buildingName;
+    private String name;
     private Long ownerId;
-
     private int price;
     private List<Integer> priceHistory;
     private int rate;
