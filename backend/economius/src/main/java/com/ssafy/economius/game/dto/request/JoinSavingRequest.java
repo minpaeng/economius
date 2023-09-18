@@ -2,7 +2,7 @@ package com.ssafy.economius.game.dto.request;
 
 public class JoinSavingRequest {
 
-    private String player;
+    private Long player;
     private String bankCode;
 
 }

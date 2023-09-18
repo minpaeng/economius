@@ -16,7 +16,7 @@ public class Building {
     @Id
     private String buildingCode;
     private String buildingName;
-    private String ownerId;
+    private Long ownerId;
 
     private int price;
     private List<Integer> priceHistory;

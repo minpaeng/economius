@@ -5,7 +5,7 @@ import java.util.List;
 
 public class SelectStockResponse {
 
-    private String player;
+    private Long player;
     private String companyCode;
     private List<StockAmountDto> stockAmount;
 

@@ -7,15 +7,13 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
-@RedisHash
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 public class Portfolio {
 
-    @Id
-    private String memberId;
+    private Long player;
     private int money;
     private PortfolioGold gold;
     private PortfolioSavings savings;

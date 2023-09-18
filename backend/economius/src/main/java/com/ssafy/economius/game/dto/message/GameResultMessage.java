@@ -4,5 +4,5 @@ import java.util.List;
 
 public class GameResultMessage {
 
-    private List<String> ranking;
+    private List<Long> ranking;
 }

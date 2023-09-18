@@ -1,6 +1,7 @@
 package com.ssafy.economius.game.controller;
 
 import com.ssafy.economius.game.dto.request.BuyGoldRequest;
+import com.ssafy.economius.game.dto.response.BuyGoldResponse;
 import com.ssafy.economius.game.service.GoldService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +19,8 @@ public class GoldController {
     private final GoldService goldService;
 
     @MessageMapping(value = "/{roomId}/buyGolds")
-    public void buyGolds(@DestinationVariable int roomId, BuyGoldRequest) {
-        goldService.
+    public void buyGolds(@DestinationVariable int roomId, BuyGoldRequest buyGoldRequest) {
+        BuyGoldResponse buyGoldResponse = goldService.buyGold(roomId, buyGoldRequest);
         template.convertAndSend("");
     }
 

@@ -2,8 +2,8 @@ package com.ssafy.economius.game.dto.request;
 
 public class SellStockRequest {
 
-    private String player;
+    private Long player;
     private String companyCode;
-    private String stockAmount;
+    private int stockAmount;
 
 }

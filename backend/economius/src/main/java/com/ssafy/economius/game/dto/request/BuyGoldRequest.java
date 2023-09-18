@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 public class BuyGoldRequest {
 
-    private String player;
+    private Long player;
     private int goldAmount;
 }
