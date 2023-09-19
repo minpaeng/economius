@@ -1,5 +1,10 @@
 package com.ssafy.economius.game.dto;
 
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
 public class PortfolioDto {
 
     private Long player;

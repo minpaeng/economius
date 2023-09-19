@@ -2,6 +2,7 @@ package com.ssafy.economius.game.service;
 
 import static com.ssafy.economius.game.enums.RateEnum.*;
 
+import com.ssafy.economius.game.dto.response.CalculateResponse;
 import com.ssafy.economius.game.dto.response.GameJoinResponse;
 import com.ssafy.economius.game.dto.response.GameStartResponse;
 import com.ssafy.economius.game.entity.redis.Game;
@@ -111,5 +112,9 @@ public class GameService {
             .totalPrice(INITIAL_ZERO_VALUE.getValue())
             .savings(new ArrayList<>())
             .build();
+    }
+
+    public CalculateResponse calculate(int roomId, Long player) {
+        return null;
     }
 }

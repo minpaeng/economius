@@ -22,6 +22,7 @@ public class Game {
     private List<Long> players;
     private int gameTurn;
     private Map<Long, Portfolio> portfolios;
+    private Map<Integer, Integer> tax;
 
     // 경제 asset
     private Gold gold;
