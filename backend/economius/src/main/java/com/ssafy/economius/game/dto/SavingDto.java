@@ -1,8 +1,10 @@
 package com.ssafy.economius.game.dto;
 
-public class SavingDto {
+import lombok.Builder;
 
-    private String savingCode;
+@Builder
+public class SavingDto {
+    private String bankCode;
     private String savingName;
     private int perPrice;
     private int currentPrice;
