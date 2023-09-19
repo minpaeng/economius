@@ -1,8 +1,10 @@
 package com.ssafy.economius.game.controller;
 
 import com.ssafy.economius.game.dto.request.BuyGoldRequest;
+import com.ssafy.economius.game.dto.request.GoldSelectRequest;
 import com.ssafy.economius.game.dto.request.SellGoldRequest;
 import com.ssafy.economius.game.dto.response.BuyGoldResponse;
+import com.ssafy.economius.game.dto.response.GoldSelectResponse;
 import com.ssafy.economius.game.dto.response.SellGoldResponse;
 import com.ssafy.economius.game.service.GoldService;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +39,10 @@ public class GoldController {
     }
 
     @MessageMapping(value = "/{roomId}/selectGolds")
-    public void selectGolds() {
-        template.convertAndSend("");
+    public void selectGolds(@DestinationVariable int roomId, GoldSelectRequest goldSelectRequest) {
+        GoldSelectResponse goldSelectResponse = goldService.selectGold(roomId, goldSelectRequest.getPlayer());
+
+        template.convertAndSend("/sub/" + roomId, goldSelectResponse);
     }
 
 

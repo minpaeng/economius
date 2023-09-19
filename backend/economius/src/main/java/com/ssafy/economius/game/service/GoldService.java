@@ -2,6 +2,7 @@ package com.ssafy.economius.game.service;
 
 import com.ssafy.economius.game.dto.GoldDto;
 import com.ssafy.economius.game.dto.response.BuyGoldResponse;
+import com.ssafy.economius.game.dto.response.GoldSelectResponse;
 import com.ssafy.economius.game.dto.response.SellGoldResponse;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Portfolio;
@@ -68,5 +69,13 @@ public class GoldService {
             .money(portfolio.getMoney())
             .player(player)
             .build();
+    }
+
+    public GoldSelectResponse selectGold(int roomId, Long player) {
+        Game game = gameRepository.findById(roomId).orElseThrow(
+            () -> new RuntimeException("해당하는 게임이 존재하지 않습니다.")
+        );
+
+        return modelMapper.map(game.getGold(), GoldSelectResponse.class);
     }
 }
