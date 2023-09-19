@@ -12,6 +12,8 @@ import com.ssafy.economius.game.entity.redis.PortfolioSavings;
 import com.ssafy.economius.game.entity.redis.PortfolioStocks;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,12 +46,17 @@ public class GameService {
         );
 
         // 호스트의 요청인지 체크
-        if(!game.getPlayers().get(0).equals(hostPlayer)){
+        log.info(game.getPlayers().toString());
+        System.out.println(game.getPlayers().get(0));
+        System.out.println(game.getPlayers().get(0).equals(hostPlayer));
+        if (!game.getPlayers().get(0).equals(hostPlayer)) {
+            log.error("호스트가 아닌 사용자의 요청");
             throw new RuntimeException();
         }
 
         // 현제인원이 4명인지 체크
         if (game.getPlayers().size() != 4) {
+            log.error("인원이 부족합니다.");
             throw new RuntimeException();
         }
 
@@ -60,8 +67,9 @@ public class GameService {
     }
 
     private void uploadInitialPortfolioOnRedis(Game game) {
+        Map<Long, Portfolio> portfolioMap = new HashMap<>();
         for (Long player : game.getPlayers()) {
-            game.getPortfolios().put(player, Portfolio.builder()
+            portfolioMap.put(player, Portfolio.builder()
                 .money(INITIAL_MONEY.getValue())
                 .player(player)
                 .gold(makePortfolioGold())
@@ -71,6 +79,7 @@ public class GameService {
                 .build());
         }
 
+        game.initializePortfolio(portfolioMap);
         gameRepository.save(game);
     }
 

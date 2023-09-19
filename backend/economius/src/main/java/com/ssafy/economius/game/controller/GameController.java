@@ -3,6 +3,7 @@ package com.ssafy.economius.game.controller;
 import com.ssafy.economius.game.dto.request.GameJoinRequest;
 import com.ssafy.economius.game.dto.request.GameStartRequest;
 import com.ssafy.economius.game.dto.response.GameJoinResponse;
+import com.ssafy.economius.game.dto.response.GameStartResponse;
 import com.ssafy.economius.game.service.GameService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +30,8 @@ public class GameController {
 
     @MessageMapping(value = "/{roomId}/start")
     public void start(@DestinationVariable int roomId, GameStartRequest gameStartRequest) {
-
-        template.convertAndSend("");
+        GameStartResponse gameStartResponse = gameService.start(roomId, gameStartRequest.getHostPlayer());
+        template.convertAndSend("/sub/" + roomId, gameStartResponse);
     }
 
     @MessageMapping(value = "/{roomId}/enter")

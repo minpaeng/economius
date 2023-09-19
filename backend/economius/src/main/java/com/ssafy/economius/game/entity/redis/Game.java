@@ -30,4 +30,8 @@ public class Game {
     private List<Insurance> insurances;
     private List<Saving> savings;
     private InterestRate interestRate;
+
+    public void initializePortfolio(Map<Long, Portfolio> portfolios) {
+        this.portfolios = portfolios;
+    }
 }

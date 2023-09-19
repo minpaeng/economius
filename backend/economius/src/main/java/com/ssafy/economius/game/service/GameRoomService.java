@@ -55,7 +55,6 @@ public class GameRoomService {
             .players(new ArrayList<>(List.of(player)))
             .gameTurn(0)
             .roomId(roomId)
-            .portfolios(new HashMap<>())
             .interestRate(makeInterestRate())
             .gold(makeGold())
             .stocks(makeStocks())
