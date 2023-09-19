@@ -11,7 +11,7 @@ function ChanceCard() {
   };
 
   // 원래는 초기값 false로 두고 해당 위치 되면 true로 바꿔줘야할듯
-  const [isChanceOpen, setIsChanceOpen] = useState(true);
+  const [isChanceOpen, setIsChanceOpen] = useState(false);
 
   const closeModal = () => {
     setIsChanceOpen(false);
