@@ -22,14 +22,17 @@ public class GoldController {
 
     @MessageMapping(value = "/{roomId}/buyGolds")
     public void buyGolds(@DestinationVariable int roomId, BuyGoldRequest buyGoldRequest) {
-        BuyGoldResponse buyGoldResponse = goldService.buyGold(roomId, buyGoldRequest);
+        BuyGoldResponse buyGoldResponse = goldService.buyGold(
+            roomId, buyGoldRequest.getPlayer(), buyGoldRequest.getGoldAmount());
+
         template.convertAndSend("/sub/" + roomId, buyGoldResponse);
     }
 
     @MessageMapping(value = "/{roomId}/sellGolds")
     public void sellGolds(@DestinationVariable int roomId, SellGoldRequest sellGoldRequest) {
-        SellGoldResponse sellGoldResponse = goldService.sellGold(roomId,
-            sellGoldRequest.getPlayer(), sellGoldRequest.getGoldAmount());
+        SellGoldResponse sellGoldResponse = goldService.sellGold(
+            roomId, sellGoldRequest.getPlayer(), sellGoldRequest.getGoldAmount());
+
         template.convertAndSend("/sub/" + roomId, sellGoldResponse);
     }
 
