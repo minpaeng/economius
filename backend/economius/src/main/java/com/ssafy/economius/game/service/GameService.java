@@ -2,6 +2,7 @@ package com.ssafy.economius.game.service;
 
 import static com.ssafy.economius.game.enums.RateEnum.*;
 
+import com.ssafy.economius.game.dto.response.GameJoinResponse;
 import com.ssafy.economius.game.dto.response.GameStartResponse;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Portfolio;
@@ -21,6 +22,21 @@ import org.springframework.stereotype.Service;
 public class GameService {
 
     private final GameRepository gameRepository;
+
+    public GameJoinResponse join(int roomId, Long player) {
+        Game game = gameRepository.findById(roomId).orElseThrow(
+            () -> new RuntimeException("일치하는 방이 존재하지 않습니다.")
+        );
+
+        if (game.getPlayers().size() >=4){
+            throw new RuntimeException("방에 인원이 다 찼습니다.");
+        }
+
+        game.getPlayers().add(player);
+        gameRepository.save(game);
+
+        return new GameJoinResponse(roomId);
+    }
 
     public GameStartResponse start(int roomId, Long hostPlayer) {
         Game game = gameRepository.findById(roomId).orElseThrow(
