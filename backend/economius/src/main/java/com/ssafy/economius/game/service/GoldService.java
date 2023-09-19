@@ -37,17 +37,18 @@ public class GoldService {
         }
 
         portfolio.setMoney(portfolio.getMoney() - price * buyGoldRequest.getGoldAmount());
-
         portfolio.getGold().setAmount(portfolio.getGold().getAmount() + amount);
-
         portfolio.getGold().setTotalPrice(portfolio.getGold().getAmount() * price);
 
         gameRepository.save(game);
 
-        // 멤버아이디 돈 골드 디티오
         GoldDto goldDto = modelMapper.map(portfolio.getGold(), GoldDto.class);
 
-        return null;
+        return BuyGoldResponse.builder()
+            .gold(goldDto)
+            .money(portfolio.getMoney())
+            .player(player)
+            .build();
     }
 
 }

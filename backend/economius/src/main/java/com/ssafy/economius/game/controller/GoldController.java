@@ -21,7 +21,7 @@ public class GoldController {
     @MessageMapping(value = "/{roomId}/buyGolds")
     public void buyGolds(@DestinationVariable int roomId, BuyGoldRequest buyGoldRequest) {
         BuyGoldResponse buyGoldResponse = goldService.buyGold(roomId, buyGoldRequest);
-        template.convertAndSend("");
+        template.convertAndSend("/sub/" + roomId, buyGoldResponse);
     }
 
     @MessageMapping(value = "/{roomId}/sellGolds")
