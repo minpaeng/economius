@@ -23,6 +23,8 @@ import com.ssafy.economius.game.repository.redis.GameRepository;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -142,8 +144,8 @@ public class GameRoomService {
         return insurances;
     }
 
-    private List<Building> makeBuildings() {
-        ArrayList<Building> buildings = new ArrayList<>();
+    private Map<Integer, Building> makeBuildings() {
+        Map<Integer, Building> buildings = new HashMap<>();
 
         List<VolatileDto> tmpBuildings = List.of(
             InitialData.VOLATILES.get(HOTEL.getValue()),
@@ -160,7 +162,7 @@ public class GameRoomService {
                 .rate(INITIAL_RATE.getValue())
                 .build();
 
-            buildings.add(tmpBuilding);
+            buildings.put(building.getVolatileId(), tmpBuilding);
         }
 
         return buildings;
