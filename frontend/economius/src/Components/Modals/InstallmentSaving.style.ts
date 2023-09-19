@@ -36,6 +36,15 @@ export const BankMidDesc = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  align-items: center;
+`;
+
+export const BankMidPriceDesc = styled.div`
+  display: flex;
+`;
+
+export const BankMidCycle = styled.div`
+  display: flex;
 `;
 
 export const BankDivide = styled.div`
