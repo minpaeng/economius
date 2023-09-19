@@ -45,10 +45,6 @@ public class GameService {
             () -> new RuntimeException("일치하는 방이 존재하지 않습니다.")
         );
 
-        // 호스트의 요청인지 체크
-        log.info(game.getPlayers().toString());
-        System.out.println(game.getPlayers().get(0));
-        System.out.println(game.getPlayers().get(0).equals(hostPlayer));
         if (!game.getPlayers().get(0).equals(hostPlayer)) {
             log.error("호스트가 아닌 사용자의 요청");
             throw new RuntimeException();

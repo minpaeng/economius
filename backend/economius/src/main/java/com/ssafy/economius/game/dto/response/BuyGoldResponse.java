@@ -8,7 +8,7 @@ import lombok.Data;
 @Builder
 public class BuyGoldResponse {
 
-    private String player;
+    private Long player;
     private int money;
     private GoldDto gold;
 }
