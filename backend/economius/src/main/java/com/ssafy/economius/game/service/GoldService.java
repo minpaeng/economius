@@ -76,6 +76,9 @@ public class GoldService {
             () -> new RuntimeException("해당하는 게임이 존재하지 않습니다.")
         );
 
-        return modelMapper.map(game.getGold(), GoldSelectResponse.class);
+        GoldSelectResponse goldSelectResponse = modelMapper.map(game.getGold(), GoldSelectResponse.class);
+        goldSelectResponse.setPlayer(player);
+
+        return goldSelectResponse;
     }
 }
