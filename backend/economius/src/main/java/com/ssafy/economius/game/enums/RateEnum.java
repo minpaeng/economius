@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum RateEnum {
 
     INITIAL_INTEREST_RATE(5),
-    INITIAL_RATE(0);
+    INITIAL_ZERO_VALUE(0),
+    INITIAL_MONEY(5000000),;
 
     private final int value;
 

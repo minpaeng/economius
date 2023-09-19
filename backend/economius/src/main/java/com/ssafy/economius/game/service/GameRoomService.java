@@ -55,7 +55,6 @@ public class GameRoomService {
             .players(new ArrayList<>(List.of(player)))
             .gameTurn(0)
             .roomId(roomId)
-            .portfolios(new HashMap<>())
             .interestRate(makeInterestRate())
             .gold(makeGold())
             .stocks(makeStocks())
@@ -80,7 +79,7 @@ public class GameRoomService {
         return Gold.builder()
             .price(gold.getInitialValue())
             .priceHistory(new ArrayList<>())
-            .rate(INITIAL_RATE.getValue())
+            .rate(INITIAL_ZERO_VALUE.getValue())
             .rateHistory(new ArrayList<>())
             .build();
     }
@@ -95,7 +94,7 @@ public class GameRoomService {
                 .companySubCategory(stock.getType())
                 .owners(new HashMap<>())
                 .rateHistory(new ArrayList<>())
-                .rate(INITIAL_RATE.getValue())
+                .rate(INITIAL_ZERO_VALUE.getValue())
                 .priceHistory(new ArrayList<>())
                 .price(stock.getInitialValue())
                 .build();
@@ -157,7 +156,7 @@ public class GameRoomService {
                 .priceHistory(new ArrayList<>())
                 .rateHistory(new ArrayList<>())
                 .price(building.getInitialValue())
-                .rate(INITIAL_RATE.getValue())
+                .rate(INITIAL_ZERO_VALUE.getValue())
                 .build();
 
             buildings.add(tmpBuilding);
