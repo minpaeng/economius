@@ -9,6 +9,7 @@ public class PortfolioDto {
 
     private Long player;
     private int money;
+    private int totalMoney;
     private GoldDto gold;
     private SavingsDto saving;
     private BuildingsDto building;

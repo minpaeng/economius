@@ -36,7 +36,6 @@ public class GoldService {
         portfolio.setMoney(portfolio.getMoney() - price * goldAmount);
         portfolio.getGold().setAmount(portfolio.getGold().getAmount() + goldAmount);
         portfolio.getGold().setTotalPrice(portfolio.getGold().getAmount() * price);
-
         gameRepository.save(game);
 
         GoldDto goldDto = modelMapper.map(portfolio.getGold(), GoldDto.class);

@@ -2,6 +2,7 @@ package com.ssafy.economius.game.service;
 
 import static com.ssafy.economius.game.enums.RateEnum.*;
 
+import com.ssafy.economius.game.dto.ReceiptDto;
 import com.ssafy.economius.game.dto.response.CalculateResponse;
 import com.ssafy.economius.game.dto.response.GameJoinResponse;
 import com.ssafy.economius.game.dto.response.GameStartResponse;
@@ -73,6 +74,7 @@ public class GameService {
                 .savings(makePortfolioSavings())
                 .building(makePortfolioBuildings())
                 .stocks(makePortfolioStocks())
+                .totalMoney(INITIAL_MONEY.getValue())
                 .build());
         }
 
@@ -114,7 +116,11 @@ public class GameService {
             .build();
     }
 
-    public CalculateResponse calculate(int roomId, Long player) {
-        return null;
-    }
+//    public CalculateResponse calculate(int roomId, Long player) {
+//        Game game = gameRepository.findById(roomId).orElseThrow(
+//            () -> new RuntimeException("일치하는 방이 존재하지 않습니다.")
+//        );
+//
+//        return null;
+//    }
 }

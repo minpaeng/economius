@@ -17,7 +17,11 @@ public enum RateEnum {
     FIRST_PRIZE(1),
     SECOND_PRIZE(2),
     THIRD_PRIZE(3),
-    FOURTH_PRIZE(4);
+    FOURTH_PRIZE(4),
+
+    SALARY(5000000),
+    ;
+
 
 
     private final int value;

@@ -17,6 +17,7 @@ public class Portfolio {
 
     private Long player;
     private int money;
+    private int totalMoney;
     private PortfolioGold gold;
     private PortfolioSavings savings;
     private PortfolioBuildings building;
