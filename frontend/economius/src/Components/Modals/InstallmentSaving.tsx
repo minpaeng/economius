@@ -28,7 +28,7 @@ function InstallmentSaving() {
     },
   };
 
-  const [isBankOpen, setIsBankOpen] = useState(true);
+  const [isBankOpen, setIsBankOpen] = useState(false);
 
   const closeModal = () => {
     setIsBankOpen(false);
@@ -76,9 +76,34 @@ function InstallmentSaving() {
         <S.BankMid>
           <S.BankMidImg src="Bank/image 34.png" alt="img" />
           <S.BankMidDesc>
-            <div>입금액 : 500</div>
-            <div>기간 : 3</div>
-            <div>이율 : 기준금리 + 9%p</div>
+            <S.BankMidPriceDesc>
+              <p>입금액 : 500</p>
+              <img
+                src="Bank/dollar-coin 15.png"
+                alt="img"
+                style={{
+                  width: "25px",
+                  height: "25px",
+
+                  marginLeft: "5px",
+                }}
+              />
+            </S.BankMidPriceDesc>
+            <S.BankMidCycle>
+              <p>기간 : 3</p>
+              <img
+                src="Bank/BankCycle.png"
+                alt="img"
+                style={{
+                  width: "25px",
+                  height: "25px",
+                  marginRight: "5px",
+                  marginLeft: "5px",
+                }}
+              />
+              <p>(3달)</p>
+            </S.BankMidCycle>
+            <div>이율(변동) : 기준금리 + 9%p</div>
             <div>중도 해지 : 원금만 수령</div>
           </S.BankMidDesc>
         </S.BankMid>

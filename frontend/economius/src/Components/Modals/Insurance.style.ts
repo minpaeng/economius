@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 
-export const BankMain = styled.div`
+export const InsuranceMain = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -8,51 +8,46 @@ export const BankMain = styled.div`
   background: #fff9ee;
 `;
 
-export const BankTop = styled.div`
-  flex: 2;
+export const InsuranceTop = styled.div`
+  flex: 1.5;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-export const BankTopTitle = styled.div`
+export const InsuranceTopTitle = styled.div`
   font-size: 28px;
   font-weight: 800;
 `;
 
-export const BankMid = styled.div`
-  flex: 5.85;
+export const InsuranceMid = styled.div`
+  flex: 8.5;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
 `;
 
-export const BankMidImg = styled.img`
-  width: 200px;
-`;
+// export const InsuranceMidImg = styled.img`
+//   width: 200px;
+// `;
 
-export const BankMidDesc = styled.div`
-  height: 70%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-`;
+// export const InsuranceMidDesc = styled.div`
+//   height: 70%;
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: space-evenly;
+//   align-items: center;
+// `;
 
-export const BankMidPriceDesc = styled.div`
-  display: flex;
-`;
+// export const InsuranceMidPriceDesc = styled.div`
+//   display: flex;
+// `;
 
-export const BankMidCycle = styled.div`
-  display: flex;
-`;
+// export const InsuranceMidCycle = styled.div`
+//   display: flex;
+// `;
 
-export const BankDivide = styled.div`
-  flex: 0.15;
-  background-color: white;
-`;
-
-export const BankJoinBottom = styled.button`
+export const InsuranceJoinBottom = styled.button`
   flex: 2;
   border: none;
   background: #ffdaae;
@@ -65,7 +60,7 @@ export const BankJoinBottom = styled.button`
   }
 `;
 
-export const BankCancelBottom = styled.button`
+export const InsuranceCancelBottom = styled.button`
   flex: 2;
   border: none;
   background: #ffdaae;
