@@ -10,6 +10,7 @@ import Modal from "react-modal";
 import BigEvent from "../src/Components/Modals/BigEvent";
 import ChanceCard from "../src/Components/Modals/ChanceCard";
 import InstallmentSaving from "./Components/Modals/InstallmentSaving";
+import Insurance from "./Components/Modals/Insurance";
 
 function App() {
   Modal.setAppElement("#root");
@@ -33,6 +34,7 @@ function App() {
       <BigEvent />
       <ChanceCard />
       <InstallmentSaving />
+      <Insurance />
     </div>
   );
 }

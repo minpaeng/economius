@@ -28,7 +28,7 @@ function InstallmentSaving() {
     },
   };
 
-  const [isBankOpen, setIsBankOpen] = useState(true);
+  const [isBankOpen, setIsBankOpen] = useState(false);
 
   const closeModal = () => {
     setIsBankOpen(false);
