@@ -54,6 +54,6 @@ public class BuildingController {
                                @Payload SelectBuildingRequest selectBuildingRequest) {
 
         SelectBuildingResponse responseDto = buildingService.selectBuilding(roomId, selectBuildingRequest);
-        template.convertAndSend(roomId + "/selectBuilding", responseDto);
+        template.convertAndSend("/sub/" + roomId, responseDto);
     }
 }

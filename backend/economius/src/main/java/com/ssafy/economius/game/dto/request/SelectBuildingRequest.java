@@ -7,5 +7,6 @@ import lombok.ToString;
 @Getter
 public class SelectBuildingRequest {
 
+    private Long player;
     private int buildingId;
 }

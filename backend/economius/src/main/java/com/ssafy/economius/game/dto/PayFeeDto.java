@@ -8,6 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Builder
 public class PayFeeDto {
+    private long player;
     private int changeAmount;
     private int moneyResult;
 }
