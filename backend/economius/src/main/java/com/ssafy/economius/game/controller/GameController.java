@@ -1,7 +1,9 @@
 package com.ssafy.economius.game.controller;
 
+import com.ssafy.economius.game.dto.request.CalculateRequest;
 import com.ssafy.economius.game.dto.request.GameJoinRequest;
 import com.ssafy.economius.game.dto.request.GameStartRequest;
+import com.ssafy.economius.game.dto.response.CalculateResponse;
 import com.ssafy.economius.game.dto.response.GameJoinResponse;
 import com.ssafy.economius.game.dto.response.GameStartResponse;
 import com.ssafy.economius.game.service.GameService;
@@ -34,14 +36,11 @@ public class GameController {
         template.convertAndSend("/sub/" + roomId, gameStartResponse);
     }
 
-    @MessageMapping(value = "/{roomId}/enter")
-    public void enter() {
-        template.convertAndSend("");
-    }
-
     @MessageMapping(value = "/{roomId}/calculate")
-    public void calculate() {
-        template.convertAndSend("");
+    public void calculate(@DestinationVariable int roomId, CalculateRequest calculateRequest) {
+        CalculateResponse calculateResponse = gameService.calculate(
+            roomId, calculateRequest.getPlayer());
+        template.convertAndSend("/sub/" + roomId, calculateResponse);
     }
 
 }
