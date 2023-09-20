@@ -8,10 +8,10 @@ import lombok.Data;
 public class ReceiptDto {
 
     private int salary;
-    private int savingFinishCost;
+    private int savingFinishBenefit;
     private int tax;
     private int savingsPrice;
     private int insurancePrice;
-    private int totalPrice;
+    private int totalIncome;
     private int money;
 }
