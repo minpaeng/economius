@@ -29,5 +29,4 @@ public class GameRoomController {
             gameRoomService.createRoom(createRoomRequest.getPlayer()),
             HttpStatus.OK);
     }
-
 }
