@@ -22,9 +22,10 @@ public class GameValidator {
         return game.get();
     }
 
-    public void canBuy(int money, int price) {
+    public void  canBuy(int roomId, int money, int price) {
         if (money < price) {
             throw CustomWebsocketException.builder()
+                    .roomId(roomId)
                     .code(GameRoomMessage.CANNOT_BUY.getCode())
                     .message(GameRoomMessage.CANNOT_BUY.getMessage())
                     .build();

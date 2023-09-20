@@ -40,8 +40,7 @@ public class BuildingService {
         Building building = game.getBuildings().get(buildingId);
 
         buildingValidator.checkBuildingBuyingStatus(player, roomId, building);
-        gameValidator.canBuy(portfolio.getMoney(), building.getPrice());
-
+        gameValidator.canBuy(roomId, portfolio.getMoney(), building.getPrice());
         BuyBuildingResponse response = buyBuilding(portfolio, buildingId, building);
         gameRepository.save(game);
         return response;
