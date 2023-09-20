@@ -39,6 +39,23 @@ public class Game {
     private List<Saving> savings;
     private InterestRate interestRate;
 
+    @Override
+    public String toString() {
+        return "Game{" +
+                "roomId=" + roomId +
+                ", players=" + players +
+                ", gameTurn=" + gameTurn +
+                ", portfolios=" + portfolios +
+                ", tax=" + tax +
+                ", gold=" + gold +
+                ", buildings=" + buildings +
+                ", stocks=" + stocks +
+                ", insurances=" + insurances +
+                ", savings=" + savings +
+                ", interestRate=" + interestRate +
+                '}';
+    }
+
     public void initializePortfolio(Map<Long, Portfolio> portfolios) {
         this.portfolios = portfolios;
     }

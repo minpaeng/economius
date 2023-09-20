@@ -15,4 +15,12 @@ public class PortfolioGold {
 
     private int totalPrice;
     private int amount;
+
+    @Override
+    public String toString() {
+        return "PortfolioGold{" +
+                "totalPrice=" + totalPrice +
+                ", amount=" + amount +
+                '}';
+    }
 }

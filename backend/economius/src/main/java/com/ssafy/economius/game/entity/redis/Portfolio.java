@@ -34,5 +34,17 @@ public class Portfolio {
     public void buyBuilding(int buildingId, Building building) {
         this.money -= building.getPrice();
         this.buildings.buyBuilding(buildingId, building);
+    @Override
+    public String toString() {
+        return "Portfolio{" +
+                "player=" + player +
+                ", money=" + money +
+                ", totalMoney=" + totalMoney +
+                ", gold=" + gold +
+                ", savings=" + savings +
+                ", buildings=" + buildings +
+                ", stocks=" + stocks +
+                ", insurances=" + insurances +
+                '}';
     }
 }
