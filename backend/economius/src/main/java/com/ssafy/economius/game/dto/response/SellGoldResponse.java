@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class BuyGoldResponse {
+public class SellGoldResponse {
 
     private Long player;
     private int money;

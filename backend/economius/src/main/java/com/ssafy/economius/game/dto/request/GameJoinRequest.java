@@ -1,9 +1,9 @@
 package com.ssafy.economius.game.dto.request;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
-public class CalculateRequest {
+@Data
+public class GameJoinRequest {
 
     private Long player;
 }

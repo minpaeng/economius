@@ -6,15 +6,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Builder
-public class PortfolioStocks {
+public class PortfolioInsurances {
 
     private int totalPrice;
-    private int earningRate;
-    private int earningPrice;
     private int amount;
-
-    private List<PortfolioStock> stocks;
+    private List<PortfolioInsurance> insurance;
 }

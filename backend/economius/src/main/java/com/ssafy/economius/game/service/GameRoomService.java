@@ -1,6 +1,15 @@
 package com.ssafy.economius.game.service;
 
-import static com.ssafy.economius.game.enums.RateEnum.*;
+import static com.ssafy.economius.game.enums.RateEnum.FIRST_PRIZE;
+import static com.ssafy.economius.game.enums.RateEnum.FIRST_PRIZE_TAX;
+import static com.ssafy.economius.game.enums.RateEnum.FOURTH_PRIZE;
+import static com.ssafy.economius.game.enums.RateEnum.FOURTH_PRIZE_TAX;
+import static com.ssafy.economius.game.enums.RateEnum.INITIAL_INTEREST_RATE;
+import static com.ssafy.economius.game.enums.RateEnum.INITIAL_ZERO_VALUE;
+import static com.ssafy.economius.game.enums.RateEnum.SECOND_PRIZE;
+import static com.ssafy.economius.game.enums.RateEnum.SECOND_PRIZE_TAX;
+import static com.ssafy.economius.game.enums.RateEnum.THIRD_PRIZE;
+import static com.ssafy.economius.game.enums.RateEnum.THIRD_PRIZE_TAX;
 import static com.ssafy.economius.game.enums.VolatileEnum.GOLD;
 import static com.ssafy.economius.game.enums.VolatileEnum.HOTEL;
 import static com.ssafy.economius.game.enums.VolatileEnum.RESTAURANT;
@@ -23,6 +32,8 @@ import com.ssafy.economius.game.repository.redis.GameRepository;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -55,16 +66,23 @@ public class GameRoomService {
             .players(new ArrayList<>(List.of(player)))
             .gameTurn(0)
             .roomId(roomId)
-            .portfolios(new HashMap<>())
             .interestRate(makeInterestRate())
             .gold(makeGold())
             .stocks(makeStocks())
             .savings(makeSavings())
             .insurances(makeInsurance())
             .buildings(makeBuildings())
+            .tax(makeTax())
             .build();
 
         gameRepository.save(game);
+    }
+
+    private static Map<Integer, Integer> makeTax() {
+        return Map.of(FIRST_PRIZE.getValue(), FIRST_PRIZE_TAX.getValue(),
+            SECOND_PRIZE.getValue(), SECOND_PRIZE_TAX.getValue(),
+            THIRD_PRIZE.getValue(), THIRD_PRIZE_TAX.getValue(),
+            FOURTH_PRIZE.getValue(), FOURTH_PRIZE_TAX.getValue());
     }
 
     private InterestRate makeInterestRate() {
@@ -80,7 +98,7 @@ public class GameRoomService {
         return Gold.builder()
             .price(gold.getInitialValue())
             .priceHistory(new ArrayList<>())
-            .rate(INITIAL_RATE.getValue())
+            .rate(INITIAL_ZERO_VALUE.getValue())
             .rateHistory(new ArrayList<>())
             .build();
     }
@@ -95,7 +113,7 @@ public class GameRoomService {
                 .companySubCategory(stock.getType())
                 .owners(new HashMap<>())
                 .rateHistory(new ArrayList<>())
-                .rate(INITIAL_RATE.getValue())
+                .rate(INITIAL_ZERO_VALUE.getValue())
                 .priceHistory(new ArrayList<>())
                 .price(stock.getInitialValue())
                 .build();
@@ -142,8 +160,8 @@ public class GameRoomService {
         return insurances;
     }
 
-    private List<Building> makeBuildings() {
-        ArrayList<Building> buildings = new ArrayList<>();
+    private Map<Integer, Building> makeBuildings() {
+        Map<Integer, Building> buildings = new HashMap<>();
 
         List<VolatileDto> tmpBuildings = List.of(
             InitialData.VOLATILES.get(HOTEL.getValue()),
@@ -157,10 +175,10 @@ public class GameRoomService {
                 .priceHistory(new ArrayList<>())
                 .rateHistory(new ArrayList<>())
                 .price(building.getInitialValue())
-                .rate(INITIAL_RATE.getValue())
+                .rate(INITIAL_ZERO_VALUE.getValue())
                 .build();
 
-            buildings.add(tmpBuilding);
+            buildings.put(building.getVolatileId(), tmpBuilding);
         }
 
         return buildings;
