@@ -62,7 +62,7 @@ public class GameService {
 
         // 각자의 포트폴리오 생성
         uploadInitialPortfolioOnRedis(game);
-
+        game.initializePlayerSequence();
         return new GameStartResponse(roomId);
     }
 
