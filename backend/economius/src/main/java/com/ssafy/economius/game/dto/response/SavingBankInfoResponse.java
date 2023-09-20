@@ -5,15 +5,13 @@ import com.ssafy.economius.game.dto.SavingsDto;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @Builder
-public class SavingResponse {
+public class SavingBankInfoResponse {
 
     private Long player;
     private int money;
-    private SavingsDto savings;
+    private SavingDto savings;
 
 
 }

@@ -15,7 +15,7 @@ public class PortfolioSaving {
     private int monthlyDeposit;
     private int currentPrice;
     private int currentCount;
-    private int totalCount;
+    private int finishCount;
     private int rate;
 
     @Override
@@ -26,7 +26,7 @@ public class PortfolioSaving {
                 ", monthlyDeposit=" + monthlyDeposit +
                 ", currentPrice=" + currentPrice +
                 ", currentCount=" + currentCount +
-                ", totalCount=" + totalCount +
+                ", totalCount=" + finishCount +
                 ", rate=" + rate +
                 '}';
     }
@@ -37,6 +37,6 @@ public class PortfolioSaving {
     }
 
     public boolean checkSavingFinish() {
-        return this.totalCount == this.currentCount;
+        return this.finishCount == this.currentCount;
     }
 }

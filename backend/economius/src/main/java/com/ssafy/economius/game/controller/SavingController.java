@@ -1,6 +1,7 @@
 package com.ssafy.economius.game.controller;
 
 import com.ssafy.economius.game.dto.request.SavingRequest;
+import com.ssafy.economius.game.dto.response.SavingBankInfoResponse;
 import com.ssafy.economius.game.dto.response.SavingResponse;
 import com.ssafy.economius.game.service.SavingService;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +21,8 @@ public class SavingController {
 
     @MessageMapping(value = "/{roomId}/bank")
     public void visitBank(@DestinationVariable int roomId, SavingRequest savingRequest) {
-        SavingResponse savingResponse = savingService.visitBank(roomId, savingRequest);
-        template.convertAndSend("/sub/" + roomId, savingResponse);
+        SavingBankInfoResponse savingBankInfoResponse = savingService.visitBank(roomId, savingRequest);
+        template.convertAndSend("/sub/" + roomId, savingBankInfoResponse);
     }
 
     @MessageMapping(value = "/{roomId}/joinSavings")

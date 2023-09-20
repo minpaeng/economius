@@ -136,7 +136,7 @@ public class GameRoomService {
             Saving tmpSaving = Saving.builder()
                     .bankId(enumValues[enumIndex])
                     .name(saving.getName())
-                    .price(saving.getMonthlyDeposit())
+                    .monthlyDeposit(saving.getMonthlyDeposit())
                     .rate(saving.getFinishRate())
                     .finishCount(saving.getFinishCount())
                     .build();
