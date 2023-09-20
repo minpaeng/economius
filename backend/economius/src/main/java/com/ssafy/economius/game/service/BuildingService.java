@@ -58,7 +58,7 @@ public class BuildingService {
         return BuyBuildingResponse.builder()
                 .player(portfolio.getPlayer())
                 .buildingId(buildingId)
-                .changeAmount(afterMoney - beforeMoney)
+                .changeAmount(beforeMoney - afterMoney)
                 .moneyResult(afterMoney)
                 .build();
     }
