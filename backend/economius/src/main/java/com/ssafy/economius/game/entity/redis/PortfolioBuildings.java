@@ -1,6 +1,7 @@
 package com.ssafy.economius.game.entity.redis;
 
-import java.util.List;
+import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class PortfolioBuildings {
     private int earningPrice;
     private int amount;
 
-    private List<PortfolioBuilding> building;
+    private Map<Integer, PortfolioBuilding> building;
 
     public void buyBuilding(int buildingId, Building building) {
         this.totalPrice += building.getPrice();
@@ -36,14 +37,14 @@ public class PortfolioBuildings {
                 .building(building)
                 .build();
 
-        this.building.add(portfolioBuilding);
+        this.building.put(buildingId, portfolioBuilding);
     }
 
     private void setEarnings() {
         int totalBoughtPrice = 0;
         int totalCurrentPrice = 0;
 
-        for (PortfolioBuilding portfolioBuilding : building) {
+        for (PortfolioBuilding portfolioBuilding : building.values()) {
             totalBoughtPrice += portfolioBuilding.getBuyPrice();
             totalCurrentPrice += portfolioBuilding.getBuilding().getPrice();
         }
@@ -54,7 +55,8 @@ public class PortfolioBuildings {
     private void calculateEarnings(int totalBoughtPrice, int totalCurrentPrice) {
         int gap = Math.abs(totalCurrentPrice - totalBoughtPrice);
         int newEarningRate = 0;
-        if (totalBoughtPrice != 0) newEarningRate = (gap / totalBoughtPrice) * 100;
+        if (totalBoughtPrice != 0)
+            newEarningRate = (gap / totalBoughtPrice) * 100;
         this.earningRate = newEarningRate;
         this.earningPrice = gap;
         if (totalBoughtPrice > totalCurrentPrice) {

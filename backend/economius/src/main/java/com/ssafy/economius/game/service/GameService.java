@@ -90,7 +90,6 @@ public class GameService {
             .earningPrice(INITIAL_ZERO_VALUE.getValue())
             .totalPrice(INITIAL_ZERO_VALUE.getValue())
             .earningRate(INITIAL_ZERO_VALUE.getValue())
-            .stocks(new ArrayList<>())
             .build();
     }
 
@@ -99,7 +98,6 @@ public class GameService {
             .amount(INITIAL_ZERO_VALUE.getValue())
             .earningPrice(INITIAL_ZERO_VALUE.getValue())
             .earningRate(INITIAL_ZERO_VALUE.getValue())
-            .building(new ArrayList<>())
             .build();
     }
 
@@ -114,7 +112,6 @@ public class GameService {
         return PortfolioSavings.builder()
             .amount(INITIAL_ZERO_VALUE.getValue())
             .totalPrice(INITIAL_ZERO_VALUE.getValue())
-            .saving(new ArrayList<>())
             .build();
     }
 
