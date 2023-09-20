@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public enum GameRoomMessage {
 
-    GAME_NOT_EXIST(1000, "해당하는 게임이 존재하지 않습니다.");
+    GAME_NOT_EXIST(1000, "해당하는 게임이 존재하지 않습니다."),
+    CANNOT_BUY(1001, "보유 현금이 부족합니다.");
 
     private final int code;
     private final String message;

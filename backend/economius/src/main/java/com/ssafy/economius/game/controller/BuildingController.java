@@ -30,7 +30,7 @@ public class BuildingController {
                        @Payload PayFeeRequest payFeeRequest) {
 
         PayFeeResponse responseDto = buildingService.payFee(roomId, payFeeRequest);
-        template.convertAndSend(roomId + "/payFee", responseDto);
+        template.convertAndSend("/sub/" + roomId, responseDto);
     }
 
     @MessageMapping(value = "/{roomId}/buyBuildings")
@@ -38,7 +38,7 @@ public class BuildingController {
                              @Payload BuyBuildingsRequest buyBuildingsRequest) {
 
         BuyBuildingResponse responseDto = buildingService.buyBuildings(roomId, buyBuildingsRequest);
-        template.convertAndSend(roomId + "/buyBuildings", responseDto);
+        template.convertAndSend("/sub/" + roomId, responseDto);
     }
 
     @MessageMapping(value = "/{roomId}/sellBuildings")
@@ -46,7 +46,7 @@ public class BuildingController {
                               @Payload SellBuildingsRequest sellBuildingsRequest) {
 
         SellBuildingsResponse responseDto = buildingService.sellBuildings(roomId, sellBuildingsRequest);
-        template.convertAndSend(roomId + "/sellBuildings", responseDto);
+        template.convertAndSend("/sub/" + roomId, responseDto);
     }
 
     @MessageMapping(value = "/{roomId}/selectBuilding")
@@ -54,6 +54,10 @@ public class BuildingController {
                                @Payload SelectBuildingRequest selectBuildingRequest) {
 
         SelectBuildingResponse responseDto = buildingService.selectBuilding(roomId, selectBuildingRequest);
-        template.convertAndSend("/sub/" + roomId, responseDto);
+
+        Long player = selectBuildingRequest.getPlayer();
+        if (selectBuildingRequest.isVisit())
+            template.convertAndSend("/sub/" + roomId, responseDto);
+        else template.convertAndSend("/sub/" + roomId + "/" + player, responseDto);
     }
 }

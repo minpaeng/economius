@@ -32,7 +32,7 @@ public class Portfolio {
     }
 
     public void buyBuilding(int buildingId, Building building) {
-        this.totalMoney -= building.getPrice();
+        this.money -= building.getPrice();
         this.buildings.buyBuilding(buildingId, building);
     }
 }
