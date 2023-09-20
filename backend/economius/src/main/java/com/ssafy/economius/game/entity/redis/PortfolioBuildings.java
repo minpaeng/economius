@@ -56,7 +56,8 @@ public class PortfolioBuildings {
     private void calculateEarnings(int totalBoughtPrice, int totalCurrentPrice) {
         int gap = Math.abs(totalCurrentPrice - totalBoughtPrice);
         int newEarningRate = 0;
-        if (totalBoughtPrice != 0) newEarningRate = (gap / totalBoughtPrice) * 100;
+        if (totalBoughtPrice != 0)
+            newEarningRate = (gap / totalBoughtPrice) * 100;
         this.earningRate = newEarningRate;
         this.earningPrice = gap;
         if (totalBoughtPrice > totalCurrentPrice) {
@@ -64,7 +65,4 @@ public class PortfolioBuildings {
             this.earningPrice = gap * -1;
         }
     }
-    private List<PortfolioBuilding> building;
-
-
 }
