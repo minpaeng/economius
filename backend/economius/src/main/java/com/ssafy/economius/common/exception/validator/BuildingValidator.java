@@ -1,18 +1,37 @@
 package com.ssafy.economius.common.exception.validator;
 
+import com.ssafy.economius.common.exception.CustomWebsocketException;
+import com.ssafy.economius.common.exception.message.BuildingMessage;
 import com.ssafy.economius.game.entity.redis.Building;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 @Component
 public class BuildingValidator {
 
-    public void checkBuildingBuyingStatus(int money, int buildingId, Building building) {
-        // 이미 구매한 빌딩이라면 에러
+    public void checkBuildingBuyingStatus(Long player, int roomId, Building building) {
+        checkAlreadyOwnBuilding(player, building.getOwnerId(), roomId);
+        checkAlreadyOwnedBuilding(building, roomId);
+    }
 
+    private void checkAlreadyOwnBuilding(Long player, Long ownerId, int roomId) {
+        if (ownerId != null && Objects.equals(player, ownerId)) {
+            throw CustomWebsocketException.builder()
+                    .roomId(roomId)
+                    .code(BuildingMessage.ALREADY_OWNED_BUILDING.getCode())
+                    .message(BuildingMessage.ALREADY_OWNED_BUILDING.getMessage())
+                    .build();
+        }
+    }
 
-        // 이미 누군가사 소유한 빌딩이라면 에러
-
-        // 보유 자산이 빌딩 가격보다 적다면 에러
-//        if (money < building.getPrice())처리
+    private void checkAlreadyOwnedBuilding(Building building, int roomId) {
+        if (building.getOwnerId() != null) {
+            throw CustomWebsocketException.builder()
+                    .roomId(roomId)
+                    .code(BuildingMessage.ALREADY_OWNED_BUILDING.getCode())
+                    .message(BuildingMessage.ALREADY_OWNED_BUILDING.getMessage())
+                    .build();
+        }
     }
 }
