@@ -5,7 +5,7 @@ import * as S from './GlobalModal.stye';
 
 function Bankrupt() {
     // 원래는 초기값 false로 두고 해당 위치 되면 true로 바꿔줘야할듯
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
     // 아니면 해지 모달
     const closeModal = () => {
         setIsOpen(false);
