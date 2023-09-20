@@ -1,5 +1,6 @@
 package com.ssafy.economius.game.service;
 
+import com.ssafy.economius.common.exception.validator.BuildingValidator;
 import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.dto.request.BuyBuildingsRequest;
 import com.ssafy.economius.game.dto.request.PayFeeRequest;
@@ -9,7 +10,9 @@ import com.ssafy.economius.game.dto.response.BuyBuildingResponse;
 import com.ssafy.economius.game.dto.response.PayFeeResponse;
 import com.ssafy.economius.game.dto.response.SelectBuildingResponse;
 import com.ssafy.economius.game.dto.response.SellBuildingsResponse;
+import com.ssafy.economius.game.entity.redis.Building;
 import com.ssafy.economius.game.entity.redis.Game;
+import com.ssafy.economius.game.entity.redis.Portfolio;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class BuildingService {
+    private final BuildingValidator buildingValidator;
     private final GameValidator gameValidator;
     private final GameRepository gameRepository;
 
@@ -28,11 +32,34 @@ public class BuildingService {
     }
 
     public BuyBuildingResponse buyBuildings(int roomId, BuyBuildingsRequest buyBuildingsRequest) {
-        return BuyBuildingResponse.builder().build();
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
+
+        Long playerId = buyBuildingsRequest.getPlayer();
+        Portfolio portfolio = game.getPortfolios().get(playerId);
+
+        int buildingId = buyBuildingsRequest.getBuildingId();
+        Building building = game.getBuildings().get(buildingId);
+
+        buildingValidator.checkBuildingBuyingStatus(portfolio.getMoney(), buildingId, building);
+
+        return buyBuilding(portfolio, buildingId, building);
     }
 
     public SellBuildingsResponse sellBuildings(int roomId, SellBuildingsRequest sellBuildingsRequest) {
         return SellBuildingsResponse.builder()
+                .build();
+    }
+
+    private BuyBuildingResponse buyBuilding(Portfolio portfolio, int buildingId, Building building) {
+        int beforeMoney = portfolio.getMoney();
+        portfolio.buyBuilding(buildingId, building);
+        int afterMoney = portfolio.getMoney();
+
+        return BuyBuildingResponse.builder()
+                .player(portfolio.getPlayer())
+                .buildingId(buildingId)
+                .changeAmount(afterMoney - beforeMoney)
+                .moneyResult(afterMoney)
                 .build();
     }
 
