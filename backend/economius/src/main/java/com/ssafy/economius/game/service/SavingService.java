@@ -116,7 +116,7 @@ public class SavingService {
         }
 
         //현재 적금 지불 가능한지 확인
-        gameValidator.canBuy(portfolio.getMoney(), joinPortfolioSaving.getMonthlyDeposit());
+        gameValidator.canBuy(roomId, portfolio.getMoney(), joinPortfolioSaving.getMonthlyDeposit());
 
         //적금 지불 적용
         portfolioSavings.getSaving().add(joinPortfolioSaving);
