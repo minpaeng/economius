@@ -126,14 +126,8 @@ public class GameService {
             () -> new RuntimeException("일치하는 방이 존재하지 않습니다.")
         );
 
-        // 순위 구하기
-        int prize = 1;
-        for (Long gamePlayer : game.getPlayers()) {
-            if (gamePlayer.equals(player)) {
-                break;
-            }
-            prize++;
-        }
+        game.updatePrize();
+        int prize = game.getPrizeByPlayer(player);
 
         List<PortfolioSaving> savings = getSavings(player, game);
 
