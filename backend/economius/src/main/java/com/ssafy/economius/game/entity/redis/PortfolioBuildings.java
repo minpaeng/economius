@@ -1,5 +1,6 @@
 package com.ssafy.economius.game.entity.redis;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
@@ -30,6 +31,8 @@ public class PortfolioBuildings {
     }
 
     private void addBuilding(int buildingId, Building building) {
+        if (this.building == null) this.building = new HashMap<>();
+
         PortfolioBuilding portfolioBuilding = PortfolioBuilding.builder()
                 .buildingId(buildingId)
                 .buildingName(building.getName())
