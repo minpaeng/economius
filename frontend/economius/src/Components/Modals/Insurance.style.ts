@@ -27,26 +27,6 @@ export const InsuranceMid = styled.div`
   align-items: center;
 `;
 
-// export const InsuranceMidImg = styled.img`
-//   width: 200px;
-// `;
-
-// export const InsuranceMidDesc = styled.div`
-//   height: 70%;
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: space-evenly;
-//   align-items: center;
-// `;
-
-// export const InsuranceMidPriceDesc = styled.div`
-//   display: flex;
-// `;
-
-// export const InsuranceMidCycle = styled.div`
-//   display: flex;
-// `;
-
 export const InsuranceJoinBottom = styled.button`
   flex: 2;
   border: none;

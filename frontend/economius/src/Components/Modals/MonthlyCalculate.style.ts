@@ -81,3 +81,10 @@ export const MidDesc = styled.div`
     display: flex;
     border: solid 1px green;
 `;
+
+export const Footer = styled.div`
+    width: 210px;
+    height: 30px;
+    display: flex;
+    border: solid 1px green;
+`;
