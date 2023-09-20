@@ -17,4 +17,15 @@ public class PortfolioStocks {
     private int amount;
 
     private List<PortfolioStock> stocks;
+
+    @Override
+    public String toString() {
+        return "PortfolioStocks{" +
+                "totalPrice=" + totalPrice +
+                ", earningRate=" + earningRate +
+                ", earningPrice=" + earningPrice +
+                ", amount=" + amount +
+                ", stocks=" + stocks +
+                '}';
+    }
 }

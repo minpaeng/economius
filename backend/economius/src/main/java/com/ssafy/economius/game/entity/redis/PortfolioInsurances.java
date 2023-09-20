@@ -15,4 +15,13 @@ public class PortfolioInsurances {
     private int totalPrice;
     private int amount;
     private List<PortfolioInsurance> insurance;
+
+    @Override
+    public String toString() {
+        return "PortfolioInsurances{" +
+                "totalPrice=" + totalPrice +
+                ", amount=" + amount +
+                ", insurance=" + insurance +
+                '}';
+    }
 }

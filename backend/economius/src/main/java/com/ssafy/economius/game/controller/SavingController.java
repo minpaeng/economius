@@ -16,26 +16,25 @@ import org.springframework.stereotype.Controller;
 public class SavingController {
 
     private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
-
     private final SavingService savingService;
 
     @MessageMapping(value = "/{roomId}/bank")
     public void visitBank(@DestinationVariable int roomId, SavingRequest savingRequest) {
         SavingResponse savingResponse = savingService.visitBank(roomId, savingRequest);
-        template.convertAndSend("");
+        template.convertAndSend("/sub/" + roomId, savingResponse);
     }
 
     @MessageMapping(value = "/{roomId}/joinSavings")
     public void joinSavings(@DestinationVariable int roomId, SavingRequest savingRequest) {
         SavingResponse savingResponse = savingService.joinSavings(roomId, savingRequest);
-        template.convertAndSend("");
+        template.convertAndSend("/sub/" + roomId, savingResponse);
     }
 
 
     @MessageMapping(value = "/{roomId}/stopSavings")
     public void stopSavings(@DestinationVariable int roomId, SavingRequest savingRequest) {
         SavingResponse savingResponse = savingService.stopSavings(roomId, savingRequest);
-        template.convertAndSend("");
+        template.convertAndSend("/sub/" + roomId, savingResponse);
     }
 
 }

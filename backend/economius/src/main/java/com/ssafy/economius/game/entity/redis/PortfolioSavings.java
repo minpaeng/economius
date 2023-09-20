@@ -15,4 +15,13 @@ public class PortfolioSavings {
     private int totalPrice;
     private int amount;
     private List<PortfolioSaving> saving;
+
+    @Override
+    public String toString() {
+        return "PortfolioSavings{" +
+                "totalPrice=" + totalPrice +
+                ", amount=" + amount +
+                ", saving=" + saving +
+                '}';
+    }
 }

@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public class SavingDto {
-    private String bankCode;
+    private String bankId;
     private String savingName;
     private int perPrice;
     private int currentPrice;
