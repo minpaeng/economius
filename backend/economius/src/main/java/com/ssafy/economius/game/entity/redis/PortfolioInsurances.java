@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Builder
-public class PortfolioSavings {
+public class PortfolioInsurances {
 
     private int totalPrice;
     private int amount;
-    private List<PortfolioSaving> saving;
+    private List<PortfolioInsurance> insurance;
 }

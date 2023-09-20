@@ -13,9 +13,18 @@ public class PortfolioSaving {
 
     private String savingCode;
     private String savingName;
-    private int perPrice;
+    private int monthlyDeposit;
     private int currentPrice;
     private int currentCount;
     private int totalCount;
     private int rate;
+
+    public void updateCurrentCount() {
+        this.currentPrice += this.currentPrice * ((double) rate / 100);
+        this.currentCount++;
+    }
+
+    public boolean checkSavingFinish() {
+        return this.totalCount == this.currentCount;
+    }
 }
