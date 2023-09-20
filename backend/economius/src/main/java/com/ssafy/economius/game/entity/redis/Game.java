@@ -1,7 +1,13 @@
 package com.ssafy.economius.game.entity.redis;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,5 +41,33 @@ public class Game {
 
     public void initializePortfolio(Map<Long, Portfolio> portfolios) {
         this.portfolios = portfolios;
+    }
+
+    public int getPrizeByPlayer(Long player){
+        // 순위 구하기
+        int prize = 1;
+        for (Long gamePlayer : players) {
+            if (gamePlayer.equals(player)) {
+                break;
+            }
+            prize++;
+        }
+        return prize;
+    }
+
+    public void updatePrize(){
+        List<Entry<Long, Portfolio>> entries = new LinkedList<>(portfolios.entrySet());
+        entries.sort(new Comparator<Entry<Long, Portfolio>>() {
+            @Override
+            public int compare(Entry<Long, Portfolio> o1, Entry<Long, Portfolio> o2) {
+                return Integer.compare(o2.getValue().getTotalMoney(),
+                    o1.getValue().getTotalMoney());
+            }
+        });
+
+        int prize = 0;
+        for (Entry<Long, Portfolio> entry : entries) {
+            players.set(prize++, entry.getKey());
+        }
     }
 }
