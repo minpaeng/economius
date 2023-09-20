@@ -12,15 +12,12 @@ import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Portfolio;
 import com.ssafy.economius.game.entity.redis.PortfolioBuildings;
 import com.ssafy.economius.game.entity.redis.PortfolioGold;
-import com.ssafy.economius.game.entity.redis.PortfolioSaving;
 import com.ssafy.economius.game.entity.redis.PortfolioSavings;
 import com.ssafy.economius.game.entity.redis.PortfolioStocks;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -161,15 +158,4 @@ public class GameService {
             .portfolio(null)
             .build();
     }
-
-    private List<PortfolioSaving> getSavings(Long player, Game game) {
-        return Optional.ofNullable(
-                game
-                    .getPortfolios()
-                    .get(player)
-                    .getSavings()
-                    .getSaving())
-            .orElse(List.of());
-    }
-
 }
