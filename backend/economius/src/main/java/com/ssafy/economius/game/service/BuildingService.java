@@ -42,7 +42,9 @@ public class BuildingService {
         buildingValidator.checkBuildingBuyingStatus(player, roomId, building);
         gameValidator.canBuy(portfolio.getMoney(), building.getPrice());
 
-        return buyBuilding(portfolio, buildingId, building);
+        BuyBuildingResponse response = buyBuilding(portfolio, buildingId, building);
+        gameRepository.save(game);
+        return response;
     }
 
     public SellBuildingsResponse sellBuildings(int roomId, SellBuildingsRequest sellBuildingsRequest) {
