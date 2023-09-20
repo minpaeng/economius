@@ -18,8 +18,8 @@ export const modalStyle: any = {
         overflow: 'auto',
         zIndex: 10,
         margin: 'auto',
-        width: '600px',
-        height: '450px',
+        width: '500px',
+        height: '500px',
         border: '5px solid white',
         borderRadius: '20px',
         padding: '0px',
@@ -39,6 +39,14 @@ export const Top = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    border: none;
+    background: #ffaa55;
+    transition: all 250ms ease-in-out;
+`;
+
+export const TopImg = styled.img`
+    height: 50px;
+    margin-right: 10px;
 `;
 
 export const TopTitle = styled.div`
@@ -46,39 +54,30 @@ export const TopTitle = styled.div`
     font-weight: 800;
 `;
 
-export const Mid = styled.div`
-    flex: 5.85;
-    display: flex;
-    flex-direction: column;
-    /* justify-content: space-evenly; */
-    align-items: center;
-`;
-
-export const MidImg = styled.img`
-    height: 150px;
-`;
-
-export const MidDesc = styled.div`
-    height: 30%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-`;
-
 export const Divide = styled.div`
     flex: 0.15;
     background-color: white;
 `;
 
-export const Botton = styled.button`
-    flex: 2;
-    border: none;
-    background: #ffdaae;
-    cursor: pointer; /* 커서를 포인터로 설정 */
-    transition: all 250ms ease-in-out;
+export const Mid = styled.div`
+    flex: 7.85;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`;
 
-    /* 호버 시 색상 변경 */
-    &:hover {
-        background: #ffaa55; /* 원하는 색상으로 변경 */
-    }
+export const MidItem = styled.div`
+    border: solid 1px red;
+`;
+
+// export const MidImg = styled.img`
+//     height: 150px;
+// `;
+
+export const MidDesc = styled.div`
+    width: 210px;
+    height: 30px;
+    display: flex;
+    border: solid 1px green;
 `;

@@ -10,26 +10,28 @@ import Modal from 'react-modal';
 import BigEvent from '../src/Components/Modals/BigEvent';
 import ChanceCard from '../src/Components/Modals/ChanceCard';
 import InstallmentSaving from './Components/Modals/InstallmentSaving';
+import MonthlyCalculate from './Components/Modals/MonthlyCalculate';
 
 function App() {
     Modal.setAppElement('#root');
 
     return (
         <div className='canvas-outer' style={{ width: '100%', height: 'calc(100vw * 9 / 16)' }}>
-            <Canvas style={{ width: '100%', height: '100%' }}>
+            {/* <Canvas style={{ width: '100%', height: '100%' }}>
                 <OrthographicCamera makeDefault zoom={65} position={[4, 4.1, 4]} />
                 <OrbitControls />
                 <ambientLight intensity={3} />
                 <Map />
                 <Characters />
                 <Dice />
-            </Canvas>
+            </Canvas> */}
 
             <Controller />
             {/* Modal Test */}
             <BigEvent />
             <ChanceCard />
             <InstallmentSaving />
+            <MonthlyCalculate />
         </div>
     );
 }

@@ -9,7 +9,7 @@ import * as S from './BeforeBankrupt.style';
 // 자산들 가격
 // 소유한 자산들
 const A = ['삼성전자', '레스토랑', '호텔', '삼성전자', '레스토랑', '호텔'];
-const B = [1341, 34423];
+const B = [41, 34423];
 const ownedAssets = [false, false, false, false, false, false];
 
 function BeforeBankrupt() {
@@ -70,7 +70,11 @@ function BeforeBankrupt() {
                 </S.MidCalc>
 
                 <S.Divide />
-                <S.Button can={B[1] - B[0] >= 0}></S.Button>
+                <S.Button
+                    onClick={() => alert('파산 매각 모달')}
+                    disabled={!(B[1] - B[0] >= 0)}
+                    style={{ backgroundColor: B[1] - B[0] >= 0 ? '#ffaa55' : '#D9D9D9' }}
+                ></S.Button>
             </S.Main>
         </Modal>
     );

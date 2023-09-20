@@ -154,11 +154,10 @@ export const Divide = styled.div`
     background-color: white;
 `;
 
-export const Button = styled.button<{ can: boolean }>`
+export const Button = styled.button`
     flex: 1;
     border: none;
     background: #ffdaae;
     cursor: pointer; /* 커서를 포인터로 설정 */
     transition: all 250ms ease-in-out;
-    background: ${({ can }) => (can ? '#ffaa55' : '#D9D9D9')}; /* 원하는 색상으로 변경 */
 `;
