@@ -1,5 +1,6 @@
 package com.ssafy.economius.game.entity.redis;
 
+import java.util.List;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
@@ -62,16 +63,8 @@ public class PortfolioBuildings {
             this.earningRate = newEarningRate * -1;
             this.earningPrice = gap * -1;
         }
+    }
     private List<PortfolioBuilding> building;
 
-    @Override
-    public String toString() {
-        return "PortfolioBuildings{" +
-                "totalPrice=" + totalPrice +
-                ", earningRate=" + earningRate +
-                ", earningPrice=" + earningPrice +
-                ", amount=" + amount +
-                ", building=" + building +
-                '}';
-    }
+
 }
