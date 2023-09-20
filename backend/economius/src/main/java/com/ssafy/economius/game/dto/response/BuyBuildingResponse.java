@@ -8,4 +8,9 @@ import lombok.Getter;
 @AllArgsConstructor
 @Builder
 public class BuyBuildingResponse {
+
+    private Long player;
+    private int changeAmount;
+    private int moneyResult;
+    private int buildingId;
 }
