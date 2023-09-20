@@ -129,14 +129,12 @@ public class GameService {
         game.updatePrize();
         int prize = game.getPrizeByPlayer(player);
 
-        List<PortfolioSaving> savings = getSavings(player, game);
-
-        updateSavings(savings);
-
         Portfolio portfolio = game.getPortfolios().get(player);
+        PortfolioSavings savings = portfolio.getSavings();
+        savings.updateSavings();
 
-        int finishSaving = calculateFinishSaving(savings);
-        int savingPrice = calculateSavingPrice(savings);
+        int finishSaving = portfolio.getSavings().calculateFinishSaving();
+        int savingPrice = savings.calculateSavingPrice();
         int insurancePrice = portfolio.getInsurances().getTotalPrice();
         int money = portfolio.getMoney();
         int income = (finishSaving - savingPrice - insurancePrice + SALARY.getValue());
@@ -172,29 +170,6 @@ public class GameService {
                     .getSavings()
                     .getSaving())
             .orElse(List.of());
-    }
-
-    private void updateSavings(List<PortfolioSaving> savings) {
-        savings.forEach(PortfolioSaving::updateCurrentCount);
-    }
-
-    private int calculateSavingPrice(List<PortfolioSaving> savings) {
-        return savings.stream()
-            .mapToInt(PortfolioSaving::getMonthlyDeposit)
-            .sum();
-    }
-
-    private int calculateFinishSaving(List<PortfolioSaving> savings) {
-        return savings.stream()
-            .filter(PortfolioSaving::checkSavingFinish)
-            .mapToInt(saving -> deleteSaving(savings, saving))
-            .sum();
-    }
-
-    private int deleteSaving(List<PortfolioSaving> savings, PortfolioSaving saving) {
-        int finishPrice = saving.getCurrentPrice();
-        savings.remove(saving);
-        return finishPrice;
     }
 
 }
