@@ -21,4 +21,15 @@ public class Portfolio {
     private PortfolioBuildings buildings;
     private PortfolioStocks stocks;
     private PortfolioInsurances insurances;
+
+    public void updateTotalMoney() {
+        this.totalMoney =
+            gold.getTotalPrice() +
+                savings.getTotalPrice() +
+                buildings.getTotalPrice() +
+                stocks.getTotalPrice() +
+                money;
+    }
+
+
 }
