@@ -12,7 +12,6 @@ import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Portfolio;
 import com.ssafy.economius.game.entity.redis.PortfolioBuildings;
 import com.ssafy.economius.game.entity.redis.PortfolioGold;
-import com.ssafy.economius.game.entity.redis.PortfolioInsurance;
 import com.ssafy.economius.game.entity.redis.PortfolioSaving;
 import com.ssafy.economius.game.entity.redis.PortfolioSavings;
 import com.ssafy.economius.game.entity.redis.PortfolioStocks;
@@ -140,13 +139,15 @@ public class GameService {
 
         updateSavings(savings);
 
+        Portfolio portfolio = game.getPortfolios().get(player);
+
         int finishSaving = calculateFinishSaving(savings);
         int savingPrice = calculateSavingPrice(savings);
-        int insurancePrice = game.getPortfolios().get(player).getInsurances().getTotalPrice();
-        int money = game.getPortfolios().get(player).getMoney();
+        int insurancePrice = portfolio.getInsurances().getTotalPrice();
+        int money = portfolio.getMoney();
         int income = (finishSaving - savingPrice - insurancePrice + SALARY.getValue());
         int tax = (int) (income * (double) game.getTax().get(prize) / 100);
-        game.getPortfolios().get(player).setMoney(money + income - tax);
+        portfolio.setMoney(money + income - tax);
 
         ReceiptDto receipt = ReceiptDto.builder()
             .tax(tax)
@@ -158,10 +159,15 @@ public class GameService {
             .totalIncome(income)
             .build();
 
-
+        portfolio.updateTotalMoney();
 
         gameRepository.save(game);
-        return null;
+
+        return CalculateResponse.builder()
+            .receipt(receipt)
+            .player(player)
+            .portfolio(null)
+            .build();
     }
 
     private List<PortfolioSaving> getSavings(Long player, Game game) {
@@ -196,4 +202,5 @@ public class GameService {
         savings.remove(saving);
         return finishPrice;
     }
+
 }
