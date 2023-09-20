@@ -61,7 +61,7 @@ function Insurance() {
     },
   ];
 
-  const [isInsuranceOpen, setIsInsuranceOpen] = useState(true);
+  const [isInsuranceOpen, setIsInsuranceOpen] = useState(false);
 
   const closeModal = () => {
     setIsInsuranceOpen(false);
