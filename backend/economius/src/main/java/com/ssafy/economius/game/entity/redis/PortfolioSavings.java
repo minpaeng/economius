@@ -44,12 +44,5 @@ public class PortfolioSavings {
         int finishPrice = saving.getCurrentPrice();
         this.saving.remove(saving);
         return finishPrice;
-    @Override
-    public String toString() {
-        return "PortfolioSavings{" +
-                "totalPrice=" + totalPrice +
-                ", amount=" + amount +
-                ", saving=" + saving +
-                '}';
     }
 }

@@ -55,23 +55,13 @@ public class PortfolioBuildings {
     private void calculateEarnings(int totalBoughtPrice, int totalCurrentPrice) {
         int gap = Math.abs(totalCurrentPrice - totalBoughtPrice);
         int newEarningRate = 0;
-        if (totalBoughtPrice != 0) newEarningRate = (gap / totalBoughtPrice) * 100;
+        if (totalBoughtPrice != 0)
+            newEarningRate = (gap / totalBoughtPrice) * 100;
         this.earningRate = newEarningRate;
         this.earningPrice = gap;
         if (totalBoughtPrice > totalCurrentPrice) {
             this.earningRate = newEarningRate * -1;
             this.earningPrice = gap * -1;
         }
-    private List<PortfolioBuilding> building;
-
-    @Override
-    public String toString() {
-        return "PortfolioBuildings{" +
-                "totalPrice=" + totalPrice +
-                ", earningRate=" + earningRate +
-                ", earningPrice=" + earningPrice +
-                ", amount=" + amount +
-                ", building=" + building +
-                '}';
     }
 }
