@@ -1,10 +1,8 @@
 package com.ssafy.economius.game.dto;
 
-import java.util.List;
-
 public class StockDto {
 
-    private String companyCode;
+    private Integer stockId;
     private String companyName;
     private String costPerStock;
     private int amount;

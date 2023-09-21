@@ -1,6 +1,7 @@
 package com.ssafy.economius.game.entity.redis;
 
 import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,16 +17,6 @@ public class PortfolioStocks {
     private int earningPrice;
     private int amount;
 
-    private List<PortfolioStock> stocks;
+    private Map<Integer, PortfolioStock> stocks;
 
-    @Override
-    public String toString() {
-        return "PortfolioStocks{" +
-                "totalPrice=" + totalPrice +
-                ", earningRate=" + earningRate +
-                ", earningPrice=" + earningPrice +
-                ", amount=" + amount +
-                ", stocks=" + stocks +
-                '}';
-    }
 }

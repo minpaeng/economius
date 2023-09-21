@@ -16,7 +16,6 @@ import org.springframework.data.redis.core.index.Indexed;
 @Builder
 public class Stock {
 
-        private String code;
         private String name;
         private String companyCategory;
         private String companySubCategory;

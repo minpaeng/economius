@@ -24,6 +24,9 @@ public enum RateEnum {
     GOLD_RATE_LOWER_BOUND(-5),
     GOLD_RATE_UPPER_BOUND(10),
 
+    STOCK_RATE_LOWER_BOUND(-5),
+    STOCK_RATE_UPPER_BOUND(10),
+
     MAX_BOARD_SIZE(36);
 
 

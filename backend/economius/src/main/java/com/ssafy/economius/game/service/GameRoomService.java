@@ -105,8 +105,8 @@ public class GameRoomService {
             .build();
     }
 
-    private List<Stock> makeStocks() {
-        ArrayList<Stock> stocks = new ArrayList<>();
+    private Map<Integer,Stock> makeStocks() {
+        Map<Integer, Stock> stocks = new HashMap<>();
 
         for (StockDto stock : InitialData.STOCKS) {
             Stock tmpStock = Stock.builder()
@@ -120,7 +120,7 @@ public class GameRoomService {
                 .price(stock.getInitialValue())
                 .build();
 
-            stocks.add(tmpStock);
+            stocks.put(stock.getStockId(), tmpStock);
         }
 
         return stocks;
