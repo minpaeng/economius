@@ -1,8 +1,31 @@
 import Modal from "react-modal";
 import { useState } from "react";
 import * as S from "./Stock.style";
+import PlayerChracter from "./PlayerChracter";
+import PlayerProperty from "./PlayerProperty";
+import PlayerRanking from "./PlayerRanking";
+import styled from "styled-components";
 
-function PlayerPlace({ borderRadius, top, left, bgColor }) {
+const PlayerLayout = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
+
+function PlayerPlace({
+  borderRadius,
+  top,
+  left,
+  bgColor,
+  idx,
+  character,
+  AllProperty,
+  money,
+  Ranking,
+  Nick,
+}) {
   // modal style
   const modalStyle: any = {
     overlay: {
@@ -35,7 +58,19 @@ function PlayerPlace({ borderRadius, top, left, bgColor }) {
   };
   return (
     <Modal isOpen={true} style={modalStyle}>
-      Player
+      {!(idx % 2) ? (
+        <PlayerLayout>
+          <PlayerRanking Ranking={Ranking} />
+          <PlayerProperty AllProperty={AllProperty} money={money} Nick={Nick} />
+          <PlayerChracter character={character} />
+        </PlayerLayout>
+      ) : (
+        <PlayerLayout>
+          <PlayerChracter character={character} />
+          <PlayerProperty AllProperty={AllProperty} money={money} Nick={Nick} />
+          <PlayerRanking Ranking={Ranking} />
+        </PlayerLayout>
+      )}
     </Modal>
   );
 }

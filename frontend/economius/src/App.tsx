@@ -9,9 +9,9 @@ import Controller from "/src/Controller";
 import Modal from "react-modal";
 import Portforlio from "./Components/Common/Portfolio";
 import NewsBar from "./Components/Common/NewsBar";
-import PlayerPlace from "./Components/Common/PlayerPlace";
 import "./App.css";
 import Modals from "./Modals";
+import PlayerPlaceAll from "./Components/Common/PlayerPlaceAll";
 
 function App() {
   Modal.setAppElement("#root");
@@ -35,31 +35,8 @@ function App() {
 
       <Portforlio />
       <NewsBar />
-      <PlayerPlace
-        borderRadius="0px 0px 100px 0px"
-        top="6%"
-        left="0%"
-        bgColor="rgba(255, 216, 133, 0.9)"
-      />
-      <PlayerPlace
-        borderRadius="0px 0px 0px 100px"
-        top="6%"
-        left="50%"
-        bgColor="rgba(131, 213, 233, 0.9)"
-      />
-      <PlayerPlace
-        borderRadius="0px 100px 0px 0px"
-        top="81%"
-        left="0%"
-        bgColor="rgba(255, 166, 132, 0.90)"
-      />
+      <PlayerPlaceAll />
 
-      <PlayerPlace
-        borderRadius="100px 0px 0px 0px"
-        top="81%"
-        left="50%"
-        bgColor="rgba(255, 156, 159, 0.90)"
-      />
       <Modals />
     </div>
   );
