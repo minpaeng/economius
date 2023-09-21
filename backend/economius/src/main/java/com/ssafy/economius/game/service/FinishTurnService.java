@@ -14,25 +14,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class GameEngine {
-
-    // 다음 플레이어가 누구인지
-    // 게임이 긑났는지
-    // 새로운 정산이 있는지 전송
+public class FinishTurnService {
     private final SimpMessagingTemplate template;
-
-
-    // 주사위가 굴려질때마다 확인해서 알맞은 서버 메시지 전송
-    // 전송해야할 메시지를 구하는 컴포넌트
-
-    // 경제 이슈 전조증상
-
-    // 경제 이슈
-
-    // 금리 등 가격 변동
-
-    // 각 턴마다 금리, 주시, 금, 부동산 가격 변동
-
     public void run(Game game) {
         int gameTurn = game.updateGameTurn();
         if (gameTurn < 0){
@@ -41,13 +24,6 @@ public class GameEngine {
         // 골드 변경
         updateNextGoldRate(game);
 
-        // 금리 변동
-
-        // 주식 변동
-
-        // 부동산 가격 변동
-
-        // 경제 이슈 전조증상
     }
 
     private void updateNextGoldRate(Game game) {

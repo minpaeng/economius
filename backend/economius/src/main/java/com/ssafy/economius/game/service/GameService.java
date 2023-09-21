@@ -29,7 +29,6 @@ public class GameService {
 
     private final GameRepository gameRepository;
     private final GameValidator gameValidator;
-    private final GameEngine gameEngine;
 
     public GameJoinResponse join(int roomId, Long player) {
         Game game = gameRepository.findById(roomId).orElseThrow(
@@ -64,7 +63,11 @@ public class GameService {
 
         // 각자의 포트폴리오 생성
         uploadInitialPortfolioOnRedis(game);
+
         game.initializePlayerSequence();
+        game.initializeLocations();
+        gameRepository.save(game);
+
         return new GameStartResponse(roomId);
     }
 
@@ -83,7 +86,6 @@ public class GameService {
         }
 
         game.initializePortfolio(portfolioMap);
-        gameRepository.save(game);
     }
 
     private PortfolioStocks makePortfolioStocks() {
@@ -156,10 +158,5 @@ public class GameService {
             .player(player)
             .portfolio(null)
             .build();
-    }
-
-    public void endTurn(int roomId, Long player) {
-        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
-        gameEngine.run(game);
     }
 }
