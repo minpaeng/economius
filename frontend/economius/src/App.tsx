@@ -13,6 +13,9 @@ import InstallmentSaving from "./Components/Modals/InstallmentSaving";
 import Insurance from "./Components/Modals/Insurance";
 import Stock from "./Components/Modals/Stock";
 import Gold from "./Components/Modals/Gold";
+import Portforlio from "./Components/Common/Portfolio";
+import NewsBar from "./Components/Common/NewsBar";
+import PlayerPlace from "./Components/Common/PlayerPlace";
 
 function App() {
   Modal.setAppElement("#root");
@@ -39,6 +42,33 @@ function App() {
       <Insurance />
       <Stock />
       <Gold />
+      <Portforlio />
+      <NewsBar />
+      <PlayerPlace
+        borderRadius="0px 0px 100px 0px"
+        top="6%"
+        left="0%"
+        bgColor="rgba(255, 216, 133, 0.9)"
+      />
+      <PlayerPlace
+        borderRadius="0px 0px 0px 100px"
+        top="6%"
+        left="50%"
+        bgColor="rgba(131, 213, 233, 0.9)"
+      />
+      <PlayerPlace
+        borderRadius="0px 100px 0px 0px"
+        top="81%"
+        left="0%"
+        bgColor="rgba(255, 166, 132, 0.90)"
+      />
+
+      <PlayerPlace
+        borderRadius="100px 0px 0px 0px"
+        top="81%"
+        left="50%"
+        bgColor="rgba(255, 156, 159, 0.90)"
+      />
     </div>
   );
 }

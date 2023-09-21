@@ -97,6 +97,7 @@ function BuyOrSell({ isBuy, StockOrGold }) {
               <>
                 <span>{(currentPrice * sellStock).toLocaleString()}</span>
                 <span style={{ color: "gray" }}>
+                  {" "}
                   / {(haveStock * currentPrice).toLocaleString()} (원)
                 </span>
               </>

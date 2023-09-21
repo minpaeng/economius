@@ -27,7 +27,7 @@ function Gold() {
   //  매수,매도 구분 플래그
   const [buyClick, isBuyClick] = useState(true);
 
-  const [isGoldOpen, setIsGoldOpen] = useState(true);
+  const [isGoldOpen, setIsGoldOpen] = useState(false);
 
   const closeModal = () => {
     setIsGoldOpen(false);
