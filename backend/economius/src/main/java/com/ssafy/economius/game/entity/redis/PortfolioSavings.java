@@ -1,6 +1,7 @@
 package com.ssafy.economius.game.entity.redis;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.ssafy.economius.game.dto.SavingDto;
@@ -18,27 +19,11 @@ public class PortfolioSavings {
 
     private int totalPrice;
     private int amount;
-    private List<PortfolioSaving> savings;
-
-    public SavingsDto toDto() {
-        List<SavingDto> savingDtoList = null;
-
-        if (savings != null) {
-            savingDtoList = savings.stream()
-                    .map(PortfolioSaving::toDto) // 각 PortfolioSaving 객체를 SavingDto로 변환
-                    .collect(Collectors.toList());
-        }
-
-        return SavingsDto.builder()
-                .totalPrice(this.totalPrice)
-                .amount(this.amount)
-                .savings(savingDtoList)  // 변환된 SavingDto 리스트를 설정
-                .build();
-    }
+    private Map<Integer, PortfolioSaving> savings;
 
     public int calculateFinishSaving() {
         if (savings != null) {
-            return this.savings.stream()
+            return this.savings.values().stream()
                 .filter(PortfolioSaving::checkSavingFinish)
                 .mapToInt(this::deleteSaving)
                 .sum();
@@ -47,12 +32,12 @@ public class PortfolioSavings {
     }
 
     public void updateSavings(){
-        this.savings.forEach(PortfolioSaving::updateCurrentCount);
+        this.savings.values().forEach(PortfolioSaving::updateCurrentCount);
     }
 
     public int calculateSavingPrice() {
         if (savings != null) {
-            return this.savings.stream()
+            return this.savings.values().stream()
                 .mapToInt(PortfolioSaving::getMonthlyDeposit)
                 .sum();
         }
@@ -62,16 +47,8 @@ public class PortfolioSavings {
 
     private int deleteSaving(PortfolioSaving saving) {
         int finishPrice = saving.getCurrentPrice();
-        this.savings.remove(saving);
+        this.savings.remove(saving.getBankId());
         return finishPrice;
     }
-
-    @Override
-    public String toString() {
-        return "PortfolioSavings{" +
-                "totalPrice=" + totalPrice +
-                ", amount=" + amount +
-                ", saving=" + savings +
-                '}';
-    }
+    
 }

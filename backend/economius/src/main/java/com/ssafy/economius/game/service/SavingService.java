@@ -55,14 +55,14 @@ public class SavingService {
         // 멤버 포트폴리오 - 적금
         PortfolioSavings portfolioSavings = portfolio.getSavings();
         // 멤버 포트폴리오 - 소유 적금 리스트
-        List<PortfolioSaving> portfolioSavingList = portfolioSavings.getSavings();
-
-        if(portfolioSavingList == null) return null; //적금 아무것도 없는 경우
-        else {
-            for(PortfolioSaving savingList : portfolioSavingList) {
-                //if(savingList.getBankId().equals(savingRequest.getBankId())) return savingList;
-            }
-        }
+//        List<PortfolioSaving> portfolioSavingList = portfolioSavings.getSavings();
+//
+//        if(portfolioSavingList == null) return null; //적금 아무것도 없는 경우
+//        else {
+//            for(PortfolioSaving savingList : portfolioSavingList) {
+//                //if(savingList.getBankId().equals(savingRequest.getBankId())) return savingList;
+//            }
+//        }
         return null;
     }
 
@@ -239,8 +239,8 @@ public class SavingService {
         // 멤버 적금 포폴 (전체)
         PortfolioSavings memberSavingInfo = portfolio.getSavings();
         // 멤버 적금 포폴 (리스트)
-        List<PortfolioSaving> memberSavingList = Optional.ofNullable(memberSavingInfo.getSavings())
-                                                            .orElse(new ArrayList<>());
+        List<PortfolioSaving> memberSavingList;
+        //= Optional.ofNullable(memberSavingInfo.getSavings()).orElse(new ArrayList<>());
 
 
 
