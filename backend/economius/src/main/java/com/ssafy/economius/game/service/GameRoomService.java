@@ -26,6 +26,7 @@ import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Gold;
 import com.ssafy.economius.game.entity.redis.Insurance;
 import com.ssafy.economius.game.entity.redis.InterestRate;
+import com.ssafy.economius.game.entity.redis.Price;
 import com.ssafy.economius.game.entity.redis.Saving;
 import com.ssafy.economius.game.entity.redis.Stock;
 import com.ssafy.economius.game.enums.InitialData;
@@ -34,7 +35,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -105,7 +105,7 @@ public class GameRoomService {
             .build();
     }
 
-    private Map<Integer,Stock> makeStocks() {
+    private Map<Integer, Stock> makeStocks() {
         Map<Integer, Stock> stocks = new HashMap<>();
 
         for (StockDto stock : InitialData.STOCKS) {
@@ -114,10 +114,19 @@ public class GameRoomService {
                 .companyCategory(stock.getIndustry())
                 .companySubCategory(stock.getType())
                 .owners(new HashMap<>())
-                .rateHistory(new ArrayList<>())
+                .rateHistory(new ArrayList<>(List.of(0)))
                 .rate(INITIAL_ZERO_VALUE.getValue())
                 .priceHistory(new ArrayList<>())
                 .price(stock.getInitialValue())
+                .priceHistory(
+                    new ArrayList<>(List.of(
+                        Price.builder()
+                            .closingPrice(stock.getInitialValue())
+                            .highPrice(stock.getInitialValue())
+                            .lowPrice(stock.getInitialValue())
+                            .openingPrice(stock.getInitialValue())
+                            .build()))
+                )
                 .build();
 
             stocks.put(stock.getStockId(), tmpStock);
@@ -131,11 +140,11 @@ public class GameRoomService {
 
         for (SavingsDto saving : InitialData.SAVINGS) {
             Saving tmpSaving = Saving.builder()
-                    .name(saving.getSavingName())
-                    .monthlyDeposit(saving.getMonthlyDeposit())
-                    .rate(saving.getRate())
-                    .finishCount(saving.getFinishCount())
-                    .build();
+                .name(saving.getSavingName())
+                .monthlyDeposit(saving.getMonthlyDeposit())
+                .rate(saving.getRate())
+                .finishCount(saving.getFinishCount())
+                .build();
 
             log.info(saving.getBankId().toString());
             savings.put(saving.getBankId(), tmpSaving);
