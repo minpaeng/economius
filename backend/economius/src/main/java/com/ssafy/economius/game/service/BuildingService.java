@@ -88,12 +88,15 @@ public class BuildingService {
         Long ownerId = building.getOwnerId();
 
         payBuildingFee(playerId, ownerId, roomId, buildingId, game);
+        VisitBuildingDto visitor = makeVisitBuildingDto(playerId, game.getPortfolios().get(playerId).getMoney());
+        VisitBuildingDto owner = null;
+        if (ownerId != null) owner = makeVisitBuildingDto(ownerId, game.getPortfolios().get(ownerId).getMoney());
 
         return VisitBuildingResponse.builder()
                 .buildingId(buildingId)
                 .changeAmount(building.getPrice())
-                .visitor(makeVisitBuildingDto(playerId, game.getPortfolios().get(playerId).getMoney()))
-                .owner(makeVisitBuildingDto(ownerId, game.getPortfolios().get(ownerId).getMoney()))
+                .visitor(visitor)
+                .owner(owner)
                 .build();
     }
 
