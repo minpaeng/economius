@@ -28,7 +28,7 @@ function Stock() {
     { turn: 20, open: null, high: null, low: null, close: null },
   ];
 
-  const [isStockOpen, setIsStockOpen] = useState(true);
+  const [isStockOpen, setIsStockOpen] = useState(false);
 
   //  매수,매도 구분 플래그
   const [buyClick, isBuyClick] = useState(true);
@@ -119,7 +119,7 @@ function Stock() {
                     매도
                   </S.BuyOrSellBtn>
                 </S.BtnSection>
-                <BuyOrSell isBuy={buyClick} />
+                <BuyOrSell isBuy={buyClick} StockOrGold="stock" />
               </S.Main>
             </div>
           </S.StockMidRight>

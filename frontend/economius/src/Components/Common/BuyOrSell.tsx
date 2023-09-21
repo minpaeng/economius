@@ -1,7 +1,7 @@
 import { useState } from "react";
 import * as S from "./BuyOrSell.style";
 
-function BuyOrSell({ isBuy }) {
+function BuyOrSell({ isBuy, StockOrGold }) {
   const [buyStock, setbuyStock] = useState(1);
   const [sellStock, setSellStock] = useState(1);
 
@@ -56,12 +56,18 @@ function BuyOrSell({ isBuy }) {
               {isBuy ? (
                 <>
                   <span>{buyStock}</span>
-                  <span style={{ color: "gray" }}> (주)</span>
+                  <span style={{ color: "gray" }}>
+                    {" "}
+                    {StockOrGold === "stock" ? "(주)" : "(돈)"}
+                  </span>
                 </>
               ) : (
                 <>
                   <span>{sellStock}</span>
-                  <span style={{ color: "gray" }}> (주)</span>
+                  <span style={{ color: "gray" }}>
+                    {" "}
+                    {StockOrGold === "stock" ? "(주)" : "(돈)"}
+                  </span>
                 </>
               )}
             </S.StockCntInput>

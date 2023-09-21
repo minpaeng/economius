@@ -1,13 +1,39 @@
 import Modal from "react-modal";
 import { useState } from "react";
+import * as S from "./Stock.style";
+
+import BuyOrSell from "../Common/BuyOrSell";
+import GoldGraph from "../Common/GoldGraph";
 
 function Gold() {
-  const [isGoldOpen, setIsGoldOpen] = useState(false);
+  const data: any = [
+    { turn: 1, price: 100 },
+    { turn: 2, price: 150 },
+    { turn: 3, price: 120 },
+    { turn: 4, price: 130 },
+    { turn: 5, price: 210 },
+    { turn: 6, price: 180 },
+    { turn: 7, price: 185 },
+    { turn: 8, price: 180 },
+    { turn: 9, price: 177 },
+    { turn: 10, price: 190 },
+    { turn: 11, price: 150 },
+    { turn: 12, price: 115 },
+    { turn: 13, price: 155 },
+    { turn: 14, price: 109 },
+    { turn: 15, price: 120 },
+  ];
+
+  //  매수,매도 구분 플래그
+  const [buyClick, isBuyClick] = useState(true);
+
+  const [isGoldOpen, setIsGoldOpen] = useState(true);
 
   const closeModal = () => {
     setIsGoldOpen(false);
   };
 
+  // modal style
   const modalStyle: any = {
     overlay: {
       position: "fixed",
@@ -35,11 +61,72 @@ function Gold() {
   };
 
   return (
-    <Modal
-      isOpen={isGoldOpen}
-      style={modalStyle}
-      onRequestClose={closeModal}
-    ></Modal>
+    <Modal isOpen={isGoldOpen} style={modalStyle} onRequestClose={closeModal}>
+      <S.StockMain>
+        <S.StockTop>
+          <S.StockTopImg src="Gold/goldbar.png" style={{ width: "50px" }} />
+          <S.StockTopTitle>
+            <S.StockTopTitleEnterprise>금거래소</S.StockTopTitleEnterprise>
+          </S.StockTopTitle>
+        </S.StockTop>
+        <S.StockMid>
+          <S.StockMidLeft>
+            <GoldGraph data={data} />
+            <S.StockMidLeftPrice>
+              현재가 : 70700 <span style={{ color: "#DF7D46" }}>(+3%)</span>
+            </S.StockMidLeftPrice>
+          </S.StockMidLeft>
+          <S.StockMidRight>
+            {/* 매도,매수 */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+              }}
+            >
+              <S.Main>
+                <S.BtnSection>
+                  <S.BuyOrSellBtn
+                    onClick={() => {
+                      isBuyClick(true);
+                    }}
+                    style={{
+                      backgroundColor: buyClick
+                        ? "#F7BC0F"
+                        : "rgba(247, 188, 15, 0.5)",
+                    }}
+                  >
+                    매수
+                  </S.BuyOrSellBtn>
+                  <S.BuyOrSellBtn
+                    onClick={() => {
+                      isBuyClick(false);
+                    }}
+                    style={{
+                      backgroundColor: !buyClick
+                        ? "#F7BC0F"
+                        : "rgba(247, 188, 15, 0.5)",
+                    }}
+                  >
+                    매도
+                  </S.BuyOrSellBtn>
+                </S.BtnSection>
+                <BuyOrSell isBuy={buyClick} StockOrGold="gold" />
+              </S.Main>
+            </div>
+          </S.StockMidRight>
+        </S.StockMid>
+        <S.StockDivide />
+        {buyClick ? (
+          <S.StockBuyBottom>매수하기</S.StockBuyBottom>
+        ) : (
+          <S.StockSellBottom>매도하기</S.StockSellBottom>
+        )}
+      </S.StockMain>
+    </Modal>
   );
 }
 
