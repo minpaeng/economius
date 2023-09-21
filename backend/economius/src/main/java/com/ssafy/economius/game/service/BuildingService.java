@@ -38,7 +38,7 @@ public class BuildingService {
 
         buildingValidator.checkBuildingBuyingStatus(player, roomId, building);
         gameValidator.canBuy(roomId, portfolio.getMoney(), building.getPrice());
-        BuyBuildingResponse response = buyBuilding(portfolio, buildingId, building);
+        BuyBuildingResponse response = buyBuilding(player, portfolio, buildingId, building);
         gameRepository.save(game);
         return response;
     }
@@ -57,8 +57,8 @@ public class BuildingService {
         return response;
     }
 
-    private BuyBuildingResponse buyBuilding(Portfolio portfolio, int buildingId, Building building) {
-        portfolio.buyBuilding(buildingId, building);
+    private BuyBuildingResponse buyBuilding(Long player, Portfolio portfolio, int buildingId, Building building) {
+        portfolio.buyBuilding(player, buildingId, building);
 
         return BuyBuildingResponse.builder()
                 .player(portfolio.getPlayer())

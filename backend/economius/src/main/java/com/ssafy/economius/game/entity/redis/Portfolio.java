@@ -32,7 +32,8 @@ public class Portfolio {
                 money;
     }
 
-    public void buyBuilding(int buildingId, Building building) {
+    public void buyBuilding(Long player, int buildingId, Building building) {
+        building.setOwnerId(player);
         this.money -= building.getPrice();
         this.buildings.buyBuilding(buildingId, building);
     }
