@@ -1,14 +1,12 @@
 package com.ssafy.economius.game.entity.redis;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Builder
+@ToString
 public class PortfolioInsurance {
 
     private Integer insuranceId;

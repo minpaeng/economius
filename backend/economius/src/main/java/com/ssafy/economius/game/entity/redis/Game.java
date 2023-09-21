@@ -44,7 +44,7 @@ public class Game {
     private Gold gold;
     private Map<Integer, Building> buildings;
     private List<Stock> stocks;
-    private List<Insurance> insurances;
+    private Map<Integer, Insurance> insurances;
     private Map<Integer, Saving> savings;
     private InterestRate interestRate;
 

@@ -136,16 +136,14 @@ public class GameRoomService {
                     .rate(saving.getRate())
                     .finishCount(saving.getFinishCount())
                     .build();
-
-            log.info(saving.getBankId().toString());
             savings.put(saving.getBankId(), tmpSaving);
         }
 
         return savings;
     }
 
-    private List<Insurance> makeInsurance() {
-        ArrayList<Insurance> insurances = new ArrayList<>();
+    private Map<Integer, Insurance> makeInsurance() {
+        Map<Integer, Insurance> insurances = new HashMap<>();
 
         for (InsuranceDto insurance : InitialData.INSURANCES) {
             Insurance tmpInsurance = Insurance.builder()
@@ -156,8 +154,8 @@ public class GameRoomService {
                 .name(insurance.getProductName())
                 .price(insurance.getMonthlyDeposit())
                 .build();
-
-            insurances.add(tmpInsurance);
+            log.info(insurance.toString());
+            insurances.put(insurance.getInsuranceId(), tmpInsurance);
         }
 
         return insurances;

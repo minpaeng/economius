@@ -9,12 +9,7 @@ import com.ssafy.economius.game.dto.ReceiptDto;
 import com.ssafy.economius.game.dto.response.CalculateResponse;
 import com.ssafy.economius.game.dto.response.GameJoinResponse;
 import com.ssafy.economius.game.dto.response.GameStartResponse;
-import com.ssafy.economius.game.entity.redis.Game;
-import com.ssafy.economius.game.entity.redis.Portfolio;
-import com.ssafy.economius.game.entity.redis.PortfolioBuildings;
-import com.ssafy.economius.game.entity.redis.PortfolioGold;
-import com.ssafy.economius.game.entity.redis.PortfolioSavings;
-import com.ssafy.economius.game.entity.redis.PortfolioStocks;
+import com.ssafy.economius.game.entity.redis.*;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import java.util.HashMap;
 import java.util.Map;
@@ -75,14 +70,15 @@ public class GameService {
         Map<Long, Portfolio> portfolioMap = new HashMap<>();
         for (Long player : game.getPlayers()) {
             portfolioMap.put(player, Portfolio.builder()
-                .money(INITIAL_MONEY.getValue())
-                .player(player)
-                .gold(makePortfolioGold())
-                .savings(makePortfolioSavings())
-                .buildings(makePortfolioBuildings())
-                .stocks(makePortfolioStocks())
-                .totalMoney(INITIAL_MONEY.getValue())
-                .build());
+                    .money(INITIAL_MONEY.getValue())
+                    .player(player)
+                    .gold(makePortfolioGold())
+                    .savings(makePortfolioSavings())
+                    .buildings(makePortfolioBuildings())
+                    .stocks(makePortfolioStocks())
+                    .insurances(portfolioInsurances())
+                    .totalMoney(INITIAL_MONEY.getValue())
+                    .build());
         }
 
         game.initializePortfolio(portfolioMap);
@@ -110,6 +106,13 @@ public class GameService {
             .amount(INITIAL_ZERO_VALUE.getValue())
             .totalPrice(INITIAL_ZERO_VALUE.getValue())
             .build();
+    }
+
+    private PortfolioInsurances portfolioInsurances() {
+        return PortfolioInsurances.builder()
+                .totalPrice(INITIAL_ZERO_VALUE.getValue())
+                .amount(INITIAL_ZERO_VALUE.getValue())
+                .build();
     }
 
     private PortfolioSavings makePortfolioSavings() {
