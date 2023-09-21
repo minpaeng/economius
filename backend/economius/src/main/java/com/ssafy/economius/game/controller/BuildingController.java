@@ -51,6 +51,7 @@ public class BuildingController {
     public void visitBuilding(@DestinationVariable int roomId,
                                @Payload VisitBuildingRequest visitBuildingRequest) {
 
+        log.info("roomId: " + roomId + ", dto: " + visitBuildingRequest);
         VisitBuildingResponse responseDto = buildingService.visitBuilding(roomId, visitBuildingRequest);
 
         Map<String, Object> headers = Map.of("success", true);
