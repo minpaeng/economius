@@ -7,6 +7,8 @@ import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
+import java.util.Map;
+
 @RequiredArgsConstructor
 @ControllerAdvice
 public class WebSocketExceptionHandler {
@@ -20,6 +22,7 @@ public class WebSocketExceptionHandler {
                 WebsocketErrorResponse.builder()
                         .code(e.getCode())
                         .message(e.getMessage())
-                        .build());
+                        .build(),
+                Map.of("success", false));
     }
 }
