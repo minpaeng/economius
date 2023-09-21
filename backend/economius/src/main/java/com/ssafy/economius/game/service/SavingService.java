@@ -34,6 +34,7 @@ public class SavingService {
         return nowSaving;
     }
 
+    // 포트폴리오 적금 리스트 entity -> Dto
     public Map<Integer, SavingDto> convertToDtoMap(Map<Integer, PortfolioSaving> savings) {
         return savings.entrySet().stream()
                 .collect(Collectors.toMap(
@@ -41,7 +42,6 @@ public class SavingService {
                         entry -> convertToSavingDto(entry.getValue()) // value는 변환된 DTO를 사용
                 ));
     }
-
     private SavingDto convertToSavingDto(PortfolioSaving portfolioSaving) {
         return SavingDto.builder()
                 .bankId(portfolioSaving.getBankId())
@@ -126,7 +126,8 @@ public class SavingService {
         Saving nowSavingInfo = findNowSavingInfo(game, savingRequest);
 
         // 지불 가능한지 먼저 확인
-        
+        gameValidator.canBuy(roomId, portfolio.getMoney(), nowSavingInfo.getMonthlyDeposit());
+
         // 현재 은행 정보에 기반하여 가입
         portfolio.setMoney(portfolio.getMoney()-nowSavingInfo.getMonthlyDeposit());
         portfolioSavings.setTotalPrice(portfolioSavings.getTotalPrice()+ nowSavingInfo.getMonthlyDeposit());
