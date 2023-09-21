@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useRecoilState } from "recoil";
 import {
   nowPlayerState,
@@ -11,6 +12,17 @@ function Controller() {
   const [moveDist, setMoveDist] = useRecoilState(MoveDistState); // 캐릭터 이동 거리
   const distButtons = [1, 2, 3, 4, 5, 6];
   const playerButtons = ["Player1", "Player2", "Player3", "Player4"];
+=======
+import { useRecoilState } from 'recoil';
+import { NowPlayerState, IsMovingState, MoveDistState } from '/src/recoil/animation/atom';
+
+function Controller() {
+    const [nowPlayer, setNowPlayer] = useRecoilState(NowPlayerState); // 현재 플레이어
+    const [isMoving, setIsMoving] = useRecoilState(IsMovingState); // 캐릭터 이동 여부
+    const [moveDist, setMoveDist] = useRecoilState(MoveDistState); // 캐릭터 이동 거리
+    const distButtons = [1, 2, 3, 4, 5, 6];
+    const playerButtons = ['Player1', 'Player2', 'Player3', 'Player4'];
+>>>>>>> aba529b81d3e1ac55190ac9fe9b98f8ee60e553b
 
   return (
     <>

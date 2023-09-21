@@ -1,22 +1,17 @@
 import Modal from 'react-modal';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { nowPlayerState } from '/src/recoil/animation/atom';
+import { NowPlayerState, IsModalOpenState } from '/src/recoil/animation/atom';
 import hotelimg from '/RealState/hotel.png';
 import restaurantimg from '/RealState/restaurant.png';
 import shopimg from '/RealState/shop.png';
 import * as S from './RealEstate.style';
 
 function RealEstate() {
-    const [nowPlayer, setNowPlayer] = useRecoilState(nowPlayerState);
-
-    // 원래는 초기값 false로 두고 해당 위치 되면 true로 바꿔줘야할듯
-    const [isOpen, setIsOpen] = useState(true);
-
-    // 은행 방문 시, savings 배열이 비어있으면 가입모달
-    // 아니면 해지 모달
+    const [nowPlayer, setNowPlayer] = useRecoilState(NowPlayerState);
+    const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const closeModal = () => {
-        setIsOpen(false);
+        setIsModalOpen(false);
     };
 
     const dummy: any = {
@@ -31,7 +26,7 @@ function RealEstate() {
     const realEstateImage = [hotelimg, restaurantimg, shopimg];
 
     return (
-        <Modal isOpen={isOpen} style={S.modalStyle} onRequestClose={closeModal}>
+        <Modal isOpen={isModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
             <S.Main>
                 <S.Top>
                     <S.TopTitle>{dummy.name[dummy.id]}</S.TopTitle>

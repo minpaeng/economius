@@ -1,5 +1,7 @@
 import Modal from 'react-modal';
 import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { IsModalOpenState } from '/src/recoil/animation/atom';
 import * as S from './InstallmentSaving.style';
 
 function InstallmentSaving() {
@@ -28,10 +30,9 @@ function InstallmentSaving() {
         },
     };
 
-    const [isBankOpen, setIsBankOpen] = useState(false);
-
+    const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const closeModal = () => {
-        setIsBankOpen(false);
+        setIsModalOpen(false);
     };
 
     // modal style
@@ -62,7 +63,7 @@ function InstallmentSaving() {
     };
 
     return (
-        <Modal isOpen={isBankOpen} style={modalStyle} onRequestClose={closeModal}>
+        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
             <S.BankMain>
                 <S.BankTop>
                     {/* title은 우리가 쥐고있는 은행코드로 띄워야 할듯 */}

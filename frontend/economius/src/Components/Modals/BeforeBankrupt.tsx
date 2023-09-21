@@ -1,5 +1,7 @@
 import Modal from 'react-modal';
 import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { IsModalOpenState } from '/src/recoil/animation/atom';
 import financecenterimg from '/FinanceCenter/financecenter.png';
 import checksign from '/BeforeBankrupt/checksign.png';
 import dollarcoin from '/BeforeBankrupt/dollarcoin.png';
@@ -13,11 +15,9 @@ const B = [41, 34423];
 const ownedAssets = [false, false, false, false, false, false];
 
 function BeforeBankrupt() {
-    // 원래는 초기값 false로 두고 해당 위치 되면 true로 바꿔줘야할듯
-    const [isOpen, setIsOpen] = useState(true);
-    // 아니면 해지 모달
+    const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const closeModal = () => {
-        setIsOpen(false);
+        setIsModalOpen(false);
     };
     // 체크 함수
     const [selected, setSelected] = useState(ownedAssets);
@@ -26,7 +26,7 @@ function BeforeBankrupt() {
     };
 
     return (
-        <Modal isOpen={isOpen} style={S.modalStyle} onRequestClose={closeModal}>
+        <Modal isOpen={isModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
             <S.Main>
                 <S.Top>
                     <S.TopTitle>현금이 부족합니다.</S.TopTitle>
