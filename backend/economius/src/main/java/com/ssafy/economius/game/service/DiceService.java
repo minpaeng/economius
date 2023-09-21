@@ -6,6 +6,7 @@ import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import io.swagger.v3.oas.annotations.servers.Server;
 import java.util.List;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,9 +17,6 @@ public class DiceService {
 
     private final GameRepository gameRepository;
 
-    public void diceRoll(){
-
-    }
 
     // 주사위 순서 표출
     public DiceTurnMessage getDiceSequence(int roomId){
