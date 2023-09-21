@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "noImplicitAny": true,   
+        "noImplicitAny": false,   
         "allowSyntheticDefaultImports": true,
         "noEmitOnError": false,
         "target": "ES2020",
