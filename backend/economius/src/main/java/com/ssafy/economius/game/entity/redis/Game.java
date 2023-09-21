@@ -2,7 +2,6 @@ package com.ssafy.economius.game.entity.redis;
 
 
 import static com.ssafy.economius.game.enums.RateEnum.*;
-import com.ssafy.economius.game.enums.RateEnum;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -13,6 +12,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,11 +25,13 @@ import org.springframework.data.redis.core.RedisHash;
 @AllArgsConstructor
 @Builder
 @Slf4j
+@Data
 public class Game {
 
     @Id
     private int roomId;
     // 0번 index 가 호스트
+    private List<Long> bankruptcyPlayers;
     // 게임 시작하면 0번 index가 1위 다음 2위...
     private List<Long> players;
     private List<Long> playerSequence;
@@ -42,9 +44,9 @@ public class Game {
 
     // 경제 asset
     private Gold gold;
-    private Map<Integer, Building> buildings;
-    private List<Stock> stocks;
+    private Map<Integer, Building> buildings; 
     private Map<Integer, Insurance> insurances;
+    private Map<Integer, Stock> stocks; 
     private Map<Integer, Saving> savings;
     private InterestRate interestRate;
 
@@ -115,16 +117,20 @@ public class Game {
         }
     }
 
-    public Long getNextPlayer(Long player) {
-        int index = 0;
-        for (Long tmpPlayer : playerSequence) {
-            index++;
-            if (tmpPlayer.equals(player)) {
-                break;
-            }
-        }
+    public void payBuildingFee(Long player, Long owner, int buildingId) {
+        if (owner == null || owner.equals(player)) return;
+        int playerMoney = this.portfolios.get(player).getMoney();
+        int ownerMoney = this.portfolios.get(owner).getMoney();
+        int buildingPrice = this.buildings.get(buildingId).getPrice();
 
-        return playerSequence.get(index % 4);
+        this.portfolios.get(player).setMoney(playerMoney - buildingPrice);
+        this.portfolios.get(owner).setMoney(ownerMoney + buildingPrice);
+    }
+
+    public void proceedBankruptcy(Long player) {
+        this.getPortfolios().get(player).setMoney(-1);
+        this.players.remove(player);
+        this.bankruptcyPlayers.add(player);
     }
 
     public int updateGameTurn() {
@@ -134,5 +140,4 @@ public class Game {
         }
         return gameTurn;
     }
-
 }

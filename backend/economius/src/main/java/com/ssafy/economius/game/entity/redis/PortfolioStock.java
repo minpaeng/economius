@@ -11,11 +11,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PortfolioStock {
 
-    private String companyCode;
+    private int stockId;
     private String companyName;
     private String costPerStock;
     private int amount;
     private int totalCost;
     private int rate;
     private int earningRate;
+    private Stock stock;
 }
