@@ -17,7 +17,7 @@ public class PortfolioSaving {
     private int currentPrice;
     private int currentCount;
     private int finishCount;
-    private int rate;
+    private int rate; 
 
     @Override
     public String toString() {
