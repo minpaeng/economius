@@ -2,7 +2,6 @@ package com.ssafy.economius.game.entity.redis;
 
 
 import static com.ssafy.economius.game.enums.RateEnum.*;
-import com.ssafy.economius.game.enums.RateEnum;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -13,6 +12,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +25,7 @@ import org.springframework.data.redis.core.RedisHash;
 @AllArgsConstructor
 @Builder
 @Slf4j
+@Data
 public class Game {
 
     @Id
@@ -113,18 +114,6 @@ public class Game {
         for (Entry<Long, Portfolio> entry : entries) {
             players.set(prize++, entry.getKey());
         }
-    }
-
-    public Long getNextPlayer(Long player) {
-        int index = 0;
-        for (Long tmpPlayer : playerSequence) {
-            index++;
-            if (tmpPlayer.equals(player)) {
-                break;
-            }
-        }
-
-        return playerSequence.get(index % 4);
     }
 
     public int updateGameTurn() {

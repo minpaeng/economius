@@ -7,6 +7,7 @@ import com.ssafy.economius.game.dto.request.GameStartRequest;
 import com.ssafy.economius.game.dto.response.CalculateResponse;
 import com.ssafy.economius.game.dto.response.GameJoinResponse;
 import com.ssafy.economius.game.dto.response.GameStartResponse;
+import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.service.GameService;
 import com.ssafy.economius.game.service.FinishTurnService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class GameController {
 
     private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
     private final GameService gameService;
+
     // todo 추후에 하나의 서비스로 통합 예정
     private final FinishTurnService finishTurnService;
 
@@ -48,8 +50,10 @@ public class GameController {
     }
 
 
-//    @MessageMapping(value = "/{roomId}/finishTurn")
-//    public void finishTurn(@DestinationVariable int roomId, ){
-//
-//    }
+    @MessageMapping(value = "/{roomId}/finishTurn")
+    public void finishTurn(@DestinationVariable int roomId){
+        Game game = finishTurnService.finish(roomId);
+
+        template.convertAndSend("/sub/" + roomId, game);
+    }
 }

@@ -11,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+
 public class Portfolio {
 
     private Long player;
