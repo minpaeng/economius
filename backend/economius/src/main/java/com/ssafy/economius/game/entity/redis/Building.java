@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.RedisHash;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,4 +18,10 @@ public class Building {
     private List<Integer> priceHistory;
     private int rate;
     private List<Integer> rateHistory;
+
+    public void updateBuildingPrice(int newPrice) {
+        rate = (int) ((double) (newPrice - price) / price) / 100;
+        priceHistory.add(newPrice);
+        rateHistory.add(rate);
+    }
 }

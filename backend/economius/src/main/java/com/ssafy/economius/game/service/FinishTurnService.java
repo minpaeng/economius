@@ -1,5 +1,9 @@
 package com.ssafy.economius.game.service;
 
+import static com.ssafy.economius.game.enums.RateEnum.BUILDING_RATE_LOWER_BOUND;
+import static com.ssafy.economius.game.enums.RateEnum.BUILDING_RATE_UPPER_BOUND;
+import static com.ssafy.economius.game.enums.RateEnum.GOLD_RATE_LOWER_BOUND;
+import static com.ssafy.economius.game.enums.RateEnum.GOLD_RATE_UPPER_BOUND;
 import static com.ssafy.economius.game.enums.RateEnum.STOCK_RATE_LOWER_BOUND;
 import static com.ssafy.economius.game.enums.RateEnum.STOCK_RATE_UPPER_BOUND;
 
@@ -25,17 +29,39 @@ public class FinishTurnService {
 
         // todo 각종 이벤트 로직 구현
         // 주식가격 재 산정
-        int newPrice = RearrangeRateUtil.getRanges(STOCK_RATE_LOWER_BOUND.getValue(),
-            STOCK_RATE_UPPER_BOUND.getValue());
+        stockRearrange(game, round);
 
-        game.getStocks().values().forEach(
-            stock -> stock.updateStockPriceAndRate(newPrice, round));
+        // 새로운 라운드일경우
+        if (gameTurn % 4 == 0) {
+            // 금
+            goldRearrange(game);
+            // 부동산
+            buildingRearrange(game);
+            // 금리
+        }
 
-//        if (gameTurn % 4 == 0) {
-//
-//        }
+        // 경제 이벤트
 
         gameRepository.save(game);
         return game;
+    }
+
+    private void buildingRearrange(Game game) {
+        int newPrice = RearrangeRateUtil.getRanges(BUILDING_RATE_LOWER_BOUND.getValue(),
+            BUILDING_RATE_UPPER_BOUND.getValue());
+        game.getBuildings().values().forEach(building -> building.updateBuildingPrice(newPrice));
+    }
+
+    private void goldRearrange(Game game) {
+        int newPrice = RearrangeRateUtil.getRanges(GOLD_RATE_LOWER_BOUND.getValue(),
+            GOLD_RATE_UPPER_BOUND.getValue());
+        game.getGold().updateGoldPrice(newPrice);
+    }
+
+    private void stockRearrange(Game game, int round) {
+        int newPrice = RearrangeRateUtil.getRanges(STOCK_RATE_LOWER_BOUND.getValue(),
+            STOCK_RATE_UPPER_BOUND.getValue());
+        game.getStocks().values().forEach(
+            stock -> stock.updateStockPriceAndRate(newPrice, round));
     }
 }
