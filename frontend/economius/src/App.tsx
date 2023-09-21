@@ -12,7 +12,6 @@ import ChanceCard from '../src/Components/Modals/ChanceCard';
 import InstallmentSaving from './Components/Modals/InstallmentSaving';
 import Insurance from './Components/Modals/Insurance';
 import Stock from './Components/Modals/Stock';
-import MonthlyCalculate from './Components/Modals/MonthlyCalculate';
 
 function App() {
     Modal.setAppElement('#root');
@@ -33,9 +32,8 @@ function App() {
             <BigEvent />
             <ChanceCard />
             <InstallmentSaving />
-            {/* <Insurance /> */}
-            {/* <Stock /> */}
-            <MonthlyCalculate />
+            <Insurance />
+            <Stock />
         </div>
     );
 }
