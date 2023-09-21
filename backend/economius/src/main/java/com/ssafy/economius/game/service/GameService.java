@@ -155,14 +155,4 @@ public class GameService {
             .build();
     }
 
-    private List<PortfolioSaving> getSavings(Long player, Game game) {
-        return Optional.ofNullable(
-                game
-                    .getPortfolios()
-                    .get(player)
-                    .getSavings()
-                    .getSavings())
-            .orElse(List.of());
-    }
-
 }
