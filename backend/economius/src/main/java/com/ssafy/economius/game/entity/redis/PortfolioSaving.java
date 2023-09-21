@@ -19,19 +19,6 @@ public class PortfolioSaving {
     private int finishCount;
     private int rate;
 
-    @Override
-    public String toString() {
-        return "PortfolioSaving{" +
-                "bankId='" + bankId + '\'' +
-                ", savingName='" + name + '\'' +
-                ", monthlyDeposit=" + monthlyDeposit +
-                ", currentPrice=" + currentPrice +
-                ", currentCount=" + currentCount +
-                ", totalCount=" + finishCount +
-                ", rate=" + rate +
-                '}';
-    }
-
     public void updateCurrentCount() {
         this.currentPrice += this.currentPrice * ((double) rate / 100);
         this.currentCount++;
@@ -41,16 +28,5 @@ public class PortfolioSaving {
         return this.finishCount == this.currentCount;
     }
 
-    public SavingDto toDto() {
-        return SavingDto.builder()
-                .bankId(this.bankId)
-                .name(this.name)
-                .monthlyDeposit(this.monthlyDeposit)
-                .currentPrice(this.currentPrice)
-                .currentCount(this.currentCount)
-                .finishCount(this.finishCount)
-                .rate(this.rate)
-                .build();
-    }
 
 }

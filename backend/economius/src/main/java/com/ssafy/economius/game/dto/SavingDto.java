@@ -16,16 +16,5 @@ public class SavingDto {
     private int finishCount;
     private int rate;
 
-    @Override
-    public String toString() {
-        return "SavingDto{" +
-                "bankId='" + bankId + '\'' +
-                ", savingName='" + name + '\'' +
-                ", monthlyDeposit=" + monthlyDeposit +
-                ", currentPrice=" + currentPrice +
-                ", currentCount=" + currentCount +
-                ", totalCount=" + finishCount +
-                ", rate=" + rate +
-                '}';
-    }
+
 }

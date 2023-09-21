@@ -6,15 +6,14 @@ import java.util.stream.Collectors;
 
 import com.ssafy.economius.game.dto.SavingDto;
 import com.ssafy.economius.game.dto.SavingsDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @Builder
+@ToString
 public class PortfolioSavings {
 
     private int totalPrice;

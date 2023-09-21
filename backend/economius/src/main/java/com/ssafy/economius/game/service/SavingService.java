@@ -2,20 +2,21 @@ package com.ssafy.economius.game.service;
 
 import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.dto.SavingDto;
-import com.ssafy.economius.game.dto.SavingInfoDto;
-import com.ssafy.economius.game.dto.response.SavingBankInfoResponse;
+import com.ssafy.economius.game.dto.SavingsDto;
+import com.ssafy.economius.game.dto.response.SavingVisitResponse;
 import com.ssafy.economius.game.entity.redis.*;
 import com.ssafy.economius.game.dto.request.SavingRequest;
 import com.ssafy.economius.game.dto.response.SavingResponse;
-import com.ssafy.economius.game.enums.SavingIdEnums;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -24,29 +25,38 @@ public class SavingService {
 
     private final GameRepository gameRepository;
     private GameValidator gameValidator;
+    private ModelMapper modelMapper;
 
     //현재 은행 적금 정보 구하기
     public Saving findNowSavingInfo(Game game, SavingRequest savingRequest) {
-        Saving nowSaving = Saving.builder().build();
-        nowSaving = game.getSavings().get(savingRequest.getPlayer());
-        log.info(nowSaving.toString());
+        Saving nowSaving = game.getSavings().get(savingRequest.getBankId());
+        log.info("============ 현재 은행의 적금 정보 : {} ============", nowSaving.toString());
         return nowSaving;
     }
 
-
-    // 플레이어가 현재 적금 정보 구하기
-    public PortfolioSaving findMemberNowSaving(Game game, SavingRequest savingRequest) {
-        // 멤버 포트폴리오
-        Portfolio portfolio = game.getPortfolios().get(savingRequest.getPlayer());
-        // 멤버 포트폴리오 - 적금
-        PortfolioSavings portfolioSavings = portfolio.getSavings();
-        // 멤버 포트폴리오 - 소유 적금 리스트
-        PortfolioSaving portfolioSaving  = portfolioSavings.getSavings().get(savingRequest.getBankId());
-
-        return portfolioSaving;
+    public Map<Integer, SavingDto> convertToDtoMap(Map<Integer, PortfolioSaving> savings) {
+        return savings.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey, // key는 그대로 사용
+                        entry -> convertToSavingDto(entry.getValue()) // value는 변환된 DTO를 사용
+                ));
     }
 
-    public SavingBankInfoResponse visitBank(int roomId, SavingRequest savingRequest) {
+    private SavingDto convertToSavingDto(PortfolioSaving portfolioSaving) {
+        return SavingDto.builder()
+                .bankId(portfolioSaving.getBankId())
+                .name(portfolioSaving.getName())
+                .monthlyDeposit(portfolioSaving.getMonthlyDeposit())
+                .currentPrice(portfolioSaving.getCurrentPrice())
+                .currentCount(portfolioSaving.getCurrentCount())
+                .finishCount(portfolioSaving.getFinishCount())
+                .rate(portfolioSaving.getRate())
+                .build();
+    }
+
+
+    public SavingVisitResponse visitBank(int roomId, SavingRequest savingRequest) {
+        //게임 방 조회
         Game game = gameRepository.findById(roomId).orElseThrow(
                 () -> new RuntimeException("해당하는 게임이 존재하지 않습니다.")
         );
@@ -56,24 +66,50 @@ public class SavingService {
         // 멤버 포트폴리오 - 적금
         PortfolioSavings portfolioSavings = portfolio.getSavings();
 
+        // 현재 은행 정보
+        Saving nowSavingInfo = findNowSavingInfo(game, savingRequest);
 
+        boolean have;
+        SavingDto savingDto;
+        
         // 멤버 포트폴리오 - 소유 적금 리스트
-        //PortfolioSaving portfolioSaving = portfolioSavings.getSavings().get(savingRequest.getBankId());
+        if(portfolioSavings.getSavings()!=null && portfolioSavings.getSavings().get(savingRequest.getBankId()) != null) {
+            // 해당 적금 갖고있는 경우 - 해당 사용자의 적금 정보를 mapping
+            have = true;
+            PortfolioSaving hasSavingInfo = portfolioSavings.getSavings().get(savingRequest.getBankId());
+            savingDto = SavingDto.builder()
+                    .bankId(savingRequest.getBankId())
+                    .name(hasSavingInfo.getName())
+                    .monthlyDeposit(hasSavingInfo.getMonthlyDeposit())
+                    .currentPrice(hasSavingInfo.getCurrentPrice())
+                    .currentCount(hasSavingInfo.getCurrentCount())
+                    .finishCount(hasSavingInfo.getFinishCount())
+                    .rate(hasSavingInfo.getRate())
+                    .build();
+        }
+        else {
+            // 해당 적금 없는 경우 - 현재 은행의 적금 정보를 mapping
+            have = false;
+            savingDto = SavingDto.builder()
+                    .bankId(savingRequest.getBankId())
+                    .name(nowSavingInfo.getName())
+                    .monthlyDeposit(nowSavingInfo.getMonthlyDeposit())
+                    .currentPrice(0)
+                    .currentCount(0)
+                    .finishCount(nowSavingInfo.getFinishCount())
+                    .rate(nowSavingInfo.getRate())
+                    .build();
+        }
 
-        //log.info(portfolioSaving.toString());
-        // 없는 경우 가입을 위해 현재 은행 적금 정보
-
-        // 있는 경우 멤버의 적금 정보
-
-
-        SavingBankInfoResponse savingBankInfoResponse = SavingBankInfoResponse.builder()
-                //.player(savingRequest.getPlayer())
-                //.money(game.getPortfolios().get(savingRequest.getPlayer()).getMoney())
-                //.memberSavings(memberSavings)
-                //.savingInfoDto(savingInfoDto)
+        SavingVisitResponse savingVisitResponse = SavingVisitResponse.builder()
+                .player(savingRequest.getPlayer())
+                .money(portfolio.getMoney())
+                .have(have)
+                .savingDto(savingDto)
                 .build();
-        log.info(savingBankInfoResponse.toString());
-        return savingBankInfoResponse;
+
+        log.info("============ 은행 방문 시 반환 : {} ============", savingVisitResponse.toString());
+        return savingVisitResponse;
     }
 
     public SavingResponse joinSavings(int roomId, SavingRequest savingRequest) {
@@ -82,45 +118,50 @@ public class SavingService {
                 () -> new RuntimeException("해당하는 게임이 존재하지 않습니다.")
         );
 
-        //멤버 적금 포폴(전체 & 리스트) 구하기
+        // 멤버 포트폴리오
         Portfolio portfolio = game.getPortfolios().get(savingRequest.getPlayer());
-        // 멤버 적금 포폴 (전체)
-        PortfolioSavings memberSavingInfo = portfolio.getSavings();
-        // 멤버 적금 포폴 (리스트)
-        List<PortfolioSaving> memberSavingList;
-        //= Optional.ofNullable(memberSavingInfo.getSavings()).orElse(new ArrayList<>());
+        // 멤버 포트폴리오 - 적금
+        PortfolioSavings portfolioSavings = portfolio.getSavings();
+        //현재 은행 정보
+        Saving nowSavingInfo = findNowSavingInfo(game, savingRequest);
 
+        // 지불 가능한지 먼저 확인
+        
+        // 현재 은행 정보에 기반하여 가입
+        portfolio.setMoney(portfolio.getMoney()-nowSavingInfo.getMonthlyDeposit());
+        portfolioSavings.setTotalPrice(portfolioSavings.getTotalPrice()+ nowSavingInfo.getMonthlyDeposit());
+        portfolioSavings.setAmount(portfolioSavings.getAmount()+1);
 
+        PortfolioSaving nowSaving = PortfolioSaving.builder()
+                .bankId(savingRequest.getBankId())
+                .name(nowSavingInfo.getName())
+                .monthlyDeposit(nowSavingInfo.getMonthlyDeposit())
+                .currentPrice(nowSavingInfo.getMonthlyDeposit())
+                .currentCount(1)
+                .finishCount(nowSavingInfo.getFinishCount())
+                .rate(nowSavingInfo.getRate())
+                .build();
 
-        //멤버가 지불 가능한지 확인
+        if (portfolioSavings.getSavings() == null) portfolioSavings.setSavings(new HashMap<>());
+        portfolioSavings.getSavings().put(savingRequest.getBankId(), nowSaving);
 
-
-        //현재 적금 포폴 + 현재 은행 적금 (추가 & 레디스 저장)
-//        PortfolioSaving joinSavingInfo = PortfolioSaving.builder()
-//                .bankId(nowSaving.getBankId().toString())
-//                .savingName(nowSaving.getName())
-//                .monthlyDeposit(nowSaving.getMonthlyDeposit())
-//                .currentPrice(nowSaving.getMonthlyDeposit()) //지금까지 낸 금액
-//                .currentCount(1) //지금까지 낸 횟수
-//                .finishCount(nowSaving.getFinishCount()) //해당 적금 만기까지 총 횟수
-//                .rate(nowSaving.getRate())
-//                .build();
-//        memberSavingList.add(joinSavingInfo);
-//        PortfolioSavings afterJoin = PortfolioSavings.builder()
-//                .totalPrice((memberSavingInfo.getTotalPrice() + nowSaving.getMonthlyDeposit()))
-//                .amount((memberSavingInfo.getAmount()) + 1)
-//                .savings(memberSavingList)
-//                .build();
-
-
-        //game.getPortfolios().get(savingRequest.getPlayer()).setSavings(afterJoin);
+        // redis 저장
         gameRepository.save(game);
 
+        Map<Integer, SavingDto> savingsDtoMap = convertToDtoMap(portfolioSavings.getSavings());
+        SavingsDto responseSaving = SavingsDto.builder()
+                .totalPrice(portfolioSavings.getTotalPrice())
+                .amount(portfolioSavings.getAmount())
+                .savings(savingsDtoMap)
+                .build();
 
         // response
         SavingResponse savingResponse = SavingResponse.builder()
+                .player(savingRequest.getPlayer())
+                .money(portfolio.getMoney())
+                .savings(responseSaving)
                 .build();
-
+        log.info("============ 은행 적금 가입 시 반환 : {} ============", savingResponse.toString());
         return savingResponse;
     }
 

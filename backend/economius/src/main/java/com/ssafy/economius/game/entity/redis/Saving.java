@@ -1,7 +1,6 @@
 package com.ssafy.economius.game.entity.redis;
 
 import com.ssafy.economius.game.dto.SavingInfoDto;
-import com.ssafy.economius.game.enums.SavingIdEnums;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,16 +25,5 @@ public class Saving {
                 ", finishCount=" + finishCount +
                 '}';
     }
-
-    public SavingInfoDto toDto() {
-        return SavingInfoDto.builder()
-                //.bankId(this.bankId)
-                .name(this.name)
-                .monthlyDeposit(this.monthlyDeposit)
-                .finishCount(this.finishCount)
-                .rate(this.rate)
-                .build();
-    }
-
 
 }

@@ -28,7 +28,6 @@ import com.ssafy.economius.game.entity.redis.InterestRate;
 import com.ssafy.economius.game.entity.redis.Saving;
 import com.ssafy.economius.game.entity.redis.Stock;
 import com.ssafy.economius.game.enums.InitialData;
-import com.ssafy.economius.game.enums.SavingIdEnums;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import java.util.ArrayList;
 import java.util.HashMap;
