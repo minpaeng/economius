@@ -22,8 +22,8 @@ function App() {
                 <OrthographicCamera makeDefault zoom={65} position={[4, 4.1, 4]} />
                 <OrbitControls />
                 <ambientLight intensity={3} />
-                <Map />
-                <Characters />
+                {/* <Map /> */}
+                {/* <Characters /> */}
             </Canvas>
 
             <Dice2 />
