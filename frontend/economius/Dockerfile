@@ -11,8 +11,8 @@ ENV NODE_ENV development
 COPY package.json package-lock.json ./
 
 #RUN npm install -g recoil --legacy-peer-deps
-#RUN npm install -g typescript
-#RUN npm install -g three
+RUN npm install -g typescript
+RUN npm install -g three
 RUN npm install 
 #--legacy-peer-deps
 
