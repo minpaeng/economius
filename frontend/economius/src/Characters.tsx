@@ -1,5 +1,4 @@
 // @ts-ignore
-
 import { useState, useEffect } from 'react';
 import { Aligator, Bear, Bird, Butterfly, Camel, Cat, Chicken, Cow, Deer, Dog } from './Components/Characters';
 import { useRecoilState } from 'recoil';
@@ -27,7 +26,7 @@ function Characters() {
     const [moveDist, setMoveDist] = useRecoilState(MoveDistState);
 
     // 플레이어의 닉네임, 캐릭터(idx)
-    const [player1, setPlayer1] = useState<[string, number]>(['P1', 1]);
+    const [player1, setPlayer1] = useState<[string, number]>(['P1', 9]);
     const [player2, setPlayer2] = useState<[string, number]>(['P2', 3]);
     const [player3, setPlayer3] = useState<[string, number]>(['P3', 4]);
     const [player4, setPlayer4] = useState<[string, number]>(['P4', 5]);
