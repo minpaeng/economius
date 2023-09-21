@@ -9,7 +9,6 @@ import lombok.Getter;
 @Builder
 public class WebsocketErrorResponse {
 
-    private boolean success;
     private int code;
     private String message;
 }

@@ -9,7 +9,6 @@ import lombok.Getter;
 @Builder
 public class SelectBuildingResponse {
 
-    private final boolean success = true;
     private Long player;
     private int buildingId;
     private Long buildingOwnerPlayer;

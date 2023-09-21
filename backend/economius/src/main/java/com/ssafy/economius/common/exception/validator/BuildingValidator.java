@@ -15,6 +15,10 @@ public class BuildingValidator {
         checkAlreadyOwnedBuilding(building, roomId);
     }
 
+    public void checkBuildingSellingStatus(Long player, int roomId, Building building) {
+        checkNotOwnBuilding(player, building.getOwnerId(), roomId);
+    }
+
     private void checkAlreadyOwnBuilding(Long player, Long ownerId, int roomId) {
         if (ownerId != null && Objects.equals(player, ownerId)) {
             throw CustomWebsocketException.builder()
@@ -27,6 +31,16 @@ public class BuildingValidator {
 
     private void checkAlreadyOwnedBuilding(Building building, int roomId) {
         if (building.getOwnerId() != null) {
+            throw CustomWebsocketException.builder()
+                    .roomId(roomId)
+                    .code(BuildingMessage.ALREADY_OWNED_BUILDING.getCode())
+                    .message(BuildingMessage.ALREADY_OWNED_BUILDING.getMessage())
+                    .build();
+        }
+    }
+
+    private void checkNotOwnBuilding(Long player, Long ownerId, int roomId) {
+        if (ownerId != null && Objects.equals(player, ownerId)) {
             throw CustomWebsocketException.builder()
                     .roomId(roomId)
                     .code(BuildingMessage.ALREADY_OWNED_BUILDING.getCode())
