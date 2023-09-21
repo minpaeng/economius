@@ -1,7 +1,11 @@
 package com.ssafy.economius.game.entity.redis;
 
+
+import static com.ssafy.economius.game.enums.RateEnum.*;
+import com.ssafy.economius.game.enums.RateEnum;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
@@ -19,6 +24,7 @@ import org.springframework.data.redis.core.RedisHash;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Slf4j
 public class Game {
 
     @Id
@@ -27,9 +33,12 @@ public class Game {
     // 게임 시작하면 0번 index가 1위 다음 2위...
     private List<Long> players;
     private List<Long> playerSequence;
+    private Long currentPlayerToRoll;
     private int gameTurn;
+    private int maxGameTurn;
     private Map<Long, Portfolio> portfolios;
     private Map<Integer, Integer> tax;
+    private Map<Long, Integer> locations;
 
     // 경제 asset
     private Gold gold;
@@ -38,6 +47,22 @@ public class Game {
     private List<Insurance> insurances;
     private Map<Integer, Saving> savings;
     private InterestRate interestRate;
+
+    public void initializeLocations(){
+        log.info("사용자 위치 초기화");
+        locations = new HashMap<>();
+        players.forEach(player -> locations.put(player, 0));
+    }
+
+    public int rearrangePlayer(int diceNumber, Long player) {
+        log.info("주사위 굴린 플레이어 : " + player);
+        Integer location = locations.get(player);
+        log.info("주사위 굴린 플레이어 : " + player + "-> " + location + "위치");
+        int nextLocation = (location + diceNumber) % MAX_BOARD_SIZE.getValue();
+        log.info("주사위 굴린 플레이어 : " + player + "-> " + nextLocation + "위치");
+        locations.put(player, nextLocation);
+        return nextLocation;
+    }
 
     public void initializePlayerSequence() {
         playerSequence = new ArrayList<>(List.copyOf(players));
@@ -54,6 +79,8 @@ public class Game {
             playerSequence.set(i, playerSequence.get(randomIndex));
             playerSequence.set(randomIndex, temp);
         }
+
+        currentPlayerToRoll = playerSequence.get(0);
     }
 
     public void initializePortfolio(Map<Long, Portfolio> portfolios) {
@@ -87,4 +114,25 @@ public class Game {
             players.set(prize++, entry.getKey());
         }
     }
+
+    public Long getNextPlayer(Long player) {
+        int index = 0;
+        for (Long tmpPlayer : playerSequence) {
+            index++;
+            if (tmpPlayer.equals(player)) {
+                break;
+            }
+        }
+
+        return playerSequence.get(index % 4);
+    }
+
+    public int updateGameTurn() {
+        gameTurn++;
+        if (gameTurn == maxGameTurn) {
+            return -1;
+        }
+        return gameTurn;
+    }
+
 }

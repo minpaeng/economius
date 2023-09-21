@@ -4,6 +4,7 @@ import static com.ssafy.economius.game.enums.RateEnum.INITIAL_MONEY;
 import static com.ssafy.economius.game.enums.RateEnum.INITIAL_ZERO_VALUE;
 import static com.ssafy.economius.game.enums.RateEnum.SALARY;
 
+import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.dto.ReceiptDto;
 import com.ssafy.economius.game.dto.response.CalculateResponse;
 import com.ssafy.economius.game.dto.response.GameJoinResponse;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 public class GameService {
 
     private final GameRepository gameRepository;
+    private final GameValidator gameValidator;
 
     public GameJoinResponse join(int roomId, Long player) {
         Game game = gameRepository.findById(roomId).orElseThrow(
@@ -61,7 +63,11 @@ public class GameService {
 
         // 각자의 포트폴리오 생성
         uploadInitialPortfolioOnRedis(game);
+
         game.initializePlayerSequence();
+        game.initializeLocations();
+        gameRepository.save(game);
+
         return new GameStartResponse(roomId);
     }
 
@@ -80,7 +86,6 @@ public class GameService {
         }
 
         game.initializePortfolio(portfolioMap);
-        gameRepository.save(game);
     }
 
     private PortfolioStocks makePortfolioStocks() {
@@ -154,5 +159,4 @@ public class GameService {
             .portfolio(null)
             .build();
     }
-
 }

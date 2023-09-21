@@ -7,6 +7,7 @@ public enum RateEnum {
 
     INITIAL_INTEREST_RATE(5),
     INITIAL_ZERO_VALUE(0),
+    MAX_GAME_TURN(25),
     INITIAL_MONEY(500_000_000),
 
     FIRST_PRIZE_TAX(15),
@@ -21,8 +22,9 @@ public enum RateEnum {
 
     SALARY(5000000),
     GOLD_RATE_LOWER_BOUND(-5),
-    GOLD_RATE_UPPER_BOUND(10);
+    GOLD_RATE_UPPER_BOUND(10),
 
+    MAX_BOARD_SIZE(36);
 
 
     private final int value;
