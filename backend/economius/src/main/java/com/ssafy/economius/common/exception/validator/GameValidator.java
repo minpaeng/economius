@@ -31,4 +31,12 @@ public class GameValidator {
                     .build();
         }
     }
+
+    public void throwBankruptcyResponse(int roomId, Long player) {
+        throw CustomWebsocketException.builder()
+                .roomId(roomId)
+                .code(GameRoomMessage.PLAYER_BANKRUPTCY.getCode())
+                .message(GameRoomMessage.PLAYER_BANKRUPTCY.getMessage() + ": 플레이어 아이디 " + player)
+                .build();
+    }
 }

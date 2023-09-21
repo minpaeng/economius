@@ -87,17 +87,13 @@ public class BuildingService {
         Building building = game.getBuildings().get(buildingId);
         Long ownerId = building.getOwnerId();
 
-        // 다른 플레이어가 소유한 부동산이라면 비용 지불
-        checkBankruptcy(playerId, ownerId, roomId, buildingId, game);
-        game.payBuildingFee(playerId, ownerId, buildingId);
+        payBuildingFee(playerId, ownerId, roomId, buildingId, game);
 
-        VisitBuildingDto visitor = makeVisitBuildingDto(playerId, game.getPortfolios().get(playerId).getMoney());
-        VisitBuildingDto owner = makeVisitBuildingDto(ownerId, game.getPortfolios().get(ownerId).getMoney());
         return VisitBuildingResponse.builder()
                 .buildingId(buildingId)
                 .changeAmount(building.getPrice())
-                .visitor(visitor)
-                .owner(owner)
+                .visitor(makeVisitBuildingDto(playerId, game.getPortfolios().get(playerId).getMoney()))
+                .owner(makeVisitBuildingDto(ownerId, game.getPortfolios().get(ownerId).getMoney()))
                 .build();
     }
 
@@ -114,13 +110,21 @@ public class BuildingService {
                 .build();
     }
 
+    private void payBuildingFee(Long player, Long owner, int roomId, int buildingId, Game game) {
+        if (owner == null || owner.equals(player)) return;
+        checkBankruptcy(player, owner, roomId, buildingId, game);
+        game.payBuildingFee(player, owner, buildingId);
+        gameRepository.save(game);
+    }
+
     private void checkBankruptcy(Long player, Long owner, int roomId, int buildingId, Game game) {
         int playerMoney = game.getPortfolios().get(player).getMoney();
         int buildingPrice = game.getBuildings().get(buildingId).getPrice();
 
         if (owner != null && !owner.equals(player) && playerMoney < buildingPrice) {
             game.proceedBankruptcy(player);
-            gameValidator.proceedBankruptcy(player);
+            gameRepository.save(game);
+            gameValidator.throwBankruptcyResponse(roomId, player);
         }
     }
 
