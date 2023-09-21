@@ -6,18 +6,9 @@ function BuyOrSell({ isBuy }) {
   const [sellStock, setSellStock] = useState(1);
 
   // TODO: 실제 현재 가격으로 변경하기
-  const canUseMoney = 200000;
+  const canUseMoney = 3000000;
   const currentPrice = 70700;
-
-  // TODO: 매수
-  // input 내부 값 ==> (buyStock * currentPrice) / 본인 예금
-  // if ((buyStock + 1) * currentPrice ) > 본인 예금 ==> + 버튼 disabled
-  // if (buyStock == 1) ==> - 버튼 disabled
-
-  // TODO: 매도
-  //  input 내부 값 ==> (sellStock * currentPrice) / (보유주식수 * currentPrice)
-  //  if ((sellStock + 1) * currentPrice > (보유주식수 * currentPrice)) ==> + 버튼 disabled
-  //  if (sellStock == 1) ==> - 버튼 disabled
+  const haveStock = 7;
 
   const handleIncrement = () => {
     if (isBuy) {
@@ -38,31 +29,81 @@ function BuyOrSell({ isBuy }) {
   return (
     <S.SelectStockSection>
       <S.StockSectionMain>
-        <S.HandleStockInputSection>
-          <S.DecBtn onClick={handleDecrement}>-</S.DecBtn>
-          <S.StockCntInput
-            readOnly
-            type="text"
-            required
-            value={isBuy ? buyStock : sellStock}
-            min={2}
-            max={6}
-          />
-
-          <S.IncBtn onClick={handleIncrement}>+</S.IncBtn>
-        </S.HandleStockInputSection>
         <div
           style={{
+            width: "70%",
+            height: "100%",
             display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            flexDirection: "column",
+            margin: "auto",
+            justifyContent: "space-evenly",
           }}
         >
-          <S.ChangeInput
-            readOnly
-            type="text"
-            value={isBuy ? currentPrice * buyStock : currentPrice * sellStock}
-          />
+          <S.HandleStockInputSection>
+            {isBuy ? (
+              buyStock == 1 ? (
+                <S.disableDecBtn disabled>-</S.disableDecBtn>
+              ) : (
+                <S.DecBtn onClick={handleDecrement}>-</S.DecBtn>
+              )
+            ) : sellStock == 1 ? (
+              <S.disableDecBtn disabled>-</S.disableDecBtn>
+            ) : (
+              <S.DecBtn onClick={handleDecrement}>-</S.DecBtn>
+            )}
+
+            <S.StockCntInput>
+              {isBuy ? (
+                <>
+                  <span>{buyStock}</span>
+                  <span style={{ color: "gray" }}> (주)</span>
+                </>
+              ) : (
+                <>
+                  <span>{sellStock}</span>
+                  <span style={{ color: "gray" }}> (주)</span>
+                </>
+              )}
+            </S.StockCntInput>
+            {isBuy ? (
+              (buyStock + 1) * currentPrice > canUseMoney ? (
+                <S.disableIncBtn disabled>+</S.disableIncBtn>
+              ) : (
+                <S.IncBtn onClick={handleIncrement}>+</S.IncBtn>
+              )
+            ) : (sellStock + 1) * currentPrice > haveStock * currentPrice ? (
+              <S.disableIncBtn disabled>+</S.disableIncBtn>
+            ) : (
+              <S.IncBtn onClick={handleIncrement}>+</S.IncBtn>
+            )}
+          </S.HandleStockInputSection>
+
+          <S.ChangeInputDiv>
+            {isBuy ? (
+              <>
+                <span>{(currentPrice * buyStock).toLocaleString()}</span>
+                <span style={{ color: "gray" }}>
+                  {" "}
+                  / {canUseMoney.toLocaleString()} (원)
+                </span>
+              </>
+            ) : (
+              <>
+                <span>{(currentPrice * sellStock).toLocaleString()}</span>
+                <span style={{ color: "gray" }}>
+                  / {(haveStock * currentPrice).toLocaleString()} (원)
+                </span>
+              </>
+            )}
+          </S.ChangeInputDiv>
+
+          <div style={{ textAlign: "center", color: "gray" }}>
+            체결 이후 보유금 :{" "}
+            {isBuy
+              ? (canUseMoney - currentPrice * buyStock).toLocaleString()
+              : (canUseMoney + currentPrice * sellStock).toLocaleString()}{" "}
+            (원)
+          </div>
         </div>
       </S.StockSectionMain>
     </S.SelectStockSection>

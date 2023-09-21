@@ -17,16 +17,14 @@ export const StockSectionMain = styled.div`
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   border: 1px solid rgba(131, 129, 129, 0.2);
   background: rgba(255, 255, 255, 0.5);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* justify-content: space-evenly; */
 `;
 
 export const HandleStockInputSection = styled.div`
   display: flex;
   justify-content: center;
-  width: 80%;
-  margin: 0px auto;
 `;
 
 export const DecBtn = styled.button`
@@ -46,7 +44,19 @@ export const DecBtn = styled.button`
   }
 `;
 
-export const StockCntInput = styled.input`
+export const disableDecBtn = styled.button`
+  background: rgba(175, 175, 175, 0.8);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(131, 129, 129, 0.2);
+  color: rgba(100, 100, 100, 1);
+  font-size: 15px;
+  transition: all 250ms ease-in-out;
+  border-radius: 6px 0px 0px 6px;
+  width: 100%;
+  flex: 2;
+`;
+
+export const StockCntInput = styled.div`
   padding: 8px 12px;
   font-size: 15px;
   background: rgba(250, 249, 252, 1);
@@ -77,10 +87,22 @@ export const IncBtn = styled.button`
   }
 `;
 
+export const disableIncBtn = styled.button`
+  background: rgba(175, 175, 175, 0.8);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(131, 129, 129, 0.2);
+  color: rgba(100, 100, 100, 1);
+  font-size: 15px;
+  transition: all 250ms ease-in-out;
+  border-radius: 0px 6px 6px 0px;
+  width: 100%;
+  flex: 2;
+`;
+
 // 금액 바뀌는 input
 
 export const ChangeInput = styled.input`
-  padding: 8px 12px;
+  padding: 8px 0px;
   font-size: 15px;
   background: rgba(250, 249, 252, 1);
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -88,6 +110,19 @@ export const ChangeInput = styled.input`
   text-align: center;
   user-select: none;
   outline: none;
-  width: 73%;
+  width: 100%;
+  border-radius: 6px;
+  display: flex;
+`;
+
+export const ChangeInputDiv = styled.div`
+  padding: 8px 0px;
+  font-size: 15px;
+  background: rgba(250, 249, 252, 1);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(131, 129, 129, 0.2);
+  text-align: center;
+  user-select: none;
+  width: 100%;
   border-radius: 6px;
 `;
