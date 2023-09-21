@@ -1,6 +1,5 @@
 import Modal from "react-modal";
-import { useState } from "react";
-import * as S from "./Stock.style";
+
 import PlayerChracter from "./PlayerChracter";
 import PlayerProperty from "./PlayerProperty";
 import PlayerRanking from "./PlayerRanking";

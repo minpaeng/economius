@@ -57,7 +57,7 @@ function NewsBar() {
           axis="vertical"
         >
           {data.map((word, index) => (
-            <span key={index} style={{ textAlign: "left" }}>
+            <span key={index}>
               <b>{word}</b>
             </span>
           ))}

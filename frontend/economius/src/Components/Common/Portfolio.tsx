@@ -1,6 +1,4 @@
 import Modal from "react-modal";
-import { useState } from "react";
-import * as S from "./Stock.style";
 
 function Portforlio() {
   // modal style

@@ -39,7 +39,7 @@ function StockGraph({ data }) {
             show: false,
           },
           xaxis: {
-            type: "number",
+            type: "category",
             categories: data?.map((price) => price.turn),
             labels: {
               style: {

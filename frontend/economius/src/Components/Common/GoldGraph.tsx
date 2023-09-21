@@ -57,7 +57,7 @@ function GoldGraph({ data }) {
             },
           },
           xaxis: {
-            type: "number",
+            type: "category",
             categories: data?.map((price) => price.turn),
             labels: {
               style: {
