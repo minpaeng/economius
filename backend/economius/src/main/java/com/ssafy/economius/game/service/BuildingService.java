@@ -85,6 +85,7 @@ public class BuildingService {
         Long playerId = visitBuildingRequest.getPlayer();
         int buildingId = visitBuildingRequest.getBuildingId();
         Building building = game.getBuildings().get(buildingId);
+        log.info("playerId: " + playerId);
         log.info("buildingId: " + buildingId);
         log.info("building ownerId: " + building.getOwnerId());
         Long ownerId = building.getOwnerId();
