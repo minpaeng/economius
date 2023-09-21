@@ -17,6 +17,8 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import java.util.Map;
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -29,24 +31,30 @@ public class BuildingController {
     public void payFee(@DestinationVariable int roomId,
                        @Payload PayFeeRequest payFeeRequest) {
 
+        Map<String, Object> headers = Map.of("success", true);
+
         PayFeeResponse responseDto = buildingService.payFee(roomId, payFeeRequest);
-        template.convertAndSend("/sub/" + roomId, responseDto);
+        template.convertAndSend("/sub/" + roomId, responseDto, headers);
     }
 
     @MessageMapping(value = "/{roomId}/buyBuildings")
     public void buyBuildings(@DestinationVariable int roomId,
                              @Payload BuyBuildingsRequest buyBuildingsRequest) {
 
+        Map<String, Object> headers = Map.of("success", true);
+
         BuyBuildingResponse responseDto = buildingService.buyBuildings(roomId, buyBuildingsRequest);
-        template.convertAndSend("/sub/" + roomId, responseDto);
+        template.convertAndSend("/sub/" + roomId, responseDto, headers);
     }
 
     @MessageMapping(value = "/{roomId}/sellBuildings")
     public void sellBuildings(@DestinationVariable int roomId,
                               @Payload SellBuildingsRequest sellBuildingsRequest) {
 
+        Map<String, Object> headers = Map.of("success", true);
+
         SellBuildingsResponse responseDto = buildingService.sellBuildings(roomId, sellBuildingsRequest);
-        template.convertAndSend("/sub/" + roomId, responseDto);
+        template.convertAndSend("/sub/" + roomId, responseDto, headers);
     }
 
     @MessageMapping(value = "/{roomId}/selectBuilding")
@@ -56,8 +64,10 @@ public class BuildingController {
         SelectBuildingResponse responseDto = buildingService.selectBuilding(roomId, selectBuildingRequest);
 
         Long player = selectBuildingRequest.getPlayer();
+        Map<String, Object> headers = Map.of("success", true);
+
         if (selectBuildingRequest.isVisit())
-            template.convertAndSend("/sub/" + roomId, responseDto);
-        else template.convertAndSend("/sub/" + roomId + "/" + player, responseDto);
+            template.convertAndSend("/sub/" + roomId, responseDto, headers);
+        else template.convertAndSend("/sub/" + roomId + "/" + player, responseDto, headers);
     }
 }
