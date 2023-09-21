@@ -8,6 +8,5 @@ import lombok.ToString;
 public class SelectBuildingRequest {
 
     private Long player;
-    private boolean visit;
     private int buildingId;
 }

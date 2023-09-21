@@ -7,8 +7,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Builder
-public class PayFeeDto {
+public class VisitBuildingDto {
     private long player;
-    private int changeAmount;
     private int moneyResult;
 }
