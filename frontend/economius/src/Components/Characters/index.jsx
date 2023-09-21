@@ -1,5 +1,4 @@
 // 컴포넌트들을 한 줄로 import 할 수 있게 해주는 배럴 파일
-
 export { default as Aligator } from './Aligator';
 export { default as Bear } from './Bear';
 export { default as Bird } from './Bird';

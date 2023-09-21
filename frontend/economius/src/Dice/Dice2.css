@@ -1,0 +1,23 @@
+.Dice2 {
+    font-family: Montserrat, sans-serif;
+    text-align: center;
+}
+
+.Dice2 ._space3d span {
+    width: 8px;
+    height: 8px;
+    border-radius: 23px;
+    background: #555;
+    box-shadow: inset 5px 0 10px #000;
+}
+
+.Dice2 ._space3d ._3dface {
+    box-shadow: none;
+    border-radius: 1px;
+}
+
+.Dice2 ._space3d .defaultFace {
+    background: #fff;
+    border-radius: 1px;
+    box-shadow: inset 0 0 40px #ccc;
+}
