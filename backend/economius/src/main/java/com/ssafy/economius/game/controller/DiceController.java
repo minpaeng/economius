@@ -16,9 +16,5 @@ public class DiceController {
     private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
     private final GameService diceService;
 
-//    @MessageMapping(value = "/{roomId}/join")
-//    public void join(@DestinationVariable int roomId, GameJoinRequest gameJoinRequest) {
-//        template.convertAndSend("/sub/" + roomId);
-//    }
 
 }
