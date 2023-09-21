@@ -28,6 +28,6 @@
         "noUnusedParameters": false,
         "noFallthroughCasesInSwitch": true
     },
-    "include": ["src"],
+    "include": ["src", "src/Dice/Dice2.tsx"],
     "references": [{ "path": "./tsconfig.node.json" }]
 }
