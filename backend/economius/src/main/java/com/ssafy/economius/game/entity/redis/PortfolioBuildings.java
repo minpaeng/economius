@@ -30,6 +30,13 @@ public class PortfolioBuildings {
         setEarnings();
     }
 
+    public void sellBuilding(int buildingId, Building building) {
+        this.totalPrice += building.getPrice();
+        amount -= 1;
+        this.building.remove(buildingId);
+        setEarnings();
+    }
+
     private void addBuilding(int buildingId, Building building) {
         if (this.building == null) this.building = new HashMap<>();
 

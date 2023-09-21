@@ -36,5 +36,9 @@ public class Portfolio {
         this.buildings.buyBuilding(buildingId, building);
     }
 
+    public void sellBuilding(int buildingId, Building building) {
+        this.money += building.getPrice();
+        this.buildings.sellBuilding(buildingId, building);
+    }
 
 }

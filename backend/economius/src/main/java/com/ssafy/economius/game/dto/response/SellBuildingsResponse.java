@@ -8,4 +8,10 @@ import lombok.Getter;
 @AllArgsConstructor
 @Builder
 public class SellBuildingsResponse {
+
+    private boolean success;
+    private Long player;
+    private int changeAmount;
+    private int moneyResult;
+    private int buildingId;
 }

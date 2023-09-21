@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class BuildingService {
+
     private final BuildingValidator buildingValidator;
     private final GameValidator gameValidator;
     private final GameRepository gameRepository;
@@ -47,8 +48,17 @@ public class BuildingService {
     }
 
     public SellBuildingsResponse sellBuildings(int roomId, SellBuildingsRequest sellBuildingsRequest) {
-        return SellBuildingsResponse.builder()
-                .build();
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
+
+        Long player = sellBuildingsRequest.getPlayer();
+        Portfolio portfolio = game.getPortfolios().get(player);
+        int buildingId = sellBuildingsRequest.getBuildingId();
+        Building building = game.getBuildings().get(buildingId);
+
+        buildingValidator.checkBuildingSellingStatus(player, roomId, building);
+        SellBuildingsResponse response = sellBuilding(portfolio, buildingId, building);
+        gameRepository.save(game);
+        return response;
     }
 
     private BuyBuildingResponse buyBuilding(Portfolio portfolio, int buildingId, Building building) {
@@ -57,6 +67,19 @@ public class BuildingService {
         int afterMoney = portfolio.getMoney();
 
         return BuyBuildingResponse.builder()
+                .player(portfolio.getPlayer())
+                .buildingId(buildingId)
+                .changeAmount(beforeMoney - afterMoney)
+                .moneyResult(afterMoney)
+                .build();
+    }
+
+    private SellBuildingsResponse sellBuilding(Portfolio portfolio, int buildingId, Building building) {
+        int beforeMoney = portfolio.getMoney();
+        portfolio.sellBuilding(buildingId, building);
+        int afterMoney = portfolio.getMoney();
+
+        return SellBuildingsResponse.builder()
                 .player(portfolio.getPlayer())
                 .buildingId(buildingId)
                 .changeAmount(beforeMoney - afterMoney)
