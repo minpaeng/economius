@@ -8,23 +8,23 @@ import lombok.Getter;
 @Builder
 @Getter
 public class SavingDto {
-    private String bankId;
-    private String savingName;
+    private int bankId;
+    private String name;
     private int monthlyDeposit;
-    private int currentPrice;
-    private int currentCount;
-    private int totalCount;
+    private Integer currentPrice;
+    private Integer currentCount;
+    private int finishCount;
     private int rate;
 
     @Override
     public String toString() {
         return "SavingDto{" +
                 "bankId='" + bankId + '\'' +
-                ", savingName='" + savingName + '\'' +
+                ", savingName='" + name + '\'' +
                 ", monthlyDeposit=" + monthlyDeposit +
                 ", currentPrice=" + currentPrice +
                 ", currentCount=" + currentCount +
-                ", totalCount=" + totalCount +
+                ", totalCount=" + finishCount +
                 ", rate=" + rate +
                 '}';
     }

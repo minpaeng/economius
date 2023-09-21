@@ -33,7 +33,7 @@
 
             stompClient.connect({}, function () {
                     //subscribe(subscribe url,해당 url로 메시지를 받을때마다 실행할 함수)
-                    sub = stompClient.subscribe('/sub/20', function (messageOutput) {
+                    sub = stompClient.subscribe('/sub/6', function (messageOutput) {
                         //e.body에 전송된 data가 들어있다
                         showMessageOutput(JSON.parse(messageOutput.body));
                     });
@@ -53,32 +53,32 @@
         }
 
         function sendJoin2() {
-            stompClient.send("/pub/20/join", {}, JSON.stringify({
+            stompClient.send("/pub/6/join", {}, JSON.stringify({
                 "player": 2
             }));
         }
         function sendJoin3() {
-            stompClient.send("/pub/20/join", {}, JSON.stringify({
+            stompClient.send("/pub/6/join", {}, JSON.stringify({
                 "player": 3
             }));
         }
         function sendJoin4() {
-            stompClient.send("/pub/20/join", {}, JSON.stringify({
+            stompClient.send("/pub/6/join", {}, JSON.stringify({
                 "player": 4
             }));
         }
 
 
         function sendStart() {
-            stompClient.send("/pub/20/start", {}, JSON.stringify({
+            stompClient.send("/pub/6/start", {}, JSON.stringify({
                 "hostPlayer": 1
             }));
         }
 
         function sendMessage() {
-            stompClient.send("/pub/20/bank", {}, JSON.stringify({
+            stompClient.send("/pub/6/bank", {}, JSON.stringify({
                 "player": 1,
-                "bankCode" : "BANK1"
+                "bankId" : 1
             }));
         }
 

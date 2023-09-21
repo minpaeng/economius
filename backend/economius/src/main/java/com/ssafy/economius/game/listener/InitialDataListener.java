@@ -86,11 +86,11 @@ public class InitialDataListener {
         List<Savings> savings = savingsRepository.findAll();
         for (Savings saving: savings) {
             SavingsDto tmp = new SavingsDto();
-            tmp.setSavingsId(saving.getSavingsId());
-            tmp.setName(saving.getName());
+            tmp.setBankId(saving.getSavingsId());
+            tmp.setSavingName(saving.getName());
             tmp.setMonthlyDeposit(saving.getMonthlyDeposit());
             tmp.setFinishCount(saving.getFinishCount());
-            tmp.setFinishRate(saving.getFinishRate());
+            tmp.setRate(saving.getFinishRate());
             InitialData.SAVINGS.add(tmp);
         }
     }

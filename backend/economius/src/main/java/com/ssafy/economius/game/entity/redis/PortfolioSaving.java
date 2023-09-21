@@ -1,5 +1,6 @@
 package com.ssafy.economius.game.entity.redis;
 
+import com.ssafy.economius.game.dto.SavingDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,8 +11,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 public class PortfolioSaving {
-    private String bankId;
-    private String savingName;
+    private int bankId;
+    private String name;
     private int monthlyDeposit;
     private int currentPrice;
     private int currentCount;
@@ -22,7 +23,7 @@ public class PortfolioSaving {
     public String toString() {
         return "PortfolioSaving{" +
                 "bankId='" + bankId + '\'' +
-                ", savingName='" + savingName + '\'' +
+                ", savingName='" + name + '\'' +
                 ", monthlyDeposit=" + monthlyDeposit +
                 ", currentPrice=" + currentPrice +
                 ", currentCount=" + currentCount +
@@ -39,4 +40,17 @@ public class PortfolioSaving {
     public boolean checkSavingFinish() {
         return this.finishCount == this.currentCount;
     }
+
+    public SavingDto toDto() {
+        return SavingDto.builder()
+                .bankId(this.bankId)
+                .name(this.name)
+                .monthlyDeposit(this.monthlyDeposit)
+                .currentPrice(this.currentPrice)
+                .currentCount(this.currentCount)
+                .finishCount(this.finishCount)
+                .rate(this.rate)
+                .build();
+    }
+
 }

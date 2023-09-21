@@ -16,7 +16,7 @@ import com.ssafy.economius.game.entity.redis.PortfolioSaving;
 import com.ssafy.economius.game.entity.redis.PortfolioSavings;
 import com.ssafy.economius.game.entity.redis.PortfolioStocks;
 import com.ssafy.economius.game.repository.redis.GameRepository;
-import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -165,7 +165,7 @@ public class GameService {
                     .getPortfolios()
                     .get(player)
                     .getSavings()
-                    .getSaving())
+                    .getSavings())
             .orElse(List.of());
     }
 

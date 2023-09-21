@@ -125,24 +125,19 @@ public class GameRoomService {
         return stocks;
     }
 
-    private List<Saving> makeSavings() {
-        ArrayList<Saving> savings = new ArrayList<>();
-
-        int enumIndex = 0;
-
-        SavingIdEnums[] enumValues = SavingIdEnums.values();
+    private Map<Integer, Saving> makeSavings() {
+        Map<Integer, Saving> savings = new HashMap<>();
 
         for (SavingsDto saving : InitialData.SAVINGS) {
             Saving tmpSaving = Saving.builder()
-                    .bankId(enumValues[enumIndex])
-                    .name(saving.getName())
+                    .name(saving.getSavingName())
                     .monthlyDeposit(saving.getMonthlyDeposit())
-                    .rate(saving.getFinishRate())
+                    .rate(saving.getRate())
                     .finishCount(saving.getFinishCount())
                     .build();
 
-            savings.add(tmpSaving);
-            enumIndex++;
+            log.info(saving.getBankId().toString());
+            savings.put(saving.getBankId(), tmpSaving);
         }
 
         return savings;

@@ -36,7 +36,7 @@ public class Game {
     private Map<Integer, Building> buildings;
     private List<Stock> stocks;
     private List<Insurance> insurances;
-    private List<Saving> savings;
+    private Map<Integer, Saving> savings;
     private InterestRate interestRate;
 
     @Override

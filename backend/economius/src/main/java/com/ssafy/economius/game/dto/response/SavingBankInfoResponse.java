@@ -1,7 +1,7 @@
 package com.ssafy.economius.game.dto.response;
 
 import com.ssafy.economius.game.dto.SavingDto;
-import com.ssafy.economius.game.dto.SavingsDto;
+import com.ssafy.economius.game.dto.SavingInfoDto;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,7 +11,7 @@ public class SavingBankInfoResponse {
 
     private Long player;
     private int money;
-    private SavingDto savings;
-
+    private boolean join;
+    private SavingDto memberSavings;
 
 }
