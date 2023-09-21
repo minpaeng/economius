@@ -10,8 +10,9 @@
             "/src/*": ["src/*"]
         },
 
-        /* Bundler mode */
-        "moduleResolution": "bundler",
+        /* Bundler mode bundler */
+        /*   "moduleResolution": "bundler", */
+        "moduleResolution": "node",
         "allowImportingTsExtensions": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
