@@ -7,9 +7,9 @@ import lombok.Setter;
 @Setter
 public class SavingsDto {
 
-    private Integer savingsId;
-    private String name;
+    private Integer bankId;
+    private String savingName;
     private Integer monthlyDeposit;
     private Integer finishCount;
-    private Integer finishRate;
+    private Integer rate;
 }

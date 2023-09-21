@@ -41,4 +41,17 @@ public class Portfolio {
         this.buildings.sellBuilding(buildingId, building);
     }
 
+    @Override
+    public String toString() {
+        return "Portfolio{" +
+                "player=" + player +
+                ", money=" + money +
+                ", totalMoney=" + totalMoney +
+                ", gold=" + gold +
+                ", savings=" + savings +
+                ", buildings=" + buildings +
+                ", stocks=" + stocks +
+                ", insurances=" + insurances +
+                '}';
+    }
 }
