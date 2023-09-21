@@ -1,7 +1,7 @@
 package com.ssafy.economius.game.controller;
 
 import com.ssafy.economius.game.dto.request.SavingRequest;
-import com.ssafy.economius.game.dto.response.SavingBankInfoResponse;
+import com.ssafy.economius.game.dto.response.SavingVisitResponse;
 import com.ssafy.economius.game.dto.response.SavingResponse;
 import com.ssafy.economius.game.service.SavingService;
 import lombok.RequiredArgsConstructor;
@@ -21,18 +21,18 @@ public class SavingController {
 
     @MessageMapping(value = "/{roomId}/bank")
     public void visitBank(@DestinationVariable int roomId, SavingRequest savingRequest) {
-        SavingBankInfoResponse savingBankInfoResponse = savingService.visitBank(roomId, savingRequest);
-        template.convertAndSend("/sub/" + roomId, savingBankInfoResponse);
+        SavingVisitResponse savingVisitResponse = savingService.visitBank(roomId, savingRequest);
+        template.convertAndSend("/sub/" + roomId, savingVisitResponse);
     }
 
-    @MessageMapping(value = "/{roomId}/joinSavings")
+    @MessageMapping(value = "/{roomId}/bank/join")
     public void joinSavings(@DestinationVariable int roomId, SavingRequest savingRequest) {
         SavingResponse savingResponse = savingService.joinSavings(roomId, savingRequest);
         template.convertAndSend("/sub/" + roomId, savingResponse);
     }
 
 
-    @MessageMapping(value = "/{roomId}/stopSavings")
+    @MessageMapping(value = "/{roomId}/bank/stop")
     public void stopSavings(@DestinationVariable int roomId, SavingRequest savingRequest) {
         SavingResponse savingResponse = savingService.stopSavings(roomId, savingRequest);
         template.convertAndSend("/sub/" + roomId, savingResponse);

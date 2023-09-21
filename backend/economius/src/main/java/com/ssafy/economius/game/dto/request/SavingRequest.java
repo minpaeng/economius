@@ -9,5 +9,14 @@ import lombok.Getter;
 public class SavingRequest {
 
     private Long player;
-    private String bankId;
+    private int bankId;
+
+    @Override
+    public String toString() {
+        return "SavingRequest{" +
+                "player=" + player +
+                ", bankId=" + bankId +
+                '}';
+    }
 }
+

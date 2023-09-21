@@ -6,6 +6,7 @@ import static com.ssafy.economius.game.enums.RateEnum.FOURTH_PRIZE;
 import static com.ssafy.economius.game.enums.RateEnum.FOURTH_PRIZE_TAX;
 import static com.ssafy.economius.game.enums.RateEnum.INITIAL_INTEREST_RATE;
 import static com.ssafy.economius.game.enums.RateEnum.INITIAL_ZERO_VALUE;
+import static com.ssafy.economius.game.enums.RateEnum.MAX_GAME_TURN;
 import static com.ssafy.economius.game.enums.RateEnum.SECOND_PRIZE;
 import static com.ssafy.economius.game.enums.RateEnum.SECOND_PRIZE_TAX;
 import static com.ssafy.economius.game.enums.RateEnum.THIRD_PRIZE;
@@ -28,7 +29,6 @@ import com.ssafy.economius.game.entity.redis.InterestRate;
 import com.ssafy.economius.game.entity.redis.Saving;
 import com.ssafy.economius.game.entity.redis.Stock;
 import com.ssafy.economius.game.enums.InitialData;
-import com.ssafy.economius.game.enums.SavingIdEnums;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,6 +74,7 @@ public class GameRoomService {
             .insurances(makeInsurance())
             .buildings(makeBuildings())
             .tax(makeTax())
+            .maxGameTurn(MAX_GAME_TURN.getValue())
             .build();
 
         gameRepository.save(game);
@@ -125,24 +126,19 @@ public class GameRoomService {
         return stocks;
     }
 
-    private List<Saving> makeSavings() {
-        ArrayList<Saving> savings = new ArrayList<>();
-
-        int enumIndex = 0;
-
-        SavingIdEnums[] enumValues = SavingIdEnums.values();
+    private Map<Integer, Saving> makeSavings() {
+        Map<Integer, Saving> savings = new HashMap<>();
 
         for (SavingsDto saving : InitialData.SAVINGS) {
             Saving tmpSaving = Saving.builder()
-                    .bankId(enumValues[enumIndex])
-                    .name(saving.getName())
+                    .name(saving.getSavingName())
                     .monthlyDeposit(saving.getMonthlyDeposit())
-                    .rate(saving.getFinishRate())
+                    .rate(saving.getRate())
                     .finishCount(saving.getFinishCount())
                     .build();
 
-            savings.add(tmpSaving);
-            enumIndex++;
+            log.info(saving.getBankId().toString());
+            savings.put(saving.getBankId(), tmpSaving);
         }
 
         return savings;
