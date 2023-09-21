@@ -3,8 +3,15 @@ import { recoilPersist } from 'recoil-persist';
 const { persistAtom } = recoilPersist();
 
 // 현재 플레이어
-export const nowPlayerState = atom<number>({
-    key: 'nowPlayerState',
+export const NowPlayerState = atom<number>({
+    key: 'NowPlayerState',
+    default: 0, // 기본값
+    effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+});
+
+// 현재 플레이어 최종 위치
+export const NowPlayerPositionState = atom<number>({
+    key: 'NowPlayerPositionState',
     default: 0, // 기본값
     effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
@@ -25,4 +32,10 @@ export const MoveDistState = atom<number>({
 export const MapAnimationIndexState = atom<number>({
     key: 'MapAnimationIndexState',
     default: 0,
+});
+
+// 자산 모달 오픈 여부
+export const IsModalOpenState = atom<boolean>({
+    key: 'IsModalOpenState',
+    default: false,
 });

@@ -1,7 +1,7 @@
 import Modal from 'react-modal';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { nowPlayerState } from '/src/recoil/animation/atom';
+import { IsModalOpenState } from '/src/recoil/animation/atom';
 import monthlymalculate from '/MonthlyCalculate/monthlycalculate.png';
 import dollarcoin from '/MonthlyCalculate/dollarcoin.png';
 import plus from '/MonthlyCalculate/plus.png';
@@ -11,7 +11,6 @@ import * as S from './MonthlyCalculate.style';
 
 function MonthlyCalculate() {
     const [isOpen, setIsOpen] = useState(true);
-
     const closeModal = () => {
         setIsOpen(false);
     };

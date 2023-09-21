@@ -1,14 +1,14 @@
 import Modal from 'react-modal';
 import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { IsModalOpenState } from '/src/recoil/animation/atom';
 import financecenterimg from '/FinanceCenter/financecenter.png';
 import * as S from './GlobalModal.stye';
 
 function Bankrupt() {
-    // 원래는 초기값 false로 두고 해당 위치 되면 true로 바꿔줘야할듯
-    const [isOpen, setIsOpen] = useState(false);
-    // 아니면 해지 모달
+    const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const closeModal = () => {
-        setIsOpen(false);
+        setIsModalOpen(false);
     };
 
     // modal style
@@ -38,7 +38,7 @@ function Bankrupt() {
     };
 
     return (
-        <Modal isOpen={isOpen} style={modalStyle} onRequestClose={closeModal}>
+        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
             <S.Main>
                 <S.Top>
                     <S.TopTitle>파산하였습니다...</S.TopTitle>
