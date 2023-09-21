@@ -28,6 +28,7 @@ public class Game {
     private List<Long> players;
     private List<Long> playerSequence;
     private int gameTurn;
+    private int maxGameTurn;
     private Map<Long, Portfolio> portfolios;
     private Map<Integer, Integer> tax;
 
@@ -87,4 +88,25 @@ public class Game {
             players.set(prize++, entry.getKey());
         }
     }
+
+    public Long getNextPlayer(Long player) {
+        int index = 0;
+        for (Long tmpPlayer : playerSequence) {
+            index++;
+            if (tmpPlayer.equals(player)) {
+                break;
+            }
+        }
+
+        return playerSequence.get(index % 4);
+    }
+
+    public int updateGameTurn(){
+        gameTurn++;
+        if (gameTurn == maxGameTurn) {
+            return -1;
+        }
+        return gameTurn;
+    }
+
 }

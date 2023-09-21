@@ -1,6 +1,7 @@
 package com.ssafy.economius.game.controller;
 
 import com.ssafy.economius.game.dto.request.CalculateRequest;
+import com.ssafy.economius.game.dto.request.EndTurnRequest;
 import com.ssafy.economius.game.dto.request.GameJoinRequest;
 import com.ssafy.economius.game.dto.request.GameStartRequest;
 import com.ssafy.economius.game.dto.response.CalculateResponse;
@@ -43,4 +44,8 @@ public class GameController {
         template.convertAndSend("/sub/" + roomId, calculateResponse);
     }
 
+    @MessageMapping(value = "/{roomId}/endTurn")
+    public void endTurn(@DestinationVariable int roomId, EndTurnRequest endTurnRequest){
+        gameService.endTurn(roomId, endTurnRequest.getPlayer());
+    }
 }

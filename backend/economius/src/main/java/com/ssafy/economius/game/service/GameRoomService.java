@@ -6,6 +6,7 @@ import static com.ssafy.economius.game.enums.RateEnum.FOURTH_PRIZE;
 import static com.ssafy.economius.game.enums.RateEnum.FOURTH_PRIZE_TAX;
 import static com.ssafy.economius.game.enums.RateEnum.INITIAL_INTEREST_RATE;
 import static com.ssafy.economius.game.enums.RateEnum.INITIAL_ZERO_VALUE;
+import static com.ssafy.economius.game.enums.RateEnum.MAX_GAME_TURN;
 import static com.ssafy.economius.game.enums.RateEnum.SECOND_PRIZE;
 import static com.ssafy.economius.game.enums.RateEnum.SECOND_PRIZE_TAX;
 import static com.ssafy.economius.game.enums.RateEnum.THIRD_PRIZE;
@@ -73,6 +74,7 @@ public class GameRoomService {
             .insurances(makeInsurance())
             .buildings(makeBuildings())
             .tax(makeTax())
+            .maxGameTurn(MAX_GAME_TURN.getValue())
             .build();
 
         gameRepository.save(game);

@@ -7,6 +7,7 @@ public enum RateEnum {
 
     INITIAL_INTEREST_RATE(5),
     INITIAL_ZERO_VALUE(0),
+    MAX_GAME_TURN(25),
     INITIAL_MONEY(500_000_000),
 
     FIRST_PRIZE_TAX(15),
