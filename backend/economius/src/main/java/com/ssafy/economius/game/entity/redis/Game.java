@@ -84,4 +84,14 @@ public class Game {
             players.set(prize++, entry.getKey());
         }
     }
+
+    public void payBuildingFee(Long player, Long owner, int buildingId) {
+        if (owner == null || !owner.equals(player)) return;
+        int playerMoney = this.portfolios.get(player).getMoney();
+        int ownerMoney = this.portfolios.get(owner).getMoney();
+        int buildingPrice = this.buildings.get(buildingId).getPrice();
+
+        this.portfolios.get(player).setMoney(playerMoney - buildingPrice);
+        this.portfolios.get(owner).setMoney(ownerMoney + buildingPrice);
+    }
 }
