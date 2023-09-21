@@ -20,7 +20,6 @@ export const modalStyle: any = {
         margin: 'auto',
         width: '500px',
         height: '500px',
-        border: '5px solid white',
         borderRadius: '20px',
         padding: '0px',
     },
@@ -60,7 +59,7 @@ export const Divide = styled.div`
 `;
 
 export const Mid = styled.div`
-    flex: 7.85;
+    flex: 5.85;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -68,23 +67,52 @@ export const Mid = styled.div`
 `;
 
 export const MidItem = styled.div`
-    border: solid 1px red;
-`;
-
-// export const MidImg = styled.img`
-//     height: 150px;
-// `;
-
-export const MidDesc = styled.div`
+    margin-left: auto;
     width: 210px;
     height: 30px;
     display: flex;
-    border: solid 1px green;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+`;
+
+export const MidDesc = styled.div`
+    height: 30px;
+    display: flex;
+    align-items: center;
+`;
+
+export const MidAmount = styled.div`
+    height: 30px;
+    display: flex;
+    align-items: center;
+`;
+
+export const MidImg = styled.img`
+    height: 22px;
+    margin-left: 5px;
 `;
 
 export const Footer = styled.div`
-    width: 210px;
+    flex: 2;
     height: 30px;
     display: flex;
-    border: solid 1px green;
+    justify-content: center;
+    align-items: center;
+`;
+
+export const RoundButton = styled.button`
+    cursor: pointer; /* 커서를 포인터로 설정 */
+    border: none;
+    background: #ffaa55;
+    transition: all 250ms ease-in-out;
+    padding: 10px 25px;
+    border-radius: 22px;
+    font-size: 18px;
+    font-weight: 800;
+
+    /* 호버 시 색상 변경 */
+    &:hover {
+        background: #ffaa55; /* 원하는 색상으로 변경 */
+    }
 `;
