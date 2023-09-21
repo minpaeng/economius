@@ -20,7 +20,8 @@ public enum RateEnum {
     FOURTH_PRIZE(4),
 
     SALARY(5000000),
-    ;
+    GOLD_RATE_LOWER_BOUND(-5),
+    GOLD_RATE_UPPER_BOUND(10);
 
 
 

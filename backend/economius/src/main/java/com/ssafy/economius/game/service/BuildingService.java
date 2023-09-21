@@ -40,9 +40,10 @@ public class BuildingService {
         Building building = game.getBuildings().get(buildingId);
 
         buildingValidator.checkBuildingBuyingStatus(player, roomId, building);
-        gameValidator.canBuy(portfolio.getMoney(), building.getPrice());
-
-        return buyBuilding(portfolio, buildingId, building);
+        gameValidator.canBuy(roomId, portfolio.getMoney(), building.getPrice());
+        BuyBuildingResponse response = buyBuilding(portfolio, buildingId, building);
+        gameRepository.save(game);
+        return response;
     }
 
     public SellBuildingsResponse sellBuildings(int roomId, SellBuildingsRequest sellBuildingsRequest) {
@@ -58,7 +59,7 @@ public class BuildingService {
         return BuyBuildingResponse.builder()
                 .player(portfolio.getPlayer())
                 .buildingId(buildingId)
-                .changeAmount(afterMoney - beforeMoney)
+                .changeAmount(beforeMoney - afterMoney)
                 .moneyResult(afterMoney)
                 .build();
     }
