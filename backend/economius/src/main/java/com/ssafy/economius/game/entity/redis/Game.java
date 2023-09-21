@@ -1,13 +1,10 @@
 package com.ssafy.economius.game.entity.redis;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,6 +35,23 @@ public class Game {
     private List<Insurance> insurances;
     private List<Saving> savings;
     private InterestRate interestRate;
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                "roomId=" + roomId +
+                ", players=" + players +
+                ", gameTurn=" + gameTurn +
+                ", portfolios=" + portfolios +
+                ", tax=" + tax +
+                ", gold=" + gold +
+                ", buildings=" + buildings +
+                ", stocks=" + stocks +
+                ", insurances=" + insurances +
+                ", savings=" + savings +
+                ", interestRate=" + interestRate +
+                '}';
+    }
 
     public void initializePortfolio(Map<Long, Portfolio> portfolios) {
         this.portfolios = portfolios;

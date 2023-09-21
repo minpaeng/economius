@@ -9,5 +9,5 @@ import lombok.Getter;
 public class SavingRequest {
 
     private Long player;
-    private String bankCode;
+    private String bankId;
 }

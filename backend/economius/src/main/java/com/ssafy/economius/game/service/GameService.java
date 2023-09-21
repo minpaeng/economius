@@ -15,7 +15,6 @@ import com.ssafy.economius.game.entity.redis.PortfolioGold;
 import com.ssafy.economius.game.entity.redis.PortfolioSavings;
 import com.ssafy.economius.game.entity.redis.PortfolioStocks;
 import com.ssafy.economius.game.repository.redis.GameRepository;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -90,7 +89,6 @@ public class GameService {
             .earningPrice(INITIAL_ZERO_VALUE.getValue())
             .totalPrice(INITIAL_ZERO_VALUE.getValue())
             .earningRate(INITIAL_ZERO_VALUE.getValue())
-            .stocks(new ArrayList<>())
             .build();
     }
 
@@ -99,7 +97,6 @@ public class GameService {
             .amount(INITIAL_ZERO_VALUE.getValue())
             .earningPrice(INITIAL_ZERO_VALUE.getValue())
             .earningRate(INITIAL_ZERO_VALUE.getValue())
-            .building(new ArrayList<>())
             .build();
     }
 
@@ -114,7 +111,6 @@ public class GameService {
         return PortfolioSavings.builder()
             .amount(INITIAL_ZERO_VALUE.getValue())
             .totalPrice(INITIAL_ZERO_VALUE.getValue())
-            .saving(new ArrayList<>())
             .build();
     }
 
