@@ -44,22 +44,22 @@ const mapPosition = [
 // 캐릭터 방향 ↖ ↗ ↘ ↙ ↓
 const characterRotationY = [-Math.PI / 2, Math.PI, Math.PI / 2, Math.PI * 2, Math.PI / 4];
 
-function Butterfly({
-    positionIdx,
-    moveDist,
-    opacity,
-    radius,
-    steps,
-}: {
-    positionIdx: number;
-    moveDist: number;
-    opacity: number;
-    radius: number;
-    steps: number;
-}) {
-    const gltfPath = 'Butterfly.gltf';
+// props 의 type 정의
+// 1. import { CharacterType } from '/src/types/charcter 이런 식으로 import 해서 쓸 수 있음
+// 2. type 을 직접 컴포넌트 내에 정의할 수 있음. type 대신 interface 라고도 쓸 수 있음
+// type CharacterType = {
+//     positionIdx: number;
+//     moveDist: number;
+//     opacity: number;
+//     radius: number;
+//     steps: number;
+// };
+// 3. 객체 분해해서 인라인으로 타입을 정의할 수 있음
+// function Camel({ positionIdx, moveDist, opacity, radius, steps }:{ positionIdx: number; moveDist: number; opacity: number; radius: number; steps: number }) {
+function Camel({ positionIdx, moveDist, opacity, radius, steps }) {
+    const gltfPath = 'Camel.gltf';
     const gltf = useLoader(GLTFLoader, gltfPath);
-    const gltfRef = useRef<THREE.Group>();
+    const gltfRef = useRef();
     const scale = [0.2, 0.2, 0.2];
 
     const [position, setPosition] = useState(mapPosition[positionIdx]); // 캐릭터 좌표
@@ -68,7 +68,7 @@ function Butterfly({
     const [isMoving, setIsMoving] = useRecoilState(IsMovingState); // 캐릭터 이동 여부
 
     // 투명도 설정
-    gltf.scene.traverse((child: any) => {
+    gltf.scene.traverse(child => {
         if (child.isMesh) {
             child.material.transparent = true;
             child.material.opacity = opacity; //
@@ -79,7 +79,6 @@ function Butterfly({
         for (let i = positionIdx + 1 - moveDist; i < positionIdx + 1; i++) {
             // 맵 칸
             const mapIdx = i & 31; // 31로 나눈 나머지
-            console.log('mapIdx: ', mapIdx);
             // 캐릭터 방향
             setRotationY(characterRotationY[mapIdx ? (mapIdx - 1) >> 3 : 3]); // mapIdx를 8로 나눈 몫, mapIdx = 0 예외처리
             // 캐릭터 위치
@@ -116,4 +115,4 @@ function Butterfly({
     );
 }
 
-export default Butterfly;
+export default Camel;

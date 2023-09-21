@@ -44,10 +44,22 @@ const mapPosition = [
 // 캐릭터 방향 ↖ ↗ ↘ ↙ ↓
 const characterRotationY = [-Math.PI / 2, Math.PI, Math.PI / 2, Math.PI * 2, Math.PI / 4];
 
-function Bird({ positionIdx, moveDist, opacity, radius, steps }: { positionIdx: number; moveDist: number; opacity: number; radius: number; steps: number }) {
+// props 의 type 정의
+// 1. import { CharacterType } from '/src/types/charcter 이런 식으로 import 해서 쓸 수 있음
+// 2. type 을 직접 컴포넌트 내에 정의할 수 있음. type 대신 interface 라고도 쓸 수 있음
+// type CharacterType = {
+//     positionIdx: number;
+//     moveDist: number;
+//     opacity: number;
+//     radius: number;
+//     steps: number;
+// };
+// 3. 객체 분해해서 인라인으로 타입을 정의할 수 있음
+// function Bird({ positionIdx, moveDist, opacity, radius, steps }:{ positionIdx: number; moveDist: number; opacity: number; radius: number; steps: number }) {
+function Bird({ positionIdx, moveDist, opacity, radius, steps }) {
     const gltfPath = 'Bird.gltf';
     const gltf = useLoader(GLTFLoader, gltfPath);
-    const gltfRef = useRef<THREE.Group>();
+    const gltfRef = useRef();
     const scale = [0.2, 0.2, 0.2];
 
     const [position, setPosition] = useState(mapPosition[positionIdx]); // 캐릭터 좌표
@@ -56,7 +68,7 @@ function Bird({ positionIdx, moveDist, opacity, radius, steps }: { positionIdx: 
     const [isMoving, setIsMoving] = useRecoilState(IsMovingState); // 캐릭터 이동 여부
 
     // 투명도 설정
-    gltf.scene.traverse((child: any) => {
+    gltf.scene.traverse(child => {
         if (child.isMesh) {
             child.material.transparent = true;
             child.material.opacity = opacity; //
@@ -85,7 +97,7 @@ function Bird({ positionIdx, moveDist, opacity, radius, steps }: { positionIdx: 
             // 맵 애니메이션 칸 갱신
             setMapAniIdx(mapIdx);
         }
-        // 애니메이션 끝난 후의 캐릭터 방향
+        // 애니메이션 끝난 후 캐릭터 방향
         setRotationY(characterRotationY[4]);
         // 캐릭터 이동 여부 갱신
         setIsMoving(false);

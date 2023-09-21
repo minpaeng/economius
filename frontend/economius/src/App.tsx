@@ -4,11 +4,12 @@ import { Canvas, useLoader, useFrame } from "@react-three/fiber";
 import { OrbitControls, OrthographicCamera } from "@react-three/drei";
 import Map from "/src/Map";
 import Characters from "/src/Characters";
-import Dice from "./Dice";
+import Dice2 from "./Dice/Dice2";
 import Controller from "/src/Controller";
 import Modal from "react-modal";
 import Portforlio from "./Components/Common/Portfolio";
 import NewsBar from "./Components/Common/NewsBar";
+
 import "./App.css";
 import Modals from "./Modals";
 import PlayerPlaceAll from "./Components/Common/PlayerPlaceAll";
@@ -27,11 +28,10 @@ function App() {
         <ambientLight intensity={3} />
         <Map />
         <Characters />
-        <Dice />
       </Canvas>
 
+      <Dice2 />
       <Controller />
-      {/* Modal Test */}
 
       <Portforlio />
       <NewsBar />
