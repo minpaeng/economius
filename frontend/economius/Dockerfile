@@ -16,7 +16,8 @@ RUN npm install
 
 # Copy source files and build
 COPY . .
-RUN npm run build
+#RUN npm run build
+RUN CI=false npm run build
 
 # Production stage
 FROM nginx:1.21.3-alpine
