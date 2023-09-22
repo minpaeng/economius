@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <style>
+        /* Add some basic styling */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: row;
+            gap: 10px;  /* Add some gap between buttons */
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>Stomp WebSocket Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script>
+        let stompClient = null; 
+        let playUser = 1; //플레이 테스트 할 유저 (호스트 1번으로 해둠)
+
+        function connect() {
+            const socket = new SockJS('http://localhost:8080/ws'); // 여기서 서버의 엔드포인트를 지정합니다.
+            stompClient = Stomp.over(socket);
+
+            stompClient.connect({}, function () {
+                    //subscribe(subscribe url,해당 url로 메시지를 받을때마다 실행할 함수)
+                    sub = stompClient.subscribe('/sub/6', function (messageOutput) {
+                        //e.body에 전송된 data가 들어있다
+                        showMessageOutput(JSON.parse(messageOutput.body));
+                    });
+                },
+                function(e){
+                    //에러 콜백
+                    alert('에러발생!!!!!!');
+                }
+            );
+        }
+
+        function disconnect() {
+            if (stompClient !== null) {
+                stompClient.disconnect();
+            }
+            console.log("Disconnected");
+        }
+
+        function sendJoin2() {
+            stompClient.send("/pub/6/join", {}, JSON.stringify({
+                "player": 2
+            }));
+        }
+        function sendJoin3() {
+            stompClient.send("/pub/6/join", {}, JSON.stringify({
+                "player": 3
+            }));
+        }
+        function sendJoin4() {
+            stompClient.send("/pub/6/join", {}, JSON.stringify({
+                "player": 4
+            }));
+        }
+
+
+        function sendStart() {
+            stompClient.send("/pub/6/start", {}, JSON.stringify({
+                "hostPlayer": 1
+            }));
+        }
+
+        function sendMessage() {
+            stompClient.send("/pub/6/bank", {}, JSON.stringify({
+                "player": 1,
+                "bankId" : 1
+            }));
+        }
+
+        function showMessageOutput(messageOutput) {
+            console.log(messageOutput);
+            const response = document.getElementById('messages');
+            response.value += messageOutput + '\n';
+        }
+    </script>
+</head>
+<body>
+<h1>WebSocket Test</h1> 
+ 
+<div class="button-container">
+    <button onclick="connect();">Connect</button>
+    <button onclick="disconnect();">Disconnect</button>
+</div>
+
+<div class="button-container">
+    <button onclick="sendJoin2();">게임방 참가 (2번 플레이어)</button>
+    <button onclick="sendJoin3();">게임방 참가 (3번 플레이어)</button>
+    <button onclick="sendJoin4();">게임방 참가 (4번 플레이어)</button>
+</div>
+
+<div class="button-container">
+    <button onclick="sendStart();">게임 시작 (1번 플레이어 / 호스트만 가능)</button>
+</div>
+
+<div class="button-container">
+    <button onclick="sendMessage();">커스텀 테스트</button>
+</div>
+
+<textarea id="messages" cols="50" rows="10"></textarea>
+</body>
+</html>
