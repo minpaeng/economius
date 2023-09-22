@@ -33,7 +33,7 @@ public class BuildingController {
 
         BuyBuildingResponse responseDto = buildingService.buyBuilding(roomId, buyBuildingRequest);
 
-        Map<String, Object> headers = Map.of("success", true);
+        Map<String, Object> headers = Map.of("success", true, "type", "buyBuilding");
         template.convertAndSend("/sub/" + roomId, responseDto, headers);
     }
 
@@ -43,7 +43,7 @@ public class BuildingController {
 
         SellBuildingResponse responseDto = buildingService.sellBuilding(roomId, sellBuildingRequest);
 
-        Map<String, Object> headers = Map.of("success", true);
+        Map<String, Object> headers = Map.of("success", true, "type", "sellBuilding");
         template.convertAndSend("/sub/" + roomId, responseDto, headers);
     }
 
@@ -54,7 +54,7 @@ public class BuildingController {
         log.info("roomId: " + roomId + ", dto: " + visitBuildingRequest);
         VisitBuildingResponse responseDto = buildingService.visitBuilding(roomId, visitBuildingRequest);
 
-        Map<String, Object> headers = Map.of("success", true);
+        Map<String, Object> headers = Map.of("success", true, "type", "visitBuilding");
         template.convertAndSend("/sub/" + roomId, responseDto, headers);
     }
 
@@ -65,7 +65,7 @@ public class BuildingController {
         SelectBuildingResponse responseDto = buildingService.selectBuilding(roomId, selectBuildingRequest);
 
         Long player = selectBuildingRequest.getPlayer();
-        Map<String, Object> headers = Map.of("success", true);
+        Map<String, Object> headers = Map.of("success", true, "type", "selectBuilding");
         template.convertAndSend("/sub/" + roomId + "/" + player, responseDto, headers);
     }
 }
