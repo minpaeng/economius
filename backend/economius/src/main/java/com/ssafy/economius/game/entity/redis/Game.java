@@ -54,8 +54,8 @@ public class Game {
     private InterestRate interestRate;
 
     // 찬스 이벤트 -
-    private List<EventStock> eventStock;
-    private List<EventMoney> eventMoney;
+    private Event event;
+
 
     public void initializeLocations(){
         log.info("사용자 위치 초기화");

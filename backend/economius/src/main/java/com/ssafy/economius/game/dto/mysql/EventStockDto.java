@@ -13,4 +13,5 @@ public class EventStockDto {
     private String name;
     private String description;
     private Integer rate;
+    private String url;
 }

@@ -1,18 +1,21 @@
-package com.ssafy.economius.game.dto.mysql;
+package com.ssafy.economius.game.dto;
 
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 
+@Data
+@Builder
 @Getter
-@Setter
 public class EventMoneyDto {
+    private int eventMoneyId;
 
-    private Integer eventMoneyId;
-    private Integer insuranceTypeId;
+    private int insuranceTypeId;
     private String typeCode;
     private String typeName;
+
     private String name;
     private String description;
-    private Integer money;
+    private int money;
     private String url;
 }

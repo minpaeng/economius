@@ -117,6 +117,7 @@ public class InitialDataListener {
             tmp.setName(eventStock.getName());
             tmp.setDescription(eventStock.getDescription());
             tmp.setRate(eventStock.getRate());
+            tmp.setUrl(eventStock.getUrl());
             InitialData.EVENTS.getEventStockDtos().add(tmp);
         }
 
@@ -130,6 +131,7 @@ public class InitialDataListener {
             tmp.setName(eventMoney.getName());
             tmp.setDescription(eventMoney.getDescription());
             tmp.setMoney(eventMoney.getMoney());
+            tmp.setUrl(eventMoney.getUrl());
             InitialData.EVENTS.getEventMonies().add(tmp);
         }
     }

@@ -10,20 +10,10 @@ import lombok.Getter;
 @Builder
 @Getter
 public class Saving {
-    //private int bankId; // enum을 통한 id 컬럼 추가
+    //private int bankId;
     private String name;
     private int monthlyDeposit;
     private int finishCount;
     private int rate;
-
-    @Override
-    public String toString() {
-        return "Saving{" +
-                "name='" + name + '\'' +
-                ", rate=" + rate +
-                ", price=" + monthlyDeposit +
-                ", finishCount=" + finishCount +
-                '}';
-    }
 
 }

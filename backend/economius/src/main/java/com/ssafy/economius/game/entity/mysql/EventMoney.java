@@ -26,4 +26,5 @@ public class EventMoney {
     private String name;
     private String description;
     private Integer money;
+    private String url;
 }
