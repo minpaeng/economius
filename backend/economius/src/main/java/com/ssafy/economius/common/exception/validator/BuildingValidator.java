@@ -39,8 +39,8 @@ public class BuildingValidator {
         }
     }
 
-    private void checkNotOwnBuilding(Long player, Long ownerId, int roomId) {
-        if (ownerId != null && Objects.equals(player, ownerId)) {
+    public void checkNotOwnBuilding(Long player, Long ownerId, int roomId) {
+        if (!player.equals(ownerId)) {
             throw CustomWebsocketException.builder()
                     .roomId(roomId)
                     .code(BuildingMessage.ALREADY_OWNED_BUILDING.getCode())

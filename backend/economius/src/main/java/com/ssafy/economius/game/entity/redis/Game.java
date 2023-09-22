@@ -124,14 +124,15 @@ public class Game {
         }
     }
 
-    public void payBuildingFee(Long player, Long owner, int buildingId) {
-        if (owner == null || owner.equals(player)) return;
+    public int payBuildingFee(Long player, Long owner, int buildingId) {
+        if (owner == null || owner.equals(player)) return 0;
         int playerMoney = this.portfolios.get(player).getMoney();
         int ownerMoney = this.portfolios.get(owner).getMoney();
         int buildingPrice = this.buildings.get(buildingId).getPrice();
 
         this.portfolios.get(player).setMoney(playerMoney - buildingPrice);
         this.portfolios.get(owner).setMoney(ownerMoney + buildingPrice);
+        return buildingPrice;
     }
 
     public void proceedBankruptcy(Long player) {

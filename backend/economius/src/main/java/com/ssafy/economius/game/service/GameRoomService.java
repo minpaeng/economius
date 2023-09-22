@@ -107,7 +107,7 @@ public class GameRoomService {
     private InterestRate makeInterestRate() {
         return InterestRate.builder()
             .rate(INITIAL_INTEREST_RATE.getValue())
-            .rateHistory(new ArrayList<>())
+            .rateHistory(new ArrayList<>(List.of(INITIAL_INTEREST_RATE.getValue())))
             .build();
     }
 
@@ -116,9 +116,9 @@ public class GameRoomService {
 
         return Gold.builder()
             .price(gold.getInitialValue())
-            .priceHistory(new ArrayList<>())
+            .priceHistory(new ArrayList<>(List.of(gold.getInitialValue())))
             .rate(INITIAL_ZERO_VALUE.getValue())
-            .rateHistory(new ArrayList<>())
+            .rateHistory(new ArrayList<>(List.of(0)))
             .build();
     }
 
@@ -201,8 +201,8 @@ public class GameRoomService {
             Building tmpBuilding = Building.builder()
                 .name(building.getName())
                 .ownerId(null)
-                .priceHistory(new ArrayList<>())
-                .rateHistory(new ArrayList<>())
+                .priceHistory(new ArrayList<>(List.of(building.getInitialValue())))
+                .rateHistory(new ArrayList<>(List.of(0)))
                 .price(building.getInitialValue())
                 .rate(INITIAL_ZERO_VALUE.getValue())
                 .build();

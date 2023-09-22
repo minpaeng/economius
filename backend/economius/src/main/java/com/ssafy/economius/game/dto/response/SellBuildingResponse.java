@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Builder
-public class SellBuildingsResponse {
+public class SellBuildingResponse {
 
     private Long player;
     private int changeAmount;
