@@ -39,6 +39,7 @@ public class Portfolio {
     }
 
     public void sellBuilding(int buildingId, Building building) {
+        building.setOwnerId(null);
         this.money += building.getPrice();
         this.buildings.sellBuilding(buildingId, building);
     }
