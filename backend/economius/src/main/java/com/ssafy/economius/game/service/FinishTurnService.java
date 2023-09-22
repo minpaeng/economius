@@ -50,9 +50,9 @@ public class FinishTurnService {
     }
 
     private void buildingRearrange(Game game) {
-        int newRate = RearrangeRateUtil.getRanges(BUILDING_RATE_LOWER_BOUND.getValue(),
-            BUILDING_RATE_UPPER_BOUND.getValue());
-        game.getBuildings().values().forEach(building -> building.updateBuildingPrice(newRate));
+        game.getBuildings().values().forEach(building -> building.updateBuildingPrice(
+            RearrangeRateUtil.getRanges(BUILDING_RATE_LOWER_BOUND.getValue(),
+                BUILDING_RATE_UPPER_BOUND.getValue())));
     }
 
     private void goldRearrange(Game game) {
@@ -62,9 +62,8 @@ public class FinishTurnService {
     }
 
     private void stockRearrange(Game game, int round) {
-        int newPrice = RearrangeRateUtil.getRanges(STOCK_RATE_LOWER_BOUND.getValue(),
-            STOCK_RATE_UPPER_BOUND.getValue());
         game.getStocks().values().forEach(
-            stock -> stock.updateStockPriceAndRate(newPrice, round));
+            stock -> stock.updateStockPriceAndRate(RearrangeRateUtil.getRanges
+                (STOCK_RATE_LOWER_BOUND.getValue(), STOCK_RATE_UPPER_BOUND.getValue()), round));
     }
 }
