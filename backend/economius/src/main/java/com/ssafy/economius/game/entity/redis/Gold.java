@@ -18,9 +18,10 @@ public class Gold {
     private List<Integer> priceHistory;
     private List<Integer> rateHistory;
 
-    public void updateGoldPrice(int newPrice) {
-        rate = (int) ((double) (newPrice - price) / price) / 100;
-        priceHistory.add(newPrice);
-        rateHistory.add(rate);
+    public void updateGoldPrice(int newRate) {
+        price += price * newRate / 100;
+        rate = newRate;
+        priceHistory.add(price);
+        rateHistory.add(newRate);
     }
 }

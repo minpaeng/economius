@@ -19,9 +19,10 @@ public class Building {
     private int rate;
     private List<Integer> rateHistory;
 
-    public void updateBuildingPrice(int newPrice) {
-        rate = (int) ((double) (newPrice - price) / price) / 100;
-        priceHistory.add(newPrice);
-        rateHistory.add(rate);
+    public void updateBuildingPrice(int newRate) {
+        price += price * newRate / 100;
+        rate = newRate;
+        priceHistory.add(price);
+        rateHistory.add(newRate);
     }
 }

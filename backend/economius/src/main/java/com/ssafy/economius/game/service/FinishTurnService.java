@@ -4,6 +4,8 @@ import static com.ssafy.economius.game.enums.RateEnum.BUILDING_RATE_LOWER_BOUND;
 import static com.ssafy.economius.game.enums.RateEnum.BUILDING_RATE_UPPER_BOUND;
 import static com.ssafy.economius.game.enums.RateEnum.GOLD_RATE_LOWER_BOUND;
 import static com.ssafy.economius.game.enums.RateEnum.GOLD_RATE_UPPER_BOUND;
+import static com.ssafy.economius.game.enums.RateEnum.INTEREST_RATE_LOWER_BOUND;
+import static com.ssafy.economius.game.enums.RateEnum.INTEREST_RATE_UPPER_BOUND;
 import static com.ssafy.economius.game.enums.RateEnum.STOCK_RATE_LOWER_BOUND;
 import static com.ssafy.economius.game.enums.RateEnum.STOCK_RATE_UPPER_BOUND;
 
@@ -30,32 +32,33 @@ public class FinishTurnService {
         // todo 각종 이벤트 로직 구현
         // 주식가격 재 산정
         stockRearrange(game, round);
-
         // 새로운 라운드일경우
         if (gameTurn % 4 == 0) {
-            // 금
             goldRearrange(game);
-            // 부동산
             buildingRearrange(game);
-            // 금리
+            interestRateRearrange(game);
         }
-
-        // 경제 이벤트
 
         gameRepository.save(game);
         return game;
     }
 
+    private static void interestRateRearrange(Game game) {
+        int newPrice = RearrangeRateUtil.getRanges(INTEREST_RATE_LOWER_BOUND.getValue(),
+            INTEREST_RATE_UPPER_BOUND.getValue());
+        game.getInterestRate().updateBuildingPrice(newPrice);
+    }
+
     private void buildingRearrange(Game game) {
-        int newPrice = RearrangeRateUtil.getRanges(BUILDING_RATE_LOWER_BOUND.getValue(),
+        int newRate = RearrangeRateUtil.getRanges(BUILDING_RATE_LOWER_BOUND.getValue(),
             BUILDING_RATE_UPPER_BOUND.getValue());
-        game.getBuildings().values().forEach(building -> building.updateBuildingPrice(newPrice));
+        game.getBuildings().values().forEach(building -> building.updateBuildingPrice(newRate));
     }
 
     private void goldRearrange(Game game) {
-        int newPrice = RearrangeRateUtil.getRanges(GOLD_RATE_LOWER_BOUND.getValue(),
+        int newRate = RearrangeRateUtil.getRanges(GOLD_RATE_LOWER_BOUND.getValue(),
             GOLD_RATE_UPPER_BOUND.getValue());
-        game.getGold().updateGoldPrice(newPrice);
+        game.getGold().updateGoldPrice(newRate);
     }
 
     private void stockRearrange(Game game, int round) {

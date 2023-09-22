@@ -12,4 +12,9 @@ public class InterestRate {
 
     private int rate;
     private List<Integer> rateHistory;
+
+    public void updateBuildingPrice(int newRate) {
+        rate += rate * newRate / 100;
+        rateHistory.add(rate);
+    }
 }
