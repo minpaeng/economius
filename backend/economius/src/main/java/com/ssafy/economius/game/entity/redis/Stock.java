@@ -14,11 +14,13 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Stock {
 
+    private Integer stockId;
     private String name;
     private String companyCategory;
     private String companySubCategory;
     // 아이디, 보유량
     private Map<Long, Integer> owners;
+    private int remainingAmount;
     private int price;
     private int rate;
     private List<Price> priceHistory;
