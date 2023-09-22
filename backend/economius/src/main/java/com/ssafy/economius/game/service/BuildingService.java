@@ -36,9 +36,7 @@ public class BuildingService {
         int buildingId = buyBuildingsRequest.getBuildingId();
         Building building = game.getBuildings().get(buildingId);
 
-        buildingValidator.checkBuildingBuyingStatus(player, roomId, building);
-        gameValidator.canBuy(roomId, portfolio.getMoney(), building.getPrice());
-        BuyBuildingResponse response = buyBuilding(player, portfolio, buildingId, building);
+        BuyBuildingResponse response = buyBuilding(roomId, player, portfolio, buildingId, building);
         gameRepository.save(game);
         return response;
     }
@@ -51,13 +49,15 @@ public class BuildingService {
         int buildingId = sellBuildingsRequest.getBuildingId();
         Building building = game.getBuildings().get(buildingId);
 
-        buildingValidator.checkBuildingSellingStatus(player, roomId, building);
-        SellBuildingsResponse response = sellBuilding(portfolio, buildingId, building);
+        SellBuildingsResponse response = sellBuilding(roomId, player, portfolio, buildingId, building);
         gameRepository.save(game);
         return response;
     }
 
-    private BuyBuildingResponse buyBuilding(Long player, Portfolio portfolio, int buildingId, Building building) {
+    private BuyBuildingResponse buyBuilding(int roomId, Long player, Portfolio portfolio,
+                                            int buildingId, Building building) {
+        buildingValidator.checkBuildingBuyingStatus(player, roomId, building);
+        gameValidator.canBuy(roomId, portfolio.getMoney(), building.getPrice());
         portfolio.buyBuilding(player, buildingId, building);
 
         return BuyBuildingResponse.builder()
@@ -68,7 +68,9 @@ public class BuildingService {
                 .build();
     }
 
-    private SellBuildingsResponse sellBuilding(Portfolio portfolio, int buildingId, Building building) {
+    private SellBuildingsResponse sellBuilding(int roomId, Long player, Portfolio portfolio,
+                                               int buildingId, Building building) {
+        buildingValidator.checkBuildingSellingStatus(player, roomId, building);
         portfolio.sellBuilding(buildingId, building);
 
         return SellBuildingsResponse.builder()
@@ -87,17 +89,8 @@ public class BuildingService {
         Building building = game.getBuildings().get(buildingId);
         Long ownerId = building.getOwnerId();
 
-        payBuildingFee(playerId, ownerId, roomId, buildingId, game);
-        VisitBuildingDto visitor = makeVisitBuildingDto(playerId, game.getPortfolios().get(playerId).getMoney());
-        VisitBuildingDto owner = null;
-        if (ownerId != null) owner = makeVisitBuildingDto(ownerId, game.getPortfolios().get(ownerId).getMoney());
-
-        return VisitBuildingResponse.builder()
-                .buildingId(buildingId)
-                .changeAmount(building.getPrice())
-                .visitor(visitor)
-                .owner(owner)
-                .build();
+        int changeAmount = payBuildingFee(playerId, ownerId, roomId, buildingId, game);
+        return makeVisitBuildingResponse(playerId, ownerId, buildingId, changeAmount, game);
     }
 
     public SelectBuildingResponse selectBuilding(int roomId, SelectBuildingRequest selectBuildingRequest) {
@@ -113,11 +106,11 @@ public class BuildingService {
                 .build();
     }
 
-    private void payBuildingFee(Long player, Long owner, int roomId, int buildingId, Game game) {
-        if (owner == null || owner.equals(player)) return;
+    private int payBuildingFee(Long player, Long owner, int roomId, int buildingId, Game game) {
         checkBankruptcy(player, owner, roomId, buildingId, game);
-        game.payBuildingFee(player, owner, buildingId);
+        int changeAmount = game.payBuildingFee(player, owner, buildingId);
         gameRepository.save(game);
+        return changeAmount;
     }
 
     private void checkBankruptcy(Long player, Long owner, int roomId, int buildingId, Game game) {
@@ -131,7 +124,21 @@ public class BuildingService {
         }
     }
 
+    private VisitBuildingResponse makeVisitBuildingResponse(Long playerId, Long ownerId, int buildingId,
+                                                            int changeAmount, Game game) {
+        VisitBuildingDto visitor = makeVisitBuildingDto(playerId, game.getPortfolios().get(playerId).getMoney());
+        VisitBuildingDto owner = makeVisitBuildingDto(ownerId, game.getPortfolios().get(ownerId).getMoney());
+
+        return VisitBuildingResponse.builder()
+                .buildingId(buildingId)
+                .changeAmount(changeAmount)
+                .visitor(visitor)
+                .owner(owner)
+                .build();
+    }
+
     private VisitBuildingDto makeVisitBuildingDto(Long player, int moneyResult) {
+        if (player == null) return null;
         return VisitBuildingDto.builder()
                 .player(player)
                 .moneyResult(moneyResult)
