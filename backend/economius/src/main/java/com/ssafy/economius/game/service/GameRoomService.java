@@ -116,7 +116,6 @@ public class GameRoomService {
                 .owners(new HashMap<>())
                 .rateHistory(new ArrayList<>(List.of(0)))
                 .rate(INITIAL_ZERO_VALUE.getValue())
-                .priceHistory(new ArrayList<>())
                 .price(stock.getInitialValue())
                 .priceHistory(
                     new ArrayList<>(List.of(

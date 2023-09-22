@@ -1,5 +1,6 @@
 package com.ssafy.economius.game.entity.redis;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,12 @@ public class Stock {
     public void updateStockPriceAndRate(int closingRate, int round) {
         updatePrice(closingRate, round);
         updateRate(closingRate, round);
+    }
+
+    public void initializeOwners(List<Long> players) {
+        owners = new HashMap<>();
+        players.forEach(player -> owners.put(player, 0));
+
     }
 
 
