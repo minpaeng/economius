@@ -43,7 +43,7 @@ public class FinishTurnService {
         return game;
     }
 
-    private static void interestRateRearrange(Game game) {
+    private void interestRateRearrange(Game game) {
         int newPrice = RearrangeRateUtil.getRanges(INTEREST_RATE_LOWER_BOUND.getValue(),
             INTEREST_RATE_UPPER_BOUND.getValue());
         game.getInterestRate().updateBuildingPrice(newPrice);
