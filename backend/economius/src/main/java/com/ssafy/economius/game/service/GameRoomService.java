@@ -16,21 +16,9 @@ import static com.ssafy.economius.game.enums.VolatileEnum.HOTEL;
 import static com.ssafy.economius.game.enums.VolatileEnum.RESTAURANT;
 import static com.ssafy.economius.game.enums.VolatileEnum.SHOP;
 
-import com.ssafy.economius.game.dto.mysql.InsuranceDto;
-import com.ssafy.economius.game.dto.mysql.SavingsDto;
-import com.ssafy.economius.game.dto.mysql.StockDto;
-import com.ssafy.economius.game.dto.mysql.VolatileDto;
+import com.ssafy.economius.game.dto.mysql.*;
 import com.ssafy.economius.game.dto.response.CreateRoomResponse;
-import com.ssafy.economius.game.entity.mysql.EventMoney;
-import com.ssafy.economius.game.entity.mysql.EventStock;
-import com.ssafy.economius.game.entity.redis.Building;
-import com.ssafy.economius.game.entity.redis.Game;
-import com.ssafy.economius.game.entity.redis.Gold;
-import com.ssafy.economius.game.entity.redis.Insurance;
-import com.ssafy.economius.game.entity.redis.InterestRate;
-import com.ssafy.economius.game.entity.redis.Price;
-import com.ssafy.economius.game.entity.redis.Saving;
-import com.ssafy.economius.game.entity.redis.Stock;
+import com.ssafy.economius.game.entity.redis.*;
 import com.ssafy.economius.game.enums.InitialData;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import java.util.ArrayList;
@@ -77,25 +65,29 @@ public class GameRoomService {
                 .buildings(makeBuildings())
                 .tax(makeTax())
                 .maxGameTurn(MAX_GAME_TURN.getValue())
-                .eventMoney(makeEventMoney())
-                .eventStock(makeEventStock())
+                .event(makeEvents())
             .build();
 
         gameRepository.save(game);
     }
 
-    private List<EventStock> makeEventStock() {
-        List<EventStock> eventStocks = new ArrayList<>();
-
-        return eventStocks;
-    }
-
-    private List<EventMoney> makeEventMoney() {
+    private Event makeEvents() {
         List<EventMoney> eventMonies = new ArrayList<>();
+        List<EventStock> eventStocks = new ArrayList<>();
+        for(EventMoneyDto eventDto : InitialData.EVENTS.getEventMonies()) {
+            log.info(eventDto.toString());
+        }
+        for(EventStockDto eventDto : InitialData.EVENTS.getEventStocks()) {
+            log.info(eventDto.toString());
+        }
+        Event event = Event.builder()
+                .eventMoney(eventMonies)
+                .eventStock(eventStocks)
+                .build();
 
-        return eventMonies;
-
+        return event;
     }
+
 
     private static Map<Integer, Integer> makeTax() {
         return Map.of(FIRST_PRIZE.getValue(), FIRST_PRIZE_TAX.getValue(),

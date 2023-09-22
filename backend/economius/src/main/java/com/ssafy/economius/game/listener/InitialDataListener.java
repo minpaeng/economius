@@ -68,7 +68,7 @@ public class InitialDataListener {
         setVolatiles();
         log.info(InitialData.VOLATILES.size() + " volaties loaded.");
         setEvents();
-        log.info(InitialData.EVENTS.getEventStockDtos().size() + " stock events loaded.");
+        log.info(InitialData.EVENTS.getEventStocks().size() + " stock events loaded.");
         log.info(InitialData.EVENTS.getEventMonies().size() + " money events loaded.");
         setInsurances();
         log.info(InitialData.INSURANCES.size() + " insurances loaded.");
@@ -118,7 +118,7 @@ public class InitialDataListener {
             tmp.setDescription(eventStock.getDescription());
             tmp.setRate(eventStock.getRate());
             tmp.setUrl(eventStock.getUrl());
-            InitialData.EVENTS.getEventStockDtos().add(tmp);
+            InitialData.EVENTS.getEventStocks().add(tmp);
         }
 
         List<EventMoney> eventMoneys = eventMoneyRepository.findAllWithInsuranceType();
