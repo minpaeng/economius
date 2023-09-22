@@ -137,6 +137,7 @@ public class InitialDataListener {
     private void setInsurances() {
         List<Insurance> insurances = insuranceRepository.findAllWithInsuranceType();
         for (Insurance insurance : insurances) {
+            log.info(insurance.toString());
             InsuranceDto tmp = new InsuranceDto();
             tmp.setInsuranceId(insurance.getInsuranceId());
             tmp.setInsuranceTypeId(insurance.getInsuranceType().getInsuranceTypeId());

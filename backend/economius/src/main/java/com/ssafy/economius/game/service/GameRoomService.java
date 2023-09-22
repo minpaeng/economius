@@ -158,12 +158,12 @@ public class GameRoomService {
 
         for (InsuranceDto insurance : InitialData.INSURANCES) {
             Insurance tmpInsurance = Insurance.builder()
-                .benefitRate(insurance.getGuaranteeRate())
-                .category(Character.toString(insurance.getProductCode().charAt(1)))
-                .type(insurance.getTypeCode())
-                .code(insurance.getProductCode())
-                .name(insurance.getProductName())
-                .price(insurance.getMonthlyDeposit())
+                .guaranteeRate(insurance.getGuaranteeRate())
+                .categoryCode(Character.toString(insurance.getProductCode().charAt(1)))
+                .category(insurance.getTypeCode())
+                .productCode(insurance.getProductCode())
+                .productName(insurance.getProductName())
+                .monthlyDeposit(insurance.getMonthlyDeposit())
                 .build();
             log.info(insurance.toString());
             insurances.put(insurance.getInsuranceId(), tmpInsurance);

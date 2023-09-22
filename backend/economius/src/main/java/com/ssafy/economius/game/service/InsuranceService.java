@@ -3,7 +3,6 @@ package com.ssafy.economius.game.service;
 import com.ssafy.economius.game.dto.InsuranceDto;
 import com.ssafy.economius.game.dto.request.InsuranceRequest;
 import com.ssafy.economius.game.dto.response.InsuranceVisitResponse;
-import com.ssafy.economius.game.dto.response.SavingVisitResponse;
 import com.ssafy.economius.game.entity.redis.*;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import lombok.RequiredArgsConstructor;
@@ -49,10 +48,10 @@ public class InsuranceService {
             }
             Insurance insurance = insurances.get(key);
             InsuranceDto dto = InsuranceDto.builder()
-                    .insuranceCode(insurance.getCode())
-                    .getInsuranceName(insurance.getName())
-                    .perPrice(insurance.getPrice())
-                    .insuranceBenefit(insurance.getBenefitRate())
+                    .insuranceCode(insurance.getProductCode())
+                    .getInsuranceName(insurance.getProductName())
+                    .perPrice(insurance.getMonthlyDeposit())
+                    .insuranceBenefit(insurance.getGuaranteeRate())
                     .build();
             insuranceDto.put(key, dto);
         }
