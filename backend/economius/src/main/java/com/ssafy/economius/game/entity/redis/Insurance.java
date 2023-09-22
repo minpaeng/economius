@@ -2,11 +2,13 @@ package com.ssafy.economius.game.entity.redis;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.ToString;
 
 @Builder
 @AllArgsConstructor
-@Data
+@ToString
+@Getter
 public class Insurance {
 
     private String code;

@@ -1,15 +1,13 @@
 package com.ssafy.economius.game.entity.redis;
 
 import com.ssafy.economius.game.dto.SavingDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Builder
+@ToString
 public class PortfolioSaving {
     private int bankId;
     private String name;

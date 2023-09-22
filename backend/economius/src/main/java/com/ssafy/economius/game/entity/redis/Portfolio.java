@@ -1,17 +1,13 @@
 package com.ssafy.economius.game.entity.redis;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
-
+@ToString
 public class Portfolio {
 
     private Long player;

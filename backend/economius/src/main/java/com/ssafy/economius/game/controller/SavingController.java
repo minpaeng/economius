@@ -1,5 +1,6 @@
 package com.ssafy.economius.game.controller;
 
+import com.ssafy.economius.common.exception.CustomWebsocketException;
 import com.ssafy.economius.game.dto.request.SavingRequest;
 import com.ssafy.economius.game.dto.response.SavingVisitResponse;
 import com.ssafy.economius.game.dto.response.SavingResponse;
@@ -11,6 +12,8 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import java.util.Map;
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -21,21 +24,24 @@ public class SavingController {
 
     @MessageMapping(value = "/{roomId}/bank")
     public void visitBank(@DestinationVariable int roomId, SavingRequest savingRequest) {
+        Map<String, Object> headers = Map.of("success", true);
         SavingVisitResponse savingVisitResponse = savingService.visitBank(roomId, savingRequest);
-        template.convertAndSend("/sub/" + roomId, savingVisitResponse);
+        template.convertAndSend("/sub/" + roomId, savingVisitResponse, headers);
     }
 
-    @MessageMapping(value = "/{roomId}/bank/join")
+    @MessageMapping(value = "/{roomId}/joinSavings")
     public void joinSavings(@DestinationVariable int roomId, SavingRequest savingRequest) {
-        SavingResponse savingResponse = savingService.joinSavings(roomId, savingRequest);
-        template.convertAndSend("/sub/" + roomId, savingResponse);
+        Map<String, Object> headers = Map.of("success", true);
+        savingService.joinSavings(roomId, savingRequest);
+        template.convertAndSend("/sub/" + roomId, headers);
     }
 
 
-    @MessageMapping(value = "/{roomId}/bank/stop")
+    @MessageMapping(value = "/{roomId}/stopSavings")
     public void stopSavings(@DestinationVariable int roomId, SavingRequest savingRequest) {
-        SavingResponse savingResponse = savingService.stopSavings(roomId, savingRequest);
-        template.convertAndSend("/sub/" + roomId, savingResponse);
+        Map<String, Object> headers = Map.of("success", true);
+        savingService.stopSavings(roomId, savingRequest);
+        template.convertAndSend("/sub/" + roomId, headers);
     }
 
 }

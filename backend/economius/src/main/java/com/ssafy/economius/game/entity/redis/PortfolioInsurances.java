@@ -1,27 +1,20 @@
 package com.ssafy.economius.game.entity.redis;
 
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import java.util.Map;
+
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Builder
+@ToString
 public class PortfolioInsurances {
 
     private int totalPrice;
     private int amount;
-    private List<PortfolioInsurance> insurance;
+    private Map<Integer, PortfolioInsurance> insurance;
 
-    @Override
-    public String toString() {
-        return "PortfolioInsurances{" +
-                "totalPrice=" + totalPrice +
-                ", amount=" + amount +
-                ", insurance=" + insurance +
-                '}';
-    }
+
 }
