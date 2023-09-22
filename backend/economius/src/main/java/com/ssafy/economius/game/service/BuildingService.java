@@ -3,14 +3,14 @@ package com.ssafy.economius.game.service;
 import com.ssafy.economius.common.exception.validator.BuildingValidator;
 import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.dto.VisitBuildingDto;
-import com.ssafy.economius.game.dto.request.BuyBuildingsRequest;
+import com.ssafy.economius.game.dto.request.BuyBuildingRequest;
 import com.ssafy.economius.game.dto.request.VisitBuildingRequest;
 import com.ssafy.economius.game.dto.request.SelectBuildingRequest;
-import com.ssafy.economius.game.dto.request.SellBuildingsRequest;
+import com.ssafy.economius.game.dto.request.SellBuildingRequest;
 import com.ssafy.economius.game.dto.response.BuyBuildingResponse;
 import com.ssafy.economius.game.dto.response.VisitBuildingResponse;
 import com.ssafy.economius.game.dto.response.SelectBuildingResponse;
-import com.ssafy.economius.game.dto.response.SellBuildingsResponse;
+import com.ssafy.economius.game.dto.response.SellBuildingResponse;
 import com.ssafy.economius.game.entity.redis.Building;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Portfolio;
@@ -28,12 +28,12 @@ public class BuildingService {
     private final GameValidator gameValidator;
     private final GameRepository gameRepository;
 
-    public BuyBuildingResponse buyBuildings(int roomId, BuyBuildingsRequest buyBuildingsRequest) {
+    public BuyBuildingResponse buyBuilding(int roomId, BuyBuildingRequest buyBuildingRequest) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
-        Long player = buyBuildingsRequest.getPlayer();
+        Long player = buyBuildingRequest.getPlayer();
         Portfolio portfolio = game.getPortfolios().get(player);
-        int buildingId = buyBuildingsRequest.getBuildingId();
+        int buildingId = buyBuildingRequest.getBuildingId();
         Building building = game.getBuildings().get(buildingId);
 
         BuyBuildingResponse response = buyBuilding(roomId, player, portfolio, buildingId, building);
@@ -41,15 +41,15 @@ public class BuildingService {
         return response;
     }
 
-    public SellBuildingsResponse sellBuildings(int roomId, SellBuildingsRequest sellBuildingsRequest) {
+    public SellBuildingResponse sellBuilding(int roomId, SellBuildingRequest sellBuildingRequest) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
-        Long player = sellBuildingsRequest.getPlayer();
+        Long player = sellBuildingRequest.getPlayer();
         Portfolio portfolio = game.getPortfolios().get(player);
-        int buildingId = sellBuildingsRequest.getBuildingId();
+        int buildingId = sellBuildingRequest.getBuildingId();
         Building building = game.getBuildings().get(buildingId);
 
-        SellBuildingsResponse response = sellBuilding(roomId, player, portfolio, buildingId, building);
+        SellBuildingResponse response = sellBuilding(roomId, player, portfolio, buildingId, building);
         gameRepository.save(game);
         return response;
     }
@@ -68,12 +68,12 @@ public class BuildingService {
                 .build();
     }
 
-    private SellBuildingsResponse sellBuilding(int roomId, Long player, Portfolio portfolio,
-                                               int buildingId, Building building) {
+    private SellBuildingResponse sellBuilding(int roomId, Long player, Portfolio portfolio,
+                                              int buildingId, Building building) {
         buildingValidator.checkBuildingSellingStatus(player, roomId, building);
         portfolio.sellBuilding(buildingId, building);
 
-        return SellBuildingsResponse.builder()
+        return SellBuildingResponse.builder()
                 .player(portfolio.getPlayer())
                 .buildingId(buildingId)
                 .changeAmount(building.getPrice())
