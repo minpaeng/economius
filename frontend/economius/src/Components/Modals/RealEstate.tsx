@@ -1,7 +1,8 @@
 import Modal from 'react-modal';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { NowPlayerState, IsModalOpenState, BuyRealEstateState } from '/src/recoil/animation/atom';
+import { NowPlayerState, IsModalOpenState } from '/src/recoil/animation/atom';
+import { TradeRealEstateState } from '/src/recoil/trading/atom';
 import hotelimg from '/RealState/hotel.png';
 import restaurantimg from '/RealState/restaurant.png';
 import shopimg from '/RealState/shop.png';
@@ -10,15 +11,15 @@ import * as S from './RealEstate.style';
 function RealEstate() {
     const [nowPlayer, setNowPlayer] = useRecoilState(NowPlayerState);
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
-    const [buyRealEstate, setBuyRealEstate] = useRecoilState(BuyRealEstateState);
+    const [tradeRealEstate, setTradeRealEstate] = useRecoilState(TradeRealEstateState);
     const closeModal = () => {
         setIsModalOpen(false);
-        setBuyRealEstate(false);
+        setTradeRealEstate([false, false]);
     };
 
     const dummy: any = {
         id: 0,
-        owner: 0,
+        owner: 2,
         name: ['레스토랑', '상점', '호텔'],
         price: ['가격: 50,000', '가격: 70,000', '가격: 100,000'],
         fee: ['식사 비용: 5000', '쇼핑 비용: 7000', '숙박 비용: 10000'],
@@ -41,9 +42,13 @@ function RealEstate() {
                 </S.Mid>
 
                 <S.Divide />
-                <S.Botton onClick={() => (setBuyRealEstate(true), setIsModalOpen(false))}>
-                    {!dummy.owner ? '매수하기' : dummy.owner === nowPlayer ? '매도하기' : '확인'}
-                </S.Botton>
+                {!dummy.owner ? (
+                    <S.Botton onClick={() => (setTradeRealEstate(([buy, sell]) => [!buy, sell]), setIsModalOpen(false))}>매수하기</S.Botton>
+                ) : dummy.owner === nowPlayer + 1 ? (
+                    <S.Botton onClick={() => (setTradeRealEstate(([buy, sell]) => [buy, !sell]), setIsModalOpen(false))}>매도하기</S.Botton>
+                ) : (
+                    <S.Botton onClick={() => setIsModalOpen(false)}>확인</S.Botton>
+                )}
             </S.Main>
         </Modal>
     );

@@ -39,9 +39,3 @@ export const IsModalOpenState = atom<boolean>({
     key: 'IsModalOpenState',
     default: false,
 });
-
-// 부동산 구입
-export const BuyRealEstateState = atom<boolean>({
-    key: 'BuyRealEstateState',
-    default: false,
-});

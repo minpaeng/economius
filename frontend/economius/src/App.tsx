@@ -10,11 +10,10 @@ import Modal from 'react-modal';
 import Portforlio from './Components/Common/Portfolio';
 import NewsBar from './Components/Common/NewsBar';
 
-import './App.css';
 import Modals from './Modals';
 import PlayerPlaceAll from './Components/Common/PlayerPlaceAll';
 
-import ChatTest from './socket';
+import PlayerSocket from './Socket';
 
 function App() {
     Modal.setAppElement('#root');
@@ -37,7 +36,7 @@ function App() {
             <PlayerPlaceAll />
 
             <Modals />
-            <ChatTest />
+            <PlayerSocket />
         </div>
     );
 }
