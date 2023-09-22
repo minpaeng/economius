@@ -22,7 +22,7 @@ public class StockService {
 
         // 주식의 갯수만큼 주식을 살 수 있는지 파악
 
-        // 갯수는 문제없는지\
+        // 갯수는 문제없는지
         Stock stock = game.getStocks().get(stockId);
         if (stockAmount > stock.getRemainingAmount()){
             // 에러 발생

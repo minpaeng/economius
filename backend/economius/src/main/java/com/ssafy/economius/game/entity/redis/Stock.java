@@ -26,6 +26,10 @@ public class Stock {
     private List<Price> priceHistory;
     private List<Integer> rateHistory;
 
+    public void updateOwners(Long player, int amount) {
+
+    }
+
     public void updateStockPriceAndRate(int closingRate, int round) {
         updatePrice(closingRate, round);
         updateRate(closingRate, round);

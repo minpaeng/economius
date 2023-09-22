@@ -110,6 +110,7 @@ public class GameRoomService {
 
         for (StockDto stock : InitialData.STOCKS) {
             Stock tmpStock = Stock.builder()
+                .stockId(stock.getStockId())
                 .name(stock.getCompany())
                 .companyCategory(stock.getIndustry())
                 .companySubCategory(stock.getType())

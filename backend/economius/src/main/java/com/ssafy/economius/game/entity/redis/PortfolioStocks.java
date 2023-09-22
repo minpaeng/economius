@@ -1,13 +1,16 @@
 package com.ssafy.economius.game.entity.redis;
 
+import java.util.HashMap;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
 @Getter
 @Builder
+@Slf4j
 public class PortfolioStocks {
 
     private int totalPrice;
@@ -26,9 +29,16 @@ public class PortfolioStocks {
     }
 
     private void updateStockMap(Stock stock, int changeAmount) {
+        if (stocks == null){
+            stocks = new HashMap<>();
+            log.info("stock map 생성");
+        }
+
         if (stocks.containsKey(stock.getStockId())) {
+            log.info("stock 키 존재 -> 업데이트 진행");
             stocks.get(stock.getStockId()).updateStockAmount(changeAmount);
         } else {
+            log.info("stock 키 존재 X -> 새로만듬");
             stocks.put(stock.getStockId(),
                 PortfolioStock.builder()
                     .costPerStock(stock.getPrice())
@@ -38,6 +48,7 @@ public class PortfolioStocks {
                     .stock(stock)
                     .build()
             );
+            log.info("stock 키 존재 X -> 결과" + stocks);
         }
     }
 
