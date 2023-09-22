@@ -57,13 +57,13 @@ public class BuildingService {
     private BuyBuildingResponse buyBuilding(int roomId, Long player, Portfolio portfolio,
                                             int buildingId, Building building) {
         buildingValidator.checkBuildingBuyingStatus(player, roomId, building);
-        gameValidator.canBuy(roomId, portfolio.getMoney(), building.getPrice());
+        gameValidator.canBuy(roomId, portfolio.getMoney(), building.getBuildingFee());
         portfolio.buyBuilding(player, buildingId, building);
 
         return BuyBuildingResponse.builder()
                 .player(portfolio.getPlayer())
                 .buildingId(buildingId)
-                .changeAmount(building.getPrice())
+                .changeAmount(building.getBuildingFee())
                 .moneyResult(portfolio.getMoney())
                 .build();
     }
@@ -76,7 +76,7 @@ public class BuildingService {
         return SellBuildingResponse.builder()
                 .player(portfolio.getPlayer())
                 .buildingId(buildingId)
-                .changeAmount(building.getPrice())
+                .changeAmount(building.getBuildingFee())
                 .moneyResult(portfolio.getMoney())
                 .build();
     }

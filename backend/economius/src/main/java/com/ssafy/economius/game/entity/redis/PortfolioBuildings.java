@@ -24,14 +24,14 @@ public class PortfolioBuildings {
     private Map<Integer, PortfolioBuilding> building;
 
     public void buyBuilding(int buildingId, Building building) {
-        this.totalPrice += building.getPrice();
+        this.totalPrice += building.getBuildingFee();
         addBuilding(buildingId, building);
         this.amount = this.building.size();
         setEarnings();
     }
 
     public void sellBuilding(int buildingId, Building building) {
-        this.totalPrice += building.getPrice();
+        this.totalPrice += building.getBuildingFee();
         this.building.remove(buildingId);
         this.amount = this.building.size();
         setEarnings();
