@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+
+import com.ssafy.economius.game.entity.mysql.EventMoney;
+import com.ssafy.economius.game.entity.mysql.EventStock;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -49,6 +52,10 @@ public class Game {
     private Map<Integer, Stock> stocks; 
     private Map<Integer, Saving> savings;
     private InterestRate interestRate;
+
+    // 찬스 이벤트 -
+    private List<EventStock> eventStock;
+    private List<EventMoney> eventMoney;
 
     public void initializeLocations(){
         log.info("사용자 위치 초기화");

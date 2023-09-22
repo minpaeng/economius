@@ -21,6 +21,8 @@ import com.ssafy.economius.game.dto.mysql.SavingsDto;
 import com.ssafy.economius.game.dto.mysql.StockDto;
 import com.ssafy.economius.game.dto.mysql.VolatileDto;
 import com.ssafy.economius.game.dto.response.CreateRoomResponse;
+import com.ssafy.economius.game.entity.mysql.EventMoney;
+import com.ssafy.economius.game.entity.mysql.EventStock;
 import com.ssafy.economius.game.entity.redis.Building;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Gold;
@@ -64,20 +66,35 @@ public class GameRoomService {
 
     private void creatRoomOnRedis(int roomId, Long player) {
         Game game = Game.builder()
-            .players(new ArrayList<>(List.of(player)))
-            .gameTurn(0)
-            .roomId(roomId)
-            .interestRate(makeInterestRate())
-            .gold(makeGold())
-            .stocks(makeStocks())
-            .savings(makeSavings())
-            .insurances(makeInsurance())
-            .buildings(makeBuildings())
-            .tax(makeTax())
-            .maxGameTurn(MAX_GAME_TURN.getValue())
+                .players(new ArrayList<>(List.of(player)))
+                .gameTurn(0)
+                .roomId(roomId)
+                .interestRate(makeInterestRate())
+                .gold(makeGold())
+                .stocks(makeStocks())
+                .savings(makeSavings())
+                .insurances(makeInsurance())
+                .buildings(makeBuildings())
+                .tax(makeTax())
+                .maxGameTurn(MAX_GAME_TURN.getValue())
+                .eventMoney(makeEventMoney())
+                .eventStock(makeEventStock())
             .build();
 
         gameRepository.save(game);
+    }
+
+    private List<EventStock> makeEventStock() {
+        List<EventStock> eventStocks = new ArrayList<>();
+
+        return eventStocks;
+    }
+
+    private List<EventMoney> makeEventMoney() {
+        List<EventMoney> eventMonies = new ArrayList<>();
+
+        return eventMonies;
+
     }
 
     private static Map<Integer, Integer> makeTax() {
@@ -146,7 +163,7 @@ public class GameRoomService {
                 .finishCount(saving.getFinishCount())
                 .build();
 
-            log.info(saving.getBankId().toString());
+            //log.info(saving.getBankId().toString());
             savings.put(saving.getBankId(), tmpSaving);
         }
 
@@ -165,7 +182,7 @@ public class GameRoomService {
                 .productName(insurance.getProductName())
                 .monthlyDeposit(insurance.getMonthlyDeposit())
                 .build();
-            log.info(insurance.toString());
+            //log.info(insurance.toString());
             insurances.put(insurance.getInsuranceId(), tmpInsurance);
         }
 
