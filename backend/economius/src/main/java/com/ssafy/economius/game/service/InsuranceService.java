@@ -31,9 +31,8 @@ public class InsuranceService {
     }
     public InsuranceVisitResponse visitInsurance(int roomId, InsuranceRequest insuranceRequest) {
         //게임 방 조회
-        Game game = gameRepository.findById(roomId).orElseThrow(
-                () -> new RuntimeException("해당하는 게임이 존재하지 않습니다.")
-        );
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
+
         Map<Integer, Insurance> insurances = game.getInsurances();
 
         //멤버의 보험 상품 별 가입 유무
@@ -69,9 +68,8 @@ public class InsuranceService {
 
     public void joinInsurance(int roomId, InsuranceRequest insuranceRequest) {
         //게임 방 조회
-        Game game = gameRepository.findById(roomId).orElseThrow(
-                () -> new RuntimeException("해당하는 게임이 존재하지 않습니다.")
-        );
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
+
         // 멤버 포트폴리오
         Portfolio portfolio = game.getPortfolios().get(insuranceRequest.getPlayer());
         // 멤버 포트폴리오 - 보험
@@ -80,7 +78,7 @@ public class InsuranceService {
         Insurance nowInsuranceInfo = game.getInsurances().get(insuranceRequest.getInsuranceId());
         log.info(nowInsuranceInfo.toString());
 
-        // 지불 가능한지 먼저 확인 (추후 확인 및 추가 필요)
+        // 지불 가능한지 먼저 확인
         gameValidator.canBuy(roomId, portfolio.getMoney(), nowInsuranceInfo.getMonthlyDeposit());
 
         PortfolioInsurances portfolioInsurances = portfolio.getInsurances();
@@ -112,5 +110,26 @@ public class InsuranceService {
     }
 
     public void stopInsurance(int roomId, InsuranceRequest insuranceRequest) {
+        //게임 방 조회
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
+
+        // 멤버 포트폴리오
+        Portfolio portfolio = game.getPortfolios().get(insuranceRequest.getPlayer());
+        // 멤버 포트폴리오 - 보험
+        PortfolioInsurances portfolioInsurance = portfolio.getInsurances();
+        //보험 상품 정보
+        Insurance nowInsuranceInfo = game.getInsurances().get(insuranceRequest.getInsuranceId());
+        log.info(nowInsuranceInfo.toString());
+
+        if(checkHaveInsurance(game, insuranceRequest.getPlayer(), insuranceRequest.getInsuranceId())) {
+            // 현재 보험 정보에 기반하여 해지
+            portfolioInsurance.setAmount(portfolioInsurance.getAmount() - 1);
+
+            // 보험 해지
+            portfolioInsurance.getInsurance().remove(insuranceRequest.getInsuranceId());
+            gameRepository.save(game);
+            
+            log.info("============ 보험 해지 : {} ============", game.getPortfolios().get(insuranceRequest.getPlayer()).getInsurances().toString());
+        }
     }
 }

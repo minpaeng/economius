@@ -45,9 +45,7 @@ public class SavingService {
 
     public SavingVisitResponse visitBank(int roomId, SavingRequest savingRequest) {
         //게임 방 조회
-        Game game = gameRepository.findById(roomId).orElseThrow(
-                () -> new RuntimeException("해당하는 게임이 존재하지 않습니다.")
-        );
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
         // 멤버 포트폴리오
         Portfolio portfolio = game.getPortfolios().get(savingRequest.getPlayer());
@@ -102,9 +100,7 @@ public class SavingService {
 
     public void joinSavings(int roomId, SavingRequest savingRequest) {
         //게임 방 조회
-        Game game = gameRepository.findById(roomId).orElseThrow(
-                () -> new RuntimeException("해당하는 게임이 존재하지 않습니다.")
-        );
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
         // 멤버 포트폴리오
         Portfolio portfolio = game.getPortfolios().get(savingRequest.getPlayer());
@@ -114,7 +110,7 @@ public class SavingService {
         Saving nowSavingInfo = findNowSavingInfo(game, savingRequest.getPlayer(), savingRequest.getBankId());
         log.info(String.valueOf(portfolio.getMoney()));
 
-        // 지불 가능한지 먼저 확인 (추후 확인 및 추가 필요)
+
         gameValidator.canBuy(roomId, portfolio.getMoney(),nowSavingInfo.getMonthlyDeposit() );
 
         // 가입 안되어 있는지 확인 
@@ -146,9 +142,7 @@ public class SavingService {
 
     public void stopSavings(int roomId, SavingRequest savingRequest) {
         //게임 방 조회
-        Game game = gameRepository.findById(roomId).orElseThrow(
-                () -> new RuntimeException("해당하는 게임이 존재하지 않습니다.")
-        );
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
         // 멤버 포트폴리오
         Portfolio portfolio = game.getPortfolios().get(savingRequest.getPlayer());
