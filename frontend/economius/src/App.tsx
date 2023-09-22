@@ -29,12 +29,12 @@ function App() {
                 <Characters />
             </Canvas>
 
-            {/* <Dice2 /> */}
+            <Dice2 />
             <Controller />
 
-            {/* <Portforlio />
+            <Portforlio />
             <NewsBar />
-            <PlayerPlaceAll /> */}
+            <PlayerPlaceAll />
 
             <Modals />
             <ChatTest />
