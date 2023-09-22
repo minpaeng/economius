@@ -1,6 +1,8 @@
 package com.ssafy.economius.game.entity.redis;
 
 import java.util.List;
+
+import com.ssafy.economius.game.enums.BuildingEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,5 +28,9 @@ public class Building {
         rate = newRate;
         priceHistory.add(price);
         rateHistory.add(newRate);
+    }
+
+    public int getBuildingFee() {
+        return this.price / 100 * BuildingEnum.Building_FEE_RATE.getValue();
     }
 }

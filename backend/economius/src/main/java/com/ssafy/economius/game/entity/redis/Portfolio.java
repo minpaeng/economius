@@ -7,7 +7,6 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-@ToString
 public class Portfolio {
 
     private Long player;
@@ -30,13 +29,13 @@ public class Portfolio {
 
     public void buyBuilding(Long player, int buildingId, Building building) {
         building.setOwnerId(player);
-        this.money -= building.getPrice();
+        this.money -= building.getBuildingFee();
         this.buildings.buyBuilding(buildingId, building);
     }
 
     public void sellBuilding(int buildingId, Building building) {
         building.setOwnerId(null);
-        this.money += building.getPrice();
+        this.money += building.getBuildingFee();
         this.buildings.sellBuilding(buildingId, building);
     }
 
