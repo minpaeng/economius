@@ -10,12 +10,13 @@ import lombok.ToString;
 @ToString
 @Getter
 public class Insurance {
+    private String category; //H M
+    private String categoryCode; // X S
+    private String productCode; //HX HS
+    private String productName; // 상해보험 상해보험특
 
-    private String code;
-    private String name;
-    private String type;
-    private String category;
-    private int benefitRate;
-    private int price;
+
+    private int guaranteeRate;  //
+    private int monthlyDeposit;
 
 }
