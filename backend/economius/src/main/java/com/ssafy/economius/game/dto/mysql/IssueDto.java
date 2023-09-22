@@ -16,6 +16,7 @@ public class IssueDto {
     private String country;
     private String year;
     private String description;
+    private String url;
     private List<IssueStockDto> issueStockDtos = new ArrayList<>();
     private List<PrevIssueDto> prevIssueDtos = new ArrayList<>();
 }

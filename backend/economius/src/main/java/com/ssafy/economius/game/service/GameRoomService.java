@@ -17,6 +17,7 @@ import static com.ssafy.economius.game.enums.VolatileEnum.RESTAURANT;
 import static com.ssafy.economius.game.enums.VolatileEnum.SHOP;
 
 import com.ssafy.economius.game.dto.mysql.InsuranceDto;
+import com.ssafy.economius.game.dto.mysql.IssueDto;
 import com.ssafy.economius.game.dto.mysql.SavingsDto;
 import com.ssafy.economius.game.dto.mysql.StockDto;
 import com.ssafy.economius.game.dto.mysql.VolatileDto;
@@ -28,10 +29,14 @@ import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Gold;
 import com.ssafy.economius.game.entity.redis.Insurance;
 import com.ssafy.economius.game.entity.redis.InterestRate;
+import com.ssafy.economius.game.entity.redis.Issue;
+import com.ssafy.economius.game.entity.redis.IssueAssetChange;
+import com.ssafy.economius.game.entity.redis.PrevIssue;
 import com.ssafy.economius.game.entity.redis.Price;
 import com.ssafy.economius.game.entity.redis.Saving;
 import com.ssafy.economius.game.entity.redis.Stock;
 import com.ssafy.economius.game.enums.InitialData;
+import com.ssafy.economius.game.enums.IssueEnum;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,6 +76,7 @@ public class GameRoomService {
                 .roomId(roomId)
                 .interestRate(makeInterestRate())
                 .gold(makeGold())
+                .issues(makeIssues())
                 .stocks(makeStocks())
                 .savings(makeSavings())
                 .insurances(makeInsurance())
@@ -120,6 +126,37 @@ public class GameRoomService {
             .rate(INITIAL_ZERO_VALUE.getValue())
             .rateHistory(new ArrayList<>(List.of(0)))
             .build();
+    }
+
+    private Map<Integer, Issue> makeIssues() {
+        Map<Integer, Issue> issues = new HashMap<>();
+
+        for (IssueDto issue : InitialData.ISSUES) {
+            Issue tmpIssue = Issue.builder()
+                    .name(issue.getName())
+                    .type(issue.isType() ? IssueEnum.BOOM : IssueEnum.DEPRESSION)
+                    .country(issue.getCountry())
+                    .year(issue.getYear())
+                    .description(issue.getDescription())
+                    .url(issue.getUrl())
+                    .issueAssetsChanges(makeIssueAssetsChanges())
+                    .prevIssues(makePrevIssues())
+                    .build();
+            issues.put(issue.getIssueId(), tmpIssue);
+        }
+        return issues;
+    }
+
+    private Map<Integer, IssueAssetChange> makeIssueAssetsChanges() {
+        Map<Integer, IssueAssetChange> issueAssetChanges = new HashMap<>();
+
+        return issueAssetChanges;
+    }
+
+    private List<PrevIssue> makePrevIssues() {
+        List<PrevIssue> prevIssues = new ArrayList<>();
+
+        return prevIssues;
     }
 
     private Map<Integer, Stock> makeStocks() {

@@ -47,6 +47,7 @@ public class Game {
 
     // 경제 asset
     private Gold gold;
+    private Map<Integer, Issue> issues;
     private Map<Integer, Building> buildings; 
     private Map<Integer, Insurance> insurances;
     private Map<Integer, Stock> stocks; 
