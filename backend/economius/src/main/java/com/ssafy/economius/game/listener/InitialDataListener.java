@@ -84,7 +84,7 @@ public class InitialDataListener {
 
     private void setSavings() {
         List<Savings> savings = savingsRepository.findAll();
-        for (Savings saving: savings) {
+        for (Savings saving : savings) {
             SavingsDto tmp = new SavingsDto();
             tmp.setBankId(saving.getSavingsId());
             tmp.setSavingName(saving.getName());
@@ -97,7 +97,7 @@ public class InitialDataListener {
 
     private void setVolatiles() {
         List<Volatile> volatiles = volatileRepository.findAll();
-        for (Volatile vol: volatiles) {
+        for (Volatile vol : volatiles) {
             VolatileDto tmp = new VolatileDto();
             tmp.setVolatileId(vol.getVolatileId());
             tmp.setName(vol.getName());
@@ -109,7 +109,7 @@ public class InitialDataListener {
 
     private void setEvents() {
         List<EventStock> eventStocks = eventStockRepository.findAllWithStockIndustry();
-        for (EventStock eventStock: eventStocks) {
+        for (EventStock eventStock : eventStocks) {
             EventStockDto tmp = new EventStockDto();
             tmp.setEventStockId(eventStock.getEventStockId());
             tmp.setStockIndustryId(eventStock.getStockIndustry().getStockIndustryId());
@@ -121,7 +121,7 @@ public class InitialDataListener {
         }
 
         List<EventMoney> eventMoneys = eventMoneyRepository.findAllWithInsuranceType();
-        for (EventMoney eventMoney: eventMoneys) {
+        for (EventMoney eventMoney : eventMoneys) {
             EventMoneyDto tmp = new EventMoneyDto();
             tmp.setEventMoneyId(eventMoney.getEventMoneyId());
             tmp.setInsuranceTypeId(eventMoney.getInsuranceType().getInsuranceTypeId());
@@ -153,7 +153,7 @@ public class InitialDataListener {
 
     private void setIssues() {
         List<Issue> issues = issueRepository.findAll();
-        for (Issue issue: issues) {
+        for (Issue issue : issues) {
             IssueDto tmp = new IssueDto();
             tmp.setIssueId(issue.getIssueId());
             tmp.setName(issue.getName());
@@ -161,6 +161,7 @@ public class InitialDataListener {
             tmp.setCountry(issue.getCountry());
             tmp.setYear(issue.getYear());
             tmp.setDescription(issue.getDescription());
+            tmp.setUrl(issue.getUrl());
             setIssueStocks(tmp);
             setPrevIssues(tmp);
             InitialData.ISSUES.add(tmp);
@@ -171,7 +172,7 @@ public class InitialDataListener {
             IssueDto issueDto) {
         List<IssueStock> issueStocks = issueStockRepository.findIssueStockByIssueId(issueDto.getIssueId());
 
-        for (IssueStock issueStock: issueStocks) {
+        for (IssueStock issueStock : issueStocks) {
             IssueStockDto tmp = new IssueStockDto();
             tmp.setIssueStockId(issueStock.getIssueStockId());
             tmp.setAssetType(issueStock.getAssetType());
