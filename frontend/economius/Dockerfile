@@ -10,14 +10,15 @@ ENV NODE_ENV development
 # Install dependencies
 COPY package.json package-lock.json ./
 
-# If typescript is needed for the build, make sure it's in your dependencies or install it explicitly
-RUN npm install -g typescript
-
-RUN npm install
+# RUN npm install -g recoil --force
+# RUN npm install -g typescript
+# RUN npm install -g three
+RUN npm install --force
 
 # Copy source files and build
 COPY . .
-RUN npm run build
+#RUN npm run build
+RUN CI=false npm run build
 
 # Production stage
 FROM nginx:1.21.3-alpine
