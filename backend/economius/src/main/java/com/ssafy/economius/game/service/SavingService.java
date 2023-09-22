@@ -25,8 +25,7 @@ import java.util.stream.Collectors;
 public class SavingService {
 
     private final GameRepository gameRepository;
-    private GameValidator gameValidator;
-    private ModelMapper modelMapper;
+    private final GameValidator gameValidator;
 
     //현재 은행 적금 정보 구하기
     public Saving findNowSavingInfo(Game game, Long player, int bankId) {
@@ -43,27 +42,6 @@ public class SavingService {
 
         return (portfolioSavings.getSavings()!=null && portfolioSavings.getSavings().get(bankId) != null);
     }
-
-    // 포트폴리오 적금 리스트 entity -> Dto
-    public Map<Integer, SavingDto> convertToDtoMap(Map<Integer, PortfolioSaving> savings) {
-        return savings.entrySet().stream()
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey, // key는 그대로 사용
-                        entry -> convertToSavingDto(entry.getValue()) // value는 변환된 DTO를 사용
-                ));
-    }
-    private SavingDto convertToSavingDto(PortfolioSaving portfolioSaving) {
-        return SavingDto.builder()
-                .bankId(portfolioSaving.getBankId())
-                .name(portfolioSaving.getName())
-                .monthlyDeposit(portfolioSaving.getMonthlyDeposit())
-                .currentPrice(portfolioSaving.getCurrentPrice())
-                .currentCount(portfolioSaving.getCurrentCount())
-                .finishCount(portfolioSaving.getFinishCount())
-                .rate(portfolioSaving.getRate())
-                .build();
-    }
-
 
     public SavingVisitResponse visitBank(int roomId, SavingRequest savingRequest) {
         //게임 방 조회
@@ -137,7 +115,7 @@ public class SavingService {
         log.info(String.valueOf(portfolio.getMoney()));
 
         // 지불 가능한지 먼저 확인 (추후 확인 및 추가 필요)
-        gameValidator.canBuy(roomId, portfolio.getMoney(),390000000 ); //nowSavingInfo.getMonthlyDeposit()
+        gameValidator.canBuy(roomId, portfolio.getMoney(),nowSavingInfo.getMonthlyDeposit() );
 
         // 가입 안되어 있는지 확인 
         if(!checkHaveSaving(game, savingRequest.getPlayer(), savingRequest.getBankId())) {

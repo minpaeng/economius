@@ -1,5 +1,6 @@
 package com.ssafy.economius.game.service;
 
+import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.dto.InsuranceDto;
 import com.ssafy.economius.game.dto.request.InsuranceRequest;
 import com.ssafy.economius.game.dto.response.InsuranceVisitResponse;
@@ -17,6 +18,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class InsuranceService {
     private final GameRepository gameRepository;
+    private final GameValidator gameValidator;
 
     public boolean checkHaveInsurance(Game game, Long player, int insuranceId) {
         // 멤버 포트폴리오
@@ -77,11 +79,33 @@ public class InsuranceService {
         //보험 상품 정보
         Insurance nowInsuranceInfo = game.getInsurances().get(insuranceRequest.getInsuranceId());
         log.info(nowInsuranceInfo.toString());
+
+        // 지불 가능한지 먼저 확인 (추후 확인 및 추가 필요)
+        gameValidator.canBuy(roomId, portfolio.getMoney(), nowInsuranceInfo.getMonthlyDeposit());
+
+        PortfolioInsurances portfolioInsurances = portfolio.getInsurances();
         //가입 안되어 있는지 확인
         if(!checkHaveInsurance(game, insuranceRequest.getPlayer(), insuranceRequest.getInsuranceId())) {
-
-            PortfolioInsurance joinInsurance = PortfolioInsurance.builder() 
+            PortfolioInsurance nowInsurance = PortfolioInsurance.builder()
+                    .insuranceId(insuranceRequest.getInsuranceId())
+                    .category(nowInsuranceInfo.getCategory())
+                    .categoryCode(nowInsuranceInfo.getCategoryCode())
+                    .productCode(nowInsuranceInfo.getProductCode())
+                    .productName(nowInsuranceInfo.getProductName())
+                    .guaranteeRate(nowInsuranceInfo.getGuaranteeRate())
+                    .monthlyDeposit(nowInsuranceInfo.getMonthlyDeposit())
                     .build();
+
+            portfolio.setMoney(portfolio.getMoney() - nowInsuranceInfo.getMonthlyDeposit());
+            portfolioInsurance.setTotalPrice(portfolioInsurance.getTotalPrice()+ nowInsuranceInfo.getMonthlyDeposit());
+            portfolioInsurance.setAmount(portfolioInsurance.getAmount() + 1);
+
+            if(portfolioInsurances.getInsurance() == null) portfolioInsurances.setInsurance(new HashMap<>());
+            portfolioInsurances.getInsurance().put(insuranceRequest.getInsuranceId(), nowInsurance);
+
+            // redis 저장
+            gameRepository.save(game);
+            log.info("============ 보험 가입 : {} ============", game.getPortfolios().get(insuranceRequest.getPlayer()).getInsurances().toString());
         }
 
 

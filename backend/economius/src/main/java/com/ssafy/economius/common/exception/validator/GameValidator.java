@@ -24,6 +24,7 @@ public class GameValidator {
 
     public void canBuy(int roomId, int money, int price) {
         if (money < price) {
+            System.out.println("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
             throw CustomWebsocketException.builder()
                     .roomId(roomId)
                     .code(GameRoomMessage.CANNOT_BUY.getCode())

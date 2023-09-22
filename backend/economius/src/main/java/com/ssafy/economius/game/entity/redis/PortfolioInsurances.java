@@ -10,6 +10,7 @@ import lombok.*;
 @Getter
 @Builder
 @ToString
+@Setter
 public class PortfolioInsurances {
 
     private int totalPrice;

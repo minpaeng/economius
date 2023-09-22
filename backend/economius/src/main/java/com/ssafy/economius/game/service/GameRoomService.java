@@ -146,7 +146,7 @@ public class GameRoomService {
                 .finishCount(saving.getFinishCount())
                 .build();
 
-            log.info(saving.getBankId().toString());
+            //log.info(saving.getBankId().toString());
             savings.put(saving.getBankId(), tmpSaving);
         }
 
@@ -165,7 +165,7 @@ public class GameRoomService {
                 .productName(insurance.getProductName())
                 .monthlyDeposit(insurance.getMonthlyDeposit())
                 .build();
-            log.info(insurance.toString());
+            //log.info(insurance.toString());
             insurances.put(insurance.getInsuranceId(), tmpInsurance);
         }
 
