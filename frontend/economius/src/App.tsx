@@ -14,7 +14,7 @@ import './App.css';
 import Modals from './Modals';
 import PlayerPlaceAll from './Components/Common/PlayerPlaceAll';
 
-import ChatTest from './socket';
+import ChatTest from './Socket';
 
 function App() {
     Modal.setAppElement('#root');
