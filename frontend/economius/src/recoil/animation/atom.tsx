@@ -6,7 +6,7 @@ const { persistAtom } = recoilPersist();
 export const NowPlayerState = atom<number>({
     key: 'NowPlayerState',
     default: 0, // 기본값
-    effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
 // 현재 플레이어 최종 위치
@@ -37,5 +37,11 @@ export const MapAnimationIndexState = atom<number>({
 // 자산 모달 오픈 여부
 export const IsModalOpenState = atom<boolean>({
     key: 'IsModalOpenState',
+    default: false,
+});
+
+// 부동산 구입
+export const BuyRealEstateState = atom<boolean>({
+    key: 'BuyRealEstateState',
     default: false,
 });

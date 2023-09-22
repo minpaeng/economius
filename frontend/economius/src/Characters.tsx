@@ -12,7 +12,7 @@ const opacity = 0.3;
 
 // 캐릭터 애니메이션 변수
 const radius = 0.5; // 점프 높이, 반원의 반지름
-const steps = 30; // 애니메이션당 프레임 수
+const steps = 10; // 애니메이션당 프레임 수
 
 function Characters() {
     // 현재 플레이어

@@ -1,7 +1,7 @@
 import Modal from 'react-modal';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { NowPlayerState, IsModalOpenState } from '/src/recoil/animation/atom';
+import { NowPlayerState, IsModalOpenState, BuyRealEstateState } from '/src/recoil/animation/atom';
 import hotelimg from '/RealState/hotel.png';
 import restaurantimg from '/RealState/restaurant.png';
 import shopimg from '/RealState/shop.png';
@@ -10,8 +10,10 @@ import * as S from './RealEstate.style';
 function RealEstate() {
     const [nowPlayer, setNowPlayer] = useRecoilState(NowPlayerState);
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
+    const [buyRealEstate, setBuyRealEstate] = useRecoilState(BuyRealEstateState);
     const closeModal = () => {
         setIsModalOpen(false);
+        setBuyRealEstate(false);
     };
 
     const dummy: any = {
@@ -39,7 +41,9 @@ function RealEstate() {
                 </S.Mid>
 
                 <S.Divide />
-                <S.Botton>{!dummy.owner ? '매수하기' : dummy.owner === nowPlayer ? '매도하기' : '확인'}</S.Botton>
+                <S.Botton onClick={() => (setBuyRealEstate(true), setIsModalOpen(false))}>
+                    {!dummy.owner ? '매수하기' : dummy.owner === nowPlayer ? '매도하기' : '확인'}
+                </S.Botton>
             </S.Main>
         </Modal>
     );
