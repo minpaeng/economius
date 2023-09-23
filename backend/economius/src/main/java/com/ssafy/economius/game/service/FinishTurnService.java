@@ -11,13 +11,16 @@ import static com.ssafy.economius.game.enums.RateEnum.STOCK_RATE_UPPER_BOUND;
 
 import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.entity.redis.Game;
+import com.ssafy.economius.game.entity.redis.Portfolio;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import com.ssafy.economius.game.util.RearrangeRateUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class FinishTurnService {
 
     private final GameRepository gameRepository;
@@ -63,7 +66,14 @@ public class FinishTurnService {
 
     private void stockRearrange(Game game, int round) {
         game.getStocks().values().forEach(
-            stock -> stock.updateStockPriceAndRate(RearrangeRateUtil.getRanges
-                (STOCK_RATE_LOWER_BOUND.getValue(), STOCK_RATE_UPPER_BOUND.getValue()), round));
+            stock -> {
+                stock.updateStockPriceAndRate(RearrangeRateUtil.getRanges
+                    (STOCK_RATE_LOWER_BOUND.getValue(), STOCK_RATE_UPPER_BOUND.getValue()), round);
+                log.info("게임 턴 변경 ->" + stock);
+                game.getPortfolios().values()
+                    .forEach(portfolio -> portfolio.getStocks().updateStock(stock));
+            }
+        );
+
     }
 }

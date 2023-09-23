@@ -7,11 +7,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Builder
+@ToString
 public class Stock {
 
     private Integer stockId;
@@ -26,8 +30,14 @@ public class Stock {
     private List<Price> priceHistory;
     private List<Integer> rateHistory;
 
-    public void updateOwners(Long player, int amount) {
+    public boolean checkStockAvailableToPurchase(int buyStockAmount){
+        return buyStockAmount <= remainingAmount;
+    }
 
+
+    public void dealStock(Long player, int amount) {
+        owners.compute(player, (key, value) -> value + amount);
+        remainingAmount -= amount;
     }
 
     public void updateStockPriceAndRate(int closingRate, int round) {
@@ -40,7 +50,6 @@ public class Stock {
         players.forEach(player -> owners.put(player, 0));
 
     }
-
 
     private void updateRate(int closingRate, int round) {
         rate = closingRate;

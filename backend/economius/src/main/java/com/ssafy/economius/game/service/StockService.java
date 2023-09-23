@@ -24,7 +24,7 @@ public class StockService {
 
         // 갯수는 문제없는지
         Stock stock = game.getStocks().get(stockId);
-        if (stockAmount > stock.getRemainingAmount()){
+        if (stock.checkStockAvailableToPurchase(stockAmount)) {
             // 에러 발생
             // 갯수부족
         }
@@ -36,6 +36,7 @@ public class StockService {
         gameValidator.canBuy(roomId, money, price);
 
         // 모두 통과했다..
+        stock.dealStock(player, stockAmount);
         portfolio.getStocks().updatePortfolioStock(stock, stockAmount);
 
         gameRepository.save(game);

@@ -20,44 +20,63 @@ public class PortfolioStocks {
 
     private Map<Integer, PortfolioStock> stocks;
 
+    public void updateStock(Stock stock){
+        log.info("updateStock : " + stock.getStockId() + " : " + stock);
+        if (stocks == null) {
+            return;
+        }
+        if (stocks.containsKey(stock.getStockId())){
+            changePortfolioStock(stock, 0);
+        }
+    }
+
     public void updatePortfolioStock(Stock stock, int changeAmount) {
         totalPrice += stock.getPrice() * changeAmount;
         amount += changeAmount;
 
         updateStockMap(stock, changeAmount);
-        calculatePortfolioStock();
     }
 
     private void updateStockMap(Stock stock, int changeAmount) {
-        if (stocks == null){
+        if (stocks == null) {
             stocks = new HashMap<>();
             log.info("stock map 생성");
         }
 
         if (stocks.containsKey(stock.getStockId())) {
-            log.info("stock 키 존재 -> 업데이트 진행");
-            stocks.get(stock.getStockId()).updateStockAmount(changeAmount);
+            changePortfolioStock(stock, changeAmount);
         } else {
-            log.info("stock 키 존재 X -> 새로만듬");
-            stocks.put(stock.getStockId(),
-                PortfolioStock.builder()
-                    .costPerStock(stock.getPrice())
-                    .amount(changeAmount)
-                    .earningRate(0)
-                    .totalCost(stock.getPrice() * changeAmount)
-                    .stock(stock)
-                    .build()
-            );
-            log.info("stock 키 존재 X -> 결과" + stocks);
+            createPortfolioStock(stock, changeAmount);
         }
     }
 
+    private void createPortfolioStock(Stock stock, int changeAmount) {
+        log.info("stock 키 존재 X -> 새로만듬");
+        stocks.put(stock.getStockId(),
+            PortfolioStock.builder()
+                .costPerStock(stock.getPrice())
+                .amount(changeAmount)
+                .earningRate(0)
+                .totalCost(stock.getPrice() * changeAmount)
+                .earningPrice(stock.getPrice() * changeAmount)
+                .stock(stock)
+                .build()
+        );
+        log.info("stock 키 존재 X -> 결과" + stocks);
+    }
 
-    private void calculatePortfolioStock(){
+    private void changePortfolioStock(Stock stock, int changeAmount) {
+        log.info("stock 키 존재 -> 업데이트 진행");
+        stocks.get(stock.getStockId()).updateStockAmount(changeAmount, stock);
+        calculatePortfolioStock();
+    }
+
+
+    private void calculatePortfolioStock() {
         earningPrice = stocks.values().stream()
-            .mapToInt(PortfolioStock::calculateStock)
+            .mapToInt(PortfolioStock::evaluateStock)
             .sum();
 
-        earningRate = (int) ((double) (earningPrice - totalPrice) / totalPrice * 100);
+        earningRate = (int) ((double) (earningPrice - totalPrice) / totalPrice) * 100;
     }
 }
