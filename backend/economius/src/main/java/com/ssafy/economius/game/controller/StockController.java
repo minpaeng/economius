@@ -1,7 +1,9 @@
 package com.ssafy.economius.game.controller;
 
 import com.ssafy.economius.game.dto.request.BuyStockRequest;
+import com.ssafy.economius.game.dto.response.BuyGoldResponse;
 import com.ssafy.economius.game.service.StockService;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -19,9 +21,12 @@ public class StockController {
 
     @MessageMapping(value = "/{roomId}/buyStock")
     public void buyStock(@DestinationVariable int roomId, BuyStockRequest buyStockRequest) {
-        stockService.buyStock(roomId, buyStockRequest.getStockId(),
+        BuyGoldResponse buyGoldResponse = stockService.buyStock(roomId,
+            buyStockRequest.getStockId(),
             buyStockRequest.getStockAmount(), buyStockRequest.getPlayer());
-        template.convertAndSend("");
+
+        Map<String, Object> headers = Map.of("success", true);
+        template.convertAndSend("/sub/" + roomId, buyGoldResponse, headers);
     }
 
     @MessageMapping(value = "/{roomId}/sellStock")

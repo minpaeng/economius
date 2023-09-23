@@ -8,8 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.RedisHash;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,7 +28,7 @@ public class Stock {
     private List<Price> priceHistory;
     private List<Integer> rateHistory;
 
-    public boolean checkStockAvailableToPurchase(int buyStockAmount){
+    public boolean checkStockAvailableToPurchase(int buyStockAmount) {
         return buyStockAmount <= remainingAmount;
     }
 

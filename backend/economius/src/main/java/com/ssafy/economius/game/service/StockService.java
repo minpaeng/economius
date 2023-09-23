@@ -1,6 +1,10 @@
 package com.ssafy.economius.game.service;
 
+import com.ssafy.economius.common.exception.CustomWebsocketException;
+import com.ssafy.economius.common.exception.message.BuildingMessage;
+import com.ssafy.economius.common.exception.message.GameRoomMessage;
 import com.ssafy.economius.common.exception.validator.GameValidator;
+import com.ssafy.economius.game.dto.response.BuyGoldResponse;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Portfolio;
 import com.ssafy.economius.game.entity.redis.Stock;
@@ -17,7 +21,7 @@ public class StockService {
     private final GameRepository gameRepository;
     private final GameValidator gameValidator;
 
-    public void buyStock(int roomId, int stockId, int stockAmount, Long player){
+    public BuyGoldResponse buyStock(int roomId, int stockId, int stockAmount, Long player){
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
         // 주식의 갯수만큼 주식을 살 수 있는지 파악
@@ -25,8 +29,11 @@ public class StockService {
         // 갯수는 문제없는지
         Stock stock = game.getStocks().get(stockId);
         if (stock.checkStockAvailableToPurchase(stockAmount)) {
-            // 에러 발생
-            // 갯수부족
+            throw CustomWebsocketException.builder()
+                .roomId(roomId)
+                .code(GameRoomMessage.CANNOT_BUY.getCode())
+                .message(GameRoomMessage.CANNOT_BUY.getMessage())
+                .build();
         }
 
         // 금액은 문제 없는지
@@ -40,5 +47,7 @@ public class StockService {
         portfolio.getStocks().updatePortfolioStock(stock, stockAmount);
 
         gameRepository.save(game);
+
+        return new BuyGoldResponse(player);
     }
 }
