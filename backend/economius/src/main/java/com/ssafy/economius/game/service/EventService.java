@@ -1,9 +1,13 @@
 package com.ssafy.economius.game.service;
 
 import com.ssafy.economius.common.exception.validator.GameValidator;
+import com.ssafy.economius.game.dto.EventDto;
+import com.ssafy.economius.game.dto.EventMoneyDto;
+import com.ssafy.economius.game.dto.EventStockDto;
 import com.ssafy.economius.game.dto.SavingDto;
 import com.ssafy.economius.game.dto.request.EventCardRequest;
 import com.ssafy.economius.game.dto.request.SavingRequest;
+import com.ssafy.economius.game.dto.response.EventCardResponse;
 import com.ssafy.economius.game.dto.response.SavingVisitResponse;
 import com.ssafy.economius.game.entity.redis.*;
 import com.ssafy.economius.game.repository.redis.GameRepository;
@@ -12,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.Random;
 
 @Service
 @Slf4j
@@ -21,155 +26,62 @@ public class EventService {
     private final GameRepository gameRepository;
     private final GameValidator gameValidator;
 
-    //현재 은행 적금 정보 구하기
-    public Saving findNowSavingInfo(Game game, Long player, int bankId) {
-        Saving nowSaving = game.getSavings().get(bankId);
-        log.info("============ 현재 은행의 적금 정보 : {} ============", nowSaving.toString());
-        return nowSaving;
-    }
-
-    public boolean checkHaveSaving(Game game, Long player, int bankId) {
-        // 멤버 포트폴리오
-        Portfolio portfolio = game.getPortfolios().get(player);
-        // 멤버 포트폴리오 - 적금
-        PortfolioSavings portfolioSavings = portfolio.getSavings();
-
-        return (portfolioSavings.getSavings()!=null && portfolioSavings.getSavings().get(bankId) != null);
-    }
-
-    public SavingVisitResponse visitBank(int roomId, SavingRequest savingRequest) {
+    public EventCardResponse visitEventCard(int roomId, EventCardRequest eventCardRequest) {
         //게임 방 조회
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
-        // 멤버 포트폴리오
-        Portfolio portfolio = game.getPortfolios().get(savingRequest.getPlayer());
-        // 멤버 포트폴리오 - 적금
-        PortfolioSavings portfolioSavings = portfolio.getSavings();
+        //게임 속 이벤트 조회
+        Event event = game.getEvent();
 
-        // 현재 은행 정보
-        Saving nowSavingInfo = findNowSavingInfo(game, savingRequest.getPlayer(), savingRequest.getBankId());
-
-        boolean have;
-        SavingDto savingDto;
-        
-        // 멤버 포트폴리오 - 소유 적금 리스트
-        if(checkHaveSaving(game, savingRequest.getPlayer(), savingRequest.getBankId())) {
-            // 해당 적금 갖고있는 경우 - 해당 사용자의 적금 정보를 mapping
-            have = true;
-            PortfolioSaving hasSavingInfo = portfolioSavings.getSavings().get(savingRequest.getBankId());
-            savingDto = SavingDto.builder()
-                    .bankId(savingRequest.getBankId())
-                    .name(hasSavingInfo.getName())
-                    .monthlyDeposit(hasSavingInfo.getMonthlyDeposit())
-                    .currentPrice(hasSavingInfo.getCurrentPrice())
-                    .currentCount(hasSavingInfo.getCurrentCount())
-                    .finishCount(hasSavingInfo.getFinishCount())
-                    .rate(hasSavingInfo.getRate())
-                    .build();
-        }
-        else {
-            // 해당 적금 없는 경우 - 현재 은행의 적금 정보를 mapping
-            have = false;
-            savingDto = SavingDto.builder()
-                    .bankId(savingRequest.getBankId())
-                    .name(nowSavingInfo.getName())
-                    .monthlyDeposit(nowSavingInfo.getMonthlyDeposit())
-                    .currentPrice(0)
-                    .currentCount(0)
-                    .finishCount(nowSavingInfo.getFinishCount())
-                    .rate(nowSavingInfo.getRate())
-                    .build();
-        }
-
-        SavingVisitResponse savingVisitResponse = SavingVisitResponse.builder()
-                .player(savingRequest.getPlayer())
-                .money(portfolio.getMoney())
-                .have(have)
-                .savingDto(savingDto)
-                .build();
-
-        log.info("============ 은행 방문 시 반환 : {} ============", savingVisitResponse.toString());
-        return savingVisitResponse;
-    }
-
-    public void joinSavings(int roomId, SavingRequest savingRequest) {
-        //게임 방 조회
-        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
-
-        // 멤버 포트폴리오
-        Portfolio portfolio = game.getPortfolios().get(savingRequest.getPlayer());
-        // 멤버 포트폴리오 - 적금
-        PortfolioSavings portfolioSavings = portfolio.getSavings();
-        //현재 은행 정보
-        Saving nowSavingInfo = findNowSavingInfo(game, savingRequest.getPlayer(), savingRequest.getBankId());
-        log.info(String.valueOf(portfolio.getMoney()));
-
-
-        gameValidator.canBuy(roomId, portfolio.getMoney(),nowSavingInfo.getMonthlyDeposit() );
-
-        // 가입 안되어 있는지 확인 
-        if(!checkHaveSaving(game, savingRequest.getPlayer(), savingRequest.getBankId())) {
-            PortfolioSaving nowSaving = PortfolioSaving.builder()
-                    .bankId(savingRequest.getBankId())
-                    .name(nowSavingInfo.getName())
-                    .monthlyDeposit(nowSavingInfo.getMonthlyDeposit())
-                    .currentPrice(nowSavingInfo.getMonthlyDeposit())
-                    .currentCount(1)
-                    .finishCount(nowSavingInfo.getFinishCount())
-                    .rate(nowSavingInfo.getRate())
-                    .build();
-
-            // 현재 은행 정보에 기반하여 가입
-            portfolio.setMoney(portfolio.getMoney()-nowSaving.getCurrentPrice());
-            portfolioSavings.setTotalPrice(portfolioSavings.getTotalPrice()+ nowSaving.getCurrentPrice());
-            portfolioSavings.setAmount(portfolioSavings.getAmount()+1);
-
-            if (portfolioSavings.getSavings() == null) portfolioSavings.setSavings(new HashMap<>());
-            portfolioSavings.getSavings().put(savingRequest.getBankId(), nowSaving);
-
-            // redis 저장
-            gameRepository.save(game);
-            log.info("============ 은행 적금 가입 : {} ============", game.getPortfolios().get(savingRequest.getPlayer()).getSavings().toString());
-        }
-
-    }
-
-    public void stopSavings(int roomId, SavingRequest savingRequest) {
-        //게임 방 조회
-        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
-
-        // 멤버 포트폴리오
-        Portfolio portfolio = game.getPortfolios().get(savingRequest.getPlayer());
-        // 멤버 포트폴리오 - 적금
-        PortfolioSavings portfolioSavings = portfolio.getSavings();
-        // 해지 대상 적금
-        PortfolioSaving nowSaving = portfolioSavings.getSavings().get(savingRequest.getBankId());
-
-        // 가입 되어있는지 확인
-        if(checkHaveSaving(game, savingRequest.getPlayer(), savingRequest.getBankId())) {
-            // 현재 은행 정보에 기반하여 해지
-            portfolio.setMoney(portfolio.getMoney() + nowSaving.getCurrentPrice());
-            portfolioSavings.setTotalPrice(portfolioSavings.getTotalPrice() - nowSaving.getCurrentPrice());
-            portfolioSavings.setAmount(portfolioSavings.getAmount()-1);
-
-            //적금 중도 해지
-            portfolioSavings.getSavings().remove(savingRequest.getBankId());
-            gameRepository.save(game);
-            log.info("============ 은행 적금 해지 : {} ============", game.getPortfolios().get(savingRequest.getPlayer()).getSavings().toString());
-        }
-
-    }
-
-    public void visitEventCard(int roomId, EventCardRequest eventCardRequest) {
-        //게임 방 조회
-        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
+        log.info(event.getEventMoney().toString());
+        log.info(event.getEventStock().toString());
 
         // 이벤트 랜덤 선정
+        Random random = new Random();
+
+        // 이벤트 카테고리 선정 (money stock)
+        int randomCategory = random.nextInt(2);
+
+        // 세부 이벤트 선정 및 적용
+        EventDto eventDto = EventDto.builder().build();
+
+        if(randomCategory == 0) {
+            EventMoney eventMoney = event.getEventMoney().get(random.nextInt(event.getEventMoney().size()));
+            EventMoneyDto eventMoneyDto = EventMoneyDto.builder()
+                    .eventMoneyId(eventMoney.getEventMoneyId())
+                    .insuranceTypeId(eventMoney.getInsuranceTypeId())
+                    .typeCode(eventMoney.getTypeCode())
+                    .typeName(eventMoney.getName())
+                    .name(eventMoney.getName())
+                    .description(eventMoney.getDescription())
+                    .money(eventMoney.getMoney())
+                    .url(eventMoney.getUrl())
+                    .build();
+            eventDto.setEventMoneyDto(eventMoneyDto);
+        }
+        else {
+            EventStock eventStock = event.getEventStock().get(random.nextInt(event.getEventStock().size()));
+            EventStockDto eventStockDto = EventStockDto.builder()
+                    .eventStockId(eventStock.getEventStockId())
+                    .stockIndustryId(eventStock.getStockIndustryId())
+                    .industry(eventStock.getIndustry())
+                    .name(eventStock.getName())
+                    .description(eventStock.getDescription())
+                    .rate(eventStock.getRate())
+                    .url(eventStock.getUrl())
+                    .build();
+            eventDto.setEventStockDto(eventStockDto);
+        }
 
 
         // 이벤트 적용
 
 
         // 어떤 이벤트인지 response 던져주기
+        EventCardResponse eventCardResponse = EventCardResponse.builder()
+                .eventDto(eventDto)
+                .build();
+
+        return eventCardResponse;
     }
 }

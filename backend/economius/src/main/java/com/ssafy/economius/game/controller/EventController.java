@@ -2,6 +2,7 @@ package com.ssafy.economius.game.controller;
 
 import com.ssafy.economius.game.dto.request.EventCardRequest;
 import com.ssafy.economius.game.dto.request.SavingRequest;
+import com.ssafy.economius.game.dto.response.EventCardResponse;
 import com.ssafy.economius.game.service.EventService;
 import com.sun.jdi.request.EventRequest;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,8 @@ public class EventController {
     @MessageMapping(value = "/{roomId}/eventCard")
     public void visitEventCard(@DestinationVariable int roomId, EventCardRequest eventCardRequest) {
         Map<String, Object> headers = Map.of("success", true);
-        eventService.visitEventCard(roomId, eventCardRequest);
-        template.convertAndSend("/sub/" + roomId, headers);
+        EventCardResponse eventCardResponse = eventService.visitEventCard(roomId, eventCardRequest);
+        template.convertAndSend("/sub/" + roomId, eventCardResponse, headers);
     }
 
 

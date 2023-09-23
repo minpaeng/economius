@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class EventCardRequest {
-
     private Long player;
 }
 

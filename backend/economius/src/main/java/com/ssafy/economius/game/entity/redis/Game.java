@@ -13,11 +13,7 @@ import java.util.Random;
 
 import com.ssafy.economius.game.entity.mysql.EventMoney;
 import com.ssafy.economius.game.entity.mysql.EventStock;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
@@ -29,6 +25,7 @@ import org.springframework.data.redis.core.RedisHash;
 @Builder
 @Slf4j
 @Data
+@ToString
 public class Game {
 
     @Id

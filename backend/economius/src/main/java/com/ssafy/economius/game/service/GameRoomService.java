@@ -75,16 +75,34 @@ public class GameRoomService {
         List<EventMoney> eventMonies = new ArrayList<>();
         List<EventStock> eventStocks = new ArrayList<>();
         for(EventMoneyDto eventDto : InitialData.EVENTS.getEventMonies()) {
-            log.info(eventDto.toString());
+            EventMoney eventMoney = EventMoney.builder()
+                    .eventMoneyId(eventDto.getEventMoneyId())
+                    .insuranceTypeId(eventDto.getInsuranceTypeId())
+                    .typeCode(eventDto.getTypeCode())
+                    .typeName(eventDto.getTypeName())
+                    .name(eventDto.getName())
+                    .description(eventDto.getDescription())
+                    .money(eventDto.getMoney())
+                    .url(eventDto.getUrl())
+                    .build();
+            eventMonies.add(eventMoney);
         }
         for(EventStockDto eventDto : InitialData.EVENTS.getEventStocks()) {
-            log.info(eventDto.toString());
+            EventStock eventStock = EventStock.builder()
+                    .eventStockId(eventDto.getEventStockId())
+                    .stockIndustryId(eventDto.getStockIndustryId())
+                    .industry(eventDto.getIndustry())
+                    .name(eventDto.getName())
+                    .description(eventDto.getDescription())
+                    .rate(eventDto.getRate())
+                    .url(eventDto.getUrl())
+                    .build();
+            eventStocks.add(eventStock);
         }
         Event event = Event.builder()
                 .eventMoney(eventMonies)
                 .eventStock(eventStocks)
                 .build();
-
         return event;
     }
 

@@ -4,6 +4,7 @@ import com.ssafy.economius.game.entity.mysql.StockIndustry;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -11,6 +12,7 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor
 @Builder
 @Getter
+@ToString
 public class EventStock {
     private int eventStockId;
     private int stockIndustryId;
