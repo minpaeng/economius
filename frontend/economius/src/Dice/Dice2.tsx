@@ -1,4 +1,4 @@
-import Dice from 'react-dice-roll';
+// import Dice from 'react-dice-roll';
 import './Dice2.css';
 
 export default function Dice2() {
@@ -13,7 +13,7 @@ export default function Dice2() {
                     left: '30%',
                 }}
             >
-                <Dice size={50} cheatValue={values[0]} />
+                {/* <Dice size={50} cheatValue={values[0]} /> */}
             </div>
             <div
                 className='Dice2'
@@ -23,7 +23,7 @@ export default function Dice2() {
                     left: '40%',
                 }}
             >
-                <Dice size={50} cheatValue={values[1]} />
+                {/* <Dice size={50} cheatValue={values[1]} /> */}
             </div>
         </>
     );
