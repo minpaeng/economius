@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface IssueStockRepository extends JpaRepository<IssueStock, Integer> {
 
-    @Query("select i from IssueStock i join fetch i.issue where i.issue.issueId = :issueId")
-    List<IssueStock> findIssueStockByIssueId(@Param("issueId") Integer issueId);
+    @Query("select i from IssueStock i join fetch i.issue")
+    List<IssueStock> findIssueWithIssue();
 }

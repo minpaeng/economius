@@ -80,6 +80,10 @@ public class InitialDataListener {
         log.info(InitialData.STOCKS.size() + " stocks loaded.");
         setInsuranceTypes();
         log.info(InitialData.INSURANCE_TYPE.size() + " insurance types loaded.");
+        setIssueStocks();
+        log.info(InitialData.INSURANCE_TYPE.size() + " issueStock loaded.");
+        setPrevIssues();
+        log.info(InitialData.INSURANCE_TYPE.size() + " prevIssue loaded.");
     }
 
     private void setSavings() {
@@ -162,35 +166,36 @@ public class InitialDataListener {
             tmp.setYear(issue.getYear());
             tmp.setDescription(issue.getDescription());
             tmp.setUrl(issue.getUrl());
-            setIssueStocks(tmp);
-            setPrevIssues(tmp);
             InitialData.ISSUES.add(tmp);
         }
     }
 
-    private void setIssueStocks(
-            IssueDto issueDto) {
-        List<IssueStock> issueStocks = issueStockRepository.findIssueStockByIssueId(issueDto.getIssueId());
+    private void setIssueStocks() {
+        List<IssueStock> issueStocks = issueStockRepository.findAll();
 
         for (IssueStock issueStock : issueStocks) {
             IssueStockDto tmp = new IssueStockDto();
             tmp.setIssueStockId(issueStock.getIssueStockId());
+            tmp.setIssueId(issueStock.getIssue().getIssueId());
+            tmp.setName(issueStock.getIssue().getName());
+            tmp.setType(issueStock.getIssue().typeByteToBoolean());
             tmp.setAssetType(issueStock.getAssetType());
             tmp.setAssetId(issueStock.getAssetId());
             tmp.setChangeUnit(issueStock.getChangeUnit());
             tmp.setChangeReason(issueStock.getChangeReason());
-            issueDto.getIssueStockDtos().add(tmp);
+            InitialData.ISSUE_STOCKS.add(tmp);
         }
     }
 
-    private void setPrevIssues(IssueDto issueDto) {
-        List<PrevIssue> prevIssues = prevIssueRepository.findPrevIssueByIssueId(issueDto.getIssueId());
+    private void setPrevIssues() {
+        List<PrevIssue> prevIssues = prevIssueRepository.findPrevIssueWithIssue();
 
         for (PrevIssue prevIssue : prevIssues) {
             PrevIssueDto tmp = new PrevIssueDto();
             tmp.setPrevIssueId(prevIssue.getPrevIssueId());
+            tmp.setIssueId(prevIssue.getIssue().getIssueId());
             tmp.setForetoken(prevIssue.getForetoken());
-            issueDto.getPrevIssueDtos().add(tmp);
+            InitialData.PREVISSUES.add(tmp);
         }
     }
 

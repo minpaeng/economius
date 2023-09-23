@@ -47,12 +47,16 @@ public class Game {
 
     // 경제 asset
     private Gold gold;
-    private Map<Integer, Issue> issues;
     private Map<Integer, Building> buildings; 
     private Map<Integer, Insurance> insurances;
     private Map<Integer, Stock> stocks; 
     private Map<Integer, Saving> savings;
     private InterestRate interestRate;
+
+    // 경제 이슈, 전조증상
+    private List<Issue> issues;
+    private int currentIssue;
+    private int currentPrevIssue;
 
     // 찬스 이벤트 -
     private List<EventStock> eventStock;

@@ -8,5 +8,6 @@ import lombok.Setter;
 public class PrevIssueDto {
 
     private Integer prevIssueId;
+    private Integer issueId;
     private String foretoken;
 }

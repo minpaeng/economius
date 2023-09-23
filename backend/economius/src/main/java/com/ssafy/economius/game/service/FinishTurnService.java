@@ -12,7 +12,7 @@ import static com.ssafy.economius.game.enums.RateEnum.STOCK_RATE_UPPER_BOUND;
 import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.repository.redis.GameRepository;
-import com.ssafy.economius.game.util.RearrangeRateUtil;
+import com.ssafy.economius.game.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -38,32 +38,40 @@ public class FinishTurnService {
             buildingRearrange(game);
             interestRateRearrange(game);
         }
+        // 전조증상 변경
+        changePrevIssue(gameTurn);
+
+        //
 
         gameRepository.save(game);
         return game;
     }
 
+    private void changePrevIssue(int gameTurn) {
+
+    }
+
     private void interestRateRearrange(Game game) {
-        int newPrice = RearrangeRateUtil.getRanges(INTEREST_RATE_LOWER_BOUND.getValue(),
+        int newPrice = RandomUtil.getRanges(INTEREST_RATE_LOWER_BOUND.getValue(),
             INTEREST_RATE_UPPER_BOUND.getValue());
         game.getInterestRate().updateBuildingPrice(newPrice);
     }
 
     private void buildingRearrange(Game game) {
         game.getBuildings().values().forEach(building -> building.updateBuildingPrice(
-            RearrangeRateUtil.getRanges(BUILDING_RATE_LOWER_BOUND.getValue(),
+            RandomUtil.getRanges(BUILDING_RATE_LOWER_BOUND.getValue(),
                 BUILDING_RATE_UPPER_BOUND.getValue())));
     }
 
     private void goldRearrange(Game game) {
-        int newRate = RearrangeRateUtil.getRanges(GOLD_RATE_LOWER_BOUND.getValue(),
+        int newRate = RandomUtil.getRanges(GOLD_RATE_LOWER_BOUND.getValue(),
             GOLD_RATE_UPPER_BOUND.getValue());
         game.getGold().updateGoldPrice(newRate);
     }
 
     private void stockRearrange(Game game, int round) {
         game.getStocks().values().forEach(
-            stock -> stock.updateStockPriceAndRate(RearrangeRateUtil.getRanges
+            stock -> stock.updateStockPriceAndRate(RandomUtil.getRanges
                 (STOCK_RATE_LOWER_BOUND.getValue(), STOCK_RATE_UPPER_BOUND.getValue()), round));
     }
 }
