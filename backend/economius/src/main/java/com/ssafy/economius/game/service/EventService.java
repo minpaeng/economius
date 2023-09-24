@@ -45,6 +45,7 @@ public class EventService {
         // 세부 이벤트 선정 및 적용
         EventDto eventDto = EventDto.builder().build();
 
+        // Money 이벤트 발생
         if(randomCategory == 0) {
             EventMoney eventMoney = event.getEventMoney().get(random.nextInt(event.getEventMoney().size()));
             EventMoneyDto eventMoneyDto = EventMoneyDto.builder()
@@ -58,7 +59,10 @@ public class EventService {
                     .url(eventMoney.getUrl())
                     .build();
             eventDto.setEventMoneyDto(eventMoneyDto);
+
+            // 모든 플레이어의 보험 확인 & 적용
         }
+        // Stock 이벤트 발생
         else {
             EventStock eventStock = event.getEventStock().get(random.nextInt(event.getEventStock().size()));
             EventStockDto eventStockDto = EventStockDto.builder()
@@ -71,6 +75,8 @@ public class EventService {
                     .url(eventStock.getUrl())
                     .build();
             eventDto.setEventStockDto(eventStockDto);
+
+            // 해당 주식 업종 시세 적용
         }
 
 
