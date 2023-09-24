@@ -6,12 +6,11 @@ import static com.ssafy.economius.game.enums.RateEnum.MOVEMENT_CARD_UPPER_BOUND;
 
 import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.dto.message.DiceTurnMessage;
-import com.ssafy.economius.game.dto.response.DiceRollResponse;
+import com.ssafy.economius.game.dto.response.MovePlayerResponse;
 import com.ssafy.economius.game.dto.response.ViewMovementCardResponse;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import com.ssafy.economius.game.util.RandomUtil;
-import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,17 +43,15 @@ public class DiceService {
         return new DiceTurnMessage(game.getPlayerSequence());
     }
 
-    public DiceRollResponse rollDice(int roomId, Long player) {
-        Random random = new Random();
-        int diceNumber = random.nextInt(6) + 1;
-
+    public MovePlayerResponse movePlayer(int roomId, Long player, int movementCount) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
-        int nextLocation = game.rearrangePlayer(diceNumber, player);
+        int nextLocation = game.rearrangePlayer(movementCount, player);
 
         gameRepository.save(game);
-        return DiceRollResponse.builder()
+
+        return MovePlayerResponse.builder()
             .location(nextLocation)
-            .moveCount(diceNumber)
+            .movementCount(movementCount)
             .player(player)
             .build();
     }

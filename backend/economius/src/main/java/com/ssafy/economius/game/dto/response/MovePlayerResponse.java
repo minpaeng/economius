@@ -7,9 +7,9 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class DiceRollResponse {
+public class MovePlayerResponse {
 
-    private int moveCount;
+    private int movementCount;
     private Long player;
     private int location;
 }

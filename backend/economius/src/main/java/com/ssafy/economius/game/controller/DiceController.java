@@ -1,8 +1,8 @@
 package com.ssafy.economius.game.controller;
 
-import com.ssafy.economius.game.dto.request.RollDiceRequest;
+import com.ssafy.economius.game.dto.request.MovePlayerRequest;
 import com.ssafy.economius.game.dto.request.ViewMovementCardRequest;
-import com.ssafy.economius.game.dto.response.DiceRollResponse;
+import com.ssafy.economius.game.dto.response.MovePlayerResponse;
 import com.ssafy.economius.game.dto.response.ViewMovementCardResponse;
 import com.ssafy.economius.game.service.DiceService;
 import java.util.Map;
@@ -33,15 +33,15 @@ public class DiceController {
         template.convertAndSend("/sub/" + roomId, viewMovementCardResponse, headers);
     }
 
-    @MessageMapping(value = "/{roomId}/rollDice")
-    public void rollDice(@DestinationVariable int roomId, RollDiceRequest rollDiceRequest) {
-        log.info(rollDiceRequest.toString());
-        DiceRollResponse diceRollResponse = diceService.rollDice(roomId,
-            rollDiceRequest.getPlayer());
+    @MessageMapping(value = "/{roomId}/movePlayer")
+    public void movePlayer(@DestinationVariable int roomId, MovePlayerRequest movePlayerRequest) {
+        log.info("roomId : " + roomId + " -> movePlayer 호출");
 
-        //todo 해더설정
-        template.convertAndSend("/sub/" + roomId, diceRollResponse);
+        MovePlayerResponse movePlayerResponse = diceService.movePlayer(roomId,
+            movePlayerRequest.getPlayer(), movePlayerRequest.getMovementCount());
+
+        Map<String, Object> headers = Map.of("success", true);
+        template.convertAndSend("/sub/" + roomId, movePlayerResponse, headers);
     }
-
 
 }
