@@ -31,27 +31,15 @@ public class StockService {
          * 징수한 돈을 100으로 나눈값 * 주식 보유량을 기준으로 플레이어들에게 전송
          */
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
-
         Portfolio portfolio = game.getPortfolios().get(buyPlayer);
-
         Stock stock = game.getStocks().get(stockId);
 
         if (portfolio.getMoney() - stock.getPrice() < 0) {
             gameValidator.throwBankruptcyResponse(roomId, buyPlayer);
         }
 
-        portfolio.setMoney(portfolio.getMoney() - stock.getPrice());
-
-        Map<Long, Integer> owners = stock.getOwners();
-        for (Long player : owners.keySet()) {
-            if (owners.get(player) != 0) {
-                Portfolio portfolio1 = game.getPortfolios().get(player);
-                portfolio1.setMoney(portfolio1.getMoney()
-                    + (int) ((double) owners.get(player) / 100 * stock.getPrice()));
-                log.info(player + " : " + portfolio1.getMoney());
-                portfolio1.updateTotalMoney();
-            }
-        }
+        portfolio.spendMoney(stock.getPrice());
+        sendMoneyToStockDividends(game, stock);
 
         gameRepository.save(game);
         return new BuyItemResponse(buyPlayer);
@@ -104,6 +92,18 @@ public class StockService {
                 .code(GameRoomMessage.NOT_ENOUGH_STOCK.getCode())
                 .message(GameRoomMessage.NOT_ENOUGH_STOCK.getMessage())
                 .build();
+        }
+    }
+
+    private static void sendMoneyToStockDividends(Game game, Stock stock) {
+        Map<Long, Integer> owners = stock.getOwners();
+        for (Long player : owners.keySet()) {
+            if (owners.get(player) != 0) {
+                Portfolio beneficiaryPortfolio = game.getPortfolios().get(player);
+                beneficiaryPortfolio.updateMoneyAndTotalMoneyByStockDividends(
+                    owners.get(player), stock.getPrice());
+                log.info(player + " : " + beneficiaryPortfolio.getMoney());
+            }
         }
     }
 
