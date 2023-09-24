@@ -20,7 +20,7 @@ public class PortfolioStocks {
 
     private Map<Integer, PortfolioStock> stocks;
 
-    public void updateStock(Stock stock){
+    public void updatePortfolioStockByStockChange(Stock stock){
         log.info("updateStock : " + stock.getStockId() + " : " + stock);
         if (stocks == null) {
             return;
@@ -30,7 +30,7 @@ public class PortfolioStocks {
         }
     }
 
-    public void updatePortfolioStock(Stock stock, int changeAmount) {
+    public void updatePortfolioStockByDeal(Stock stock, int changeAmount) {
         totalPrice += stock.getPrice() * changeAmount;
         amount += changeAmount;
 

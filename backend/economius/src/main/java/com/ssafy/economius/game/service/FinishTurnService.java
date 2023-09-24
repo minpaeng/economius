@@ -149,6 +149,6 @@ public class FinishTurnService {
         stock.updateStockPriceAndRate(newRate, round);
         log.info("게임 턴 변경 ->" + stock);
         game.getPortfolios().values()
-                .forEach(portfolio -> portfolio.getStocks().updateStock(stock));
+                .forEach(portfolio -> portfolio.getStocks().updatePortfolioStockByStockChange(stock));
     }
 }

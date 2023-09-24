@@ -57,7 +57,7 @@ public class StockService {
 
         // 모두 통과했다..
         stock.dealStock(player, stockAmount);
-        portfolio.getStocks().updatePortfolioStock(stock, stockAmount);
+        portfolio.getStocks().updatePortfolioStockByDeal(stock, stockAmount);
 
         gameRepository.save(game);
 
@@ -74,7 +74,7 @@ public class StockService {
         validateStockToBuy(roomId, stockAmount, stock, portfolio);
 
         stock.dealStock(player, stockAmount);
-        portfolio.getStocks().updatePortfolioStock(stock, stockAmount);
+        portfolio.getStocks().updatePortfolioStockByDeal(stock, stockAmount);
 
         gameRepository.save(game);
 
