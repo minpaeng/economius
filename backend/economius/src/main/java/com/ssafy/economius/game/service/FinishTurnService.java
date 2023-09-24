@@ -33,27 +33,25 @@ public class FinishTurnService {
             interestRateRearrange(game);
 
             changePrevIssue(game, round);
+            checkIssueRound(game, round);
         }
-
-        // 경제 이슈
-        checkIssueRound(round);
 
         gameRepository.save(game);
         return game;
     }
 
-    // 전조증상 변경
     private void changePrevIssue(Game game, int round) {
         if (round % 4 != 3) return;
-
         int idx = game.getIssueIdx() + 1;
         game.setIssueIdx(idx);
         game.setCurrentPrevIssue(
                 InitialData.getPrevIssue(game.getIssues().get(idx).getIssueId()));
+        game.setCurrentIssue(null);
     }
 
-    // 경제 이슈 설정
-    private void checkIssueRound(int round) {
+    private void checkIssueRound(Game game, int round) {
+        if (round % 4 != 0) return;
+        game.setCurrentIssue(game.getIssues().get(game.getIssueIdx()));
     }
 
     private void interestRateRearrange(Game game) {
