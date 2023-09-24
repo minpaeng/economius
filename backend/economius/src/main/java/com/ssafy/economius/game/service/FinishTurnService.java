@@ -1,20 +1,14 @@
 package com.ssafy.economius.game.service;
 
-import static com.ssafy.economius.game.enums.RateEnum.BUILDING_RATE_LOWER_BOUND;
-import static com.ssafy.economius.game.enums.RateEnum.BUILDING_RATE_UPPER_BOUND;
-import static com.ssafy.economius.game.enums.RateEnum.GOLD_RATE_LOWER_BOUND;
-import static com.ssafy.economius.game.enums.RateEnum.GOLD_RATE_UPPER_BOUND;
-import static com.ssafy.economius.game.enums.RateEnum.INTEREST_RATE_LOWER_BOUND;
-import static com.ssafy.economius.game.enums.RateEnum.INTEREST_RATE_UPPER_BOUND;
-import static com.ssafy.economius.game.enums.RateEnum.STOCK_RATE_LOWER_BOUND;
-import static com.ssafy.economius.game.enums.RateEnum.STOCK_RATE_UPPER_BOUND;
-
 import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.entity.redis.Game;
+import com.ssafy.economius.game.enums.InitialData;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import com.ssafy.economius.game.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import static com.ssafy.economius.game.enums.RateEnum.*;
 
 @Component
 @RequiredArgsConstructor
@@ -37,18 +31,29 @@ public class FinishTurnService {
             goldRearrange(game);
             buildingRearrange(game);
             interestRateRearrange(game);
-        }
-        // 전조증상 변경
-        changePrevIssue(gameTurn);
 
-        //
+            changePrevIssue(game, round);
+        }
+
+        // 경제 이슈
+        checkIssueRound(round);
 
         gameRepository.save(game);
         return game;
     }
 
-    private void changePrevIssue(int gameTurn) {
+    // 전조증상 변경
+    private void changePrevIssue(Game game, int round) {
+        if (round % 4 != 3) return;
 
+        int idx = game.getIssueIdx() + 1;
+        game.setIssueIdx(idx);
+        game.setCurrentPrevIssue(
+                InitialData.getPrevIssue(game.getIssues().get(idx).getIssueId()));
+    }
+
+    // 경제 이슈 설정
+    private void checkIssueRound(int round) {
     }
 
     private void interestRateRearrange(Game game) {

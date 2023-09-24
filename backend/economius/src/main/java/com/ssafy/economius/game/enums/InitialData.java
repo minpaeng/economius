@@ -21,10 +21,13 @@ public class InitialData {
     public static Map<String, VolatileDto> VOLATILES = new HashMap<>();
     public static EventDto EVENTS = new EventDto();
     public static List<InsuranceDto> INSURANCES = new ArrayList<>();
-    public static List<IssueDto> ISSUES = new ArrayList<>();
+    public static Map<Integer, IssueDto> ISSUES = new HashMap<>();
     public static List<IssueStockDto> ISSUE_STOCKS = new ArrayList<>();
-    public static List<PrevIssueDto> PREVISSUES = new ArrayList<>();
     public static List<StockIndustryDto> STOCK_INDUSTRIES = new ArrayList<>();
     public static List<StockDto> STOCKS = new ArrayList<>();
     public static List<InsuranceTypeDto> INSURANCE_TYPE = new ArrayList<>();
+
+    public static List<PrevIssueDto> getPrevIssue(int issueId) {
+        return ISSUES.get(issueId).getPrevIssues();
+    }
 }

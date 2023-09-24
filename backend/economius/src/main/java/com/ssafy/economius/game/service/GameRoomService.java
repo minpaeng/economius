@@ -2,8 +2,6 @@ package com.ssafy.economius.game.service;
 
 import com.ssafy.economius.game.dto.mysql.InsuranceDto;
 import com.ssafy.economius.game.dto.mysql.IssueDto;
-import com.ssafy.economius.game.dto.mysql.IssueStockDto;
-import com.ssafy.economius.game.dto.mysql.PrevIssueDto;
 import com.ssafy.economius.game.dto.mysql.SavingsDto;
 import com.ssafy.economius.game.dto.mysql.StockDto;
 import com.ssafy.economius.game.dto.mysql.VolatileDto;
@@ -16,8 +14,6 @@ import com.ssafy.economius.game.entity.redis.Gold;
 import com.ssafy.economius.game.entity.redis.Insurance;
 import com.ssafy.economius.game.entity.redis.InterestRate;
 import com.ssafy.economius.game.entity.redis.Issue;
-import com.ssafy.economius.game.entity.redis.IssueAssetChange;
-import com.ssafy.economius.game.entity.redis.PrevIssue;
 import com.ssafy.economius.game.entity.redis.Price;
 import com.ssafy.economius.game.entity.redis.Saving;
 import com.ssafy.economius.game.entity.redis.Stock;
@@ -25,8 +21,6 @@ import com.ssafy.economius.game.enums.InitialData;
 import com.ssafy.economius.game.enums.IssueEnum;
 import com.ssafy.economius.game.enums.RateEnum;
 import com.ssafy.economius.game.repository.redis.GameRepository;
-import com.ssafy.economius.game.repository.redis.IssueAssetChangeRepository;
-import com.ssafy.economius.game.repository.redis.PrevIssueRepository;
 import com.ssafy.economius.game.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,8 +40,6 @@ import static com.ssafy.economius.game.enums.VolatileEnum.*;
 public class GameRoomService {
 
     private final GameRepository gameRepository;
-    private final IssueAssetChangeRepository issueAssetChangeRepository;
-    private final PrevIssueRepository prevIssueRepository;
 
     public CreateRoomResponse createRoom(Long player) {
         // Redis에서 현제 키값들을 다 불러오는 기능
@@ -60,48 +52,21 @@ public class GameRoomService {
         }
         roomId++;
         creatRoomOnRedis(roomId, player);
-        createIssueAssetChangeOnRedis();
-        createPrevIssueOnRedis();
 
         return new CreateRoomResponse(roomId);
     }
 
-    private void createIssueAssetChangeOnRedis() {
-        List<IssueAssetChange> list = new ArrayList<>();
-        for (IssueStockDto issueStockDto : InitialData.ISSUE_STOCKS) {
-            issueStockDto.setIssueStockId(issueStockDto.getIssueStockId());
-            issueStockDto.setIssueId(issueStockDto.getIssueId());
-            issueStockDto.setName(issueStockDto.getName());
-            issueStockDto.setType(issueStockDto.isType());
-            issueStockDto.setAssetId(issueStockDto.getAssetId());
-            issueStockDto.setAssetType(issueStockDto.getAssetType());
-            issueStockDto.setChangeUnit(issueStockDto.getChangeUnit());
-            issueStockDto.setChangeReason(issueStockDto.getChangeReason());
-        }
-        issueAssetChangeRepository.saveAll(list);
-    }
-
-    private void createPrevIssueOnRedis() {
-        List<PrevIssue> list = new ArrayList<>();
-        for (PrevIssueDto prevIssueDto : InitialData.PREVISSUES) {
-            PrevIssue prevIssue = PrevIssue.builder()
-                    .prevIssueId(prevIssueDto.getPrevIssueId())
-                    .issueId(prevIssueDto.getIssueId())
-                    .foretoken(prevIssueDto.getForetoken())
-                    .build();
-            list.add(prevIssue);
-        }
-        prevIssueRepository.saveAll(list);
-    }
-
     private void creatRoomOnRedis(int roomId, Long player) {
+        List<Issue> issues = makeIssues();
+
         Game game = Game.builder()
                 .players(new ArrayList<>(List.of(player)))
                 .gameTurn(0)
                 .roomId(roomId)
                 .interestRate(makeInterestRate())
                 .gold(makeGold())
-                .issues(makeIssues())
+                .issues(issues)
+                .currentPrevIssue(InitialData.getPrevIssue(issues.get(0).getIssueId()))
                 .stocks(makeStocks())
                 .savings(makeSavings())
                 .insurances(makeInsurance())
@@ -111,7 +76,6 @@ public class GameRoomService {
                 .eventMoney(makeEventMoney())
                 .eventStock(makeEventStock())
             .build();
-
         gameRepository.save(game);
     }
 

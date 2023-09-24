@@ -82,8 +82,6 @@ public class InitialDataListener {
         log.info(InitialData.INSURANCE_TYPE.size() + " insurance types loaded.");
         setIssueStocks();
         log.info(InitialData.INSURANCE_TYPE.size() + " issueStock loaded.");
-        setPrevIssues();
-        log.info(InitialData.INSURANCE_TYPE.size() + " prevIssue loaded.");
     }
 
     private void setSavings() {
@@ -166,7 +164,8 @@ public class InitialDataListener {
             tmp.setYear(issue.getYear());
             tmp.setDescription(issue.getDescription());
             tmp.setUrl(issue.getUrl());
-            InitialData.ISSUES.add(tmp);
+            setPrevIssues(issue.getIssueId(), tmp.getPrevIssues());
+            InitialData.ISSUES.put(tmp.getIssueId(), tmp);
         }
     }
 
@@ -187,15 +186,15 @@ public class InitialDataListener {
         }
     }
 
-    private void setPrevIssues() {
-        List<PrevIssue> prevIssues = prevIssueRepository.findPrevIssueWithIssue();
+    private void setPrevIssues(int issueId, List<PrevIssueDto> list) {
+        List<PrevIssue> prevIssues = prevIssueRepository.findPrevIssueByIssueId(issueId);
 
         for (PrevIssue prevIssue : prevIssues) {
             PrevIssueDto tmp = new PrevIssueDto();
             tmp.setPrevIssueId(prevIssue.getPrevIssueId());
             tmp.setIssueId(prevIssue.getIssue().getIssueId());
             tmp.setForetoken(prevIssue.getForetoken());
-            InitialData.PREVISSUES.add(tmp);
+            list.add(tmp);
         }
     }
 
