@@ -50,6 +50,10 @@ public class PortfolioBuildings {
         this.building.put(buildingId, portfolioBuilding);
     }
 
+    public void updateBuildingInfo(int buildingId, Building building) {
+        this.building.get(buildingId).setBuilding(building);
+    }
+
     private void setEarnings() {
         int totalBoughtPrice = 0;
         int totalCurrentPrice = 0;

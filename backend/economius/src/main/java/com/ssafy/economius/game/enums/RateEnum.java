@@ -9,6 +9,7 @@ public enum RateEnum {
     INITIAL_ZERO_VALUE(0),
     MAX_GAME_TURN(25),
     INITIAL_MONEY(500_000_000),
+    ISSUE_COUNT(5),
 
     FIRST_PRIZE_TAX(15),
     SECOND_PRIZE_TAX(10),
@@ -33,7 +34,14 @@ public enum RateEnum {
     INTEREST_RATE_LOWER_BOUND(-5),
     INTEREST_RATE_UPPER_BOUND(10),
 
-    MAX_BOARD_SIZE(36);
+    MAX_BOARD_SIZE(36),
+    STOCK_DIVIDENDS_RATE(100),
+
+    MOVEMENT_CARD_LOWER_BOUND(1),
+    MOVEMENT_CARD_UPPER_BOUND(10),
+    MOVEMENT_CARD_SIZE(3),
+    ;
+
 
 
     private final int value;

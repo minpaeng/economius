@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import com.ssafy.economius.game.dto.mysql.PrevIssueDto;
 import com.ssafy.economius.game.entity.mysql.EventMoney;
 import com.ssafy.economius.game.entity.mysql.EventStock;
 import lombok.*;
@@ -49,6 +50,12 @@ public class Game {
     private Map<Integer, Stock> stocks; 
     private Map<Integer, Saving> savings;
     private InterestRate interestRate;
+
+    // 경제 이슈, 전조증상
+    private int issueIdx;
+    private List<Issue> issues;
+    private Issue currentIssue;
+    private List<PrevIssueDto> currentPrevIssue;
 
     // 찬스 이벤트 -
     private Event event;

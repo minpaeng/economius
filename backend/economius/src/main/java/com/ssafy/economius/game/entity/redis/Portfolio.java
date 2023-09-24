@@ -1,6 +1,14 @@
 package com.ssafy.economius.game.entity.redis;
 
-import lombok.*;
+import static com.ssafy.economius.game.enums.RateEnum.*;
+
+import com.ssafy.economius.game.enums.RateEnum;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,6 +25,16 @@ public class Portfolio {
     private PortfolioBuildings buildings;
     private PortfolioStocks stocks;
     private PortfolioInsurances insurances;
+
+    public void spendMoney(int price) {
+        this.money -= price;
+        updateTotalMoney();
+    }
+
+    public void updateMoneyAndTotalMoneyByStockDividends(int stockAmount, int stockPrice) {
+        this.money += (int) ((double) stockAmount / STOCK_DIVIDENDS_RATE.getValue() * stockPrice);
+        updateTotalMoney();
+    }
 
     public void updateTotalMoney() {
         this.totalMoney =
@@ -42,14 +60,14 @@ public class Portfolio {
     @Override
     public String toString() {
         return "Portfolio{" +
-                "player=" + player +
-                ", money=" + money +
-                ", totalMoney=" + totalMoney +
-                ", gold=" + gold +
-                ", savings=" + savings +
-                ", buildings=" + buildings +
-                ", stocks=" + stocks +
-                ", insurances=" + insurances +
-                '}';
+            "player=" + player +
+            ", money=" + money +
+            ", totalMoney=" + totalMoney +
+            ", gold=" + gold +
+            ", savings=" + savings +
+            ", buildings=" + buildings +
+            ", stocks=" + stocks +
+            ", insurances=" + insurances +
+            '}';
     }
 }

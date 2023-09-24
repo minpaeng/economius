@@ -19,15 +19,39 @@ import static com.ssafy.economius.game.enums.VolatileEnum.SHOP;
 import com.ssafy.economius.game.dto.mysql.*;
 import com.ssafy.economius.game.dto.response.CreateRoomResponse;
 import com.ssafy.economius.game.entity.redis.*;
+import com.ssafy.economius.game.dto.mysql.InsuranceDto;
+import com.ssafy.economius.game.dto.mysql.IssueDto;
+import com.ssafy.economius.game.dto.mysql.SavingsDto;
+import com.ssafy.economius.game.dto.mysql.StockDto;
+import com.ssafy.economius.game.dto.mysql.VolatileDto;
+import com.ssafy.economius.game.dto.response.CreateRoomResponse;
+import com.ssafy.economius.game.entity.mysql.EventMoney;
+import com.ssafy.economius.game.entity.mysql.EventStock;
+import com.ssafy.economius.game.entity.redis.Building;
+import com.ssafy.economius.game.entity.redis.Game;
+import com.ssafy.economius.game.entity.redis.Gold;
+import com.ssafy.economius.game.entity.redis.Insurance;
+import com.ssafy.economius.game.entity.redis.InterestRate;
+import com.ssafy.economius.game.entity.redis.Issue;
+import com.ssafy.economius.game.entity.redis.Price;
+import com.ssafy.economius.game.entity.redis.Saving;
+import com.ssafy.economius.game.entity.redis.Stock;
 import com.ssafy.economius.game.enums.InitialData;
+import com.ssafy.economius.game.enums.IssueEnum;
+import com.ssafy.economius.game.enums.RateEnum;
 import com.ssafy.economius.game.repository.redis.GameRepository;
+import com.ssafy.economius.game.util.RandomUtil;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+
+import static com.ssafy.economius.game.enums.RateEnum.*;
+import static com.ssafy.economius.game.enums.VolatileEnum.*;
 
 @Service
 @Slf4j
@@ -35,7 +59,6 @@ import org.springframework.stereotype.Service;
 public class GameRoomService {
 
     private final GameRepository gameRepository;
-
 
     public CreateRoomResponse createRoom(Long player) {
         // Redis에서 현제 키값들을 다 불러오는 기능
@@ -53,12 +76,16 @@ public class GameRoomService {
     }
 
     private void creatRoomOnRedis(int roomId, Long player) {
+        List<Issue> issues = makeIssues();
+
         Game game = Game.builder()
                 .players(new ArrayList<>(List.of(player)))
                 .gameTurn(0)
                 .roomId(roomId)
                 .interestRate(makeInterestRate())
                 .gold(makeGold())
+                .issues(issues)
+                .currentPrevIssue(InitialData.getPrevIssue(issues.get(0).getIssueId()))
                 .stocks(makeStocks())
                 .savings(makeSavings())
                 .insurances(makeInsurance())
@@ -109,27 +136,54 @@ public class GameRoomService {
 
     private static Map<Integer, Integer> makeTax() {
         return Map.of(FIRST_PRIZE.getValue(), FIRST_PRIZE_TAX.getValue(),
-            SECOND_PRIZE.getValue(), SECOND_PRIZE_TAX.getValue(),
-            THIRD_PRIZE.getValue(), THIRD_PRIZE_TAX.getValue(),
-            FOURTH_PRIZE.getValue(), FOURTH_PRIZE_TAX.getValue());
+                SECOND_PRIZE.getValue(), SECOND_PRIZE_TAX.getValue(),
+                THIRD_PRIZE.getValue(), THIRD_PRIZE_TAX.getValue(),
+                FOURTH_PRIZE.getValue(), FOURTH_PRIZE_TAX.getValue());
     }
 
     private InterestRate makeInterestRate() {
         return InterestRate.builder()
-            .rate(INITIAL_INTEREST_RATE.getValue())
-            .rateHistory(new ArrayList<>(List.of(INITIAL_INTEREST_RATE.getValue())))
-            .build();
+                .rate(INITIAL_INTEREST_RATE.getValue())
+                .rateHistory(new ArrayList<>(List.of(INITIAL_INTEREST_RATE.getValue())))
+                .build();
     }
 
     private Gold makeGold() {
         VolatileDto gold = InitialData.VOLATILES.get(GOLD.getValue());
 
         return Gold.builder()
-            .price(gold.getInitialValue())
-            .priceHistory(new ArrayList<>(List.of(gold.getInitialValue())))
-            .rate(INITIAL_ZERO_VALUE.getValue())
-            .rateHistory(new ArrayList<>(List.of(0)))
-            .build();
+                .price(gold.getInitialValue())
+                .priceHistory(new ArrayList<>(List.of(gold.getInitialValue())))
+                .rate(INITIAL_ZERO_VALUE.getValue())
+                .rateHistory(new ArrayList<>(List.of(0)))
+                .build();
+    }
+
+    private List<Issue> makeIssues() {
+        List<Issue> issues = new ArrayList<>();
+        List<Integer> list = pickIssues();
+
+        for (int idx : list) {
+            IssueDto issue = InitialData.ISSUES.get(idx);
+            Issue tmpIssue = Issue.builder()
+                    .issueId(issue.getIssueId())
+                    .name(issue.getName())
+                    .type(issue.isType() ? IssueEnum.BOOM : IssueEnum.DEPRESSION)
+                    .country(issue.getCountry())
+                    .year(issue.getYear())
+                    .description(issue.getDescription())
+                    .url(issue.getUrl())
+                    .build();
+            issues.add(tmpIssue);
+        }
+        return issues;
+    }
+
+    private List<Integer> pickIssues() {
+        int size = RateEnum.ISSUE_COUNT.getValue();
+        int lowerBound = 0;
+        int upperBound = InitialData.ISSUES.size() - 1;
+        return RandomUtil.getUniqueRandomNumbers(size, lowerBound, upperBound);
     }
 
     private Map<Integer, Stock> makeStocks() {
@@ -137,24 +191,25 @@ public class GameRoomService {
 
         for (StockDto stock : InitialData.STOCKS) {
             Stock tmpStock = Stock.builder()
-                .name(stock.getCompany())
-                .companyCategory(stock.getIndustry())
-                .companySubCategory(stock.getType())
-                .owners(new HashMap<>())
-                .rateHistory(new ArrayList<>(List.of(0)))
-                .rate(INITIAL_ZERO_VALUE.getValue())
-                .priceHistory(new ArrayList<>())
-                .price(stock.getInitialValue())
-                .priceHistory(
-                    new ArrayList<>(List.of(
-                        Price.builder()
-                            .closingPrice(stock.getInitialValue())
-                            .highPrice(stock.getInitialValue())
-                            .lowPrice(stock.getInitialValue())
-                            .openingPrice(stock.getInitialValue())
-                            .build()))
-                )
-                .build();
+                    .stockId(stock.getStockId())
+                    .name(stock.getCompany())
+                    .companyCategory(stock.getIndustry())
+                    .companySubCategory(stock.getType())
+                    .owners(new HashMap<>())
+                    .rateHistory(new ArrayList<>(List.of(0)))
+                    .rate(INITIAL_ZERO_VALUE.getValue())
+                    .price(stock.getInitialValue())
+                    .priceHistory(
+                            new ArrayList<>(List.of(
+                                    Price.builder()
+                                            .closingPrice(stock.getInitialValue())
+                                            .highPrice(stock.getInitialValue())
+                                            .lowPrice(stock.getInitialValue())
+                                            .openingPrice(stock.getInitialValue())
+                                            .build()))
+                    )
+                    .remainingAmount(100)
+                    .build();
 
             stocks.put(stock.getStockId(), tmpStock);
         }
@@ -167,11 +222,11 @@ public class GameRoomService {
 
         for (SavingsDto saving : InitialData.SAVINGS) {
             Saving tmpSaving = Saving.builder()
-                .name(saving.getSavingName())
-                .monthlyDeposit(saving.getMonthlyDeposit())
-                .rate(saving.getRate())
-                .finishCount(saving.getFinishCount())
-                .build();
+                    .name(saving.getSavingName())
+                    .monthlyDeposit(saving.getMonthlyDeposit())
+                    .rate(saving.getRate())
+                    .finishCount(saving.getFinishCount())
+                    .build();
 
             //log.info(saving.getBankId().toString());
             savings.put(saving.getBankId(), tmpSaving);
@@ -185,13 +240,13 @@ public class GameRoomService {
 
         for (InsuranceDto insurance : InitialData.INSURANCES) {
             Insurance tmpInsurance = Insurance.builder()
-                .guaranteeRate(insurance.getGuaranteeRate())
-                .categoryCode(Character.toString(insurance.getProductCode().charAt(1)))
-                .category(insurance.getTypeCode())
-                .productCode(insurance.getProductCode())
-                .productName(insurance.getProductName())
-                .monthlyDeposit(insurance.getMonthlyDeposit())
-                .build();
+                    .guaranteeRate(insurance.getGuaranteeRate())
+                    .categoryCode(Character.toString(insurance.getProductCode().charAt(1)))
+                    .category(insurance.getTypeCode())
+                    .productCode(insurance.getProductCode())
+                    .productName(insurance.getProductName())
+                    .monthlyDeposit(insurance.getMonthlyDeposit())
+                    .build();
             //log.info(insurance.toString());
             insurances.put(insurance.getInsuranceId(), tmpInsurance);
         }
@@ -203,19 +258,19 @@ public class GameRoomService {
         Map<Integer, Building> buildings = new HashMap<>();
 
         List<VolatileDto> tmpBuildings = List.of(
-            InitialData.VOLATILES.get(HOTEL.getValue()),
-            InitialData.VOLATILES.get(SHOP.getValue()),
-            InitialData.VOLATILES.get(RESTAURANT.getValue()));
+                InitialData.VOLATILES.get(HOTEL.getValue()),
+                InitialData.VOLATILES.get(SHOP.getValue()),
+                InitialData.VOLATILES.get(RESTAURANT.getValue()));
 
         for (VolatileDto building : tmpBuildings) {
             Building tmpBuilding = Building.builder()
-                .name(building.getName())
-                .ownerId(null)
-                .priceHistory(new ArrayList<>(List.of(building.getInitialValue())))
-                .rateHistory(new ArrayList<>(List.of(0)))
-                .price(building.getInitialValue())
-                .rate(INITIAL_ZERO_VALUE.getValue())
-                .build();
+                    .name(building.getName())
+                    .ownerId(null)
+                    .priceHistory(new ArrayList<>(List.of(building.getInitialValue())))
+                    .rateHistory(new ArrayList<>(List.of(0)))
+                    .price(building.getInitialValue())
+                    .rate(INITIAL_ZERO_VALUE.getValue())
+                    .build();
 
             buildings.put(building.getVolatileId(), tmpBuilding);
         }
