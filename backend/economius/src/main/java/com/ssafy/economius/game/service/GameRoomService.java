@@ -1,22 +1,7 @@
 package com.ssafy.economius.game.service;
 
-import static com.ssafy.economius.game.enums.RateEnum.FIRST_PRIZE;
-import static com.ssafy.economius.game.enums.RateEnum.FIRST_PRIZE_TAX;
-import static com.ssafy.economius.game.enums.RateEnum.FOURTH_PRIZE;
-import static com.ssafy.economius.game.enums.RateEnum.FOURTH_PRIZE_TAX;
-import static com.ssafy.economius.game.enums.RateEnum.INITIAL_INTEREST_RATE;
-import static com.ssafy.economius.game.enums.RateEnum.INITIAL_ZERO_VALUE;
-import static com.ssafy.economius.game.enums.RateEnum.MAX_GAME_TURN;
-import static com.ssafy.economius.game.enums.RateEnum.SECOND_PRIZE;
-import static com.ssafy.economius.game.enums.RateEnum.SECOND_PRIZE_TAX;
-import static com.ssafy.economius.game.enums.RateEnum.THIRD_PRIZE;
-import static com.ssafy.economius.game.enums.RateEnum.THIRD_PRIZE_TAX;
-import static com.ssafy.economius.game.enums.VolatileEnum.GOLD;
-import static com.ssafy.economius.game.enums.VolatileEnum.HOTEL;
-import static com.ssafy.economius.game.enums.VolatileEnum.RESTAURANT;
-import static com.ssafy.economius.game.enums.VolatileEnum.SHOP;
-
 import com.ssafy.economius.game.dto.mysql.InsuranceDto;
+import com.ssafy.economius.game.dto.mysql.IssueDto;
 import com.ssafy.economius.game.dto.mysql.SavingsDto;
 import com.ssafy.economius.game.dto.mysql.StockDto;
 import com.ssafy.economius.game.dto.mysql.VolatileDto;
@@ -28,18 +13,26 @@ import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Gold;
 import com.ssafy.economius.game.entity.redis.Insurance;
 import com.ssafy.economius.game.entity.redis.InterestRate;
+import com.ssafy.economius.game.entity.redis.Issue;
 import com.ssafy.economius.game.entity.redis.Price;
 import com.ssafy.economius.game.entity.redis.Saving;
 import com.ssafy.economius.game.entity.redis.Stock;
 import com.ssafy.economius.game.enums.InitialData;
+import com.ssafy.economius.game.enums.IssueEnum;
+import com.ssafy.economius.game.enums.RateEnum;
 import com.ssafy.economius.game.repository.redis.GameRepository;
+import com.ssafy.economius.game.util.RandomUtil;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+
+import static com.ssafy.economius.game.enums.RateEnum.*;
+import static com.ssafy.economius.game.enums.VolatileEnum.*;
 
 @Service
 @Slf4j
@@ -47,7 +40,6 @@ import org.springframework.stereotype.Service;
 public class GameRoomService {
 
     private final GameRepository gameRepository;
-
 
     public CreateRoomResponse createRoom(Long player) {
         // Redis에서 현제 키값들을 다 불러오는 기능
@@ -65,12 +57,16 @@ public class GameRoomService {
     }
 
     private void creatRoomOnRedis(int roomId, Long player) {
+        List<Issue> issues = makeIssues();
+
         Game game = Game.builder()
                 .players(new ArrayList<>(List.of(player)))
                 .gameTurn(0)
                 .roomId(roomId)
                 .interestRate(makeInterestRate())
                 .gold(makeGold())
+                .issues(issues)
+                .currentPrevIssue(InitialData.getPrevIssue(issues.get(0).getIssueId()))
                 .stocks(makeStocks())
                 .savings(makeSavings())
                 .insurances(makeInsurance())
@@ -80,7 +76,6 @@ public class GameRoomService {
                 .eventMoney(makeEventMoney())
                 .eventStock(makeEventStock())
             .build();
-
         gameRepository.save(game);
     }
 
@@ -120,6 +115,33 @@ public class GameRoomService {
             .rate(INITIAL_ZERO_VALUE.getValue())
             .rateHistory(new ArrayList<>(List.of(0)))
             .build();
+    }
+
+    private List<Issue> makeIssues() {
+        List<Issue> issues = new ArrayList<>();
+        List<Integer> list = pickIssues();
+
+        for (int idx : list) {
+            IssueDto issue = InitialData.ISSUES.get(idx);
+            Issue tmpIssue = Issue.builder()
+                    .issueId(issue.getIssueId())
+                    .name(issue.getName())
+                    .type(issue.isType() ? IssueEnum.BOOM : IssueEnum.DEPRESSION)
+                    .country(issue.getCountry())
+                    .year(issue.getYear())
+                    .description(issue.getDescription())
+                    .url(issue.getUrl())
+                    .build();
+            issues.add(tmpIssue);
+        }
+        return issues;
+    }
+
+    private List<Integer> pickIssues() {
+        int size = RateEnum.ISSUE_COUNT.getValue();
+        int lowerBound = 0;
+        int upperBound = InitialData.ISSUES.size() - 1;
+        return RandomUtil.getUniqueRandomNumbers(size, lowerBound, upperBound);
     }
 
     private Map<Integer, Stock> makeStocks() {

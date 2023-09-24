@@ -20,6 +20,7 @@ import com.ssafy.economius.game.repository.redis.GameRepository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,9 +34,7 @@ public class GameService {
     private final GameValidator gameValidator;
 
     public GameJoinResponse join(int roomId, Long player) {
-        Game game = gameRepository.findById(roomId).orElseThrow(
-            () -> new RuntimeException("일치하는 방이 존재하지 않습니다.")
-        );
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
         if (game.getPlayers().size() >= 4) {
             throw new RuntimeException("방에 인원이 다 찼습니다.");
@@ -48,9 +47,7 @@ public class GameService {
     }
 
     public GameStartResponse start(int roomId, Long hostPlayer) {
-        Game game = gameRepository.findById(roomId).orElseThrow(
-            () -> new RuntimeException("일치하는 방이 존재하지 않습니다.")
-        );
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
         List<Long> players = game.getPlayers();
 
@@ -133,9 +130,7 @@ public class GameService {
     }
 
     public CalculateResponse calculate(int roomId, Long player) {
-        Game game = gameRepository.findById(roomId).orElseThrow(
-            () -> new RuntimeException("일치하는 방이 존재하지 않습니다.")
-        );
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
         game.updatePrize();
         int prize = game.getPrizeByPlayer(player);

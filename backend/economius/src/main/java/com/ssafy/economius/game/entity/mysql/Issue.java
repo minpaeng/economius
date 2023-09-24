@@ -24,6 +24,7 @@ public class Issue {
     private String country;
     private String year;
     private String description;
+    private String url;
     @OneToMany(mappedBy = "issue")
     private List<IssueStock> issueStocks;
     @OneToMany(mappedBy = "issue")
