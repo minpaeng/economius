@@ -9,9 +9,16 @@ import com.ssafy.economius.game.dto.ReceiptDto;
 import com.ssafy.economius.game.dto.response.CalculateResponse;
 import com.ssafy.economius.game.dto.response.GameJoinResponse;
 import com.ssafy.economius.game.dto.response.GameStartResponse;
-import com.ssafy.economius.game.entity.redis.*;
+import com.ssafy.economius.game.entity.redis.Game;
+import com.ssafy.economius.game.entity.redis.Portfolio;
+import com.ssafy.economius.game.entity.redis.PortfolioBuildings;
+import com.ssafy.economius.game.entity.redis.PortfolioGold;
+import com.ssafy.economius.game.entity.redis.PortfolioInsurances;
+import com.ssafy.economius.game.entity.redis.PortfolioSavings;
+import com.ssafy.economius.game.entity.redis.PortfolioStocks;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,13 +52,15 @@ public class GameService {
             () -> new RuntimeException("일치하는 방이 존재하지 않습니다.")
         );
 
-        if (!game.getPlayers().get(0).equals(hostPlayer)) {
+        List<Long> players = game.getPlayers();
+
+        if (!players.get(0).equals(hostPlayer)) {
             log.error("호스트가 아닌 사용자의 요청");
             throw new RuntimeException();
         }
 
         // 현제인원이 4명인지 체크
-        if (game.getPlayers().size() != 4) {
+        if (players.size() != 4) {
             log.error("인원이 부족합니다.");
             throw new RuntimeException();
         }
@@ -61,6 +70,7 @@ public class GameService {
 
         game.initializePlayerSequence();
         game.initializeLocations();
+        game.getStocks().values().forEach(stock -> stock.initializeOwners(players));
         gameRepository.save(game);
 
         return new GameStartResponse(roomId);
@@ -70,15 +80,15 @@ public class GameService {
         Map<Long, Portfolio> portfolioMap = new HashMap<>();
         for (Long player : game.getPlayers()) {
             portfolioMap.put(player, Portfolio.builder()
-                    .money(INITIAL_MONEY.getValue())
-                    .player(player)
-                    .gold(makePortfolioGold())
-                    .savings(makePortfolioSavings())
-                    .buildings(makePortfolioBuildings())
-                    .stocks(makePortfolioStocks())
-                    .insurances(portfolioInsurances())
-                    .totalMoney(INITIAL_MONEY.getValue())
-                    .build());
+                .money(INITIAL_MONEY.getValue())
+                .player(player)
+                .gold(makePortfolioGold())
+                .savings(makePortfolioSavings())
+                .buildings(makePortfolioBuildings())
+                .stocks(makePortfolioStocks())
+                .insurances(portfolioInsurances())
+                .totalMoney(INITIAL_MONEY.getValue())
+                .build());
         }
 
         game.initializePortfolio(portfolioMap);
@@ -110,9 +120,9 @@ public class GameService {
 
     private PortfolioInsurances portfolioInsurances() {
         return PortfolioInsurances.builder()
-                .totalPrice(INITIAL_ZERO_VALUE.getValue())
-                .amount(INITIAL_ZERO_VALUE.getValue())
-                .build();
+            .totalPrice(INITIAL_ZERO_VALUE.getValue())
+            .amount(INITIAL_ZERO_VALUE.getValue())
+            .build();
     }
 
     private PortfolioSavings makePortfolioSavings() {

@@ -1,10 +1,11 @@
 package com.ssafy.economius.game.dto.response;
 
-import com.ssafy.economius.game.dto.StocksDto;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
+@Data
+@AllArgsConstructor
 public class SellStockResponse {
 
     private Long player;
-    private int money;
-    private StocksDto stocks;
 }

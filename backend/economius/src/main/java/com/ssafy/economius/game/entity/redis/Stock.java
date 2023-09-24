@@ -1,33 +1,53 @@
 package com.ssafy.economius.game.entity.redis;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Builder
+@ToString
 public class Stock {
 
+    private Integer stockId;
     private String name;
     private String companyCategory;
     private String companySubCategory;
     // 아이디, 보유량
     private Map<Long, Integer> owners;
+    private int remainingAmount;
     private int price;
     private int rate;
     private List<Price> priceHistory;
     private List<Integer> rateHistory;
+
+    public boolean checkStockAvailableToPurchase(int buyStockAmount) {
+        return buyStockAmount <= remainingAmount;
+    }
+
+
+    public void dealStock(Long player, int amount) {
+        owners.compute(player, (key, value) -> value + amount);
+        remainingAmount -= amount;
+    }
 
     public void updateStockPriceAndRate(int closingRate, int round) {
         updatePrice(closingRate, round);
         updateRate(closingRate, round);
     }
 
+    public void initializeOwners(List<Long> players) {
+        owners = new HashMap<>();
+        players.forEach(player -> owners.put(player, 0));
+
+    }
 
     private void updateRate(int closingRate, int round) {
         rate = closingRate;
