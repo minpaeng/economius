@@ -1,10 +1,8 @@
 package com.ssafy.economius.game.service;
 
 import com.ssafy.economius.common.exception.CustomWebsocketException;
-import com.ssafy.economius.common.exception.message.BuildingMessage;
 import com.ssafy.economius.common.exception.message.GameRoomMessage;
 import com.ssafy.economius.common.exception.validator.GameValidator;
-import com.ssafy.economius.game.dto.response.BuyGoldResponse;
 import com.ssafy.economius.game.dto.response.BuyStockResponse;
 import com.ssafy.economius.game.dto.response.SellStockResponse;
 import com.ssafy.economius.game.entity.redis.Game;
@@ -23,18 +21,11 @@ public class StockService {
     private final GameRepository gameRepository;
     private final GameValidator gameValidator;
 
-    public BuyStockResponse buyStock(int roomId, int stockId, int stockAmount, Long player){
+    public BuyStockResponse buyStock(int roomId, int stockId, int stockAmount, Long player) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
         // 갯수는 문제없는지
         Stock stock = game.getStocks().get(stockId);
-//        if (stock.checkStockAvailableToPurchase(stockAmount)) {
-//            throw CustomWebsocketException.builder()
-//                .roomId(roomId)
-//                .code(GameRoomMessage.CANNOT_BUY.getCode())
-//                .message(GameRoomMessage.CANNOT_BUY.getMessage())
-//                .build();
-//        }
 
         // 금액은 문제 없는지
         Portfolio portfolio = game.getPortfolios().get(player);
@@ -70,6 +61,14 @@ public class StockService {
         int money = portfolio.getMoney();
         int price = stock.getPrice() * stockAmount;
         gameValidator.canBuy(roomId, money, price);
+
+        if (stock.checkStockAvailableToPurchase(stockAmount)) {
+            throw CustomWebsocketException.builder()
+                .roomId(roomId)
+                .code(GameRoomMessage.NOT_ENOUGH_STOCK.getCode())
+                .message(GameRoomMessage.NOT_ENOUGH_STOCK.getMessage())
+                .build();
+        }
     }
 
 }

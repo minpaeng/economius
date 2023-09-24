@@ -127,6 +127,7 @@ public class GameRoomService {
                             .openingPrice(stock.getInitialValue())
                             .build()))
                 )
+                .remainingAmount(100)
                 .build();
 
             stocks.put(stock.getStockId(), tmpStock);
