@@ -1,8 +1,9 @@
 package com.ssafy.economius.game.controller;
 
+import com.ssafy.economius.game.dto.request.BuyItemRequest;
 import com.ssafy.economius.game.dto.request.BuyStockRequest;
 import com.ssafy.economius.game.dto.request.SellStockRequest;
-import com.ssafy.economius.game.dto.response.BuyGoldResponse;
+import com.ssafy.economius.game.dto.response.BuyItemResponse;
 import com.ssafy.economius.game.dto.response.BuyStockResponse;
 import com.ssafy.economius.game.dto.response.SellStockResponse;
 import com.ssafy.economius.game.service.StockService;
@@ -44,8 +45,12 @@ public class StockController {
     }
 
     @MessageMapping(value = "/{roomId}/buyItem")
-    public void buyItem() {
-        template.convertAndSend("");
+    public void buyItem(@DestinationVariable int roomId, BuyItemRequest buyItemRequest) {
+        log.info("buyItem 호출");
+        BuyItemResponse buyItemResponse = stockService.buyItem(roomId, buyItemRequest.getStockId(),
+            buyItemRequest.getPlayer());
+        Map<String, Object> headers = Map.of("success", true);
+        template.convertAndSend("/sub/" + roomId, buyItemResponse, headers);
     }
 
     @MessageMapping(value = "/{roomId}/selectStock")
