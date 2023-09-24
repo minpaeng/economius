@@ -149,13 +149,13 @@ public class GameRoomService {
 
         for (StockDto stock : InitialData.STOCKS) {
             Stock tmpStock = Stock.builder()
+                .stockId(stock.getStockId())
                 .name(stock.getCompany())
                 .companyCategory(stock.getIndustry())
                 .companySubCategory(stock.getType())
                 .owners(new HashMap<>())
                 .rateHistory(new ArrayList<>(List.of(0)))
                 .rate(INITIAL_ZERO_VALUE.getValue())
-                .priceHistory(new ArrayList<>())
                 .price(stock.getInitialValue())
                 .priceHistory(
                     new ArrayList<>(List.of(
@@ -166,6 +166,7 @@ public class GameRoomService {
                             .openingPrice(stock.getInitialValue())
                             .build()))
                 )
+                .remainingAmount(100)
                 .build();
 
             stocks.put(stock.getStockId(), tmpStock);

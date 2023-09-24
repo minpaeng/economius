@@ -34,7 +34,9 @@ public enum RateEnum {
     INTEREST_RATE_LOWER_BOUND(-5),
     INTEREST_RATE_UPPER_BOUND(10),
 
-    MAX_BOARD_SIZE(36);
+    MAX_BOARD_SIZE(36),
+    STOCK_DIVIDENDS_RATE(100),;
+
 
 
     private final int value;
