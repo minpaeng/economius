@@ -1,11 +1,11 @@
 package com.ssafy.economius.game.controller;
 
-import com.ssafy.economius.game.dto.request.GameJoinRequest;
 import com.ssafy.economius.game.dto.request.RollDiceRequest;
+import com.ssafy.economius.game.dto.request.ViewMovementCardRequest;
 import com.ssafy.economius.game.dto.response.DiceRollResponse;
-import com.ssafy.economius.game.dto.response.GameJoinResponse;
+import com.ssafy.economius.game.dto.response.ViewMovementCardResponse;
 import com.ssafy.economius.game.service.DiceService;
-import com.ssafy.economius.game.service.GameService;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -21,6 +21,18 @@ public class DiceController {
     private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
     private final DiceService diceService;
 
+    @MessageMapping(value = "/{roomId}/viewMovementCard")
+    public void viewMovementCard(@DestinationVariable int roomId,
+        ViewMovementCardRequest viewMovementCardRequest) {
+        log.info("roomId : " + roomId + " -> viewMovementCard 호출");
+
+        ViewMovementCardResponse viewMovementCardResponse = diceService.makeMovementCard(
+            viewMovementCardRequest.getPlayer());
+
+        Map<String, Object> headers = Map.of("success", true);
+        template.convertAndSend("/sub/" + roomId, viewMovementCardResponse, headers);
+    }
+
     @MessageMapping(value = "/{roomId}/rollDice")
     public void rollDice(@DestinationVariable int roomId, RollDiceRequest rollDiceRequest) {
         log.info(rollDiceRequest.toString());
@@ -30,7 +42,6 @@ public class DiceController {
         //todo 해더설정
         template.convertAndSend("/sub/" + roomId, diceRollResponse);
     }
-
 
 
 }
