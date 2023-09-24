@@ -3,7 +3,6 @@ package com.ssafy.economius.game.service;
 import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.enums.InitialData;
-import com.ssafy.economius.game.entity.redis.Portfolio;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import com.ssafy.economius.game.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
@@ -78,7 +77,7 @@ public class FinishTurnService {
     private void stockRearrange(Game game, int round) {
         game.getStocks().values().forEach(
             stock -> {
-                stock.updateStockPriceAndRate(RearrangeRateUtil.getRanges
+                stock.updateStockPriceAndRate(RandomUtil.getRanges
                     (STOCK_RATE_LOWER_BOUND.getValue(), STOCK_RATE_UPPER_BOUND.getValue()), round);
                 log.info("게임 턴 변경 ->" + stock);
                 game.getPortfolios().values()
