@@ -1,12 +1,14 @@
 package com.ssafy.economius.game.dto.response;
 
-import lombok.AllArgsConstructor;
+import com.ssafy.economius.game.dto.GoldDto;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
+@Builder
 public class BuyGoldResponse {
 
     private Long player;
+    private int money;
+    private GoldDto gold;
 }

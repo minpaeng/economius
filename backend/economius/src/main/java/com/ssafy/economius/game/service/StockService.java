@@ -5,6 +5,8 @@ import com.ssafy.economius.common.exception.message.BuildingMessage;
 import com.ssafy.economius.common.exception.message.GameRoomMessage;
 import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.dto.response.BuyGoldResponse;
+import com.ssafy.economius.game.dto.response.BuyStockResponse;
+import com.ssafy.economius.game.dto.response.SellStockResponse;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Portfolio;
 import com.ssafy.economius.game.entity.redis.Stock;
@@ -21,26 +23,22 @@ public class StockService {
     private final GameRepository gameRepository;
     private final GameValidator gameValidator;
 
-    public BuyGoldResponse buyStock(int roomId, int stockId, int stockAmount, Long player){
+    public BuyStockResponse buyStock(int roomId, int stockId, int stockAmount, Long player){
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
-
-        // 주식의 갯수만큼 주식을 살 수 있는지 파악
 
         // 갯수는 문제없는지
         Stock stock = game.getStocks().get(stockId);
-        if (stock.checkStockAvailableToPurchase(stockAmount)) {
-            throw CustomWebsocketException.builder()
-                .roomId(roomId)
-                .code(GameRoomMessage.CANNOT_BUY.getCode())
-                .message(GameRoomMessage.CANNOT_BUY.getMessage())
-                .build();
-        }
+//        if (stock.checkStockAvailableToPurchase(stockAmount)) {
+//            throw CustomWebsocketException.builder()
+//                .roomId(roomId)
+//                .code(GameRoomMessage.CANNOT_BUY.getCode())
+//                .message(GameRoomMessage.CANNOT_BUY.getMessage())
+//                .build();
+//        }
 
         // 금액은 문제 없는지
         Portfolio portfolio = game.getPortfolios().get(player);
-        int money = portfolio.getMoney();
-        int price = stock.getPrice() * stockAmount;
-        gameValidator.canBuy(roomId, money, price);
+        validateStockToBuy(roomId, stockAmount, stock, portfolio);
 
         // 모두 통과했다..
         stock.dealStock(player, stockAmount);
@@ -48,6 +46,30 @@ public class StockService {
 
         gameRepository.save(game);
 
-        return new BuyGoldResponse(player);
+        return new BuyStockResponse(player);
     }
+
+
+    public SellStockResponse sellStock(int roomId, int stockId, int stockAmount, Long player) {
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
+        stockAmount *= -1;
+        Stock stock = game.getStocks().get(stockId);
+        Portfolio portfolio = game.getPortfolios().get(player);
+
+        validateStockToBuy(roomId, stockAmount, stock, portfolio);
+
+        stock.dealStock(player, stockAmount);
+        portfolio.getStocks().updatePortfolioStock(stock, stockAmount);
+
+        gameRepository.save(game);
+
+        return new SellStockResponse(player);
+    }
+
+    private void validateStockToBuy(int roomId, int stockAmount, Stock stock, Portfolio portfolio) {
+        int money = portfolio.getMoney();
+        int price = stock.getPrice() * stockAmount;
+        gameValidator.canBuy(roomId, money, price);
+    }
+
 }

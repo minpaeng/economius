@@ -1,7 +1,10 @@
 package com.ssafy.economius.game.controller;
 
 import com.ssafy.economius.game.dto.request.BuyStockRequest;
+import com.ssafy.economius.game.dto.request.SellStockRequest;
 import com.ssafy.economius.game.dto.response.BuyGoldResponse;
+import com.ssafy.economius.game.dto.response.BuyStockResponse;
+import com.ssafy.economius.game.dto.response.SellStockResponse;
 import com.ssafy.economius.game.service.StockService;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +24,7 @@ public class StockController {
 
     @MessageMapping(value = "/{roomId}/buyStock")
     public void buyStock(@DestinationVariable int roomId, BuyStockRequest buyStockRequest) {
-        BuyGoldResponse buyGoldResponse = stockService.buyStock(roomId,
+        BuyStockResponse buyGoldResponse = stockService.buyStock(roomId,
             buyStockRequest.getStockId(),
             buyStockRequest.getStockAmount(), buyStockRequest.getPlayer());
 
@@ -30,8 +33,14 @@ public class StockController {
     }
 
     @MessageMapping(value = "/{roomId}/sellStock")
-    public void sellStock() {
-        template.convertAndSend("");
+    public void sellStock(@DestinationVariable int roomId, SellStockRequest sellStockRequest) {
+        log.info("sellStock 호출");
+        SellStockResponse sellStockResponse = stockService.sellStock(roomId,
+            sellStockRequest.getStockId(), sellStockRequest.getStockAmount(),
+            sellStockRequest.getPlayer());
+
+        Map<String, Object> headers = Map.of("success", true);
+        template.convertAndSend("/sub/" + roomId, sellStockResponse, headers);
     }
 
     @MessageMapping(value = "/{roomId}/buyItem")
