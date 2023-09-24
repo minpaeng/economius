@@ -80,8 +80,6 @@ public class InitialDataListener {
         log.info(InitialData.STOCKS.size() + " stocks loaded.");
         setInsuranceTypes();
         log.info(InitialData.INSURANCE_TYPE.size() + " insurance types loaded.");
-        setIssueStocks();
-        log.info(InitialData.INSURANCE_TYPE.size() + " issueStock loaded.");
     }
 
     private void setSavings() {
@@ -164,13 +162,14 @@ public class InitialDataListener {
             tmp.setYear(issue.getYear());
             tmp.setDescription(issue.getDescription());
             tmp.setUrl(issue.getUrl());
+            setIssueStocks(issue.getIssueId(), tmp.getAssetsChanges());
             setPrevIssues(issue.getIssueId(), tmp.getPrevIssues());
             InitialData.ISSUES.put(tmp.getIssueId(), tmp);
         }
     }
 
-    private void setIssueStocks() {
-        List<IssueStock> issueStocks = issueStockRepository.findAll();
+    private void setIssueStocks(int issueId, List<IssueStockDto> list) {
+        List<IssueStock> issueStocks = issueStockRepository.findIssueStockByIssueId(issueId);
 
         for (IssueStock issueStock : issueStocks) {
             IssueStockDto tmp = new IssueStockDto();
@@ -182,7 +181,7 @@ public class InitialDataListener {
             tmp.setAssetId(issueStock.getAssetId());
             tmp.setChangeUnit(issueStock.getChangeUnit());
             tmp.setChangeReason(issueStock.getChangeReason());
-            InitialData.ISSUE_STOCKS.add(tmp);
+            list.add(tmp);
         }
     }
 
