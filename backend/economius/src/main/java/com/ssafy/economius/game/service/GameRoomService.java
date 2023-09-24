@@ -24,9 +24,6 @@ import com.ssafy.economius.game.dto.mysql.IssueDto;
 import com.ssafy.economius.game.dto.mysql.SavingsDto;
 import com.ssafy.economius.game.dto.mysql.StockDto;
 import com.ssafy.economius.game.dto.mysql.VolatileDto;
-import com.ssafy.economius.game.dto.response.CreateRoomResponse;
-import com.ssafy.economius.game.entity.mysql.EventMoney;
-import com.ssafy.economius.game.entity.mysql.EventStock;
 import com.ssafy.economius.game.entity.redis.Building;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Gold;
@@ -102,7 +99,7 @@ public class GameRoomService {
         List<EventMoney> eventMonies = new ArrayList<>();
         List<EventStock> eventStocks = new ArrayList<>();
         for(EventMoneyDto eventDto : InitialData.EVENTS.getEventMonies()) {
-            EventMoney eventMoney = EventMoney.builder()
+            com.ssafy.economius.game.entity.redis.EventMoney eventMoney = com.ssafy.economius.game.entity.redis.EventMoney.builder()
                     .eventMoneyId(eventDto.getEventMoneyId())
                     .insuranceTypeId(eventDto.getInsuranceTypeId())
                     .typeCode(eventDto.getTypeCode())
@@ -115,7 +112,7 @@ public class GameRoomService {
             eventMonies.add(eventMoney);
         }
         for(EventStockDto eventDto : InitialData.EVENTS.getEventStocks()) {
-            EventStock eventStock = EventStock.builder()
+            com.ssafy.economius.game.entity.redis.EventStock eventStock = com.ssafy.economius.game.entity.redis.EventStock.builder()
                     .eventStockId(eventDto.getEventStockId())
                     .stockIndustryId(eventDto.getStockIndustryId())
                     .industry(eventDto.getIndustry())
@@ -190,9 +187,11 @@ public class GameRoomService {
         Map<Integer, Stock> stocks = new HashMap<>();
 
         for (StockDto stock : InitialData.STOCKS) {
+            log.info(stock.toString());
             Stock tmpStock = Stock.builder()
                     .stockId(stock.getStockId())
                     .name(stock.getCompany())
+                    .stockIndustryId(stock.getStockIndustryId())
                     .companyCategory(stock.getIndustry())
                     .companySubCategory(stock.getType())
                     .owners(new HashMap<>())

@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 @Service
@@ -33,8 +34,9 @@ public class EventService {
         //게임 속 이벤트 조회
         Event event = game.getEvent();
 
-        log.info(event.getEventMoney().toString());
-        log.info(event.getEventStock().toString());
+        //log.info(event.getEventMoney().toString());
+        //log.info(event.getEventStock().toString());
+        Map<Integer, Stock> stocks = game.getStocks();
 
         // 이벤트 랜덤 선정
         Random random = new Random();
@@ -77,10 +79,24 @@ public class EventService {
             eventDto.setEventStockDto(eventStockDto);
 
             // 해당 주식 업종 시세 적용
+            //log.info(eventStockDto.toString());
+
+            for(Stock stock : stocks.values()) {
+                if(stock.getStockIndustryId() == eventStockDto.getStockIndustryId())  {
+                    int rate = eventStockDto.getRate();
+                    int nowPrice = stock.getPrice();
+                    int afterPrice = (int) (nowPrice + (nowPrice * (rate / 100.0)));
+                    System.out.println("변경 전 ");
+                    log.info(stock.toString());
+                    stock.setPrice(afterPrice);
+                }
+            }
+            //log.info(game.getStocks());
+            gameRepository.save(game);
+            System.out.println("변경 후 ");
+            Game gameAfter = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
+            log.info(gameAfter.getStocks().values().toString());
         }
-
-
-        // 이벤트 적용
 
 
         // 어떤 이벤트인지 response 던져주기

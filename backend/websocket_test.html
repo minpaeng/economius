@@ -33,9 +33,9 @@
 
             stompClient.connect({}, function () {
                     //subscribe(subscribe url,해당 url로 메시지를 받을때마다 실행할 함수)
-                    sub = stompClient.subscribe('/sub/1', function (messageOutput) {
+                    sub = stompClient.subscribe('/sub/4', function (messageOutput) {
                         //e.body에 전송된 data가 들어있다
-                        showMessageOutput(JSON.parse(messageOutput.body));
+                        //showMessageOutput(JSON.parse(messageOutput.body));
                     });
                 },
                 function(e){
@@ -53,30 +53,30 @@
         }
 
         function sendJoin2() {
-            stompClient.send("/pub/1/join", {}, JSON.stringify({
+            stompClient.send("/pub/4/join", {}, JSON.stringify({
                 "player": 2
             }));
         }
         function sendJoin3() {
-            stompClient.send("/pub/1/join", {}, JSON.stringify({
+            stompClient.send("/pub/4/join", {}, JSON.stringify({
                 "player": 3
             }));
         }
         function sendJoin4() {
-            stompClient.send("/pub/1/join", {}, JSON.stringify({
+            stompClient.send("/pub/4/join", {}, JSON.stringify({
                 "player": 4
             }));
         }
 
 
         function sendStart() {
-            stompClient.send("/pub/1/start", {}, JSON.stringify({
+            stompClient.send("/pub/4/start", {}, JSON.stringify({
                 "hostPlayer": 1
             }));
         }
 
         function sendEventCard() {
-            stompClient.send("/pub/1/eventCard", {}, JSON.stringify({
+            stompClient.send("/pub/4/eventCard", {}, JSON.stringify({
                 "player": 1 
             }));
         }
