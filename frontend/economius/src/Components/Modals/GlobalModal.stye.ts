@@ -86,3 +86,32 @@ export const RoundButton = styled.button`
         }
     }
 `;
+
+export const ButtonOuter = styled.div`
+    display: inline;
+    /* position: absolute; */
+    position: fixed;
+    top: 80%;
+    right: 50%;
+    left: 50%;
+`;
+
+export const RoundButtonRoom = styled.button`
+    /* flex: 2.15; */
+    /* background: #fff9ee; */
+    /* transition: all 250ms ease-in-out; */
+    font-size: 24px;
+    margin: 0 20px;
+    width: auto;
+    border: 5px solid white;
+    padding: 25px 70px;
+    border-radius: 15px;
+    background: #ffdaae;
+    /* 호버 시 색상 변경 */
+    &:hover {
+        background: #ffaa55; /* 원하는 색상으로 변경 */
+    }
+    cursor: pointer; /* 커서를 포인터로 설정 */
+    span {
+    }
+`;

@@ -3,8 +3,20 @@ import { useEffect, useRef, useState } from 'react';
 import video1 from '/video/video_start.mp4'; // 1080p
 import video3 from '/video/video_repeat.mp4'; // sound
 import StartAccess from './Components/Modals/StartAccess';
+import * as S from '../src/Components/Modals/GlobalModal.stye';
+import { UseridState } from './recoil/animation/atom';
+import { useRecoilState } from 'recoil';
+import Modal from 'react-modal';
 
 export default function Index() {
+    // 최상단 컴포넌트에서 모달을 쓸 것이라고 명시 작업이 필요
+    Modal.setAppElement('#root');
+
+    // recoil
+    const [userid, setUserid] = useRecoilState(UseridState);
+    // const memberType = useRecoilValue(memberTypeAtom);
+    // const settermemberName = useSetRecoilState(memberNameAtom); // react setState와 동일하게 동작함
+
     const videoRef = useRef(null);
     const [isOpen, setIsOpen] = useState(true);
     const [isMuted, setIsMuted] = useState(true); // 비디오 음소거 상태
@@ -80,23 +92,60 @@ export default function Index() {
         }, 2000);
     };
 
+    // {!!!!!!!!!!!!!!!!!!!!} 카카오 로그인 시 실행할 함수
+    const loginHandler = () => {
+        setUserid('shin');
+        setTimeout(() => {
+            console.log(userid);
+            console.log('안녕하세요');
+        }, 5000);
+    };
+
+    // {!!!!!!!!!!!!!!!!!!!!} 카카오 로그인 시 실행할 함수
+    const roomJoinHandler = () => {
+        //
+    };
+
+    // {!!!!!!!!!!!!!!!!!!!!} 카카오 로그인 시 실행할 함수
+    const roomMakeHandler = () => {
+        //
+    };
+
     return (
         <>
             <video muted={isMuted} ref={videoRef} loop>
                 <source src={video1} type='video/mp4' />
             </video>
             <div className='content'>
-                <h1>AngelPlayer`s Viedo Test!!!</h1>
                 {/* 화면 처음 들어오면 자동으로 켜지는 모달 */}
                 {isOpen && (
                     <>
                         <StartAccess videoControl={videoControl} />
                     </>
                 )}
-                <Link to={`/room`}>
+                {/* <Link to={`/room`}>
                     <h1>room</h1>
-                </Link>
-                <h1>index page</h1>
+                </Link> */}
+
+                {userid === 'a' ? (
+                    <S.ButtonOuter>
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <img onClick={loginHandler} src='/button/kakao.png' alt='kakao-login-btn' />
+                        </div>
+                        {/* <S.RoundButtonRoom onClick={loginHandler}>
+                            <span>카카오톡 로그인</span>
+                        </S.RoundButtonRoom> */}
+                    </S.ButtonOuter>
+                ) : (
+                    <S.ButtonOuter>
+                        <S.RoundButtonRoom onClick={roomMakeHandler}>
+                            <span>방 생성하기</span>
+                        </S.RoundButtonRoom>
+                        <S.RoundButtonRoom onClick={roomJoinHandler}>
+                            <span>방 입장하기</span>
+                        </S.RoundButtonRoom>
+                    </S.ButtonOuter>
+                )}
             </div>
         </>
     );
