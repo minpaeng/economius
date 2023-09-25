@@ -98,7 +98,7 @@ public class StockService {
         int price = stock.getPrice() * stockAmount;
         gameValidator.canBuy(roomId, money, price);
 
-        if (stock.checkStockAvailableToPurchase(stockAmount)) {
+        if (!stock.checkStockAvailableToPurchase(stockAmount)) {
             throw CustomWebsocketException.builder()
                 .roomId(roomId)
                 .code(GameRoomMessage.NOT_ENOUGH_STOCK.getCode())
