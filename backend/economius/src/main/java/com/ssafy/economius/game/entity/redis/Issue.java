@@ -4,12 +4,12 @@ import com.ssafy.economius.game.enums.IssueEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.data.redis.core.RedisHash;
 
-@RedisHash
-@Getter
-@AllArgsConstructor
+import java.util.List;
+
 @Builder
+@AllArgsConstructor
+@Getter
 public class Issue {
 
     private int issueId;
@@ -19,4 +19,5 @@ public class Issue {
     private String year;
     private String description;
     private String url;
+    private List<AssetChange> currentAssetChanges;
 }

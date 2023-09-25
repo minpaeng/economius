@@ -1,7 +1,7 @@
 package com.ssafy.economius.game.service;
 
 import com.ssafy.economius.common.exception.validator.GameValidator;
-import com.ssafy.economius.game.dto.mysql.IssueStockDto;
+import com.ssafy.economius.game.entity.redis.AssetChange;
 import com.ssafy.economius.game.entity.redis.Building;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Stock;
@@ -54,31 +54,29 @@ public class FinishTurnService {
         if (round % 4 != 0) return;
         int idx = game.getIssueIdx() + 1;
         game.setIssueIdx(idx);
-        game.setCurrentPrevIssue(
+        game.setCurrentPrevIssues(
                 InitialData.getPrevIssue(game.getIssues().get(idx).getIssueId()));
         game.setCurrentIssue(null);
     }
 
     private void checkIssueRound(Game game, int round) {
         if (round % 4 != 1) return;
-        game.setCurrentPrevIssue(null);
+        game.setCurrentPrevIssues(null);
         game.setCurrentIssue(game.getIssues().get(game.getIssueIdx()));
     }
 
     private void applyIssueEffect(Game game, int round) {
         if (round % 4 == 0) return;
-        int issueId = game.getIssues().get(game.getIssueIdx()).getIssueId();
-        List<IssueStockDto> assetsChanges = InitialData.getIssueChanges(issueId);
-        log.info(assetsChanges.toString());
+        List<AssetChange> assetChanges = game.getIssues().get(game.getIssueIdx()).getCurrentAssetChanges();
 
-        for (IssueStockDto assetChange : assetsChanges) {
+        for (AssetChange assetChange : assetChanges) {
             applyChanges(game, assetChange, round);
         }
     }
 
-    private void applyChanges(Game game, IssueStockDto assetChange, int round) {
+    private void applyChanges(Game game, AssetChange assetChange, int round) {
         String type = assetChange.getAssetType();
-        int changeRate = getChangeRate(assetChange.getChangeUnit());
+        int changeRate = assetChange.getChangeRate().getValue();
 
         if (type.equals(VolatileEnum.GOLD.getValue())) {
             game.getGold().updateGoldPrice(changeRate);
@@ -151,7 +149,4 @@ public class FinishTurnService {
         game.getPortfolios().values()
                 .forEach(portfolio -> portfolio.getStocks().updatePortfolioStockByStockChange(stock));
     }
-
-
-
 }

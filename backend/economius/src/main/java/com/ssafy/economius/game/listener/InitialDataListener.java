@@ -2,6 +2,7 @@ package com.ssafy.economius.game.listener;
 
 import com.ssafy.economius.game.dto.mysql.EventMoneyDto;
 import com.ssafy.economius.game.dto.mysql.EventStockDto;
+import com.ssafy.economius.game.enums.DescriptionTitleEnum;
 import com.ssafy.economius.game.enums.InitialData;
 import com.ssafy.economius.game.dto.mysql.InsuranceDto;
 import com.ssafy.economius.game.dto.mysql.InsuranceTypeDto;
@@ -63,6 +64,10 @@ public class InitialDataListener {
     @Transactional(readOnly = true)
     @EventListener
     public void setInitialData(ContextRefreshedEvent event) {
+        setStockIndustries();
+        log.info(InitialData.STOCK_INDUSTRIES.size() + " stock industry loaded.");
+        setStocks();
+        log.info(InitialData.STOCKS.size() + " stocks loaded.");
         setSavings();
         log.info(InitialData.SAVINGS.size() + " savings loaded.");
         setVolatiles();
@@ -74,12 +79,32 @@ public class InitialDataListener {
         log.info(InitialData.INSURANCES.size() + " insurances loaded.");
         setIssues();
         log.info(InitialData.ISSUES.size() + " issues loaded.");
-        setStockIndustries();
-        log.info(InitialData.STOCK_INDUSTRIES.size() + " stock industry loaded.");
-        setStocks();
-        log.info(InitialData.STOCKS.size() + " stocks loaded.");
         setInsuranceTypes();
         log.info(InitialData.INSURANCE_TYPE.size() + " insurance types loaded.");
+    }
+
+    private void setStockIndustries() {
+        List<StockIndustry> stockIndustries = stockIndustryRepository.findAll();
+        for (StockIndustry StockIndustry : stockIndustries) {
+            StockIndustryDto tmp = new StockIndustryDto();
+            tmp.setStockIndustryId(StockIndustry.getStockIndustryId());
+            tmp.setIndustry(StockIndustry.getIndustry());
+            InitialData.STOCK_INDUSTRIES.add(tmp);
+        }
+    }
+
+    private void setStocks() {
+        List<Stock> stocks = stockRepository.findAllWithStockIndustries();
+        for (Stock stock : stocks) {
+            StockDto tmp = new StockDto();
+            tmp.setStockId(stock.getStockId());
+            tmp.setStockIndustryId(stock.getStockIndustry().getStockIndustryId());
+            tmp.setIndustry(stock.getStockIndustry().getIndustry());
+            tmp.setType(stock.getType());
+            tmp.setCompany(stock.getCompany());
+            tmp.setInitialValue(stock.getInitialValue());
+            InitialData.STOCKS.put(tmp.getStockId(), tmp);
+        }
     }
 
     private void setSavings() {
@@ -163,7 +188,7 @@ public class InitialDataListener {
             tmp.setYear(issue.getYear());
             tmp.setDescription(issue.getDescription());
             tmp.setUrl(issue.getUrl());
-            setIssueStocks(issue.getIssueId(), tmp.getAssetsChanges());
+            setIssueStocks(issue.getIssueId(), tmp.getAssetChanges());
             setPrevIssues(issue.getIssueId(), tmp.getPrevIssues());
             InitialData.ISSUES.put(tmp.getIssueId(), tmp);
         }
@@ -193,32 +218,8 @@ public class InitialDataListener {
             PrevIssueDto tmp = new PrevIssueDto();
             tmp.setPrevIssueId(prevIssue.getPrevIssueId());
             tmp.setIssueId(prevIssue.getIssue().getIssueId());
-            tmp.setForetoken(prevIssue.getForetoken());
+            tmp.setForetoken(DescriptionTitleEnum.NEWSFLASH.getTitle() + " " + prevIssue.getForetoken());
             list.add(tmp);
-        }
-    }
-
-    private void setStockIndustries() {
-        List<StockIndustry> stockIndustries = stockIndustryRepository.findAll();
-        for (StockIndustry StockIndustry : stockIndustries) {
-            StockIndustryDto tmp = new StockIndustryDto();
-            tmp.setStockIndustryId(StockIndustry.getStockIndustryId());
-            tmp.setIndustry(StockIndustry.getIndustry());
-            InitialData.STOCK_INDUSTRIES.add(tmp);
-        }
-    }
-
-    private void setStocks() {
-        List<Stock> stocks = stockRepository.findAllWithStockIndustries();
-        for (Stock stock : stocks) {
-            StockDto tmp = new StockDto();
-            tmp.setStockId(stock.getStockId());
-            tmp.setStockIndustryId(stock.getStockIndustry().getStockIndustryId());
-            tmp.setIndustry(stock.getStockIndustry().getIndustry());
-            tmp.setType(stock.getType());
-            tmp.setCompany(stock.getCompany());
-            tmp.setInitialValue(stock.getInitialValue());
-            InitialData.STOCKS.add(tmp);
         }
     }
 
