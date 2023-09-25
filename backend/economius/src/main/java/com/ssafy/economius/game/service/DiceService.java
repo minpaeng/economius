@@ -36,9 +36,7 @@ public class DiceService {
 
     // 주사위 순서 표출
     public DiceTurnMessage getDiceSequence(int roomId) {
-        Game game = gameRepository.findById(roomId).orElseThrow(
-            () -> new RuntimeException("일치하는 방이 존재하지 않습니다.")
-        );
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
         return new DiceTurnMessage(game.getPlayerSequence());
     }
