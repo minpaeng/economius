@@ -5,7 +5,6 @@ import com.ssafy.economius.game.entity.redis.AssetChange;
 import com.ssafy.economius.game.entity.redis.Building;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Stock;
-import com.ssafy.economius.game.enums.ChangeUnit;
 import com.ssafy.economius.game.enums.InitialData;
 import com.ssafy.economius.game.enums.VolatileEnum;
 import com.ssafy.economius.game.repository.redis.GameRepository;
@@ -87,13 +86,6 @@ public class FinishTurnService {
         } else if (type.equals(VolatileEnum.STOCK.getValue())) {
             applyStockChanges(game, assetChange.getAssetId(), changeRate, round);
         }
-    }
-
-    private int getChangeRate(int changeUnit) {
-        for (ChangeUnit c : ChangeUnit.values()) {
-            if (changeUnit == c.getCode()) return c.getValue();
-        }
-        return 1;
     }
 
     private void applyBuildingChanges(Game game, int changeRate) {
