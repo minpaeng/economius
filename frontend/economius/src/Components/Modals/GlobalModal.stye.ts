@@ -32,6 +32,18 @@ export const MidImg = styled.img`
     height: 150px;
 `;
 
+export const MidNoImg = styled.div`
+    flex: 5.85;
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+`;
+
 export const MidDesc = styled.div`
     height: 30%;
     display: flex;
