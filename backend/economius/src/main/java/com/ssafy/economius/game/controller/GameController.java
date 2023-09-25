@@ -1,13 +1,12 @@
 package com.ssafy.economius.game.controller;
 
 import com.ssafy.economius.game.dto.request.CalculateRequest;
-import com.ssafy.economius.game.dto.request.EndTurnRequest;
 import com.ssafy.economius.game.dto.request.GameJoinRequest;
 import com.ssafy.economius.game.dto.request.GameStartRequest;
 import com.ssafy.economius.game.dto.response.CalculateResponse;
+import com.ssafy.economius.game.dto.response.FinishTurnResponse;
 import com.ssafy.economius.game.dto.response.GameJoinResponse;
 import com.ssafy.economius.game.dto.response.GameStartResponse;
-import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.service.GameService;
 import com.ssafy.economius.game.service.FinishTurnService;
 import lombok.RequiredArgsConstructor;
@@ -52,8 +51,8 @@ public class GameController {
 
     @MessageMapping(value = "/{roomId}/finishTurn")
     public void finishTurn(@DestinationVariable int roomId){
-        Game game = finishTurnService.finish(roomId);
+        FinishTurnResponse finishTurnResponse = finishTurnService.finish(roomId);
 
-        template.convertAndSend("/sub/" + roomId, game);
+        template.convertAndSend("/sub/" + roomId, finishTurnResponse);
     }
 }
