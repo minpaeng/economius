@@ -51,7 +51,7 @@ public class FinishTurnService {
     }
 
     private void changePrevIssue(Game game, int round) {
-        if (round % 4 != 3) return;
+        if (round % 4 != 0) return;
         int idx = game.getIssueIdx() + 1;
         game.setIssueIdx(idx);
         game.setCurrentPrevIssue(
@@ -60,12 +60,13 @@ public class FinishTurnService {
     }
 
     private void checkIssueRound(Game game, int round) {
-        if (round % 4 != 0) return;
+        if (round % 4 != 1) return;
+        game.setCurrentPrevIssue(null);
         game.setCurrentIssue(game.getIssues().get(game.getIssueIdx()));
     }
 
     private void applyIssueEffect(Game game, int round) {
-        if (round % 4 == 3) return;
+        if (round % 4 == 0) return;
         int issueId = game.getIssues().get(game.getIssueIdx()).getIssueId();
         List<IssueStockDto> assetsChanges = InitialData.getIssueChanges(issueId);
         log.info(assetsChanges.toString());
@@ -116,7 +117,6 @@ public class FinishTurnService {
 
     private void buildingRearrange(Game game) {
         for (int buildingId : game.getBuildings().keySet()) {
-            // 가격 재조정
             int newRate = RandomUtil.getRanges(BUILDING_RATE_LOWER_BOUND.getValue(),
                     BUILDING_RATE_UPPER_BOUND.getValue());
             updateBuildingPrice(newRate, game, buildingId);
@@ -126,7 +126,7 @@ public class FinishTurnService {
     private void updateBuildingPrice(int newRate, Game game, int buildingId) {
         Building building = game.getBuildings().get(buildingId);
         building.updateBuildingPrice(newRate);
-        // 포폴 부동산 업데이트
+
         game.getPortfolios().get(building.getOwnerId())
                 .getBuildings().updateBuildingInfo(buildingId, building);
     }
