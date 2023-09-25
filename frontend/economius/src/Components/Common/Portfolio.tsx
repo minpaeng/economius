@@ -1,41 +1,41 @@
-import Modal from "react-modal";
+import * as S from "./Portfolio.style";
+import PortfolioGold from "./PortfolioProperty/PortfolioGold/PortfolioGold";
+import PortfolioMoney from "./PortfolioProperty/PortfolioMoney/PortfolioMoney";
+import PortfolioStock from "./PortfolioProperty/PortfolioStock/PortfolioStock";
+import PropertyChart from "./PortfolioProperty/PropertyChart";
+import PortfolioSaving from "./PortfolioProperty/PortfolioSaving/PortfolioSaving";
+import PortfolioRealEstate from "./PortfolioProperty/PortfolioRealEstate/PortfolioRealEstate";
 
 function Portforlio() {
-  // modal style
-  const modalStyle: any = {
-    overlay: {
-      position: "fixed",
-      top: "6%",
-      left: "75%",
-      right: 0,
-      bottom: 0,
-      backgroundColor: "rgba(0,0,0,0)",
-      zIndex: 1,
-      //   width: "0px",
-    },
-    content: {
-      display: "flex",
-      flexDirextion: "column",
-      backgroundColor: "#b8d4ffdb",
-      overflow: "auto",
-      zIndex: 1,
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      border: "none",
-      //   width: "100%",
-      //   height: "100%",
-      //   border: "5px solid white",
-      borderRadius: "0",
-
-      padding: "0px",
-    },
-  };
   return (
-    <Modal isOpen={true} style={modalStyle}>
-      portfolio
-    </Modal>
+    <S.PortfolioMain>
+      <div
+        style={{
+          fontSize: "28px",
+          margin: "20px 0px",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <img
+          src="Portfolio/Portfolio.png"
+          alt="img"
+          style={{ height: "50px" }}
+        />
+        <span>지니어스 님의 포트폴리오</span>
+      </div>
+      <PropertyChart></PropertyChart>
+      {/* 현금 */}
+      <PortfolioMoney />
+      {/* 금 */}
+      <PortfolioGold />
+      {/* 적금 */}
+      <PortfolioSaving />
+      {/* 부동산 */}
+      <PortfolioRealEstate />
+      {/* 주식 토글 */}
+      <PortfolioStock />
+    </S.PortfolioMain>
   );
 }
 
