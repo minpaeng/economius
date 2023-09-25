@@ -10,6 +10,7 @@ import com.ssafy.economius.game.dto.response.GameStartResponse;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.service.GameService;
 import com.ssafy.economius.game.service.FinishTurnService;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -32,21 +33,26 @@ public class GameController {
     public void join(@DestinationVariable int roomId, GameJoinRequest gameJoinRequest) {
         GameJoinResponse gameJoinResponse = gameService.join(roomId, gameJoinRequest.getPlayer());
 
-        template.convertAndSend("/sub/" + roomId, gameJoinResponse);
+        Map<String, Object> headers = Map.of("success", true, "type", "join");
+        template.convertAndSend("/sub/" + roomId, gameJoinResponse, headers);
     }
 
     @MessageMapping(value = "/{roomId}/start")
     public void start(@DestinationVariable int roomId, GameStartRequest gameStartRequest) {
         GameStartResponse gameStartResponse = gameService.start(roomId,
             gameStartRequest.getHostPlayer());
-        template.convertAndSend("/sub/" + roomId, gameStartResponse);
+
+        Map<String, Object> headers = Map.of("success", true, "type", "start");
+        template.convertAndSend("/sub/" + roomId, gameStartResponse, headers);
     }
 
     @MessageMapping(value = "/{roomId}/calculate")
     public void calculate(@DestinationVariable int roomId, CalculateRequest calculateRequest) {
         CalculateResponse calculateResponse = gameService.calculate(
             roomId, calculateRequest.getPlayer());
-        template.convertAndSend("/sub/" + roomId, calculateResponse);
+
+        Map<String, Object> headers = Map.of("success", true, "type", "calculate");
+        template.convertAndSend("/sub/" + roomId, calculateResponse, headers);
     }
 
 
@@ -54,6 +60,7 @@ public class GameController {
     public void finishTurn(@DestinationVariable int roomId){
         Game game = finishTurnService.finish(roomId);
 
-        template.convertAndSend("/sub/" + roomId, game);
+        Map<String, Object> headers = Map.of("success", true, "type", "finishTurn");
+        template.convertAndSend("/sub/" + roomId, game, headers);
     }
 }
