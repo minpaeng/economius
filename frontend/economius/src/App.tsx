@@ -4,7 +4,6 @@ import { Canvas, useLoader, useFrame } from '@react-three/fiber';
 import { OrbitControls, OrthographicCamera } from '@react-three/drei';
 import Map from '/src/Map';
 import Characters from '/src/Characters';
-import Dice2 from './Dice/Dice2';
 import Controller from '/src/Controller';
 import Modal from 'react-modal';
 import Portforlio from './Components/Common/Portfolio';
@@ -14,6 +13,8 @@ import Modals from './Modals';
 import PlayerPlaceAll from './Components/Common/PlayerPlaceAll';
 
 import PlayerSocket from './Socket';
+
+// import Cards from './Cards';
 
 function App() {
     Modal.setAppElement('#root');
@@ -28,15 +29,16 @@ function App() {
                 <Characters />
             </Canvas>
 
-            <Dice2 />
             <Controller />
 
-            <Portforlio />
+            {/* <Portforlio />
             <NewsBar />
-            <PlayerPlaceAll />
+            <PlayerPlaceAll /> */}
 
             <Modals />
             <PlayerSocket />
+
+            {/* <Cards /> */}
         </div>
     );
 }

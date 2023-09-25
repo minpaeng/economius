@@ -1,5 +1,6 @@
 import { useRecoilState } from 'recoil';
 import { IsModalOpenState } from '/src/recoil/animation/atom';
+import { TradeStockState } from '/src/recoil/trading/atom';
 import Modal from 'react-modal';
 import { useState } from 'react';
 import * as S from './Stock.style';
@@ -30,13 +31,15 @@ function Stock() {
         { turn: 20, open: null, high: null, low: null, close: null },
     ];
 
-    //  매수,매도 구분 플래그
+    //  매수,매도 탭 구분 플래그
     const [buyClick, isBuyClick] = useState(true);
 
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const closeModal = () => {
         setIsModalOpen(false);
     };
+    // 주식 매수, 매도 여부
+    const [tradeStock, setTradeStock] = useRecoilState(TradeStockState);
 
     // modal style
     const modalStyle: any = {
@@ -122,7 +125,11 @@ function Stock() {
                     </S.StockMidRight>
                 </S.StockMid>
                 <S.StockDivide />
-                {buyClick ? <S.StockBuyBottom>매수하기</S.StockBuyBottom> : <S.StockSellBottom>매도하기</S.StockSellBottom>}
+                {buyClick ? (
+                    <S.StockBuyBottom onClick={() => setTradeStock([true, false])}>매수하기</S.StockBuyBottom>
+                ) : (
+                    <S.StockSellBottom onClick={() => setTradeStock([false, true])}>매도하기</S.StockSellBottom>
+                )}
             </S.StockMain>
         </Modal>
     );

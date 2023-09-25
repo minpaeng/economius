@@ -11,6 +11,7 @@ import * as S from './RealEstate.style';
 function RealEstate() {
     const [nowPlayer, setNowPlayer] = useRecoilState(NowPlayerState);
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
+    // 부동산 매수, 매도 여부
     const [tradeRealEstate, setTradeRealEstate] = useRecoilState(TradeRealEstateState);
     const closeModal = () => {
         setIsModalOpen(false);

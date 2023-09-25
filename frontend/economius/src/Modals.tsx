@@ -28,7 +28,7 @@ const modalComponent = {
     11: Stock,
     12: ChanceCard,
     13: Stock,
-    14: InstallmentSaving,
+    14: RealEstate,
     15: Stock,
     16: FinanceCenter,
     17: Stock,
