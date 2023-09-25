@@ -109,7 +109,7 @@ function Insurance() {
                         return <InsuranceCard CardInfo={insurance} index={index}></InsuranceCard>;
                     })}
                 </S.InsuranceMid>
-                <S.InsuranceConfirmButton onClick={() => setTradeInsurance([true, false, false, false])}>확인</S.InsuranceConfirmButton>
+                <S.InsuranceConfirmButton onClick={() => setTradeInsurance([false, true, false, false])}>확인</S.InsuranceConfirmButton>
             </S.InsuranceMain>
         </Modal>
     );

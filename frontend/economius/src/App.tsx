@@ -9,12 +9,11 @@ import Modal from 'react-modal';
 import Portforlio from './Components/Common/Portfolio';
 import NewsBar from './Components/Common/NewsBar';
 
+import './App.css';
 import Modals from './Modals';
 import PlayerPlaceAll from './Components/Common/PlayerPlaceAll';
 
-import PlayerSocket from './Socket';
-
-// import Cards from './Cards';
+import ChatTest from './Socket';
 
 function App() {
     Modal.setAppElement('#root');
@@ -31,14 +30,12 @@ function App() {
 
             <Controller />
 
-            {/* <Portforlio />
+            <Portforlio />
             <NewsBar />
-            <PlayerPlaceAll /> */}
+            <PlayerPlaceAll />
 
             <Modals />
-            <PlayerSocket />
-
-            {/* <Cards /> */}
+            <ChatTest />
         </div>
     );
 }

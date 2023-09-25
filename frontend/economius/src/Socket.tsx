@@ -44,11 +44,6 @@ const bankIds = {
     18: 3,
 };
 
-const insuranceIds = {
-    6: 1,
-    26: 2,
-};
-
 function PlayerSocket() {
     const [roomId, setRoomId] = useRecoilState(RoomIdState);
     const [isOpen, setIsOpen] = useRecoilState(IsModalOpenState);
@@ -141,12 +136,7 @@ function PlayerSocket() {
         // 보험 방문
         else if ([6, 26].includes(nowPlayerPosition)) {
             if (stompClient.current) {
-                console.log(nowPlayer + 1, insuranceIds[nowPlayerPosition]);
-                stompClient.current.send(
-                    `/pub/${roomId}/insurance`,
-                    {},
-                    JSON.stringify({ player: nowPlayer + 1, insuranceId: insuranceIds[nowPlayerPosition] })
-                );
+                stompClient.current.send(`/pub/${roomId}/insurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: '' }));
             }
         }
     }, [isOpen]);
@@ -198,7 +188,6 @@ function PlayerSocket() {
     useEffect(() => {
         if (tradeGold[0]) {
             if (stompClient.current) {
-                console.log(nowPlayer + 1, buyAmount);
                 stompClient.current.send('/pub/1/buyGolds', {}, JSON.stringify({ player: nowPlayer + 1, goldAmount: buyAmount }));
                 setTradeGold([false, false]);
             }
@@ -214,7 +203,6 @@ function PlayerSocket() {
     useEffect(() => {
         if (tradeBank[0]) {
             if (stompClient.current) {
-                console.log(nowPlayer + 1, bankIds[nowPlayerPosition]);
                 stompClient.current.send('/pub/1/joinSavings', {}, JSON.stringify({ player: nowPlayer + 1, bankId: bankIds[nowPlayerPosition] }));
                 setTradeBank([false, false]);
             }
@@ -230,26 +218,25 @@ function PlayerSocket() {
     useEffect(() => {
         if (tradeInsurance[0]) {
             if (stompClient.current) {
-                console.log(nowPlayer + 1, insuranceIds[nowPlayerPosition]);
-                stompClient.current.send('/pub/1/joinInsurance', {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: insuranceIds[nowPlayerPosition] }));
+                stompClient.current.send('/pub/1/joinInsurance', {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 1 }));
                 setTradeInsurance([false, false, false, false]);
             }
         }
-        if (!tradeInsurance[1]) {
+        if (tradeInsurance[1]) {
             if (stompClient.current) {
-                stompClient.current.send('/pub/1/finishInsurance', {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: insuranceIds[nowPlayerPosition] }));
+                stompClient.current.send('/pub/1/finishInsurance', {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
                 setTradeInsurance([false, false, false, false]);
             }
         }
         if (tradeInsurance[2]) {
             if (stompClient.current) {
-                stompClient.current.send('/pub/1/joinInsurance', {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: insuranceIds[nowPlayerPosition] }));
+                stompClient.current.send('/pub/1/joinInsurance', {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 3 }));
                 setTradeInsurance([false, false, false, false]);
             }
         }
         if (tradeInsurance[3]) {
             if (stompClient.current) {
-                stompClient.current.send('/pub/1/joinInsurance', {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: insuranceIds[nowPlayerPosition] }));
+                stompClient.current.send('/pub/1/joinInsurance', {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 4 }));
                 setTradeInsurance([false, false, false, false]);
             }
         }
