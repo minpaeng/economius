@@ -25,7 +25,7 @@ public class InsuranceController {
     public void visitInsurance(@DestinationVariable int roomId, InsuranceRequest insuranceRequest) {
         Map<String, Object> headers = Map.of("success", true);
         InsuranceVisitResponse insuranceVisitResponse = insuranceService.visitInsurance(roomId, insuranceRequest);
-        template.convertAndSend("/sub/" + roomId, headers);
+        template.convertAndSend("/sub/" + roomId, insuranceVisitResponse, headers);
     }
 
     @MessageMapping(value = "/{roomId}/joinInsurance")
