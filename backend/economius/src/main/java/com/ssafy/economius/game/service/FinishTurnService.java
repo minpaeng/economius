@@ -120,7 +120,7 @@ public class FinishTurnService {
     private void updateBuildingPrice(int newRate, Game game, int buildingId) {
         Building building = game.getBuildings().get(buildingId);
         building.updateBuildingPrice(newRate);
-
+        if (building.getOwnerId() == null) return;
         game.getPortfolios().get(building.getOwnerId())
                 .getBuildings().updateBuildingInfo(buildingId, building);
     }
