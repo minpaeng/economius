@@ -21,7 +21,7 @@ public class PortfolioStocks {
     private Map<Integer, PortfolioStock> stocks;
 
     public void updatePortfolioStockByStockChange(Stock stock){
-        log.info("updateStock : " + stock.getStockId() + " : " + stock);
+//        log.info("updateStock : " + stock.getStockId() + " : " + stock);
         if (stocks == null) {
             return;
         }
