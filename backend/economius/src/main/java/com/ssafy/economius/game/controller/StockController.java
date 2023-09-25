@@ -2,9 +2,11 @@ package com.ssafy.economius.game.controller;
 
 import com.ssafy.economius.game.dto.request.BuyItemRequest;
 import com.ssafy.economius.game.dto.request.BuyStockRequest;
+import com.ssafy.economius.game.dto.request.SelectStockRequest;
 import com.ssafy.economius.game.dto.request.SellStockRequest;
 import com.ssafy.economius.game.dto.response.BuyItemResponse;
 import com.ssafy.economius.game.dto.response.BuyStockResponse;
+import com.ssafy.economius.game.dto.response.SelectStockResponse;
 import com.ssafy.economius.game.dto.response.SellStockResponse;
 import com.ssafy.economius.game.service.StockService;
 import java.util.Map;
@@ -53,15 +55,18 @@ public class StockController {
         template.convertAndSend("/sub/" + roomId, buyItemResponse, headers);
     }
 
-    @MessageMapping(value = "/{roomId}/selectStock")
-    public void selectStock() {
-        template.convertAndSend("");
+    @MessageMapping(value = "/{roomId}/stockDetail")
+    public void selectStock(@DestinationVariable int roomId,
+        SelectStockRequest selectStockRequest) {
+        log.info(roomId + " -> stockDetail 호출");
+
+        SelectStockResponse selectStockResponse = stockService.stockDetail(roomId,
+            selectStockRequest.getStockId());
+
+        Map<String, Object> headers = Map.of("success", true, "type", "stockDetail");
+        template.convertAndSend("/sub/" + roomId + "/" + selectStockRequest.getPlayer(),
+            selectStockResponse, headers);
     }
 
-
-    @MessageMapping(value = "/{roomId}/companyDetail")
-    public void companyDetail() {
-        template.convertAndSend("");
-    }
 
 }
