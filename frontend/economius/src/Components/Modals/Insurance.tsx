@@ -1,6 +1,8 @@
 import Modal from 'react-modal';
+import { useState } from 'react';
 import {useRecoilState} from 'recoil';
 import {IsModalOpenState} from '/src/recoil/animation/atom';
+import { TradeInsuranceConfirmState, TradeInsuranceState } from '/src/recoil/trading/atom';
 import * as S from './Insurance.style';
 import InsuranceCard from './InsuranceCard';
 
@@ -78,6 +80,7 @@ function Insurance() {
     const closeModal = () => {
         setIsModalOpen(false);
     };
+    const [tradeInsurance, setTradeInsurance] = useRecoilState(TradeInsuranceState);
 
     // modal style
     const modalStyle: any = {
@@ -114,10 +117,11 @@ function Insurance() {
                     <S.InsuranceTopTitle>한화생명</S.InsuranceTopTitle>
                 </S.InsuranceTop>
                 <S.InsuranceMid>
-                    {InsuranceInfo.map(insurance => {
-                        return <InsuranceCard CardInfo={insurance}></InsuranceCard>;
+                    {InsuranceInfo.map((insurance, index) => {
+                        return <InsuranceCard CardInfo={insurance} index={index}></InsuranceCard>;
                     })}
                 </S.InsuranceMid>
+                <S.InsuranceConfirmButton onClick={() => setTradeInsurance([false, true, false, false])}>확인</S.InsuranceConfirmButton>
             </S.InsuranceMain>
         </Modal>
     );

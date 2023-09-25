@@ -2,6 +2,13 @@ import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 const { persistAtom } = recoilPersist();
 
+// 현재 방 번호
+export const RoomIdState = atom<number>({
+    key: 'RoomIdState',
+    default: 1, // 기본값
+    effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+});
+
 // 현재 플레이어
 export const UseridState = atom({
     key: 'UseridState',
@@ -18,9 +25,16 @@ export const NowPlayerState = atom<number>({
 
 // 현재 플레이어 최종 위치
 export const NowPlayerPositionState = atom<number>({
-  key: "NowPlayerPositionState",
-  default: 0, // 기본값
-  effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+    key: 'NowPlayerPositionState',
+    default: 0, // 기본값
+    effects_UNSTABLE: [persistAtom],
+});
+
+// 이동 카드 번호
+export const MovementCardsState = atom<number[]>({
+    key: 'MovementCardState',
+    default: [1, 1, 1],
+    effects_UNSTABLE: [persistAtom],
 });
 
 // 캐릭터 이동 여부
@@ -46,6 +60,7 @@ export const IsModalOpenState = atom<boolean>({
   key: "IsModalOpenState",
   default: false,
 });
+<<<<<<< HEAD
 
 // 부동산 구입
 export const BuyRealEstateState = atom<boolean>({
@@ -59,3 +74,5 @@ export const NewsClickIdxState = atom<boolean>({
   key: "NewsClickIdxState",
   default: null,
 });
+=======
+>>>>>>> feat/fe/socket_connection

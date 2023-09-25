@@ -1,7 +1,11 @@
+import { useRecoilState } from 'recoil';
+import { TradeInsuranceState } from '/src/recoil/trading/atom';
 import * as S from './InsuranceCard.style';
 import InsuranceCardItem from './InsuranceCardItem';
 
-function InsuranceCard({ CardInfo }) {
+function InsuranceCard({ CardInfo, index }) {
+    const [tradeInsurance, setTradeInsurance] = useRecoilState(TradeInsuranceState);
+
     return (
         <S.CardLayout>
             <S.CardMain>
