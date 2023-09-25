@@ -3,6 +3,13 @@ import { recoilPersist } from 'recoil-persist';
 const { persistAtom } = recoilPersist();
 
 // 현재 플레이어
+export const UseridState = atom({
+    key: 'UseridState',
+    default: 'a', // 기본값
+    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+});
+
+// 현재 플레이어
 export const NowPlayerState = atom<number>({
     key: 'NowPlayerState',
     default: 0, // 기본값
