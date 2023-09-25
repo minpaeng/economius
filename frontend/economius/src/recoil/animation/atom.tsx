@@ -60,7 +60,6 @@ export const IsModalOpenState = atom<boolean>({
   key: "IsModalOpenState",
   default: false,
 });
-<<<<<<< HEAD
 
 // 부동산 구입
 export const BuyRealEstateState = atom<boolean>({
@@ -74,5 +73,3 @@ export const NewsClickIdxState = atom<boolean>({
   key: "NewsClickIdxState",
   default: null,
 });
-=======
->>>>>>> feat/fe/socket_connection
