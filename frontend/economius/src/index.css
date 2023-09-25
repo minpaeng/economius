@@ -1,0 +1,22 @@
+/* 기본 적용된 padding, margin 제거 */
+* {
+    padding: 0;
+    margin: 0;
+}
+
+/* 화면 크기에 맞춰서 영상크기가 100%가 되도록 적용 */
+video {
+    width: 100%;
+}
+
+/* 영상 가운데 들어갈 태그들 가운데 띄워지도록 적용 */
+.content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+}
