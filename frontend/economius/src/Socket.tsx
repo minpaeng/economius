@@ -232,25 +232,25 @@ function PlayerSocket() {
             if (stompClient.current) {
                 console.log(nowPlayer + 1, insuranceIds[nowPlayerPosition]);
                 stompClient.current.send('/pub/1/joinInsurance', {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: insuranceIds[nowPlayerPosition] }));
-                setTradeBank([false, false, false, false]);
+                setTradeInsurance([false, false, false, false]);
             }
         }
-        if (tradeBank[1]) {
+        if (!tradeInsurance[1]) {
             if (stompClient.current) {
-                stompClient.current.send('/pub/1/joinInsurance', {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: insuranceIds[nowPlayerPosition] }));
-                setTradeBank([false, false, false, false]);
+                stompClient.current.send('/pub/1/finishInsurance', {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: insuranceIds[nowPlayerPosition] }));
+                setTradeInsurance([false, false, false, false]);
             }
         }
-        if (tradeBank[2]) {
+        if (tradeInsurance[2]) {
             if (stompClient.current) {
                 stompClient.current.send('/pub/1/joinInsurance', {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: insuranceIds[nowPlayerPosition] }));
-                setTradeBank([false, false, false, false]);
+                setTradeInsurance([false, false, false, false]);
             }
         }
-        if (tradeBank[3]) {
+        if (tradeInsurance[3]) {
             if (stompClient.current) {
                 stompClient.current.send('/pub/1/joinInsurance', {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: insuranceIds[nowPlayerPosition] }));
-                setTradeBank([false, false, false, false]);
+                setTradeInsurance([false, false, false, false]);
             }
         }
     }, [tradeInsurance]);
