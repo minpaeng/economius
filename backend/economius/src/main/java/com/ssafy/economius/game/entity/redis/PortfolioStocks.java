@@ -67,7 +67,9 @@ public class PortfolioStocks {
 
     private void changePortfolioStock(Stock stock, int changeAmount) {
         log.info("stock 키 존재 -> 업데이트 진행");
-        stocks.get(stock.getStockId()).updateStockAmount(changeAmount, stock);
+        if (!stocks.get(stock.getStockId()).updateStockAmount(changeAmount, stock)) {
+            this.stocks.remove(stock.getStockId());
+        }
         calculatePortfolioStock();
     }
 

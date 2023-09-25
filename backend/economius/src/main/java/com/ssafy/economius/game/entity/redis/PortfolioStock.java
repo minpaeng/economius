@@ -26,11 +26,16 @@ public class PortfolioStock {
         return earningPrice;
     }
 
-    public void updateStockAmount(int changeAmount, Stock stock) {
+    public boolean updateStockAmount(int changeAmount, Stock stock) {
         this.stock = stock;
 
         totalCost += stock.getPrice() * changeAmount;
         this.amount += changeAmount;
+
+        if (amount == 0){
+            return false;
+        }
         this.costPerStock = totalCost / amount;
+        return true;
     }
 }

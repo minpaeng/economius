@@ -3,14 +3,19 @@ package com.ssafy.economius.game.service;
 import com.ssafy.economius.common.exception.CustomWebsocketException;
 import com.ssafy.economius.common.exception.message.GameRoomMessage;
 import com.ssafy.economius.common.exception.validator.GameValidator;
+import com.ssafy.economius.game.dto.PriceDto;
 import com.ssafy.economius.game.dto.response.BuyItemResponse;
 import com.ssafy.economius.game.dto.response.BuyStockResponse;
+import com.ssafy.economius.game.dto.response.SelectStockResponse;
 import com.ssafy.economius.game.dto.response.SellStockResponse;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Portfolio;
+import com.ssafy.economius.game.entity.redis.Price;
 import com.ssafy.economius.game.entity.redis.Stock;
 import com.ssafy.economius.game.repository.redis.GameRepository;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +27,13 @@ public class StockService {
 
     private final GameRepository gameRepository;
     private final GameValidator gameValidator;
+
+    public SelectStockResponse stockDetail(int roomId, int stockId) {
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
+        Stock stock = game.getStocks().get(stockId);
+
+        return getSelectStockResponse(stock);
+    }
 
     public BuyItemResponse buyItem(int roomId, int stockId, Long buyPlayer) {
         /**
@@ -86,7 +98,7 @@ public class StockService {
         int price = stock.getPrice() * stockAmount;
         gameValidator.canBuy(roomId, money, price);
 
-        if (stock.checkStockAvailableToPurchase(stockAmount)) {
+        if (!stock.checkStockAvailableToPurchase(stockAmount)) {
             throw CustomWebsocketException.builder()
                 .roomId(roomId)
                 .code(GameRoomMessage.NOT_ENOUGH_STOCK.getCode())
@@ -106,5 +118,34 @@ public class StockService {
             }
         }
     }
+
+    private PriceDto priceMappingToDto(Price price) {
+        return PriceDto.builder()
+            .openingPrice(price.getOpeningPrice())
+            .closingPrice(price.getClosingPrice())
+            .highPrice(price.getHighPrice())
+            .lowPrice(price.getLowPrice())
+            .build();
+    }
+
+    private SelectStockResponse getSelectStockResponse(Stock stock) {
+        List<PriceDto> priceHistory = stock.getPriceHistory().stream()
+            .map(this::priceMappingToDto)
+            .collect(Collectors.toList());
+
+        return SelectStockResponse.builder()
+            .stockId(stock.getStockId())
+            .stockIndustryId(stock.getStockIndustryId())
+            .name(stock.getName())
+            .rate(stock.getRate())
+            .companyCategory(stock.getCompanyCategory())
+            .price(stock.getPrice())
+            .companySubCategory(stock.getCompanySubCategory())
+            .rateHistory(stock.getRateHistory())
+            .remainingAmount(stock.getRemainingAmount())
+            .priceHistory(priceHistory)
+            .build();
+    }
+
 
 }

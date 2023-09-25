@@ -2,9 +2,11 @@ package com.ssafy.economius.game.controller;
 
 import com.ssafy.economius.game.dto.request.BuyItemRequest;
 import com.ssafy.economius.game.dto.request.BuyStockRequest;
+import com.ssafy.economius.game.dto.request.SelectStockRequest;
 import com.ssafy.economius.game.dto.request.SellStockRequest;
 import com.ssafy.economius.game.dto.response.BuyItemResponse;
 import com.ssafy.economius.game.dto.response.BuyStockResponse;
+import com.ssafy.economius.game.dto.response.SelectStockResponse;
 import com.ssafy.economius.game.dto.response.SellStockResponse;
 import com.ssafy.economius.game.service.StockService;
 import java.util.Map;
@@ -25,43 +27,55 @@ public class StockController {
 
     @MessageMapping(value = "/{roomId}/buyStock")
     public void buyStock(@DestinationVariable int roomId, BuyStockRequest buyStockRequest) {
-        BuyStockResponse buyGoldResponse = stockService.buyStock(roomId,
-            buyStockRequest.getStockId(),
-            buyStockRequest.getStockAmount(), buyStockRequest.getPlayer());
+        log.info(roomId + ": buyStock 호출 -> " + buyStockRequest.toString());
 
-        Map<String, Object> headers = Map.of("success", true);
-        template.convertAndSend("/sub/" + roomId, buyGoldResponse, headers);
+        BuyStockResponse buyStockResponse = stockService.buyStock(roomId,
+            buyStockRequest.getStockId(), buyStockRequest.getStockAmount(),
+            buyStockRequest.getPlayer());
+
+        log.info(roomId + ": buyStock 결과 -> " + buyStockResponse.toString());
+        Map<String, Object> headers = Map.of("success", true, "type", "buyStock");
+        template.convertAndSend("/sub/" + roomId, buyStockResponse, headers);
     }
 
     @MessageMapping(value = "/{roomId}/sellStock")
     public void sellStock(@DestinationVariable int roomId, SellStockRequest sellStockRequest) {
-        log.info("sellStock 호출");
+        log.info(roomId + ": sellStock 호출 -> " + sellStockRequest.toString());
+
         SellStockResponse sellStockResponse = stockService.sellStock(roomId,
             sellStockRequest.getStockId(), sellStockRequest.getStockAmount(),
             sellStockRequest.getPlayer());
 
-        Map<String, Object> headers = Map.of("success", true);
+        log.info(roomId + ": sellStock 결과 -> " + sellStockResponse.toString());
+        Map<String, Object> headers = Map.of("success", true, "type", "sellStock");
         template.convertAndSend("/sub/" + roomId, sellStockResponse, headers);
     }
 
     @MessageMapping(value = "/{roomId}/buyItem")
     public void buyItem(@DestinationVariable int roomId, BuyItemRequest buyItemRequest) {
-        log.info("buyItem 호출");
+        log.info(roomId + ": buyItem 호출 -> " + buyItemRequest.toString());
+
         BuyItemResponse buyItemResponse = stockService.buyItem(roomId, buyItemRequest.getStockId(),
             buyItemRequest.getPlayer());
-        Map<String, Object> headers = Map.of("success", true);
+
+        log.info(roomId + ": buyItem 결과 -> " + buyItemResponse.toString());
+        Map<String, Object> headers = Map.of("success", true, "type", "buyItem");
         template.convertAndSend("/sub/" + roomId, buyItemResponse, headers);
     }
 
-    @MessageMapping(value = "/{roomId}/selectStock")
-    public void selectStock() {
-        template.convertAndSend("");
+    @MessageMapping(value = "/{roomId}/stockDetail")
+    public void selectStock(@DestinationVariable int roomId,
+        SelectStockRequest selectStockRequest) {
+        log.info(roomId + ": stockDetail 호출 -> " + selectStockRequest.toString());
+
+        SelectStockResponse selectStockResponse = stockService.stockDetail(roomId,
+            selectStockRequest.getStockId());
+
+        log.info(roomId + ": stockDetail 결과 -> " + selectStockResponse.toString());
+        Map<String, Object> headers = Map.of("success", true, "type", "stockDetail");
+        template.convertAndSend("/sub/" + roomId + "/" + selectStockRequest.getPlayer(),
+            selectStockResponse, headers);
     }
 
-
-    @MessageMapping(value = "/{roomId}/companyDetail")
-    public void companyDetail() {
-        template.convertAndSend("");
-    }
 
 }

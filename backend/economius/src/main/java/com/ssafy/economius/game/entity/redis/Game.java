@@ -1,9 +1,18 @@
 package com.ssafy.economius.game.entity.redis;
 
 
-import static com.ssafy.economius.game.enums.RateEnum.*;
+import com.ssafy.economius.game.dto.mysql.PrevIssueDto;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
+
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,13 +20,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import com.ssafy.economius.game.dto.mysql.PrevIssueDto;
-import com.ssafy.economius.game.entity.mysql.EventMoney;
-import com.ssafy.economius.game.entity.mysql.EventStock;
-import lombok.*;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.RedisHash;
+import static com.ssafy.economius.game.enums.RateEnum.MAX_BOARD_SIZE;
 
 @RedisHash
 @Getter
@@ -55,7 +58,7 @@ public class Game {
     private int issueIdx;
     private List<Issue> issues;
     private Issue currentIssue;
-    private List<PrevIssueDto> currentPrevIssue;
+    private List<PrevIssueDto> currentPrevIssues;
 
     // 찬스 이벤트 -
     private Event event;
@@ -114,13 +117,9 @@ public class Game {
 
     public void updatePrize() {
         List<Entry<Long, Portfolio>> entries = new LinkedList<>(portfolios.entrySet());
-        entries.sort(new Comparator<Entry<Long, Portfolio>>() {
-            @Override
-            public int compare(Entry<Long, Portfolio> o1, Entry<Long, Portfolio> o2) {
-                return Integer.compare(o2.getValue().getTotalMoney(),
-                    o1.getValue().getTotalMoney());
-            }
-        });
+        entries.sort((o1, o2) -> Integer.compare(
+                o2.getValue().getTotalMoney(),
+                o1.getValue().getTotalMoney()));
 
         int prize = 0;
         for (Entry<Long, Portfolio> entry : entries) {

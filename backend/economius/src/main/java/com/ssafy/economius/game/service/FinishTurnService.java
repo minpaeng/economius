@@ -1,11 +1,10 @@
 package com.ssafy.economius.game.service;
 
 import com.ssafy.economius.common.exception.validator.GameValidator;
-import com.ssafy.economius.game.dto.mysql.IssueStockDto;
+import com.ssafy.economius.game.entity.redis.AssetChange;
 import com.ssafy.economius.game.entity.redis.Building;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Stock;
-import com.ssafy.economius.game.enums.ChangeUnit;
 import com.ssafy.economius.game.enums.InitialData;
 import com.ssafy.economius.game.enums.VolatileEnum;
 import com.ssafy.economius.game.repository.redis.GameRepository;
@@ -51,33 +50,32 @@ public class FinishTurnService {
     }
 
     private void changePrevIssue(Game game, int round) {
-        if (round % 4 != 3) return;
+        if (round % 4 != 0) return;
         int idx = game.getIssueIdx() + 1;
         game.setIssueIdx(idx);
-        game.setCurrentPrevIssue(
+        game.setCurrentPrevIssues(
                 InitialData.getPrevIssue(game.getIssues().get(idx).getIssueId()));
         game.setCurrentIssue(null);
     }
 
     private void checkIssueRound(Game game, int round) {
-        if (round % 4 != 0) return;
+        if (round % 4 != 1) return;
+        game.setCurrentPrevIssues(null);
         game.setCurrentIssue(game.getIssues().get(game.getIssueIdx()));
     }
 
     private void applyIssueEffect(Game game, int round) {
-        if (round % 4 == 3) return;
-        int issueId = game.getIssues().get(game.getIssueIdx()).getIssueId();
-        List<IssueStockDto> assetsChanges = InitialData.getIssueChanges(issueId);
-        log.info(assetsChanges.toString());
+        if (round % 4 == 0) return;
+        List<AssetChange> assetChanges = game.getIssues().get(game.getIssueIdx()).getCurrentAssetChanges();
 
-        for (IssueStockDto assetChange : assetsChanges) {
+        for (AssetChange assetChange : assetChanges) {
             applyChanges(game, assetChange, round);
         }
     }
 
-    private void applyChanges(Game game, IssueStockDto assetChange, int round) {
+    private void applyChanges(Game game, AssetChange assetChange, int round) {
         String type = assetChange.getAssetType();
-        int changeRate = getChangeRate(assetChange.getChangeUnit());
+        int changeRate = assetChange.getChangeRate().getValue();
 
         if (type.equals(VolatileEnum.GOLD.getValue())) {
             game.getGold().updateGoldPrice(changeRate);
@@ -88,13 +86,6 @@ public class FinishTurnService {
         } else if (type.equals(VolatileEnum.STOCK.getValue())) {
             applyStockChanges(game, assetChange.getAssetId(), changeRate, round);
         }
-    }
-
-    private int getChangeRate(int changeUnit) {
-        for (ChangeUnit c : ChangeUnit.values()) {
-            if (changeUnit == c.getCode()) return c.getValue();
-        }
-        return 1;
     }
 
     private void applyBuildingChanges(Game game, int changeRate) {
@@ -116,7 +107,6 @@ public class FinishTurnService {
 
     private void buildingRearrange(Game game) {
         for (int buildingId : game.getBuildings().keySet()) {
-            // 가격 재조정
             int newRate = RandomUtil.getRanges(BUILDING_RATE_LOWER_BOUND.getValue(),
                     BUILDING_RATE_UPPER_BOUND.getValue());
             updateBuildingPrice(newRate, game, buildingId);
@@ -126,7 +116,7 @@ public class FinishTurnService {
     private void updateBuildingPrice(int newRate, Game game, int buildingId) {
         Building building = game.getBuildings().get(buildingId);
         building.updateBuildingPrice(newRate);
-        // 포폴 부동산 업데이트
+
         game.getPortfolios().get(building.getOwnerId())
                 .getBuildings().updateBuildingInfo(buildingId, building);
     }
@@ -151,7 +141,4 @@ public class FinishTurnService {
         game.getPortfolios().values()
                 .forEach(portfolio -> portfolio.getStocks().updatePortfolioStockByStockChange(stock));
     }
-
-
-
 }

@@ -24,23 +24,25 @@ public class DiceController {
     @MessageMapping(value = "/{roomId}/viewMovementCard")
     public void viewMovementCard(@DestinationVariable int roomId,
         ViewMovementCardRequest viewMovementCardRequest) {
-        log.info("roomId : " + roomId + " -> viewMovementCard 호출");
+        log.info(roomId + ": viewMovementCard 호출 -> " + viewMovementCardRequest.toString());
 
         ViewMovementCardResponse viewMovementCardResponse = diceService.makeMovementCard(
             viewMovementCardRequest.getPlayer());
 
-        Map<String, Object> headers = Map.of("success", true);
+        log.info(roomId + ": viewMovementCard 결과 -> " + viewMovementCardResponse.toString());
+        Map<String, Object> headers = Map.of("success", true, "type", "viewMovementCard");
         template.convertAndSend("/sub/" + roomId, viewMovementCardResponse, headers);
     }
 
     @MessageMapping(value = "/{roomId}/movePlayer")
     public void movePlayer(@DestinationVariable int roomId, MovePlayerRequest movePlayerRequest) {
-        log.info("roomId : " + roomId + " -> movePlayer 호출");
+        log.info(roomId + ": movePlayer 호출 -> " + movePlayerRequest.toString());
 
         MovePlayerResponse movePlayerResponse = diceService.movePlayer(roomId,
             movePlayerRequest.getPlayer(), movePlayerRequest.getMovementCount());
 
-        Map<String, Object> headers = Map.of("success", true);
+        log.info(roomId + ": movePlayer 결과 -> " + movePlayerResponse.toString());
+        Map<String, Object> headers = Map.of("success", true, "type", "movePlayer");
         template.convertAndSend("/sub/" + roomId, movePlayerResponse, headers);
     }
 

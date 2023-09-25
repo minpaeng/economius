@@ -75,6 +75,28 @@
             }));
         }
 
+        function sendInsuranceVisit() {
+            stompClient.send("/pub/1/insurance", {}, JSON.stringify({
+                "player": 1 ,
+                "insuranceId" : 1
+            }));
+        }
+
+        function sendInsuranceJoin() {
+            stompClient.send("/pub/1/joinInsurance", {}, JSON.stringify({
+                "player": 1 ,
+                "insuranceId" : 3
+            }));
+        }
+
+
+        function sendInsuranceStop() {
+            stompClient.send("/pub/1/finishInsurance", {}, JSON.stringify({
+                "player": 1 ,
+                "insuranceId" : 3
+            }));
+        }
+
         function sendEventCard() {
             stompClient.send("/pub/4/eventCard", {}, JSON.stringify({
                 "player": 1 
@@ -100,6 +122,12 @@
 
 <div class="button-container">
     <button onclick="sendStart();">게임 시작 (1번 플레이어 / 호스트만 가능)</button>
+</div>
+
+<div class="button-container">
+    <button onclick="sendInsuranceVisit();">보험사 방문 발생 테스트</button>
+    <button onclick="sendInsuranceJoin();">보험사 방문 발생 테스트</button>
+    <button onclick="sendInsuranceStop();">보험사 방문 발생 테스트</button>
 </div>
 
 <div class="button-container">
