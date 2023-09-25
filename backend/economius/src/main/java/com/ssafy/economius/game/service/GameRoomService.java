@@ -33,9 +33,11 @@ import com.ssafy.economius.game.entity.redis.Issue;
 import com.ssafy.economius.game.entity.redis.Price;
 import com.ssafy.economius.game.entity.redis.Saving;
 import com.ssafy.economius.game.entity.redis.Stock;
+import com.ssafy.economius.game.enums.DescriptionTitleEnum;
 import com.ssafy.economius.game.enums.InitialData;
 import com.ssafy.economius.game.enums.IssueEnum;
 import com.ssafy.economius.game.enums.RateEnum;
+import com.ssafy.economius.game.enums.VolatileEnum;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import com.ssafy.economius.game.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
@@ -46,9 +48,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.ssafy.economius.game.enums.RateEnum.*;
-import static com.ssafy.economius.game.enums.VolatileEnum.*;
 
 @Service
 @Slf4j
@@ -82,7 +81,7 @@ public class GameRoomService {
                 .interestRate(makeInterestRate())
                 .gold(makeGold())
                 .issues(issues)
-                .currentPrevIssue(InitialData.getPrevIssue(issues.get(0).getIssueId()))
+                .currentPrevIssues(InitialData.getPrevIssue(issues.get(0).getIssueId()))
                 .stocks(makeStocks())
                 .savings(makeSavings())
                 .insurances(makeInsurance())
@@ -90,7 +89,7 @@ public class GameRoomService {
                 .tax(makeTax())
                 .maxGameTurn(MAX_GAME_TURN.getValue())
                 .event(makeEvents())
-            .build();
+                .build();
 
         gameRepository.save(game);
     }
@@ -98,7 +97,7 @@ public class GameRoomService {
     private Event makeEvents() {
         List<EventMoney> eventMonies = new ArrayList<>();
         List<EventStock> eventStocks = new ArrayList<>();
-        for(EventMoneyDto eventDto : InitialData.EVENTS.getEventMonies()) {
+        for (EventMoneyDto eventDto : InitialData.EVENTS.getEventMonies()) {
             com.ssafy.economius.game.entity.redis.EventMoney eventMoney = com.ssafy.economius.game.entity.redis.EventMoney.builder()
                     .eventMoneyId(eventDto.getEventMoneyId())
                     .insuranceTypeId(eventDto.getInsuranceTypeId())
@@ -111,7 +110,7 @@ public class GameRoomService {
                     .build();
             eventMonies.add(eventMoney);
         }
-        for(EventStockDto eventDto : InitialData.EVENTS.getEventStocks()) {
+        for (EventStockDto eventDto : InitialData.EVENTS.getEventStocks()) {
             com.ssafy.economius.game.entity.redis.EventStock eventStock = com.ssafy.economius.game.entity.redis.EventStock.builder()
                     .eventStockId(eventDto.getEventStockId())
                     .stockIndustryId(eventDto.getStockIndustryId())
@@ -170,11 +169,55 @@ public class GameRoomService {
                     .year(issue.getYear())
                     .description(issue.getDescription())
                     .url(issue.getUrl())
+                    .currentAssetChanges(setCurrentAssetChanges(issue.getAssetChanges()))
                     .build();
             issues.add(tmpIssue);
         }
         return issues;
     }
+
+    private List<AssetChange> setCurrentAssetChanges(List<IssueStockDto> assetChanges) {
+        List<AssetChange> list = new ArrayList<>();
+
+        for (IssueStockDto issueStockDto : assetChanges) {
+            list.add(AssetChange.builder()
+                    .issueStockId(issueStockDto.getIssueStockId())
+                    .issueId(issueStockDto.getIssueId())
+                    .issueName(issueStockDto.getName())
+                    .type(issueStockDto.getTypeIssueEnum())
+                    .assetType(issueStockDto.getAssetType())
+                    .assetId(issueStockDto.getAssetId())
+                    .changeRate(issueStockDto.getChangeUnitEnum())
+                    .changeReason(setChangeReasonTitle(issueStockDto) + issueStockDto.getChangeReason())
+                    .build());
+        }
+
+        return list;
+    }
+
+    private String setChangeReasonTitle(IssueStockDto issueStockDto) {
+        String type = issueStockDto.getAssetType();
+        String space = " ";
+        if (type.equals(VolatileEnum.GOLD.getValue()))
+            return DescriptionTitleEnum.GOLD.getTitle() + space;
+        else if (type.equals(VolatileEnum.INTEREST_RATE.getValue()))
+            return DescriptionTitleEnum.INTEREST_RATE.getTitle() + space;
+        else if (type.equals(VolatileEnum.BUIDING.getValue()))
+            return DescriptionTitleEnum.BUILDING.getTitle() + space;
+        else if (type.equals(VolatileEnum.STOCK.getValue())) {
+            return DescriptionTitleEnum.STOCK.getTitle()
+                    + getStockType(InitialData.STOCKS.get(issueStockDto.getAssetId()).getType()) + space;
+        }
+        return space;
+    }
+
+    private String getStockType(String type) {
+        for (DescriptionTitleEnum titleEnum : DescriptionTitleEnum.values()) {
+            if (type.equals(titleEnum.getType())) return titleEnum.getTitle();
+        }
+        return "";
+    }
+
 
     private List<Integer> pickIssues() {
         int size = RateEnum.ISSUE_COUNT.getValue();
@@ -186,8 +229,7 @@ public class GameRoomService {
     private Map<Integer, Stock> makeStocks() {
         Map<Integer, Stock> stocks = new HashMap<>();
 
-        for (StockDto stock : InitialData.STOCKS) {
-            log.info(stock.toString());
+        for (StockDto stock : InitialData.STOCKS.values()) {
             Stock tmpStock = Stock.builder()
                     .stockId(stock.getStockId())
                     .name(stock.getCompany())
@@ -227,7 +269,6 @@ public class GameRoomService {
                     .finishCount(saving.getFinishCount())
                     .build();
 
-            //log.info(saving.getBankId().toString());
             savings.put(saving.getBankId(), tmpSaving);
         }
 
@@ -246,7 +287,6 @@ public class GameRoomService {
                     .productName(insurance.getProductName())
                     .monthlyDeposit(insurance.getMonthlyDeposit())
                     .build();
-            //log.info(insurance.toString());
             insurances.put(insurance.getInsuranceId(), tmpInsurance);
         }
 
