@@ -126,8 +126,8 @@ public class BuildingService {
 
     private VisitBuildingResponse makeVisitBuildingResponse(Long playerId, Long ownerId, int buildingId,
                                                             int changeAmount, Game game) {
-        VisitBuildingDto visitor = makeVisitBuildingDto(playerId, game.getPortfolios().get(playerId).getMoney());
-        VisitBuildingDto owner = makeVisitBuildingDto(ownerId, game.getPortfolios().get(ownerId).getMoney());
+        VisitBuildingDto visitor = makeVisitBuildingDto(playerId, game);
+        VisitBuildingDto owner = makeVisitBuildingDto(ownerId, game);
 
         return VisitBuildingResponse.builder()
                 .buildingId(buildingId)
@@ -137,8 +137,9 @@ public class BuildingService {
                 .build();
     }
 
-    private VisitBuildingDto makeVisitBuildingDto(Long player, int moneyResult) {
+    private VisitBuildingDto makeVisitBuildingDto(Long player, Game game) {
         if (player == null) return null;
+        int moneyResult = game.getPortfolios().get(player).getMoney();
         return VisitBuildingDto.builder()
                 .player(player)
                 .moneyResult(moneyResult)
