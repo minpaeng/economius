@@ -27,6 +27,8 @@ public class StockController {
 
     @MessageMapping(value = "/{roomId}/buyStock")
     public void buyStock(@DestinationVariable int roomId, BuyStockRequest buyStockRequest) {
+        log.info(roomId + ": buyStock 호출 -> " + buyStockRequest.toString());
+
         BuyStockResponse buyGoldResponse = stockService.buyStock(roomId,
             buyStockRequest.getStockId(),
             buyStockRequest.getStockAmount(), buyStockRequest.getPlayer());
@@ -37,7 +39,8 @@ public class StockController {
 
     @MessageMapping(value = "/{roomId}/sellStock")
     public void sellStock(@DestinationVariable int roomId, SellStockRequest sellStockRequest) {
-        log.info("sellStock 호출");
+        log.info(roomId + ": sellStock 호출 -> " + sellStockRequest.toString());
+
         SellStockResponse sellStockResponse = stockService.sellStock(roomId,
             sellStockRequest.getStockId(), sellStockRequest.getStockAmount(),
             sellStockRequest.getPlayer());
@@ -48,7 +51,8 @@ public class StockController {
 
     @MessageMapping(value = "/{roomId}/buyItem")
     public void buyItem(@DestinationVariable int roomId, BuyItemRequest buyItemRequest) {
-        log.info("buyItem 호출");
+        log.info(roomId + ": buyItem 호출 -> " + buyItemRequest.toString());
+
         BuyItemResponse buyItemResponse = stockService.buyItem(roomId, buyItemRequest.getStockId(),
             buyItemRequest.getPlayer());
         Map<String, Object> headers = Map.of("success", true);
@@ -58,7 +62,7 @@ public class StockController {
     @MessageMapping(value = "/{roomId}/stockDetail")
     public void selectStock(@DestinationVariable int roomId,
         SelectStockRequest selectStockRequest) {
-        log.info(roomId + " -> stockDetail 호출");
+        log.info(roomId + ": stockDetail 호출 -> " + selectStockRequest.toString());
 
         SelectStockResponse selectStockResponse = stockService.stockDetail(roomId,
             selectStockRequest.getStockId());
