@@ -4,9 +4,18 @@ import { useState } from "react";
 import Portfolio from "./Portfolio";
 import EconomicIndicator from "./EconomicIndicator";
 import StockCheck from "./StockCheck";
+// import { useRecoilState } from "recoil";
+// import { NewsClickIdxState } from "/src/recoil/animation/atom";
+// import { motion, AnimatePresence } from "framer-motion";
 
 function SideBar() {
+  // 뉴스
+
+  // const News = ["속보1", "속보2", "속보3", "속보4", "속보5"];
+
   const [sideBarType, setSideBarType] = useState("portfolio");
+
+  // const [NewsClickIdx, setNewsClickIdx] = useRecoilState(NewsClickIdxState);
 
   // 렌더링할 컴포넌트 정의
   let componentToRender;

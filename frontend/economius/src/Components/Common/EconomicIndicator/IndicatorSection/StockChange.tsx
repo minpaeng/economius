@@ -100,7 +100,7 @@ function StockChange() {
             <S.LayoutTop>
               <S.LayoutTopLeft>
                 <img src="Portfolio/Stock.png" alt="img" />
-                <div style={{ fontSize: "28px" }}>주식</div>
+                <div style={{ fontSize: "18px" }}>주식</div>
               </S.LayoutTopLeft>
               <S.LayoutTopRight></S.LayoutTopRight>
             </S.LayoutTop>
@@ -119,6 +119,7 @@ function StockChange() {
             </div>
             {dummy.length ? (
               <S.ToggleBtn
+                style={{ padding: 0 }}
                 onClick={() => {
                   toggle();
                   toggleCollapse();

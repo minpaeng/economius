@@ -6,12 +6,16 @@ export const SideBar = styled.div`
   width: 100%;
   height: 98.5%;
   align-items: center;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const SideBarBtnSection = styled.div`
   display: flex;
   justify-content: space-around;
-  flex: 1
+  flex: 1;
   /* height: 12%; */
   height: 100px;
   align-items: center;

@@ -23,7 +23,7 @@ function PortforlioStockItem({
   }
 
   return (
-    <S.PropertyLayout>
+    <S.PropertyLayoutItem>
       <S.LayoutTop>
         <S.LayoutTopLeft>
           <img src={`Stock/${imgPath}.png`} alt="img" />
@@ -58,7 +58,7 @@ function PortforlioStockItem({
           </S.LayoutBottomitemRight>
         </S.LayoutBottomitem>
       </S.LayoutBottom>
-    </S.PropertyLayout>
+    </S.PropertyLayoutItem>
   );
 }
 

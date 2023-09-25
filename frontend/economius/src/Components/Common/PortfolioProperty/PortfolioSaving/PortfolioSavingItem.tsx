@@ -9,7 +9,7 @@ function PortfolioSavingItem({
   expectedProfit,
 }) {
   return (
-    <S.PropertyLayout>
+    <S.PropertyLayoutItem>
       <S.LayoutTop>
         <S.LayoutTopLeft>
           <img src={`Bank/BankTitle.png`} alt="img" />
@@ -44,7 +44,7 @@ function PortfolioSavingItem({
           </S.LayoutBottomitemRight>
         </S.LayoutBottomitem>
       </S.LayoutBottom>
-    </S.PropertyLayout>
+    </S.PropertyLayoutItem>
   );
 }
 

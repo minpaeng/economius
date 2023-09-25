@@ -14,7 +14,7 @@ function StockChangeItem({ imgPath, title, type, value, valueChange }) {
   }
 
   return (
-    <S.PropertyLayout>
+    <S.PropertyLayoutItem>
       <S.LayoutTop>
         <S.LayoutTopLeft>
           <img src={`Stock/${imgPath}.png`} alt="img" />
@@ -28,7 +28,7 @@ function StockChangeItem({ imgPath, title, type, value, valueChange }) {
           {percentStyleSpan}
         </S.LayoutTopRight>
       </S.LayoutTop>
-    </S.PropertyLayout>
+    </S.PropertyLayoutItem>
   );
 }
 export default StockChangeItem;

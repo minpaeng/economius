@@ -45,7 +45,7 @@ function PortfolioRealEstate() {
             <S.LayoutTop>
               <S.LayoutTopLeft>
                 <img src="Portfolio/RealEstate.png" alt="img" />
-                <div style={{ fontSize: "28px" }}>부동산</div>
+                <div style={{ fontSize: "18px" }}>부동산</div>
               </S.LayoutTopLeft>
               <S.LayoutTopRight>
                 {dummy.length ? (

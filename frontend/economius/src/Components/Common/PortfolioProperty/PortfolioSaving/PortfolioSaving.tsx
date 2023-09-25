@@ -35,7 +35,7 @@ function PortfolioSaving() {
             <S.LayoutTop>
               <S.LayoutTopLeft>
                 <img src="Portfolio/Saving.png" alt="img" />
-                <div style={{ fontSize: "28px" }}>적금</div>
+                <div style={{ fontSize: "20px" }}>적금</div>
               </S.LayoutTopLeft>
               <S.LayoutTopRight>
                 {dummy.length ? (

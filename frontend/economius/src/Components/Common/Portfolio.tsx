@@ -11,7 +11,7 @@ function Portforlio() {
     <S.PortfolioMain>
       <div
         style={{
-          fontSize: "28px",
+          fontSize: "20px",
           margin: "20px 0px",
           display: "flex",
           alignItems: "center",
@@ -20,11 +20,11 @@ function Portforlio() {
         <img
           src="Portfolio/Portfolio.png"
           alt="img"
-          style={{ height: "50px" }}
+          style={{ height: "30px" }}
         />
         <span>지니어스 님의 포트폴리오</span>
       </div>
-      <PropertyChart></PropertyChart>
+      <PropertyChart />
       {/* 현금 */}
       <PortfolioMoney />
       {/* 금 */}

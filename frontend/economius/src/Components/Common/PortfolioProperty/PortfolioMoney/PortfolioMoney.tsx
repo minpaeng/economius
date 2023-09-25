@@ -7,7 +7,7 @@ function PortfolioMoney() {
       <S.LayoutTop>
         <S.LayoutTopLeft>
           <img src="Bank/dollar-coin 15.png" alt="img" />
-          <div style={{ fontSize: "28px" }}>현금</div>
+          <div style={{ fontSize: "20px" }}>현금</div>
         </S.LayoutTopLeft>
         <S.LayoutTopRight>
           {Money ? (
