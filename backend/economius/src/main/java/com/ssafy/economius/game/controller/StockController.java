@@ -46,7 +46,8 @@ public class StockController {
             sellStockRequest.getStockId(), sellStockRequest.getStockAmount(),
             sellStockRequest.getPlayer());
 
-        Map<String, Object> headers = Map.of("success", true);
+        log.info(roomId + ": sellStock 결과 -> " + sellStockResponse.toString());
+        Map<String, Object> headers = Map.of("success", true, "type", "sellStock");
         template.convertAndSend("/sub/" + roomId, sellStockResponse, headers);
     }
 
@@ -56,7 +57,9 @@ public class StockController {
 
         BuyItemResponse buyItemResponse = stockService.buyItem(roomId, buyItemRequest.getStockId(),
             buyItemRequest.getPlayer());
-        Map<String, Object> headers = Map.of("success", true);
+
+        log.info(roomId + ": buyItem 결과 -> " + buyItemResponse.toString());
+        Map<String, Object> headers = Map.of("success", true, "type", "buyItem");
         template.convertAndSend("/sub/" + roomId, buyItemResponse, headers);
     }
 
@@ -68,6 +71,7 @@ public class StockController {
         SelectStockResponse selectStockResponse = stockService.stockDetail(roomId,
             selectStockRequest.getStockId());
 
+        log.info(roomId + ": stockDetail 결과 -> " + selectStockResponse.toString());
         Map<String, Object> headers = Map.of("success", true, "type", "stockDetail");
         template.convertAndSend("/sub/" + roomId + "/" + selectStockRequest.getPlayer(),
             selectStockResponse, headers);
