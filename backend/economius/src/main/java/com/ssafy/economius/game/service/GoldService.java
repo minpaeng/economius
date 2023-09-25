@@ -1,5 +1,6 @@
 package com.ssafy.economius.game.service;
 
+import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.dto.GoldDto;
 import com.ssafy.economius.game.dto.response.BuyGoldResponse;
 import com.ssafy.economius.game.dto.response.GoldSelectResponse;
@@ -19,11 +20,10 @@ public class GoldService {
 
     private final GameRepository gameRepository;
     private final ModelMapper modelMapper;
+    private final GameValidator gameValidator;
 
     public BuyGoldResponse buyGold(int roomId, Long player, int goldAmount) {
-        Game game = gameRepository.findById(roomId).orElseThrow(
-            () -> new RuntimeException("해당하는 게임이 존재하지 않습니다.")
-        );
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
         Portfolio portfolio = game.getPortfolios().get(player);
         int money = portfolio.getMoney();
@@ -48,9 +48,7 @@ public class GoldService {
     }
 
     public SellGoldResponse sellGold(int roomId, Long player, int goldAmount) {
-        Game game = gameRepository.findById(roomId).orElseThrow(
-            () -> new RuntimeException("해당하는 게임이 존재하지 않습니다.")
-        );
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
         Portfolio portfolio = game.getPortfolios().get(player);
 
         int price = game.getGold().getPrice();
@@ -71,11 +69,10 @@ public class GoldService {
     }
 
     public GoldSelectResponse selectGold(int roomId, Long player) {
-        Game game = gameRepository.findById(roomId).orElseThrow(
-            () -> new RuntimeException("해당하는 게임이 존재하지 않습니다.")
-        );
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
-        GoldSelectResponse goldSelectResponse = modelMapper.map(game.getGold(), GoldSelectResponse.class);
+        GoldSelectResponse goldSelectResponse = modelMapper.map(game.getGold(),
+            GoldSelectResponse.class);
         goldSelectResponse.setPlayer(player);
 
         return goldSelectResponse;

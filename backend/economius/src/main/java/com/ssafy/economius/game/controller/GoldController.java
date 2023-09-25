@@ -55,7 +55,7 @@ public class GoldController {
             goldSelectRequest.getPlayer());
 
         log.info(roomId + ": selectGolds 결과 -> " + goldSelectResponse.toString());
-        Map<String, Object> headers = Map.of("success", true, "type", "sellGolds");
+        Map<String, Object> headers = Map.of("success", true, "type", "selectGolds");
         template.convertAndSend("/sub/" + roomId + "/" + goldSelectRequest.getPlayer(),
             goldSelectResponse, headers);
     }
