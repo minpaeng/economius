@@ -1,6 +1,7 @@
 package com.ssafy.economius.game.service;
 
 import com.ssafy.economius.common.exception.validator.GameValidator;
+import com.ssafy.economius.game.dto.response.FinishTurnResponse;
 import com.ssafy.economius.game.entity.redis.AssetChange;
 import com.ssafy.economius.game.entity.redis.Building;
 import com.ssafy.economius.game.entity.redis.Game;
@@ -11,6 +12,7 @@ import com.ssafy.economius.game.repository.redis.GameRepository;
 import com.ssafy.economius.game.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -25,7 +27,7 @@ public class FinishTurnService {
     private final GameRepository gameRepository;
     private final GameValidator gameValidator;
 
-    public Game finish(int roomId) {
+    public FinishTurnResponse finish(int roomId) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
         int gameTurn = game.updateGameTurn();
@@ -46,7 +48,9 @@ public class FinishTurnService {
         }
 
         gameRepository.save(game);
-        return game;
+
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(game, FinishTurnResponse.class);
     }
 
     private void changePrevIssue(Game game, int round) {
@@ -137,7 +141,6 @@ public class FinishTurnService {
 
     private void updateStock(Game game, Stock stock, int newRate, int round) {
         stock.updateStockPriceAndRate(newRate, round);
-        log.info("게임 턴 변경 ->" + stock);
         game.getPortfolios().values()
                 .forEach(portfolio -> portfolio.getStocks().updatePortfolioStockByStockChange(stock));
     }
