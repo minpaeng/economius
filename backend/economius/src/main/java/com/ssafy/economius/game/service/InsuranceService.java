@@ -86,8 +86,8 @@ public class InsuranceService {
                 .player(insuranceRequest.getPlayer())
                 .have(have)
                 .insuranceDto(insuranceDto)
-                .build();
-        //log.info(response.toString());
+                .build(); 
+        log.info("============ 보험 방문 : {} ============", response.toString());
         return response;
     }
 
