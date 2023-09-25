@@ -29,12 +29,13 @@ public class StockController {
     public void buyStock(@DestinationVariable int roomId, BuyStockRequest buyStockRequest) {
         log.info(roomId + ": buyStock 호출 -> " + buyStockRequest.toString());
 
-        BuyStockResponse buyGoldResponse = stockService.buyStock(roomId,
-            buyStockRequest.getStockId(),
-            buyStockRequest.getStockAmount(), buyStockRequest.getPlayer());
+        BuyStockResponse buyStockResponse = stockService.buyStock(roomId,
+            buyStockRequest.getStockId(), buyStockRequest.getStockAmount(),
+            buyStockRequest.getPlayer());
 
-        Map<String, Object> headers = Map.of("success", true);
-        template.convertAndSend("/sub/" + roomId, buyGoldResponse, headers);
+        log.info(roomId + ": buyStock 결과 -> " + buyStockResponse.toString());
+        Map<String, Object> headers = Map.of("success", true, "type", "buyStock");
+        template.convertAndSend("/sub/" + roomId, buyStockResponse, headers);
     }
 
     @MessageMapping(value = "/{roomId}/sellStock")
