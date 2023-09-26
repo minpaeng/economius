@@ -72,7 +72,16 @@ function SideBar() {
           </S.PushableButton>
         </S.SideBarBtnSection>
 
-        <S.SideBarMainSection>{componentToRender}</S.SideBarMainSection>
+        <S.SideBarMainSection
+          style={{
+            backgroundColor:
+              sideBarType === "StockCheck"
+                ? "white"
+                : "rgba(255, 255, 255, 0.5)",
+          }}
+        >
+          {componentToRender}
+        </S.SideBarMainSection>
       </S.SideBar>
     </Modal>
   );

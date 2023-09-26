@@ -18,7 +18,7 @@ export const SideStockTitle = styled.div`
 export const SideStockPrice = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 8px 12px;
+  padding: 16px 12px;
 `;
 
 export const SideStockPriceItem = styled.div`
