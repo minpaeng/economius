@@ -43,7 +43,7 @@ public class GameService {
         game.getPlayers().add(player);
         gameRepository.save(game);
 
-        return new GameJoinResponse(roomId);
+        return new GameJoinResponse(roomId, game.getPlayers().get(0));
     }
 
     public GameStartResponse start(int roomId, Long hostPlayer) {
@@ -79,12 +79,12 @@ public class GameService {
             if (p.equals(player)) {
                 game.getPlayers().remove(p);
                 gameRepository.save(game);
-                return new GameRoomExitResponse(player);
+                return new GameRoomExitResponse(player, game.getPlayers().get(0));
             }
         }
 
         gameValidator.throwNotExistPlayerResponse(roomId, player);
-        return new GameRoomExitResponse(null);
+        return new GameRoomExitResponse(null, null);
     }
 
     private void uploadInitialPortfolioOnRedis(Game game) {

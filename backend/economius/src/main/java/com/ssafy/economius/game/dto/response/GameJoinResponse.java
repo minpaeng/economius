@@ -7,5 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class GameJoinResponse {
     private int roomId;
-
+    private Long hostPlayer;
 }

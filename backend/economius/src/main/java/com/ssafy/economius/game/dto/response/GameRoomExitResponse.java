@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class GameRoomExitResponse {
 
-    private Long player;
+    private Long exitPlayer;
+    private Long hostPlayer;
 }
