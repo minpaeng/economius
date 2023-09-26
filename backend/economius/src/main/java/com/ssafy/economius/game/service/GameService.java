@@ -76,16 +76,11 @@ public class GameService {
 
     public GameRoomExitResponse exit(int roomId, Long player) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
-        for (Long p : game.getPlayers()) {
-            if (p.equals(player)) {
-                game.getPlayers().remove(p);
-                gameRepository.save(game);
-                return new GameRoomExitResponse(player, game.getPlayers().get(0));
-            }
-        }
+        boolean found = removePlayerInRoom(game, player);
+        if (!found) gameValidator.throwNotExistPlayerResponse(roomId, player);
+        gameRepository.save(game);
 
-        gameValidator.throwNotExistPlayerResponse(roomId, player);
-        return new GameRoomExitResponse(null, null);
+        return makeGameExitResponse(roomId, game);
     }
 
     private void uploadInitialPortfolioOnRedis(Game game) {
@@ -182,8 +177,28 @@ public class GameService {
             .build();
     }
 
+    private boolean removePlayerInRoom(Game game, Long player) {
+        for (Long p : game.getPlayers()) {
+            if (p.equals(player)) {
+                game.getPlayers().remove(p);
+                game.getNicknames().remove(p);
+                return true;
+            }
+        }
+        return false;
+    }
+
     private GameJoinResponse makeGameJoinResponse(int roomId, Game game) {
         return GameJoinResponse.builder()
+                .roomId(roomId)
+                .players(game.getPlayers())
+                .nicknames(game.getNicknames())
+                .hostPlayer(game.getPlayers().get(0))
+                .build();
+    }
+
+    private GameRoomExitResponse makeGameExitResponse(int roomId, Game game) {
+        return GameRoomExitResponse.builder()
                 .roomId(roomId)
                 .players(game.getPlayers())
                 .nicknames(game.getNicknames())
