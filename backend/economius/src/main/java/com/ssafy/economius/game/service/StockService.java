@@ -47,6 +47,7 @@ public class StockService {
         Stock stock = game.getStocks().get(stockId);
 
         if (portfolio.getMoney() - stock.getPrice() < 0) {
+            game.proceedBankruptcy(buyPlayer);
             gameValidator.throwBankruptcyResponse(roomId, buyPlayer);
         }
 
