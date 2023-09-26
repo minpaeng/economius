@@ -49,7 +49,7 @@ function AfterBigEventNews({ News }) {
         {NewsClickIdx !== null && (
           <motion.div
             key="selectedNews" // 고유한 키를 설정해야 합니다.
-            layoutId={NewsClickIdx}
+            layoutId={NewsClickIdx !== null ? NewsClickIdx.toString() : ""}
             style={{
               position: "absolute",
               backgroundColor: "yellow",
@@ -66,7 +66,13 @@ function AfterBigEventNews({ News }) {
               justifyContent: "space-around",
             }}
           >
-            <motion.div>{News[NewsClickIdx]}</motion.div>
+            <motion.div>
+              {
+                News[
+                  NewsClickIdx !== null ? NewsClickIdx.toString() : undefined
+                ]
+              }
+            </motion.div>
             <motion.div
               style={{
                 display: "flex",

@@ -2,13 +2,13 @@ import { useState } from "react";
 import * as S from "./EconomicIndicator.style";
 import ChartSection from "./EconomicIndicator/IndicatorSection/ChartSection";
 import StockChange from "./EconomicIndicator/IndicatorSection/StockChange";
-import BeforeBigEventNews from "./EconomicIndicator/News/beforeBigEventNews";
+import BeforeBigEventNews from "./EconomicIndicator/News/BeforeBigEventNews";
 import AfterBigEventNews from "./EconomicIndicator/News/AfterBigEventNews";
 
 function EconomicIndicator() {
-  const [beforeBigEvent, setBeforeBigEvent] = useState(false);
+  const [beforeBigEvent, setBeforeBigEvent] = useState(true);
 
-  const beforeBigEventNews = [
+  const beforeBigEventNewsList = [
     "[속보] 주식시장 과열",
     "[속보] 높은 부채 수준",
     "[속보] 불안정한 금융 시스템",
@@ -362,7 +362,7 @@ function EconomicIndicator() {
         <span>경제 뉴스</span>
       </div>
       {beforeBigEvent ? (
-        <BeforeBigEventNews News={beforeBigEventNews} />
+        <BeforeBigEventNews News={beforeBigEventNewsList} />
       ) : (
         <AfterBigEventNews News={NewsList} />
       )}
