@@ -2,18 +2,21 @@ import Modal from 'react-modal';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { IsModalOpenState } from '/src/recoil/animation/atom';
+import { ChanceCardInfoState } from '/src/recoil/modalInfo/atom';
 import * as S from './ChanceCard.style';
 
 function ChanceCard() {
-    const dummy = {
-        title: '교통사고',
-        desc: '교통사고를 당했습니다.',
-        // TODO: result에서 주식이든 자산이든 변경되는 뭔가가 들어올 듯
-        result: '',
-    };
+    // const dummy = {
+    //     title: '교통사고',
+    //     desc: '교통사고를 당했습니다.',
+    //     // TODO: result에서 주식이든 자산이든 변경되는 뭔가가 들어올 듯
+    //     result: '',
+    // };
 
     // 원래는 초기값 false로 두고 해당 위치 되면 true로 바꿔줘야할듯
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
+    const [chanceCardInfo, setChanceCardInfo] = useRecoilState(ChanceCardInfoState);
+    console.log(chanceCardInfo);
     const closeModal = () => {
         setIsModalOpen(false);
     };
@@ -48,14 +51,19 @@ function ChanceCard() {
         <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
             <S.ChanceCard>
                 <S.ChanceCardTop>
-                    <S.ChanceCardTopTitle>{dummy.title}</S.ChanceCardTopTitle>
-                    <S.ChanceCardTopImg src='ChanceCard/car-accident.png' alt='Image' />
+                    <S.ChanceCardTopTitle>{chanceCardInfo.name}</S.ChanceCardTopTitle>
+                    <S.ChanceCardTopImg src={chanceCardInfo.url} alt='Image' />
                 </S.ChanceCardTop>
                 <S.ChanceCardDivide />
                 <S.ChanceCardBottom>
-                    <div>{dummy.desc}</div>
-                    <div>병원비 : -100만</div>
+                    <div>{chanceCardInfo.description}</div>
+                    {chanceCardInfo.moneyCard ? (
+                        <div>현금 {chanceCardInfo.eventValue} 만원</div>
+                    ) : (
+                        <div>주식 {chanceCardInfo.eventValue} %</div>
+                    )}
                 </S.ChanceCardBottom>
+
             </S.ChanceCard>
         </Modal>
     );

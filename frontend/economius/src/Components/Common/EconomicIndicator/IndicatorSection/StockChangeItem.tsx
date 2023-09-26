@@ -1,6 +1,18 @@
 import * as S from "../../PortfolioProperty/PortfolioProperty.style";
+import { useRecoilState } from "recoil";
+import { StockClickIdState } from "/src/recoil/animation/atom";
 
-function StockChangeItem({ imgPath, title, type, value, valueChange }) {
+function StockChangeItem({
+  id,
+  imgPath,
+  title,
+  type,
+  value,
+  valueChange,
+  setSideBarType,
+}) {
+  const [stockId, setStockId] = useRecoilState(StockClickIdState);
+
   let percentStyleSpan;
 
   if (valueChange > 0) {
@@ -13,8 +25,13 @@ function StockChangeItem({ imgPath, title, type, value, valueChange }) {
     );
   }
 
+  const handleButtonClick = () => {
+    setSideBarType("StockCheck"); // 원하는 값으로 설정
+    setStockId(id);
+  };
+
   return (
-    <S.PropertyLayoutItem>
+    <S.PropertyLayoutItem onClick={handleButtonClick}>
       <S.LayoutTop>
         <S.LayoutTopLeft>
           <img src={`Stock/${imgPath}.png`} alt="img" />

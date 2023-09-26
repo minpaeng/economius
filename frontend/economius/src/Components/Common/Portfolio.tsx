@@ -7,7 +7,7 @@ import PortfolioSaving from "./PortfolioProperty/PortfolioSaving/PortfolioSaving
 import PortfolioRealEstate from "./PortfolioProperty/PortfolioRealEstate/PortfolioRealEstate";
 import PortfolioInsurance from "./PortfolioProperty/PortfolioInsurance/PortfolioInsurance";
 
-function Portforlio() {
+function Portforlio({ setSideBarType }) {
   return (
     <S.PortfolioMain>
       <div
@@ -35,7 +35,7 @@ function Portforlio() {
       {/* 부동산 */}
       <PortfolioRealEstate />
       {/* 주식 토글 */}
-      <PortfolioStock />
+      <PortfolioStock setSideBarType={setSideBarType} />
       {/* 보험 토글 */}
       <PortfolioInsurance />
     </S.PortfolioMain>

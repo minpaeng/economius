@@ -5,8 +5,8 @@ import StockChange from "./EconomicIndicator/IndicatorSection/StockChange";
 import BeforeBigEventNews from "./EconomicIndicator/News/BeforeBigEventNews";
 import AfterBigEventNews from "./EconomicIndicator/News/AfterBigEventNews";
 
-function EconomicIndicator() {
-  const [beforeBigEvent, setBeforeBigEvent] = useState(true);
+function EconomicIndicator({ setSideBarType }) {
+  const [beforeBigEvent, setBeforeBigEvent] = useState(false);
 
   const beforeBigEventNewsList = [
     "[속보] 주식시장 과열",
@@ -393,7 +393,7 @@ function EconomicIndicator() {
       <ChartSection data={RealEstateData} />
 
       {/* 주식 리스트 */}
-      <StockChange />
+      <StockChange setSideBarType={setSideBarType} />
     </S.EconomicIndicatorMain>
   );
 }
