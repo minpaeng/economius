@@ -131,44 +131,6 @@ function PlayerSocket() {
                                 priceHistory: message.priceHistory,
                                 rateHistory: message.rateHistory,
                             });
-                        } else if (type === 'buyStock') {
-                            setCallBack(true);
-                        } else if (type === 'buyGolds') {
-                            setCallBack(true);
-                        }
-
-                        // 주식 recoil 종료
-                    });
-
-                    // 개인 메시지 구독 => sub/{roomId}/{playerId}
-                    stompClient.current.subscribe(`/sub/${roomId}/1`, function (recievedMessage: any) {
-                        console.log('개인메시지', recievedMessage);
-                        console.log('개인메시지', recievedMessage.body);
-                        const message = JSON.parse(recievedMessage.body); // 객체
-                        const type = recievedMessage.headers.type || null; // 문자열
-                        // 주식 변경 recoil 시작
-                        if (type === 'stockDetail') {
-                            setStockDetail({
-                                stockId: message.stockId,
-                                name: message.name,
-                                stockIndustryId: message.stockIndustryId,
-                                companyCategory: message.companyCategory,
-                                companySubCategory: message.companySubCategory,
-                                owners: message.owners,
-                                remainingAmount: message.remainingAmount,
-                                price: message.price,
-                                rate: message.rate,
-                                priceHistory: message.priceHistory,
-                                rateHistory: message.rateHistory,
-                            });
-                        } else if (type === 'selectGolds') {
-                            setGoldDetail({
-                                player: message.player,
-                                price: message.price,
-                                rate: message.rate,
-                                priceHistory: message.priceHistory,
-                                rateHistory: message.rateHistory,
-                            });
                         }
                         // 턴 종료 로직
                         else if (type === 'buyStock') {
@@ -189,7 +151,6 @@ function PlayerSocket() {
                         } else if (type === 'stopSavings') {
                             setCallBack(true);
                         }
-
                         // 주식 recoil 종료
                     });
 
@@ -212,12 +173,13 @@ function PlayerSocket() {
                                 player: message.player,
                                 money: message.money,
                                 have: message.have,
-                                name: message.name,
-                                monthlyDeposit: message.monthlyDeposit,
-                                currentPrice: message.currentPrice,
-                                currentCount: message.currentCount,
-                                finishCount: message.finishCount,
-                                rate: message.rate,
+                                bankId: message.savingDto.bankId,
+                                name: message.savingDto.name,
+                                monthlyDeposit: message.savingDto.monthlyDeposit,
+                                currentPrice: message.savingDto.currentPrice,
+                                currentCount: message.savingDto.currentCount,
+                                finishCount: message.savingDto.finishCount,
+                                rate: message.savingDto.rate,
                             });
                         } else if (type == 'calculate') {
                             setMonthlyInfo({

@@ -25,7 +25,7 @@ export const StockInfoState = atom({
 
 // 부동산 모달 정보
 export const RealEstateInfoState = atom({
-    key: 'TradeRealEstateState',
+    key: 'RealEstateInfoState',
     default: {
         buildingId: null,
         buildingPrice: null,
@@ -44,22 +44,27 @@ export const GoldInfoState = atom({
 // 보험 모달 정보
 export const InsuranceInfoState = atom({
     key: 'InsuranceInfoState',
-    default: {},
+    default: {
+        player: 0,
+        have: { 1: false, 2: false, 3: false, 4: false },
+        insuranceDto: {},
+    },
 });
 
 // 은행 모달 정보
 export const BankInfoState = atom({
     key: 'BankInfoState',
     default: {
-        player: null,
-        money: null,
-        have: null,
-        name: null,
-        monthlyDeposit: null,
-        currentPrice: null,
-        currentCount: null,
-        finishCount: null,
-        rate: null,
+        player: 0,
+        have: 0,
+        money: 0,
+        bankId: 0,
+        name: 0,
+        monthlyDeposit: 0,
+        currentPrice: 0,
+        currentCount: 0,
+        finishCount: 0,
+        rate: 0,
     },
 });
 
