@@ -131,6 +131,7 @@ public class BuildingService {
 
         return VisitBuildingResponse.builder()
                 .buildingId(buildingId)
+                .buildingPrice(game.getBuildings().get(buildingId).getPrice())
                 .changeAmount(changeAmount)
                 .visitor(visitor)
                 .owner(owner)
