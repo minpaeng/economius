@@ -31,6 +31,11 @@ export default function Room() {
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
         if (token===null) navigate('/');
+
+        if (!window.Kakao.isInitialized()) {
+            window.Kakao.init(import.meta.env.VITE_APP_JavaScript_URI);
+          }
+
     }, [navigate]);
     const [isModalClosed, setIsModalClosed] = useState(false); // 모달이 닫힌 상태를 관리
     const [renderContent, setRenderContent] = useState(false); // 모달이 닫힌 후 n초 뒤에 렌더링할 상태를 관리
@@ -146,6 +151,12 @@ export default function Room() {
         //
     };
 
+    const shareKakao = () => {
+        window.Kakao.Link.sendCustom({
+          templateId: 98901, // 내가 만든 템플릿 아이디를 넣어주면 된다
+        });
+      };
+
     return (
         <>
             <video muted={isMuted} ref={videoRef} loop>
@@ -164,7 +175,7 @@ export default function Room() {
                         <S.RoundButtonRoom onClick={roomMakeHandler}>
                             <span>방 생성하기</span>
                         </S.RoundButtonRoom>
-                        <S.RoundButtonRoom onClick={roomJoinHandler}>
+                        <S.RoundButtonRoom onClick={shareKakao}>
                             <span>방 입장하기</span>
                         </S.RoundButtonRoom>
                     </S.ButtonOuter>
