@@ -4,16 +4,16 @@ const { persistAtom } = recoilPersist();
 
 // 현재 방 번호
 export const RoomIdState = atom<number>({
-    key: 'RoomIdState',
-    default: 1, // 기본값
-    effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+  key: "RoomIdState",
+  default: 1, // 기본값
+  effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
 // 현재 플레이어
 export const UseridState = atom({
-    key: 'UseridState',
-    default: 'a', // 기본값
-    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+  key: "UseridState",
+  default: "a", // 기본값
+  // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
 // 현재 플레이어
@@ -25,16 +25,16 @@ export const NowPlayerState = atom<number>({
 
 // 현재 플레이어 최종 위치
 export const NowPlayerPositionState = atom<number>({
-    key: 'NowPlayerPositionState',
-    default: 0, // 기본값
-    effects_UNSTABLE: [persistAtom],
+  key: "NowPlayerPositionState",
+  default: 0, // 기본값
+  effects_UNSTABLE: [persistAtom],
 });
 
 // 이동 카드 번호
 export const MovementCardsState = atom<number[]>({
-    key: 'MovementCardState',
-    default: [1, 1, 1],
-    effects_UNSTABLE: [persistAtom],
+  key: "MovementCardState",
+  default: [1, 1, 1],
+  effects_UNSTABLE: [persistAtom],
 });
 
 // 캐릭터 이동 여부
@@ -71,5 +71,12 @@ export const BuyRealEstateState = atom<boolean>({
 
 export const NewsClickIdxState = atom<boolean>({
   key: "NewsClickIdxState",
+  default: null,
+});
+
+// 주식 클릭
+
+export const StockClickIdState = atom<number>({
+  key: "StockClickIdState",
   default: null,
 });
