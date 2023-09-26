@@ -2,7 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import sockjs from 'sockjs-client/dist/sockjs';
 import { Stomp } from '@stomp/stompjs';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { RoomIdState, IsModalOpenState, MonthlyModalOpenState, NowPlayerState, NowPlayerPositionState, MovementCardsState } from './recoil/animation/atom';
+import {
+    RoomIdState,
+    IsModalOpenState,
+    MonthlyModalOpenState,
+    NowPlayerState,
+    NowPlayerPositionState,
+    MovementCardsState,
+    CallBackState,
+} from './recoil/animation/atom';
 import {
     TradeRealEstateState,
     TradeStockState,
@@ -71,6 +79,7 @@ function PlayerSocket() {
 
     const setStockDetail = useSetRecoilState(StockDetailState);
     const setGoldDetail = useSetRecoilState(GoldDetailState);
+    const [callBack, setCallBack] = useRecoilState(CallBackState);
 
     const stompClient = useRef(null);
 
@@ -95,7 +104,7 @@ function PlayerSocket() {
                         console.log('개인메시지', recievedMessage);
                         console.log('개인메시지', recievedMessage.body);
                         const message = JSON.parse(recievedMessage.body); // 객체
-                        const type = recievedMessage.headers.type; // 문자열
+                        const type = recievedMessage.headers.type || null; // 문자열
                         // 주식 변경 recoil 시작
                         if (type === 'stockDetail') {
                             setStockDetail({
@@ -121,13 +130,16 @@ function PlayerSocket() {
                                 rateHistory: message.rateHistory,
                             });
                         }
+                        if (type === 'buyStock') {
+                            setCallBack(true);
+                        }
                         // 주식 recoil 종료
                     });
 
                     // 방 메시지 구독 => sub/{roomId}
                     stompClient.current.subscribe(`/sub/${roomId}`, function (recievedMessage: any) {
                         const message = JSON.parse(recievedMessage.body);
-                        const type = recievedMessage.headers.type;
+                        const type = recievedMessage.headers.type || null;
                         console.log('전체메시지', type);
                         console.log('전체메시지', message);
                         if (type == 'visitBuilding') {
@@ -316,6 +328,14 @@ function PlayerSocket() {
             }
         }
     }, [tradeInsurance]);
+
+    useEffect(() => {
+        if (!callBack) return;
+        if (stompClient.current) {
+            stompClient.current.send(`/pub/1/finishTurn`, {}, {});
+            setCallBack(false);
+        }
+    }, [callBack]);
 
     return <></>;
 }

@@ -67,15 +67,14 @@ export const MonthlyModalOpenState = atom<boolean>({
     default: false,
 });
 
-// 부동산 구입
-export const BuyRealEstateState = atom<boolean>({
-    key: 'BuyRealEstateState',
-    default: false,
-});
-
 // 뉴스 클릭
-
 export const NewsClickIdxState = atom<boolean>({
     key: 'NewsClickIdxState',
     default: null,
+});
+
+// 콜백 턴 종료
+export const CallBackState = atom<boolean>({
+    key: 'CallBackState',
+    default: false,
 });
