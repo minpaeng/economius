@@ -5,7 +5,7 @@ import './index.css';
 import Root from './Root.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-        <RecoilRoot>
-            <Root />
-        </RecoilRoot>
+    <RecoilRoot>
+        <Root />
+    </RecoilRoot>
 );

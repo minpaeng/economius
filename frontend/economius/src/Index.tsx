@@ -141,7 +141,6 @@ export default function Index() {
     // {!!!!!!!!!!!!!!!!!!!!} 카카오 로그인 시 실행할 함수
     const roomMakeHandler = () => {
         // MakeRoom을 보여주기 위한 함수 호출
- 
     };
 
     return (
