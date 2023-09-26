@@ -33,9 +33,10 @@ function makeStockGraphData(stockPriceHistoryData) {
     return graphData;
 }
 
-const setCallBack = useSetRecoilState(CallBackState);
 
 function Stock() {
+    const setCallBack = useSetRecoilState(CallBackState);
+
     const imageUrl = [
         null,
         'koreaElectro.png',

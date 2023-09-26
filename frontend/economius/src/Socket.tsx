@@ -133,6 +133,10 @@ function PlayerSocket() {
                         if (type === 'buyStock') {
                             setCallBack(true);
                         }
+                        if (type === 'buyGolds'){
+                            setCallBack(true);
+                        }
+
                         // 주식 recoil 종료
                     });
 
