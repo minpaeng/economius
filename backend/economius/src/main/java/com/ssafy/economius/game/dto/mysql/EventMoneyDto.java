@@ -2,9 +2,11 @@ package com.ssafy.economius.game.dto.mysql;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class EventMoneyDto {
 
     private Integer eventMoneyId;
@@ -14,4 +16,5 @@ public class EventMoneyDto {
     private String name;
     private String description;
     private Integer money;
+    private String url;
 }

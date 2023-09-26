@@ -1,12 +1,12 @@
 package com.ssafy.economius.game.controller;
 
-import com.ssafy.economius.game.dto.request.BuyBuildingsRequest;
+import com.ssafy.economius.game.dto.request.BuyBuildingRequest;
 import com.ssafy.economius.game.dto.request.SelectBuildingRequest;
-import com.ssafy.economius.game.dto.request.SellBuildingsRequest;
+import com.ssafy.economius.game.dto.request.SellBuildingRequest;
 import com.ssafy.economius.game.dto.request.VisitBuildingRequest;
 import com.ssafy.economius.game.dto.response.BuyBuildingResponse;
 import com.ssafy.economius.game.dto.response.SelectBuildingResponse;
-import com.ssafy.economius.game.dto.response.SellBuildingsResponse;
+import com.ssafy.economius.game.dto.response.SellBuildingResponse;
 import com.ssafy.economius.game.dto.response.VisitBuildingResponse;
 import com.ssafy.economius.game.service.BuildingService;
 import lombok.RequiredArgsConstructor;
@@ -27,23 +27,23 @@ public class BuildingController {
     private final SimpMessagingTemplate template;
     private final BuildingService buildingService;
 
-    @MessageMapping(value = "/{roomId}/buyBuildings")
-    public void buyBuildings(@DestinationVariable int roomId,
-                             @Payload BuyBuildingsRequest buyBuildingsRequest) {
+    @MessageMapping(value = "/{roomId}/buyBuilding")
+    public void buyBuilding(@DestinationVariable int roomId,
+                             @Payload BuyBuildingRequest buyBuildingRequest) {
 
-        BuyBuildingResponse responseDto = buildingService.buyBuildings(roomId, buyBuildingsRequest);
+        BuyBuildingResponse responseDto = buildingService.buyBuilding(roomId, buyBuildingRequest);
 
-        Map<String, Object> headers = Map.of("success", true);
+        Map<String, Object> headers = Map.of("success", true, "type", "buyBuilding");
         template.convertAndSend("/sub/" + roomId, responseDto, headers);
     }
 
-    @MessageMapping(value = "/{roomId}/sellBuildings")
-    public void sellBuildings(@DestinationVariable int roomId,
-                              @Payload SellBuildingsRequest sellBuildingsRequest) {
+    @MessageMapping(value = "/{roomId}/sellBuilding")
+    public void sellBuilding(@DestinationVariable int roomId,
+                              @Payload SellBuildingRequest sellBuildingRequest) {
 
-        SellBuildingsResponse responseDto = buildingService.sellBuildings(roomId, sellBuildingsRequest);
+        SellBuildingResponse responseDto = buildingService.sellBuilding(roomId, sellBuildingRequest);
 
-        Map<String, Object> headers = Map.of("success", true);
+        Map<String, Object> headers = Map.of("success", true, "type", "sellBuilding");
         template.convertAndSend("/sub/" + roomId, responseDto, headers);
     }
 
@@ -54,7 +54,7 @@ public class BuildingController {
         log.info("roomId: " + roomId + ", dto: " + visitBuildingRequest);
         VisitBuildingResponse responseDto = buildingService.visitBuilding(roomId, visitBuildingRequest);
 
-        Map<String, Object> headers = Map.of("success", true);
+        Map<String, Object> headers = Map.of("success", true, "type", "visitBuilding");
         template.convertAndSend("/sub/" + roomId, responseDto, headers);
     }
 
@@ -65,7 +65,7 @@ public class BuildingController {
         SelectBuildingResponse responseDto = buildingService.selectBuilding(roomId, selectBuildingRequest);
 
         Long player = selectBuildingRequest.getPlayer();
-        Map<String, Object> headers = Map.of("success", true);
+        Map<String, Object> headers = Map.of("success", true, "type", "selectBuilding");
         template.convertAndSend("/sub/" + roomId + "/" + player, responseDto, headers);
     }
 }

@@ -10,6 +10,6 @@ import java.util.List;
 @Setter
 public class EventDto {
 
-    private List<EventStockDto> eventStockDtos = new ArrayList<>();
+    private List<EventStockDto> eventStocks = new ArrayList<>();
     private List<EventMoneyDto> eventMonies = new ArrayList<>();
 }

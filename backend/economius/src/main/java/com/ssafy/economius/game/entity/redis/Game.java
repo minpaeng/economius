@@ -10,11 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import com.ssafy.economius.game.entity.mysql.EventMoney;
+import com.ssafy.economius.game.entity.mysql.EventStock;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
@@ -26,6 +25,7 @@ import org.springframework.data.redis.core.RedisHash;
 @Builder
 @Slf4j
 @Data
+@ToString
 public class Game {
 
     @Id
@@ -49,6 +49,10 @@ public class Game {
     private Map<Integer, Stock> stocks; 
     private Map<Integer, Saving> savings;
     private InterestRate interestRate;
+
+    // 찬스 이벤트 -
+    private Event event;
+
 
     public void initializeLocations(){
         log.info("사용자 위치 초기화");
@@ -117,14 +121,15 @@ public class Game {
         }
     }
 
-    public void payBuildingFee(Long player, Long owner, int buildingId) {
-        if (owner == null || owner.equals(player)) return;
+    public int payBuildingFee(Long player, Long owner, int buildingId) {
+        if (owner == null || owner.equals(player)) return 0;
         int playerMoney = this.portfolios.get(player).getMoney();
         int ownerMoney = this.portfolios.get(owner).getMoney();
         int buildingPrice = this.buildings.get(buildingId).getPrice();
 
         this.portfolios.get(player).setMoney(playerMoney - buildingPrice);
         this.portfolios.get(owner).setMoney(ownerMoney + buildingPrice);
+        return buildingPrice;
     }
 
     public void proceedBankruptcy(Long player) {
