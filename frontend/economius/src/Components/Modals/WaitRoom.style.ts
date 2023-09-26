@@ -15,7 +15,8 @@ export const modalStyle: any = {
     content: {
         display: 'flex',
         flexDirextion: 'column',
-        backgroundColor: 'rgba(255,255,255,0.85)',
+        // backgroundColor: 'rgba(255,255,255,0.85)',
+        backgroundColor: '#fff9ee',
         overflow: 'auto',
         zIndex: 10,
         margin: 'auto',
