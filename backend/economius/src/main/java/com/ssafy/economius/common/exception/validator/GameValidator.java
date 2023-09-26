@@ -79,8 +79,8 @@ public class GameValidator {
     }
 
     private void checkPlayer(Game game, int roomId, Long player) {
-        log.error("이미 참여중인 플레이어: {roomId: " + roomId + ", player: " + player + "}");
         if (game.getNicknames().containsKey(player)) {
+            log.error("이미 참여중인 플레이어: {roomId: " + roomId + ", player: " + player + "}");
             throw CustomWebsocketException.builder()
                     .roomId(roomId)
                     .code(GameRoomMessage.ALREADY_JOIN_PLAYER.getCode())
