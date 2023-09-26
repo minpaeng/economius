@@ -11,6 +11,7 @@ import {
     TradeInsuranceState,
     BuyAmountState,
     SellAmountState,
+    StockDetailState,
 } from './recoil/trading/atom';
 import { ShowSpinnerState, StockInfoState, RealEstateInfoState, GoldInfoState } from './recoil/modalInfo/atom';
 
@@ -65,6 +66,8 @@ function PlayerSocket() {
     const [buyAmount, setbuyAmount] = useRecoilState(BuyAmountState);
     const [sellAmount, setSellAmount] = useRecoilState(SellAmountState);
 
+    const[stockDetail, setStockDetail] = useRecoilState(StockDetailState);
+
     const stompClient = useRef(null);
 
     useEffect(() => {
@@ -85,10 +88,27 @@ function PlayerSocket() {
 
                     // 개인 메시지 구독 => sub/{roomId}/{playerId}
                     stompClient.current.subscribe(`/sub/${roomId}/1`, function (recievedMessage: any) {
+                        console.log('개인메시지', recievedMessage);
+                        console.log('개인메시지', recievedMessage.body);
                         const message = JSON.parse(recievedMessage.body); // 객체
                         const type = recievedMessage.headers.type; // 문자열
-                        console.log('개인메시지', type);
-                        console.log('개인메시지', message);
+                        // 주식 변경 recoil 시작
+                        if(type === "stockDetail"){
+                            setStockDetail({
+                                "stockId": message["stockId"],
+                                "name": message["name"],
+                                "stockIndustryId": message["stockIndustryId"],
+                                "companyCategory": message["companyCategory"],
+                                "companySubCategory": message["companySubCategory"],
+                                "owners": message["owners"],
+                                "remainingAmount": message["remainingAmount"],
+                                "price": message["price"],
+                                "rate": message["rate"],
+                                "priceHistory": message["priceHistory"],
+                                "rateHistory": message["rateHistory"]
+                            })
+                        }
+                        // 주식 recoil 종료
                     });
 
                     // 방 메시지 구독 => sub/{roomId}
