@@ -38,8 +38,5 @@ public class FinishTurnResponse {
 
     // 경제 이슈, 전조증상
     private Issue currentIssue;
-    private List<PrevIssueDto> currentPrevIssues;
-
-    // 찬스 이벤트
-    private Event event;
+    private List<PrevIssueDto> currentPrevIssues; 
 }
