@@ -1,4 +1,4 @@
-import { UserBox } from './WaitRoom.style';
+// import { UserBox } from './WaitRoom.style';
 import { styled } from 'styled-components';
 
 // modal style
