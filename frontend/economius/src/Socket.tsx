@@ -22,7 +22,7 @@ import {
     StockDetailState,
     GoldDetailState,
 } from './recoil/trading/atom';
-import { StockInfoState, RealEstateInfoState, BankInfoState, ChanceCardInfoState } from './recoil/modalInfo/atom';
+import { MonthlyInfoState, StockInfoState, RealEstateInfoState, BankInfoState, ChanceCardInfoState } from './recoil/modalInfo/atom';
 
 const buildingIds = {
     4: 1,

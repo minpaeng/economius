@@ -12,7 +12,7 @@ import * as S from './MonthlyCalculate.style';
 
 function MonthlyCalculate() {
     const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
-    const [monthlyInfo, setMonthlyInfo] = useRecoilState(MonthlyInfoState);
+    const [monthlyInfo, setMsonthlyInfo] = useRecoilState(MonthlyInfoState);
     const closeModal = () => {
         setMonthlyModalOpen(false);
     };
