@@ -3,12 +3,14 @@ import video1 from '/video/video_start.mp4'; // 1080p
 import video3 from '/video/video_repeat.mp4'; // sound
 import StartAccess from './Components/Modals/StartAccess';
 import * as S from '../src/Components/Modals/GlobalModal.stye';
-import { UseridState } from './recoil/animation/atom';
+import { RoomIdState, UseridState } from './recoil/animation/atom';
 import { useRecoilState } from 'recoil';
-import Modal from 'react-modal'; 
+import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import WaitRoom from './Components/Modals/WaitRoom';
+import Join from './Components/Modals/Join';
+import StartLoginCheck from './Components/Modals/StartLoginCheck';
 
 export default function Room() {
     // 최상단 컴포넌트에서 모달을 쓸 것이라고 명시 작업이 필요
@@ -16,6 +18,7 @@ export default function Room() {
 
     // recoil
     const [userid, setUserid] = useRecoilState(UseridState);
+    const [roomid, setRoomid] = useRecoilState(RoomIdState);
 
     const videoRef = useRef(null);
     const [isOpen, setIsOpen] = useState(true); // 모달이 열려 있는지 확인
@@ -26,20 +29,21 @@ export default function Room() {
     const REDIRECT_URI = import.meta.env.VITE_APP_REDIRECT_URI;
     const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
-    const navigate = useNavigate();
-    
-    useEffect(() => {
-        const token = localStorage.getItem('accessToken');
-        //if (token===null) navigate('/');
-
-        // if (!window.Kakao.isInitialized()) {
-        //     window.Kakao.init(import.meta.env.VITE_APP_JavaScript_URI);
-        //   }
-
-    }, [navigate]);
     const [isModalClosed, setIsModalClosed] = useState(false); // 모달이 닫힌 상태를 관리
     const [renderContent, setRenderContent] = useState(false); // 모달이 닫힌 후 n초 뒤에 렌더링할 상태를 관리
     const [showWaitRoom, setShowWaitRoom] = useState(false);
+    const [showJoin, setShowJoin] = useState(false);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem('accessToken');
+        if (token === null) navigate('/');
+
+        // if (!window.Kakao.isInitialized()) {
+        //     window.Kakao.init(import.meta.env.VITE_APP_JavaScript_URI);
+        // }
+    }, [navigate]);
 
     // 모달 열기
     const openModal = () => {
@@ -126,36 +130,39 @@ export default function Room() {
         // }, 5000);
     };
 
-
     // 방 생성
     const roomMakeHandler = async () => {
         try {
             // localStorage에서 player 값을 가져옵니다.
             const player = localStorage.getItem('player');
-            if(!player) throw new Error("Player not found in local storage");
+            const nickname = localStorage.getItem('nickname');
+            if (!player) throw new Error('Player not found in local storage');
 
             const response = await axios.post('https://j9b109.p.ssafy.io/api/room/create', {
-                player: Number(player) // 문자열을 숫자로 변환해주기 위해 Number를 사용합니다.
+                player: Number(player), // 문자열을 숫자로 변환해주기 위해 Number를 사용합니다.
+                nickname: nickname, // 문자열을 숫자로 변환해주기 위해 Number를 사용합니다.
             });
-    
+
+            // 룸 번호 저장
+            console.log(response.data.roomId); // { roomId: 2 }와 같은 응답 출력
+            setRoomid(response.data.roomId);
+
             setShowWaitRoom(true);
-            console.log(response.data); // { roomId: 2 }와 같은 응답 출력
         } catch (error) {
             console.error('Axios error: ' + error.message); // 네트워크 오류 처리
         }
     };
 
-
     // 방 코드로 입장하기
     const roomJoinHandler = () => {
-        //
+        setShowJoin(true);
     };
 
-    const shareKakao = () => {
-        // window.Kakao.Link.sendCustom({
-        //   templateId: 98901, // 내가 만든 템플릿 아이디를 넣어주면 된다
-        // });
-      };
+    // const shareKakao = () => {
+    //     // window.Kakao.Link.sendCustom({
+    //     //   templateId: 98901, // 내가 만든 템플릿 아이디를 넣어주면 된다
+    //     // });
+    // };
 
     return (
         <>
@@ -166,21 +173,22 @@ export default function Room() {
                 {/* 화면 처음 들어오면 자동으로 켜지는 모달 */}
                 {isOpen && (
                     <>
-                        <StartAccess videoControl={videoControl} />
+                        <StartLoginCheck videoControl={videoControl} />
                     </>
                 )}
                 {/* 모달이 닫힌 후 5초 뒤에 렌더링할 내용을 렌더링합니다. */}
                 {renderContent && (
-                    <S.ButtonOuter> 
+                    <S.ButtonOuter>
                         <S.RoundButtonRoom onClick={roomMakeHandler}>
                             <span>방 생성하기</span>
                         </S.RoundButtonRoom>
-                        <S.RoundButtonRoom onClick={shareKakao}>
+                        <S.RoundButtonRoom onClick={roomJoinHandler}>
                             <span>방 입장하기</span>
                         </S.RoundButtonRoom>
                     </S.ButtonOuter>
                 )}
-                {showWaitRoom && <WaitRoom />}
+                {showWaitRoom && <WaitRoom setShowWaitRoom={setShowWaitRoom} />}
+                {showJoin && <Join setShowJoin={setShowJoin} />}
             </div>
         </>
     );

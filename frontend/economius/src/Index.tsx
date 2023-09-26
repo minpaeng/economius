@@ -123,7 +123,7 @@ export default function Index() {
         }, 5000);
     };
 
-    // {!!!!!!!!!!!!!!!!!!!!} 카카오 로그인 시 실행할 함수
+    // 로그인 버튼 누르면 실행
     const loginHandler = () => {
         window.location.href = KAKAO_AUTH_URI;
         // setUserid('shin');
@@ -156,15 +156,13 @@ export default function Index() {
                     </>
                 )}
                 {/* 모달이 닫힌 후 5초 뒤에 렌더링할 내용을 렌더링합니다. */}
-                {renderContent &&
-                    (
-                        <S.ButtonOuter>
-                            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                <img onClick={loginHandler} src='/button/kakao.png' alt='kakao-login-btn' />
-                            </div>
-                        </S.ButtonOuter>
-                    )
-                }
+                {renderContent && (
+                    <S.ButtonOuter>
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <img onClick={loginHandler} src='/button/kakao.png' alt='kakao-login-btn' />
+                        </div>
+                    </S.ButtonOuter>
+                )}
                 {showWaitRoom && <WaitRoom />}
                 {showJoin && <Join setShowJoin={setShowJoin} />}
             </div>
