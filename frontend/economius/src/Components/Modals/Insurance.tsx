@@ -1,17 +1,24 @@
 import Modal from 'react-modal';
 import { useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { IsModalOpenState } from '/src/recoil/animation/atom';
+import {useRecoilState} from 'recoil';
+import {IsModalOpenState} from '/src/recoil/animation/atom';
+import { TradeInsuranceConfirmState, TradeInsuranceState } from '/src/recoil/trading/atom';
 import * as S from './Insurance.style';
 import InsuranceCard from './InsuranceCard';
 
 function Insurance() {
-    // 의료보험
+    // 의료보험 - 일반
     const Life: any = [
-        ['교통사고', 'car-accident'],
+        ['교통사고', 'car-accident-medical'],
+        ['건강검진', 'hospital'],
+        ['감기 유행', 'covid-19'],
+    ];
+    // 의료보험 - 특약
+    const LifeSpecial: any = [
+        ['교통사고', 'car-accident-medical'],
         ['건강검진', 'hospital'],
         ['임플란트', 'dental-care'],
-        ['폐암 진단', 'lung-cancer'],
+        ['암', 'lung-cancer'],
         ['식중독', 'rotten'],
         ['심혈관 질환', 'blood-vessel'],
         ['감기 유행', 'covid-19'],
@@ -20,12 +27,18 @@ function Insurance() {
     const NonLife: any = [
         ['교통사고', 'car-accident'],
         ['화재발생', 'fire'],
+        ['도둑', 'robbery'],
+    ];
+    const NonLifeSpecial: any = [
+        ['교통사고', 'car-accident'],
+        ['화재발생', 'fire'],
         ['해상사고', 'shipwreck'],
         ['토네이도', 'tornado'],
         ['홍수', 'flood'],
         ['산재사고', 'slip'],
         ['도둑', 'robbery'],
     ];
+
 
     // 보험 정보
     const InsuranceInfo: any = [
@@ -42,7 +55,7 @@ function Insurance() {
             title: '의료보험 + 특약',
             perPrice: 250,
             ensurePercent: 120,
-            ensureInfo: Life,
+            ensureInfo: LifeSpecial,
             isJoin: false,
         },
         {
@@ -58,7 +71,7 @@ function Insurance() {
             title: '손해보험 + 특약',
             perPrice: 250,
             ensurePercent: 120,
-            ensureInfo: NonLife,
+            ensureInfo: NonLifeSpecial,
             isJoin: true,
         },
     ];
@@ -67,6 +80,7 @@ function Insurance() {
     const closeModal = () => {
         setIsModalOpen(false);
     };
+    const [tradeInsurance, setTradeInsurance] = useRecoilState(TradeInsuranceState);
 
     // modal style
     const modalStyle: any = {
@@ -103,10 +117,11 @@ function Insurance() {
                     <S.InsuranceTopTitle>한화생명</S.InsuranceTopTitle>
                 </S.InsuranceTop>
                 <S.InsuranceMid>
-                    {InsuranceInfo.map(insurance => {
-                        return <InsuranceCard CardInfo={insurance}></InsuranceCard>;
+                    {InsuranceInfo.map((insurance, index) => {
+                        return <InsuranceCard CardInfo={insurance} index={index}></InsuranceCard>;
                     })}
                 </S.InsuranceMid>
+                <S.InsuranceConfirmButton onClick={() => setTradeInsurance([false, true, false, false])}>확인</S.InsuranceConfirmButton>
             </S.InsuranceMain>
         </Modal>
     );

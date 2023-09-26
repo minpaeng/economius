@@ -2,6 +2,7 @@ import Modal from 'react-modal';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { IsModalOpenState } from '/src/recoil/animation/atom';
+import { TradeBankState } from '/src/recoil/trading/atom';
 import * as S from './InstallmentSaving.style';
 
 function InstallmentSaving() {
@@ -11,6 +12,7 @@ function InstallmentSaving() {
     // 아니면 해지 모달
     const dummy: any = {
         player: 0,
+        owner: 1,
         money: 0,
         savings: {
             totalPrice: 0, //적금 총 액
@@ -31,9 +33,8 @@ function InstallmentSaving() {
     };
 
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
+    const closeModal = () => setIsModalOpen(false);
+    const [tradeBank, setTradeBank] = useRecoilState(TradeBankState);
 
     // modal style
     const modalStyle: any = {
@@ -105,8 +106,8 @@ function InstallmentSaving() {
                     </S.BankMidDesc>
                 </S.BankMid>
                 <S.BankDivide />
-
-                <S.BankJoinBottom>적금 가입하기</S.BankJoinBottom>
+                <S.BankJoinBottom onClick={() => setTradeBank([true, false])}>적금 가입하기</S.BankJoinBottom>
+                {/* <S.BankJoinBottom onClick={() => setTradeBank([false, true])}>적금 해지하기</S.BankJoinBottom> */}
             </S.BankMain>
         </Modal>
     );

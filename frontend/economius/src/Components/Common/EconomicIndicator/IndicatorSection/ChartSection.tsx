@@ -62,15 +62,16 @@ function ChartSection({ data }) {
             <S.LayoutTop>
               <S.LayoutTopLeft>
                 <img src={`EconomicIndicator/${data.imgPath}.png`} alt="img" />
-                <div style={{ fontSize: "28px" }}>{data.title}</div>
+                <div style={{ fontSize: "18px" }}>{data.title}</div>
               </S.LayoutTopLeft>
               {layoutTopRight}
             </S.LayoutTop>
-            <div ref={setCollapsibleElement} style={{ paddingBottom: "5px" }}>
+            <div ref={setCollapsibleElement}>
               <ChartSectionItem data={data.AllData} />
             </div>
 
             <S.ToggleBtn
+              style={{ padding: 0 }}
               onClick={() => {
                 toggle();
                 toggleCollapse();

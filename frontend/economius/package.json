@@ -10,12 +10,14 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@react-spring/web": "^9.7.3",
         "@react-three/drei": "^9.83.9",
         "@react-three/fiber": "^8.14.1",
         "@stomp/stompjs": "^7.0.0",
         "@types/stompjs": "^2.3.5",
         "apexcharts": "^3.42.0",
         "axios": "^1.5.0",
+        "framer-motion": "^10.16.4",
         "react": "^18.2.0",
         "react-apexcharts": "^1.4.1",
         "react-dom": "^18.2.0",

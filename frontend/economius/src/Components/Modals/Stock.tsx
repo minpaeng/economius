@@ -1,10 +1,11 @@
-import { useRecoilState } from "recoil";
-import { IsModalOpenState } from "/src/recoil/animation/atom";
-import Modal from "react-modal";
-import { useState } from "react";
-import * as S from "./Stock.style";
-import StockGraph from "../Common/StockGraph";
-import BuyOrSell from "../Common/BuyOrSell";
+import { useRecoilState } from 'recoil';
+import { IsModalOpenState } from '/src/recoil/animation/atom';
+import { TradeStockState } from '/src/recoil/trading/atom';
+import Modal from 'react-modal';
+import { useState } from 'react';
+import * as S from './Stock.style';
+import StockGraph from '../Common/StockGraph';
+import BuyOrSell from '../Common/BuyOrSell';
 
 function Stock() {
   const data: any = [
@@ -30,13 +31,15 @@ function Stock() {
     { turn: 20, open: null, high: null, low: null, close: null },
   ];
 
-  //  매수,매도 구분 플래그
-  const [buyClick, isBuyClick] = useState(true);
+    //  매수,매도 탭 구분 플래그
+    const [buyClick, isBuyClick] = useState(true);
 
-  const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+    const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+    // 주식 매수, 매도 여부
+    const [tradeStock, setTradeStock] = useRecoilState(TradeStockState);
 
   // modal style
   const modalStyle: any = {
@@ -65,75 +68,71 @@ function Stock() {
     },
   };
 
-  return (
-    <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
-      <S.StockMain>
-        <S.StockTop>
-          <S.StockTopImg src="Stock/samsung.png" />
-          <S.StockTopTitle>
-            <S.StockTopTitleEnterprise>삼성전자</S.StockTopTitleEnterprise>
-            <S.StockTopTitleType>반도체</S.StockTopTitleType>
-          </S.StockTopTitle>
-        </S.StockTop>
-        <S.StockMid>
-          <S.StockMidLeft>
-            <StockGraph data={data} />
-            <S.StockMidLeftPrice>
-              현재가 : 70700 <span style={{ color: "#DF7D46" }}>(+3%)</span>
-            </S.StockMidLeftPrice>
-          </S.StockMidLeft>
-          <S.StockMidRight>
-            {/* 매도,매수 */}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <S.Main>
-                <S.BtnSection>
-                  <S.BuyOrSellBtn
-                    onClick={() => {
-                      isBuyClick(true);
-                    }}
-                    style={{
-                      backgroundColor: buyClick
-                        ? "#F7BC0F"
-                        : "rgba(247, 188, 15, 0.5)",
-                    }}
-                  >
-                    매수
-                  </S.BuyOrSellBtn>
-                  <S.BuyOrSellBtn
-                    onClick={() => {
-                      isBuyClick(false);
-                    }}
-                    style={{
-                      backgroundColor: !buyClick
-                        ? "#F7BC0F"
-                        : "rgba(247, 188, 15, 0.5)",
-                    }}
-                  >
-                    매도
-                  </S.BuyOrSellBtn>
-                </S.BtnSection>
-                <BuyOrSell isBuy={buyClick} StockOrGold="stock" />
-              </S.Main>
-            </div>
-          </S.StockMidRight>
-        </S.StockMid>
-        <S.StockDivide />
-        {buyClick ? (
-          <S.StockBuyBottom>매수하기</S.StockBuyBottom>
-        ) : (
-          <S.StockSellBottom>매도하기</S.StockSellBottom>
-        )}
-      </S.StockMain>
-    </Modal>
-  );
+    return (
+        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
+            <S.StockMain>
+                <S.StockTop>
+                    <S.StockTopImg src='Stock/samsung.png' />
+                    <S.StockTopTitle>
+                        <S.StockTopTitleEnterprise>삼성전자</S.StockTopTitleEnterprise>
+                        <S.StockTopTitleType>반도체</S.StockTopTitleType>
+                    </S.StockTopTitle>
+                </S.StockTop>
+                <S.StockMid>
+                    <S.StockMidLeft>
+                        <StockGraph data={data} />
+                        <S.StockMidLeftPrice>
+                            현재가 : 70700 <span style={{ color: '#DF7D46' }}>(+3%)</span>
+                        </S.StockMidLeftPrice>
+                    </S.StockMidLeft>
+                    <S.StockMidRight>
+                        {/* 매도,매수 */}
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                width: '100%',
+                                height: '100%',
+                            }}
+                        >
+                            <S.Main>
+                                <S.BtnSection>
+                                    <S.BuyOrSellBtn
+                                        onClick={() => {
+                                            isBuyClick(true);
+                                        }}
+                                        style={{
+                                            backgroundColor: buyClick ? '#F7BC0F' : 'rgba(247, 188, 15, 0.5)',
+                                        }}
+                                    >
+                                        매수
+                                    </S.BuyOrSellBtn>
+                                    <S.BuyOrSellBtn
+                                        onClick={() => {
+                                            isBuyClick(false);
+                                        }}
+                                        style={{
+                                            backgroundColor: !buyClick ? '#F7BC0F' : 'rgba(247, 188, 15, 0.5)',
+                                        }}
+                                    >
+                                        매도
+                                    </S.BuyOrSellBtn>
+                                </S.BtnSection>
+                                <BuyOrSell isBuy={buyClick} StockOrGold='stock' />
+                            </S.Main>
+                        </div>
+                    </S.StockMidRight>
+                </S.StockMid>
+                <S.StockDivide />
+                {buyClick ? (
+                    <S.StockBuyBottom onClick={() => setTradeStock([true, false])}>매수하기</S.StockBuyBottom>
+                ) : (
+                    <S.StockSellBottom onClick={() => setTradeStock([false, true])}>매도하기</S.StockSellBottom>
+                )}
+            </S.StockMain>
+        </Modal>
+    );
 }
 
 export default Stock;

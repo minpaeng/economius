@@ -2,7 +2,7 @@ import ReactApexChart from "react-apexcharts";
 
 function ChartSectionItem({ data }) {
   return (
-    <div style={{ padding: "8px 12px" }}>
+    <div>
       <ReactApexChart
         type="line"
         series={[

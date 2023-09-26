@@ -29,17 +29,17 @@ function PortfolioGold() {
     <>
       {dummy.cnt ? (
         <S.PropertyLayout
-          style={{ padding: "12px 12px 9px 12px", margin: "20px 0px" }}
+          style={{ padding: "8px 12px 5px 12px", margin: "8px 0px" }}
         >
           <S.LayoutTop>
             <S.LayoutTopLeft>
               <img
                 src={`Gold/goldbar.png`}
                 alt="img"
-                style={{ width: "50px", height: "50px" }}
+                style={{ width: "30px", height: "30px" }}
               />
 
-              <div style={{ fontSize: "28px" }}>금</div>
+              <div style={{ fontSize: "20px" }}>금</div>
             </S.LayoutTopLeft>
             <S.LayoutTopRight>수량: {dummy.cnt}개</S.LayoutTopRight>
           </S.LayoutTop>

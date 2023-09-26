@@ -112,6 +112,29 @@ export const RoundButtonRoom = styled.button`
         background: #ffaa55; /* 원하는 색상으로 변경 */
     }
     cursor: pointer; /* 커서를 포인터로 설정 */
+        span {
+            padding: 10px 20px;
+            border-radius: 20px;
+            background: #ffdaae;
+            cursor: pointer; /* 커서를 포인터로 설정 */
+            
+            /* 호버 시 색상 변경 */
+            &:hover {
+                background: #ffaa55; /* 원하는 색상으로 변경 */
+            }
+    }
+        `;
+        
+export const RealRoundButton = styled.span`
     span {
+        padding: 10px 20px;
+        border-radius: 20px;
+        background: #ffdaae;
+        cursor: pointer; /* 커서를 포인터로 설정 */
+
+        /* 호버 시 색상 변경 */
+        &:hover {
+            background: #ffaa55; /* 원하는 색상으로 변경 */
+        }
     }
 `;

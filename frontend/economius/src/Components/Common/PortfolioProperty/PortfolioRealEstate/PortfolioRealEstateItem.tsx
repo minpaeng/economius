@@ -22,7 +22,7 @@ function PortfolioRealEstateItem({
   }
 
   return (
-    <S.PropertyLayout>
+    <S.PropertyLayoutItem>
       <S.LayoutTop>
         <S.LayoutTopLeft>
           <img src={`RealState/${imgPath}.png`} alt="img" />
@@ -56,7 +56,7 @@ function PortfolioRealEstateItem({
           </S.LayoutBottomitemRight>
         </S.LayoutBottomitem>
       </S.LayoutBottom>
-    </S.PropertyLayout>
+    </S.PropertyLayoutItem>
   );
 }
 export default PortfolioRealEstateItem;
