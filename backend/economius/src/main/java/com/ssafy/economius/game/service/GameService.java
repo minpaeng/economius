@@ -64,8 +64,8 @@ public class GameService {
 
     public GameRoomExitResponse exit(int roomId, Long player) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
-        boolean found = removePlayerInRoom(game, player);
-        if (!found) gameValidator.throwNotExistPlayerResponse(roomId, player);
+        gameValidator.throwNotExistPlayerResponse(roomId, game, player);
+        removePlayerInRoom(game, player);
         gameRepository.save(game);
 
         return makeGameExitResponse(roomId, game);
@@ -165,15 +165,9 @@ public class GameService {
             .build();
     }
 
-    private boolean removePlayerInRoom(Game game, Long player) {
-        for (Long p : game.getPlayers()) {
-            if (p.equals(player)) {
-                game.getPlayers().remove(p);
-                game.getNicknames().remove(p);
-                return true;
-            }
-        }
-        return false;
+    private void removePlayerInRoom(Game game, Long player) {
+        game.getPlayers().remove(player);
+        game.getNicknames().remove(player);
     }
 
     private GameJoinResponse makeGameJoinResponse(int roomId, Game game) {

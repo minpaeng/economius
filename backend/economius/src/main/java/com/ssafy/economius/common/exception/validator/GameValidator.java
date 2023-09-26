@@ -46,13 +46,15 @@ public class GameValidator {
                 .build();
     }
 
-    public void throwNotExistPlayerResponse(int roomId, Long player) {
-        log.error("플레이어가 존재하지 않음: " + player);
-        throw CustomWebsocketException.builder()
-                .roomId(roomId)
-                .code(GameRoomMessage.PLAYER_NOT_EXIST.getCode())
-                .message(GameRoomMessage.PLAYER_NOT_EXIST.getMessage() + ": 플레이어 아이디 " + player)
-                .build();
+    public void throwNotExistPlayerResponse(int roomId, Game game, Long player) {
+        if (!game.getNicknames().containsKey(player)) {
+            log.error("플레이어가 존재하지 않음: " + player);
+            throw CustomWebsocketException.builder()
+                    .roomId(roomId)
+                    .code(GameRoomMessage.PLAYER_NOT_EXIST.getCode())
+                    .message(GameRoomMessage.PLAYER_NOT_EXIST.getMessage() + ": 플레이어 아이디 " + player)
+                    .build();
+        }
     }
 
     public void checkCanJoin(Game game, int roomId, Long player) {
