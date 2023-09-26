@@ -15,7 +15,7 @@ export default function Index() {
     const [userid, setUserid] = useRecoilState(UseridState);
 
     const videoRef = useRef(null);
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(true); // 모달이 열려 있는지 확인
     const [isMuted, setIsMuted] = useState(true); // 비디오 음소거 상태
     const [currentVideo, setCurrentVideo] = useState(video1);
 
@@ -148,12 +148,14 @@ export default function Index() {
                         </S.ButtonOuter>
                     ) : (
                         <S.ButtonOuter>
+                            {/* <div style={{ display: 'flex', justifyContent: 'center' }}> */}
                             <S.RoundButtonRoom onClick={roomMakeHandler}>
                                 <span>방 생성하기</span>
                             </S.RoundButtonRoom>
                             <S.RoundButtonRoom onClick={roomJoinHandler}>
                                 <span>방 입장하기</span>
                             </S.RoundButtonRoom>
+                            {/* </div> */}
                         </S.ButtonOuter>
                     ))}
             </div>
