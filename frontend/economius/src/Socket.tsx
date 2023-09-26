@@ -22,8 +22,8 @@ import {
     StockDetailState,
     GoldDetailState,
 } from './recoil/trading/atom';
-import {PortfolioState, StockState} from "/src/recoil/game/atom.tsx";
-import {func} from "three/examples/jsm/nodes/shadernode/ShaderNodeBaseElements";
+import { PortfolioState, StockState } from '/src/recoil/game/atom.tsx';
+import { func } from 'three/examples/jsm/nodes/shadernode/ShaderNodeBaseElements';
 import { MonthlyInfoState, StockInfoState, RealEstateInfoState, BankInfoState, ChanceCardInfoState, InsuranceInfoState } from './recoil/modalInfo/atom';
 
 const buildingIds = {
@@ -164,7 +164,7 @@ function PlayerSocket() {
                         const type = recievedMessage.headers.type || null;
                         console.log('전체메시지', type);
                         console.log('전체메시지', message);
-                        if (type === "finishTurn"){
+                        if (type === 'finishTurn') {
                             setStocks(message.stocks);
                             setPortfolio(message.portfolios);
                         }
