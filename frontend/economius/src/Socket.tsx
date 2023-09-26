@@ -159,7 +159,11 @@ function PlayerSocket() {
                         }
                         if(type == 'eventCard') {
                             setChanceCardInfo({
-                                
+                                moneyCard: message.moneyCard,
+                                name: message.name,
+                                description: message.description,
+                                eventValue: message.eventValue,
+                                url: message.url,
                             })
                         }
                      });

@@ -57,5 +57,11 @@ export const BankInfoState = atom({
 // 찬스 카드 모달 정보
 export const ChanceCardInfoState = atom({
     key: 'ChanceCardInfoState',
-    default: {},
+    default: {
+        moneyCard: null,
+        name: null,
+        description: null,
+        eventValue: null,
+        url: null,
+    },
 });
