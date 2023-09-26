@@ -5,7 +5,9 @@ import {
   OrbitControls,
   OrthographicCamera,
   SpotLight,
+  useHelper,
 } from "@react-three/drei";
+
 import Map from "/src/Map";
 import Characters from "/src/Characters";
 
@@ -20,8 +22,12 @@ import PlayerPlaceAll from "./Components/Common/PlayerPlaceAll";
 import SideBar from "./Components/Common/SideBar";
 
 import Socket from "./Socket";
+import * as THREE from "three";
 
 function App() {
+  const light = useRef();
+  //   useHelper(light, THREE.DirectionalLightHelper);
+
   return (
     <div
       className="canvas-outer"
@@ -30,8 +36,19 @@ function App() {
       <Canvas style={{ width: "100%", height: "100%" }}>
         <OrthographicCamera makeDefault zoom={65} position={[4, 4.1, 4]} />
         <OrbitControls />
-        <ambientLight intensity={3} />
-        {/* <directionalLight intensity={5} /> */}
+        <ambientLight intensity={1} />
+        <directionalLight
+          ref={light}
+          color={0xffffff}
+          intensity={3}
+          position={[0, 5, 0]}
+        />
+        <pointLight
+          ref={light}
+          color={0xffffff}
+          intensity={1}
+          position={[0, 5, 0]}
+        />
 
         <Map />
         <Characters />

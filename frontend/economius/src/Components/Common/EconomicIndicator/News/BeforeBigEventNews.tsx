@@ -95,9 +95,26 @@ function BeforeBigEventNews({ News }) {
                 ]
               }
             </motion.div>
-            <motion.button onClick={() => setNewsClickIdx(null)}>
-              Close
-            </motion.button>
+            <motion.div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <motion.button
+                onClick={() => setNewsClickIdx(null)}
+                style={{
+                  fontSize: "15px",
+                  padding: "8px 12px",
+                  borderRadius: "8px",
+                  background: "rgba(255, 255, 255, 1)",
+                  cursor: "pointer",
+                }}
+              >
+                닫기
+              </motion.button>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
