@@ -35,7 +35,7 @@
                     //subscribe(subscribe url,해당 url로 메시지를 받을때마다 실행할 함수)
                     sub = stompClient.subscribe('/sub/1', function (messageOutput) {
                         //e.body에 전송된 data가 들어있다
-                        showMessageOutput(JSON.parse(messageOutput.body));
+                        //showMessageOutput(JSON.parse(messageOutput.body));
                     });
                 },
                 function(e){
@@ -98,9 +98,7 @@
         }
 
         function sendEventCard() {
-            stompClient.send("/pub/1/eventCard", {}, JSON.stringify({
-                "player": 1 
-            }));
+            stompClient.send("/pub/1/eventCard", {});
         }
  
  

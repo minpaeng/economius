@@ -11,5 +11,4 @@ public class CalculateResponse {
 
     private Long player;
     private ReceiptDto receipt;
-    private PortfolioDto portfolio;
 }

@@ -1,16 +1,20 @@
 package com.ssafy.economius.game.dto.response;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
 
-@Data
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @Builder
-public class GameJoinResponse {
+@Getter
+public class GameRoomExitResponse {
+
     private int roomId;
     private List<Long> players;
     private Map<Long, String> nicknames;

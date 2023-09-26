@@ -4,37 +4,54 @@ import com.ssafy.economius.game.entity.mysql.Member;
 import com.ssafy.economius.game.repository.mysql.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class OAuthLoginService {
     private final MemberRepository memberRepository;
     private final AuthTokensGenerator authTokensGenerator;
     private final RequestOAuthInfoService requestOAuthInfoService;
 
-    public AuthTokens login(OAuthLoginParams params) {
+    public AuthResponse login(OAuthLoginParams params) {
         OAuthInfoResponse oAuthInfoResponse = requestOAuthInfoService.request(params);
-        Long memberId = findOrCreateMember(oAuthInfoResponse);
-        return authTokensGenerator.generate(memberId);
+        Member member = findOrCreateMember(oAuthInfoResponse);
+        AuthResponse authResponse = AuthResponse.builder()
+                .authTokens(authTokensGenerator.generate(member.getMemberId()))
+                .player(member.getMemberId())
+                .nickname(member.getNickname())
+                .build();
+        return authResponse;
     }
 
-    private Long findOrCreateMember(OAuthInfoResponse oAuthInfoResponse) {
-        Member member = memberRepository.findByEmail(oAuthInfoResponse.getEmail());
-        if (member != null) {
-            return member.getMemberId();
-        } else {
+    private Member findOrCreateMember(OAuthInfoResponse oAuthInfoResponse) {
+        if(oAuthInfoResponse.getEmail()!=null) {
+            Member member = memberRepository.findByEmail(oAuthInfoResponse.getEmail());
+            if (member != null) {
+                return member;
+            }
+            else return newMember(oAuthInfoResponse);
+        }
+         else {
             return newMember(oAuthInfoResponse);
         }
     }
 
-    private Long newMember(OAuthInfoResponse oAuthInfoResponse) {
+    private Member newMember(OAuthInfoResponse oAuthInfoResponse) {
         Member member = Member.builder()
                 .name(oAuthInfoResponse.getNickname())
                 .email(oAuthInfoResponse.getEmail())
-                .nickname("oauth")
+                .nickname(oAuthInfoResponse.getNickname())
+                .joinDate(LocalDateTime.now())
+                .editDate(LocalDateTime.now())
                 .build();
-
-        return memberRepository.save(member).getMemberId();
+        log.info(member.toString());
+        memberRepository.save(member);
+        return member;
     }
 }

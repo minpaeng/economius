@@ -1,6 +1,7 @@
 package com.ssafy.economius.game.entity.mysql;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

@@ -1,12 +1,13 @@
 package com.ssafy.economius.game.dto.mysql;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.ToString;
 
-@Getter
-@Setter
+@ToString
+@Data
 public class PrevIssueDto {
 
     private Integer prevIssueId;
+    private Integer issueId;
     private String foretoken;
 }

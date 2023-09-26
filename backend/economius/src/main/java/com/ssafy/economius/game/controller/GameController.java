@@ -1,15 +1,18 @@
 package com.ssafy.economius.game.controller;
 
 import com.ssafy.economius.game.dto.request.CalculateRequest;
-import com.ssafy.economius.game.dto.request.EndTurnRequest;
 import com.ssafy.economius.game.dto.request.GameJoinRequest;
+import com.ssafy.economius.game.dto.request.GameRoomExitRequest;
 import com.ssafy.economius.game.dto.request.GameStartRequest;
 import com.ssafy.economius.game.dto.response.CalculateResponse;
+import com.ssafy.economius.game.dto.response.FinishTurnResponse;
 import com.ssafy.economius.game.dto.response.GameJoinResponse;
-import com.ssafy.economius.game.dto.response.GameStartResponse;
-import com.ssafy.economius.game.entity.redis.Game;
+import com.ssafy.economius.game.dto.response.GameRoomExitResponse;
 import com.ssafy.economius.game.service.GameService;
 import com.ssafy.economius.game.service.FinishTurnService;
+
+import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -22,7 +25,7 @@ import org.springframework.stereotype.Controller;
 @RequiredArgsConstructor
 public class GameController {
 
-    private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
+    private final SimpMessagingTemplate template;
     private final GameService gameService;
 
     // todo 추후에 하나의 서비스로 통합 예정
@@ -30,30 +33,48 @@ public class GameController {
 
     @MessageMapping(value = "/{roomId}/join")
     public void join(@DestinationVariable int roomId, GameJoinRequest gameJoinRequest) {
-        GameJoinResponse gameJoinResponse = gameService.join(roomId, gameJoinRequest.getPlayer());
+        GameJoinResponse gameJoinResponse = gameService.join(
+                roomId,
+                gameJoinRequest.getPlayer(),
+                gameJoinRequest.getNickname());
 
-        template.convertAndSend("/sub/" + roomId, gameJoinResponse);
+        Map<String, Object> headers = Map.of("success", true, "type", "join");
+        template.convertAndSend("/sub/" + roomId, gameJoinResponse, headers);
     }
 
     @MessageMapping(value = "/{roomId}/start")
     public void start(@DestinationVariable int roomId, GameStartRequest gameStartRequest) {
-        GameStartResponse gameStartResponse = gameService.start(roomId,
-            gameStartRequest.getHostPlayer());
-        template.convertAndSend("/sub/" + roomId, gameStartResponse);
+        FinishTurnResponse gameStartResponse = gameService.start(roomId,
+                gameStartRequest.getHostPlayer());
+
+        Map<String, Object> headers = Map.of("success", true, "type", "start");
+        template.convertAndSend("/sub/" + roomId, gameStartResponse, headers);
+    }
+
+    @MessageMapping(value = "/{roomId}/exit")
+    public void exit(@DestinationVariable int roomId, GameRoomExitRequest gameRoomExitRequest) {
+        GameRoomExitResponse gameRoomExitResponse = gameService.exit(roomId,
+                gameRoomExitRequest.getPlayer());
+
+        Map<String, Object> headers = Map.of("success", true, "type", "exit");
+        template.convertAndSend("/sub/" + roomId, gameRoomExitResponse, headers);
     }
 
     @MessageMapping(value = "/{roomId}/calculate")
     public void calculate(@DestinationVariable int roomId, CalculateRequest calculateRequest) {
         CalculateResponse calculateResponse = gameService.calculate(
-            roomId, calculateRequest.getPlayer());
-        template.convertAndSend("/sub/" + roomId, calculateResponse);
+                roomId, calculateRequest.getPlayer());
+
+        Map<String, Object> headers = Map.of("success", true, "type", "calculate");
+        template.convertAndSend("/sub/" + roomId, calculateResponse, headers);
     }
 
 
     @MessageMapping(value = "/{roomId}/finishTurn")
-    public void finishTurn(@DestinationVariable int roomId){
-        Game game = finishTurnService.finish(roomId);
+    public void finishTurn(@DestinationVariable int roomId) {
+        FinishTurnResponse finishTurnResponse = finishTurnService.finish(roomId);
 
-        template.convertAndSend("/sub/" + roomId, game);
+        Map<String, Object> headers = Map.of("success", true, "type", "finishTurn");
+        template.convertAndSend("/sub/" + roomId, finishTurnResponse, headers);
     }
 }

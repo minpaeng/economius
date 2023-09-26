@@ -5,8 +5,8 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class RollDiceRequest {
+public class MovePlayerRequest {
 
     private Long player;
-
+    private int movementCount;
 }

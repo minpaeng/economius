@@ -23,21 +23,21 @@ public class InsuranceController {
 
     @MessageMapping(value = "/{roomId}/insurance")
     public void visitInsurance(@DestinationVariable int roomId, InsuranceRequest insuranceRequest) {
-        Map<String, Object> headers = Map.of("success", true);
+        Map<String, Object> headers = Map.of("success", true,"type", "insurance");
         InsuranceVisitResponse insuranceVisitResponse = insuranceService.visitInsurance(roomId, insuranceRequest);
-        template.convertAndSend("/sub/" + roomId, headers);
+        template.convertAndSend("/sub/" + roomId, insuranceVisitResponse, headers);
     }
 
     @MessageMapping(value = "/{roomId}/joinInsurance")
     public void joinInsurance(@DestinationVariable int roomId, InsuranceRequest insuranceRequest) {
-        Map<String, Object> headers = Map.of("success", true);
+        Map<String, Object> headers = Map.of("success", true,"type", "insurance");
         insuranceService.joinInsurance(roomId, insuranceRequest);
         template.convertAndSend("/sub/" + roomId, headers);
     }
 
     @MessageMapping(value = "/{roomId}/finishInsurance")
     public void finishInsurance(@DestinationVariable int roomId, InsuranceRequest insuranceRequest) {
-        Map<String, Object> headers = Map.of("success", true);
+        Map<String, Object> headers = Map.of("success", true,"type", "insurance");
         insuranceService.stopInsurance(roomId, insuranceRequest);
         template.convertAndSend("/sub/" + roomId, headers);
     }

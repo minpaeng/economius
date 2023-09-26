@@ -1,8 +1,13 @@
 package com.ssafy.economius.game.dto.request;
 
+import lombok.Getter;
+import lombok.ToString;
+
+@Getter
+@ToString
 public class BuyItemRequest {
 
     private Long player;
-    private String companyCode;
+    private int stockId;
 
 }

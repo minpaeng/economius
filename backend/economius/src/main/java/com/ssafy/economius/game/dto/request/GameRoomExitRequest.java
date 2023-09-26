@@ -1,11 +1,9 @@
 package com.ssafy.economius.game.dto.request;
 
 import lombok.Getter;
-import lombok.ToString;
 
 @Getter
-@ToString
-public class GoldSelectRequest {
+public class GameRoomExitRequest {
 
     private Long player;
 }

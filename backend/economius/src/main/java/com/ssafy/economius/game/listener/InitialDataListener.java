@@ -2,6 +2,7 @@ package com.ssafy.economius.game.listener;
 
 import com.ssafy.economius.game.dto.mysql.EventMoneyDto;
 import com.ssafy.economius.game.dto.mysql.EventStockDto;
+import com.ssafy.economius.game.enums.DescriptionTitleEnum;
 import com.ssafy.economius.game.enums.InitialData;
 import com.ssafy.economius.game.dto.mysql.InsuranceDto;
 import com.ssafy.economius.game.dto.mysql.InsuranceTypeDto;
@@ -63,6 +64,10 @@ public class InitialDataListener {
     @Transactional(readOnly = true)
     @EventListener
     public void setInitialData(ContextRefreshedEvent event) {
+        setStockIndustries();
+        log.info(InitialData.STOCK_INDUSTRIES.size() + " stock industry loaded.");
+        setStocks();
+        log.info(InitialData.STOCKS.size() + " stocks loaded.");
         setSavings();
         log.info(InitialData.SAVINGS.size() + " savings loaded.");
         setVolatiles();
@@ -74,17 +79,37 @@ public class InitialDataListener {
         log.info(InitialData.INSURANCES.size() + " insurances loaded.");
         setIssues();
         log.info(InitialData.ISSUES.size() + " issues loaded.");
-        setStockIndustries();
-        log.info(InitialData.STOCK_INDUSTRIES.size() + " stock industry loaded.");
-        setStocks();
-        log.info(InitialData.STOCKS.size() + " stocks loaded.");
         setInsuranceTypes();
         log.info(InitialData.INSURANCE_TYPE.size() + " insurance types loaded.");
     }
 
+    private void setStockIndustries() {
+        List<StockIndustry> stockIndustries = stockIndustryRepository.findAll();
+        for (StockIndustry StockIndustry : stockIndustries) {
+            StockIndustryDto tmp = new StockIndustryDto();
+            tmp.setStockIndustryId(StockIndustry.getStockIndustryId());
+            tmp.setIndustry(StockIndustry.getIndustry());
+            InitialData.STOCK_INDUSTRIES.add(tmp);
+        }
+    }
+
+    private void setStocks() {
+        List<Stock> stocks = stockRepository.findAllWithStockIndustries();
+        for (Stock stock : stocks) {
+            StockDto tmp = new StockDto();
+            tmp.setStockId(stock.getStockId());
+            tmp.setStockIndustryId(stock.getStockIndustry().getStockIndustryId());
+            tmp.setIndustry(stock.getStockIndustry().getIndustry());
+            tmp.setType(stock.getType());
+            tmp.setCompany(stock.getCompany());
+            tmp.setInitialValue(stock.getInitialValue());
+            InitialData.STOCKS.put(tmp.getStockId(), tmp);
+        }
+    }
+
     private void setSavings() {
         List<Savings> savings = savingsRepository.findAll();
-        for (Savings saving: savings) {
+        for (Savings saving : savings) {
             SavingsDto tmp = new SavingsDto();
             tmp.setBankId(saving.getSavingsId());
             tmp.setSavingName(saving.getName());
@@ -97,7 +122,7 @@ public class InitialDataListener {
 
     private void setVolatiles() {
         List<Volatile> volatiles = volatileRepository.findAll();
-        for (Volatile vol: volatiles) {
+        for (Volatile vol : volatiles) {
             VolatileDto tmp = new VolatileDto();
             tmp.setVolatileId(vol.getVolatileId());
             tmp.setName(vol.getName());
@@ -109,7 +134,7 @@ public class InitialDataListener {
 
     private void setEvents() {
         List<EventStock> eventStocks = eventStockRepository.findAllWithStockIndustry();
-        for (EventStock eventStock: eventStocks) {
+        for (EventStock eventStock : eventStocks) {
             EventStockDto tmp = new EventStockDto();
             tmp.setEventStockId(eventStock.getEventStockId());
             tmp.setStockIndustryId(eventStock.getStockIndustry().getStockIndustryId());
@@ -122,7 +147,7 @@ public class InitialDataListener {
         }
 
         List<EventMoney> eventMoneys = eventMoneyRepository.findAllWithInsuranceType();
-        for (EventMoney eventMoney: eventMoneys) {
+        for (EventMoney eventMoney : eventMoneys) {
             EventMoneyDto tmp = new EventMoneyDto();
             tmp.setEventMoneyId(eventMoney.getEventMoneyId());
             tmp.setInsuranceTypeId(eventMoney.getInsuranceType().getInsuranceTypeId());
@@ -154,7 +179,7 @@ public class InitialDataListener {
 
     private void setIssues() {
         List<Issue> issues = issueRepository.findAll();
-        for (Issue issue: issues) {
+        for (Issue issue : issues) {
             IssueDto tmp = new IssueDto();
             tmp.setIssueId(issue.getIssueId());
             tmp.setName(issue.getName());
@@ -162,59 +187,39 @@ public class InitialDataListener {
             tmp.setCountry(issue.getCountry());
             tmp.setYear(issue.getYear());
             tmp.setDescription(issue.getDescription());
-            setIssueStocks(tmp);
-            setPrevIssues(tmp);
-            InitialData.ISSUES.add(tmp);
+            tmp.setUrl(issue.getUrl());
+            setIssueStocks(issue.getIssueId(), tmp.getAssetChanges());
+            setPrevIssues(issue.getIssueId(), tmp.getPrevIssues());
+            InitialData.ISSUES.put(tmp.getIssueId(), tmp);
         }
     }
 
-    private void setIssueStocks(
-            IssueDto issueDto) {
-        List<IssueStock> issueStocks = issueStockRepository.findIssueStockByIssueId(issueDto.getIssueId());
+    private void setIssueStocks(int issueId, List<IssueStockDto> list) {
+        List<IssueStock> issueStocks = issueStockRepository.findIssueStockByIssueId(issueId);
 
-        for (IssueStock issueStock: issueStocks) {
+        for (IssueStock issueStock : issueStocks) {
             IssueStockDto tmp = new IssueStockDto();
             tmp.setIssueStockId(issueStock.getIssueStockId());
+            tmp.setIssueId(issueStock.getIssue().getIssueId());
+            tmp.setName(issueStock.getIssue().getName());
+            tmp.setType(issueStock.getIssue().typeByteToBoolean());
             tmp.setAssetType(issueStock.getAssetType());
             tmp.setAssetId(issueStock.getAssetId());
             tmp.setChangeUnit(issueStock.getChangeUnit());
             tmp.setChangeReason(issueStock.getChangeReason());
-            issueDto.getIssueStockDtos().add(tmp);
+            list.add(tmp);
         }
     }
 
-    private void setPrevIssues(IssueDto issueDto) {
-        List<PrevIssue> prevIssues = prevIssueRepository.findPrevIssueByIssueId(issueDto.getIssueId());
+    private void setPrevIssues(int issueId, List<PrevIssueDto> list) {
+        List<PrevIssue> prevIssues = prevIssueRepository.findPrevIssueByIssueId(issueId);
 
         for (PrevIssue prevIssue : prevIssues) {
             PrevIssueDto tmp = new PrevIssueDto();
             tmp.setPrevIssueId(prevIssue.getPrevIssueId());
-            tmp.setForetoken(prevIssue.getForetoken());
-            issueDto.getPrevIssueDtos().add(tmp);
-        }
-    }
-
-    private void setStockIndustries() {
-        List<StockIndustry> stockIndustries = stockIndustryRepository.findAll();
-        for (StockIndustry StockIndustry : stockIndustries) {
-            StockIndustryDto tmp = new StockIndustryDto();
-            tmp.setStockIndustryId(StockIndustry.getStockIndustryId());
-            tmp.setIndustry(StockIndustry.getIndustry());
-            InitialData.STOCK_INDUSTRIES.add(tmp);
-        }
-    }
-
-    private void setStocks() {
-        List<Stock> stocks = stockRepository.findAllWithStockIndustries();
-        for (Stock stock : stocks) {
-            StockDto tmp = new StockDto();
-            tmp.setStockId(stock.getStockId());
-            tmp.setStockIndustryId(stock.getStockIndustry().getStockIndustryId());
-            tmp.setIndustry(stock.getStockIndustry().getIndustry());
-            tmp.setType(stock.getType());
-            tmp.setCompany(stock.getCompany());
-            tmp.setInitialValue(stock.getInitialValue());
-            InitialData.STOCKS.add(tmp);
+            tmp.setIssueId(prevIssue.getIssue().getIssueId());
+            tmp.setForetoken(DescriptionTitleEnum.NEWSFLASH.getTitle() + " " + prevIssue.getForetoken());
+            list.add(tmp);
         }
     }
 

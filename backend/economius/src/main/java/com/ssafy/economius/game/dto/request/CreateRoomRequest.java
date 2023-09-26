@@ -5,4 +5,5 @@ import lombok.Data;
 @Data
 public class CreateRoomRequest {
     private Long player;
+    private String nickname;
 }

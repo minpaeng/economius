@@ -6,4 +6,5 @@ import lombok.Data;
 public class GameJoinRequest {
 
     private Long player;
+    private String nickname;
 }

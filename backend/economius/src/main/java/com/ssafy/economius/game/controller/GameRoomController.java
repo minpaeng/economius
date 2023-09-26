@@ -8,7 +8,6 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +25,7 @@ public class GameRoomController {
     @PostMapping("/create")
     public ResponseEntity<CreateRoomResponse> createRoom(@RequestBody CreateRoomRequest createRoomRequest){
         return new ResponseEntity<>(
-            gameRoomService.createRoom(createRoomRequest.getPlayer()),
+            gameRoomService.createRoom(createRoomRequest.getPlayer(), createRoomRequest.getNickname()),
             HttpStatus.OK);
     }
 }
