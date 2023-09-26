@@ -76,7 +76,7 @@ public class GameRoomService {
 
         Game game = Game.builder()
                 .players(new ArrayList<>(List.of(player)))
-                .nicknames(new HashMap<>(Map.of(player, nickname)))
+                .nicknames(new HashMap<>(){{put(player, nickname);}})
                 .gameTurn(0)
                 .roomId(roomId)
                 .interestRate(makeInterestRate())
