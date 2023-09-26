@@ -200,10 +200,7 @@ function PlayerSocket() {
                                 description: message.description,
                                 eventValue: message.eventValue,
                                 url: message.url,
-<<<<<<< HEAD
                                 apply: message.apply,
-                            })
-=======
                             });
                         } else if (type == 'insurance') {
                             setInsuranceInfo({
@@ -217,7 +214,6 @@ function PlayerSocket() {
                                 insurance3: message.insuranceDto[3],
                                 insurance4: message.insuranceDto[4],
                             });
->>>>>>> feature/fe/insurance
                         }
                     });
                 }
