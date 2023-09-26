@@ -4,20 +4,13 @@ import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.dto.EventDto;
 import com.ssafy.economius.game.dto.EventMoneyDto;
 import com.ssafy.economius.game.dto.EventStockDto;
-import com.ssafy.economius.game.dto.SavingDto;
-import com.ssafy.economius.game.dto.request.EventCardRequest;
-import com.ssafy.economius.game.dto.request.SavingRequest;
 import com.ssafy.economius.game.dto.response.EventCardResponse;
-import com.ssafy.economius.game.dto.response.SavingVisitResponse;
 import com.ssafy.economius.game.entity.redis.*;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 @Service
@@ -27,17 +20,15 @@ public class EventService {
 
     private final GameRepository gameRepository;
     private final GameValidator gameValidator;
-    private final FinishTurnService finishTurnService;
     private final InsuranceService insuranceService;
 
-    public EventCardResponse visitEventCard(int roomId, EventCardRequest eventCardRequest) {
+    public EventCardResponse visitEventCard(int roomId) {
         //게임 방 조회
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
         //게임 속 이벤트 조회
         Event event = game.getEvent();
-
-        log.info(event.getEventMoney().toString());
+//        log.info(event.getEventMoney().toString());
 
         // 이벤트 랜덤 선정
         Random random = new Random();
@@ -49,7 +40,7 @@ public class EventService {
         EventDto eventDto = EventDto.builder().build();
 
         // Money 이벤트 발생
-        if(randomCategory == 0) {
+        if (randomCategory == 0) {
             EventMoney eventMoney = event.getEventMoney().get(random.nextInt(event.getEventMoney().size()));
             EventMoneyDto eventMoneyDto = EventMoneyDto.builder()
                     .eventMoneyId(eventMoney.getEventMoneyId())
@@ -64,9 +55,18 @@ public class EventService {
             eventDto.setEventMoneyDto(eventMoneyDto);
 
             // 모든 플레이어의 보험 확인 & 적용
-            for(Long player : game.getPlayers()) {
-                int payment = insuranceService.applyInsurance(game, player, eventMoney.getInsuranceTypeId(), eventMoney.getEventMoneyId());
-                game.getPortfolios().get(player).setMoney(game.getPortfolios().get(player).getMoney()-payment);
+            for (Long player : game.getPlayers()) {
+                int payment = insuranceService.applyInsurance(
+                        game,
+                        player,
+                        eventMoney.getInsuranceTypeId(),
+                        eventMoney.getMoney());
+
+                // 보유 현금이 부족하면 파산
+                int resultMoney = game.getPortfolios().get(player).getMoney() - payment;
+                if (resultMoney < 0) gameValidator.throwBankruptcyResponse(roomId, player);
+
+                game.getPortfolios().get(player).setMoney(resultMoney);
             }
         }
         // Stock 이벤트 발생
@@ -83,11 +83,11 @@ public class EventService {
                     .build();
             eventDto.setEventStockDto(eventStockDto);
 
-            for(Stock stock : game.getStocks().values()) {
-                if(stock.getStockIndustryId() == eventStockDto.getStockIndustryId())  {
+            for (Stock stock : game.getStocks().values()) {
+                if (stock.getStockIndustryId() == eventStockDto.getStockIndustryId()) {
                     log.info(stock.toString());
 
-                    stock.updateStockPriceAndRate(eventStockDto.getRate(), game.getGameTurn()/4);
+                    stock.updateStockPriceAndRate(eventStockDto.getRate(), game.getGameTurn() / 4);
                     game.getPortfolios().values()
                             .forEach(portfolio -> portfolio.getStocks().updatePortfolioStockByStockChange(stock));
 

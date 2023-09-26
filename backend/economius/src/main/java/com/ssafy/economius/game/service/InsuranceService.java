@@ -30,11 +30,7 @@ public class InsuranceService {
     }
 
     public int applyInsurance(Game game, Long player, int applyInsuranceId, int price) {
-        int afterPrice = price;
-
         // 멤버 포트폴리오 - 보험
-        Portfolio portfolio = game.getPortfolios().get(player);
-        PortfolioInsurances portfolioInsurances = portfolio.getInsurances();
         int applyRate = 0;
         if(applyInsuranceId == 1) {
             if(checkHaveInsurance(game, player, 1)) applyRate += game.getInsurances().get(1).getGuaranteeRate();
@@ -50,9 +46,10 @@ public class InsuranceService {
         else if(applyInsuranceId == 4) {
             if(checkHaveInsurance(game, player, 4)) applyRate += game.getInsurances().get(4).getGuaranteeRate();
         }
-        afterPrice = price - (int) (price * (applyRate / 100.0));
-        return afterPrice;
+
+        return price - (int) (price * (applyRate / 100.0));
     }
+
     public InsuranceVisitResponse visitInsurance(int roomId, InsuranceRequest insuranceRequest) {
         //게임 방 조회
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);

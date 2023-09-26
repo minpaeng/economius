@@ -8,7 +8,6 @@ import com.ssafy.economius.game.dto.response.CalculateResponse;
 import com.ssafy.economius.game.dto.response.FinishTurnResponse;
 import com.ssafy.economius.game.dto.response.GameJoinResponse;
 import com.ssafy.economius.game.dto.response.GameRoomExitResponse;
-import com.ssafy.economius.game.dto.response.GameStartResponse;
 import com.ssafy.economius.game.service.GameService;
 import com.ssafy.economius.game.service.FinishTurnService;
 
