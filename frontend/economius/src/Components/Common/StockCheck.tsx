@@ -407,6 +407,27 @@ function StockCheck({ clickStockId }) {
     },
   };
 
+  const imgList = [
+    "none",
+    "Aramco",
+    "koreaElectro",
+    "LGchemi",
+    "Posco",
+    "pfizer",
+    "celltrion",
+    "Nike",
+    "CocaCola",
+    "Lexus",
+    "samsung",
+    "CJdistribution",
+    "hyundaiConstruct",
+    "KT",
+    "MS",
+    "airbnb",
+    "CJE&M",
+  ];
+
+  const imgPath = imgList[clickStockId];
   const name = stocks[clickStockId].name;
   const companyCategory = stocks[clickStockId].companyCategory;
   const companySubCategory = stocks[clickStockId].companySubCategory;
@@ -415,10 +436,12 @@ function StockCheck({ clickStockId }) {
   const priceHistory = stocks[clickStockId].priceHistory;
   const owners = stocks[clickStockId].owners;
 
+  console.log(imgPath);
+
   return (
     <>
       {/* // 제목 */}
-      <SideStockTitle imgpath={clickStockId} name={name} />
+      <SideStockTitle imgpath={imgPath} name={name} />
       {/* // 업종 & 가격 */}
       <SideStockPrice
         companyCategory={companyCategory}
@@ -427,7 +450,7 @@ function StockCheck({ clickStockId }) {
         rate={rate}
       />
       {/* // 주가차트 */}
-      {/* <StockGraph /> */}
+      <StockGraph data={priceHistory} />
       {/* // 유저 주식 보유 차트 */}
       {/* <SideStockOwnerChart /> */}
     </>
