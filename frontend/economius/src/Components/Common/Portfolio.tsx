@@ -5,6 +5,7 @@ import PortfolioStock from "./PortfolioProperty/PortfolioStock/PortfolioStock";
 import PropertyChart from "./PortfolioProperty/PropertyChart";
 import PortfolioSaving from "./PortfolioProperty/PortfolioSaving/PortfolioSaving";
 import PortfolioRealEstate from "./PortfolioProperty/PortfolioRealEstate/PortfolioRealEstate";
+import PortfolioInsurance from "./PortfolioProperty/PortfolioInsurance/PortfolioInsurance";
 
 function Portforlio() {
   return (
@@ -35,6 +36,8 @@ function Portforlio() {
       <PortfolioRealEstate />
       {/* 주식 토글 */}
       <PortfolioStock />
+      {/* 보험 토글 */}
+      <PortfolioInsurance />
     </S.PortfolioMain>
   );
 }
