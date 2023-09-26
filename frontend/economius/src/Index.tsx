@@ -4,9 +4,7 @@ import video3 from '/video/video_repeat.mp4'; // sound
 import StartAccess from './Components/Modals/StartAccess';
 import * as S from '../src/Components/Modals/GlobalModal.stye';
 import { UseridState } from './recoil/animation/atom';
-import { useRecoilState } from 'recoil';
-import Modal from 'react-modal';
-import WaitRoom from './Components/Modals/WaitRoom';
+import { useRecoilState } from 'recoil'; 
 import Modal from 'react-modal'; 
 import { useNavigate } from 'react-router-dom';
 
@@ -34,8 +32,6 @@ export default function Index() {
     }, [navigate]);
     const [isModalClosed, setIsModalClosed] = useState(false); // 모달이 닫힌 상태를 관리
     const [renderContent, setRenderContent] = useState(false); // 모달이 닫힌 후 n초 뒤에 렌더링할 상태를 관리
-
-    const [showWaitRoom, setShowWaitRoom] = useState(false);
 
     // 모달 열기
     const openModal = () => {
@@ -140,8 +136,7 @@ export default function Index() {
     // {!!!!!!!!!!!!!!!!!!!!} 카카오 로그인 시 실행할 함수
     const roomMakeHandler = () => {
         // MakeRoom을 보여주기 위한 함수 호출
-
-        setShowWaitRoom(true);
+ 
     };
 
     return (
@@ -176,7 +171,7 @@ export default function Index() {
                             {/* </div> */}
                         </S.ButtonOuter>
                     ))}
-                {showWaitRoom && <WaitRoom />}
+                
             </div>
         </>
     );
