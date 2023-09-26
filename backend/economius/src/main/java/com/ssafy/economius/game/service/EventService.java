@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -23,6 +25,7 @@ public class EventService {
     private final InsuranceService insuranceService;
 
     public EventCardResponse visitEventCard(int roomId) {
+        List<Long> bankruptcyPlayers = null;
         //게임 방 조회
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
@@ -64,7 +67,13 @@ public class EventService {
 
                 // 보유 현금이 부족하면 파산
                 int resultMoney = game.getPortfolios().get(player).getMoney() - payment;
-                if (resultMoney < 0) gameValidator.throwBankruptcyResponse(roomId, player);
+
+                if (resultMoney < 0) {
+                    if (bankruptcyPlayers == null) bankruptcyPlayers = new ArrayList<>();
+                    game.proceedBankruptcy(player);
+                    bankruptcyPlayers.add(player);
+                    gameValidator.throwBankruptcyResponse(roomId, player);
+                }
 
                 game.getPortfolios().get(player).setMoney(resultMoney);
             }
@@ -100,6 +109,7 @@ public class EventService {
         // 어떤 이벤트인지 response 던져주기
         EventCardResponse eventCardResponse = EventCardResponse.builder()
                 .eventDto(eventDto)
+                .bankruptcyPlayers(bankruptcyPlayers)
                 .build();
 
         return eventCardResponse;
