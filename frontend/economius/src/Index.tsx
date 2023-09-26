@@ -6,7 +6,7 @@ import StartAccess from './Components/Modals/StartAccess';
 import * as S from '../src/Components/Modals/GlobalModal.stye';
 import { UseridState } from './recoil/animation/atom';
 import { useRecoilState } from 'recoil';
-import Modal from 'react-modal';
+import Modal from 'react-modal'; 
 
 export default function Index() {
     // 최상단 컴포넌트에서 모달을 쓸 것이라고 명시 작업이 필요
@@ -22,9 +22,9 @@ export default function Index() {
     const [isMuted, setIsMuted] = useState(true); // 비디오 음소거 상태
     const [currentVideo, setCurrentVideo] = useState(video1);
 
-    //const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
-    //const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
-    //const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+    const REST_API_KEY = import.meta.env.VITE_APP_REST_API_KEY;
+    const REDIRECT_URI = import.meta.env.VITE_APP_REDIRECT_URI;
+    const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
 
     // 모달 열기
@@ -99,7 +99,7 @@ export default function Index() {
 
     // {!!!!!!!!!!!!!!!!!!!!} 카카오 로그인 시 실행할 함수
     const loginHandler = () => {
-        //window.location.href = KAKAO_AUTH_URI;
+        window.location.href = KAKAO_AUTH_URI; 
         // setUserid('shin');
         // setTimeout(() => {
         //     console.log(userid);
