@@ -30,7 +30,7 @@ export default function Room() {
     
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
-        if (token===null) navigate('/');
+        //if (token===null) navigate('/');
 
         // if (!window.Kakao.isInitialized()) {
         //     window.Kakao.init(import.meta.env.VITE_APP_JavaScript_URI);

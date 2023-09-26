@@ -30,7 +30,7 @@ export default function Index() {
 
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
-        if (token) navigate('/room');
+        //if (token) navigate('/room');
     }, [navigate]);
     const [isModalClosed, setIsModalClosed] = useState(false); // 모달이 닫힌 상태를 관리
     const [renderContent, setRenderContent] = useState(false); // 모달이 닫힌 후 n초 뒤에 렌더링할 상태를 관리
