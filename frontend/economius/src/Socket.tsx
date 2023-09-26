@@ -200,7 +200,8 @@ function PlayerSocket() {
                                 description: message.description,
                                 eventValue: message.eventValue,
                                 url: message.url,
-                            });
+                                apply: message.apply,
+                            })
                         }
                     });
                 }

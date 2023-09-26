@@ -77,5 +77,6 @@ export const ChanceCardInfoState = atom({
         description: null,
         eventValue: null,
         url: null,
+        apply: null
     },
 });

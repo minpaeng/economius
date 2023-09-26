@@ -60,10 +60,10 @@ function ChanceCard() {
                 <S.ChanceCardDivide />
                 <S.ChanceCardBottom>
                     <div>{chanceCardInfo.description}</div>
-                    {chanceCardInfo.moneyCard ? (
-                        <div>현금 {chanceCardInfo.eventValue} 만원</div>
+                    {chanceCardInfo.moneyCard ? ( 
+                        <div>현금 {chanceCardInfo.eventValue} 만원 {chanceCardInfo.apply}</div> 
                     ) : (
-                        <div>주식 {chanceCardInfo.eventValue} %</div>
+                        <div>주식 {chanceCardInfo.eventValue} % {chanceCardInfo.apply}</div>
                     )}
                 </S.ChanceCardBottom>
 
