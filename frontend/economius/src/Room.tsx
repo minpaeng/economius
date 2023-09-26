@@ -32,9 +32,9 @@ export default function Room() {
         const token = localStorage.getItem('accessToken');
         if (token===null) navigate('/');
 
-        if (!window.Kakao.isInitialized()) {
-            window.Kakao.init(import.meta.env.VITE_APP_JavaScript_URI);
-          }
+        // if (!window.Kakao.isInitialized()) {
+        //     window.Kakao.init(import.meta.env.VITE_APP_JavaScript_URI);
+        //   }
 
     }, [navigate]);
     const [isModalClosed, setIsModalClosed] = useState(false); // 모달이 닫힌 상태를 관리
@@ -152,9 +152,9 @@ export default function Room() {
     };
 
     const shareKakao = () => {
-        window.Kakao.Link.sendCustom({
-          templateId: 98901, // 내가 만든 템플릿 아이디를 넣어주면 된다
-        });
+        // window.Kakao.Link.sendCustom({
+        //   templateId: 98901, // 내가 만든 템플릿 아이디를 넣어주면 된다
+        // });
       };
 
     return (
