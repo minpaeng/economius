@@ -2,13 +2,11 @@ package com.ssafy.economius.game.entity.redis;
 
 import static com.ssafy.economius.game.enums.RateEnum.*;
 
-import com.ssafy.economius.game.enums.RateEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
