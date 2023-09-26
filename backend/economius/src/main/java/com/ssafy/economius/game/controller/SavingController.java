@@ -24,14 +24,14 @@ public class SavingController {
 
     @MessageMapping(value = "/{roomId}/bank")
     public void visitBank(@DestinationVariable int roomId, SavingRequest savingRequest) {
-        Map<String, Object> headers = Map.of("success", true);
+        Map<String, Object> headers = Map.of("success", true, "type", "bank");
         SavingVisitResponse savingVisitResponse = savingService.visitBank(roomId, savingRequest);
         template.convertAndSend("/sub/" + roomId, savingVisitResponse, headers);
     }
 
     @MessageMapping(value = "/{roomId}/joinSavings")
     public void joinSavings(@DestinationVariable int roomId, SavingRequest savingRequest) {
-        Map<String, Object> headers = Map.of("success", true);
+        Map<String, Object> headers = Map.of("success", true, "type", "bank");
         savingService.joinSavings(roomId, savingRequest);
         template.convertAndSend("/sub/" + roomId, headers);
     }
@@ -39,7 +39,7 @@ public class SavingController {
 
     @MessageMapping(value = "/{roomId}/stopSavings")
     public void stopSavings(@DestinationVariable int roomId, SavingRequest savingRequest) {
-        Map<String, Object> headers = Map.of("success", true);
+        Map<String, Object> headers = Map.of("success", true, "type", "bank");
         savingService.stopSavings(roomId, savingRequest);
         template.convertAndSend("/sub/" + roomId, headers);
     }
