@@ -83,6 +83,7 @@ public class EventService {
                         .description(eventDto.getEventMoneyDto().getDescription())
                         .eventValue(eventDto.getEventMoneyDto().getMoney())
                         .url(eventDto.getEventMoneyDto().getUrl())
+                        .apply(eventDto.getEventMoneyDto().getTypeName())
                         .build();
                 game.getPortfolios().get(player).setMoney(resultMoney);
             }
@@ -117,6 +118,7 @@ public class EventService {
                     .description(eventDto.getEventStockDto().getDescription())
                     .eventValue(eventDto.getEventStockDto().getRate())
                     .url(eventDto.getEventStockDto().getUrl())
+                    .apply(eventDto.getEventStockDto().getIndustry())
                     .build();
         }
 
