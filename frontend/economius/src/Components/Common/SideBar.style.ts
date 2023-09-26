@@ -65,3 +65,16 @@ export const SideBarMainSection = styled.div`
 export const divideLine = styled.div`
   flex: 0.2;
 `;
+
+export const backBtn = styled.button`
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 2px solid black;
+  background: transparent;
+  transition: all 250ms ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+`;

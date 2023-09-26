@@ -33,7 +33,7 @@ function App() {
       className="canvas-outer"
       style={{ width: "100%", height: "calc(100vw * 9 / 16)" }}
     >
-      <Canvas style={{ width: "100%", height: "100%" }}>
+      {/* <Canvas style={{ width: "100%", height: "100%" }}>
         <OrthographicCamera makeDefault zoom={65} position={[4, 4.1, 4]} />
         <OrbitControls />
         <ambientLight intensity={1} />
@@ -52,16 +52,16 @@ function App() {
 
         <Map />
         <Characters />
-      </Canvas>
+      </Canvas> */}
 
-      <Controller />
+      {/* <Controller /> */}
 
       <NewsBar />
       <PlayerPlaceAll />
       <SideBar />
 
       <Modals />
-      <Socket />
+      {/* <Socket /> */}
     </div>
   );
 }

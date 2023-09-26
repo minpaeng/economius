@@ -3,7 +3,14 @@ import SideStockPrice from "./EconomicIndicator/SideStock/SideStockPrice";
 import SideStockTitle from "./EconomicIndicator/SideStock/SideStockTitle";
 import StockGraph from "./StockGraph";
 
-function StockCheck({ clickStockId }) {
+import * as S from "./SideBar.style";
+
+import { useRecoilState } from "recoil";
+import { SideBarTypeState } from "/src/recoil/animation/atom";
+
+function StockCheck({ clickStockId, isPortfolio, setIsPortfolio }) {
+  const [sideBarType, setSideBarType] = useRecoilState(SideBarTypeState);
+
   function makeStockGraphData(stockPriceHistoryData) {
     const graphData = [];
     let index = 0;
@@ -28,6 +35,14 @@ function StockCheck({ clickStockId }) {
     }
 
     return graphData;
+  }
+
+  function handleGoBack() {
+    if (isPortfolio) {
+      setSideBarType("portfolio");
+    } else {
+      setSideBarType("economicIndicator");
+    }
   }
 
   const stocks = {
@@ -487,6 +502,15 @@ function StockCheck({ clickStockId }) {
           remainingAmount={remainingAmount}
           owners={owners}
         />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <S.backBtn onClick={handleGoBack}>뒤로가기</S.backBtn>
+        </div>
       </div>
     </div>
   );

@@ -5,7 +5,11 @@ import Portfolio from "./Portfolio";
 import EconomicIndicator from "./EconomicIndicator";
 import StockCheck from "./StockCheck";
 import { useRecoilState } from "recoil";
-import { StockClickIdState } from "/src/recoil/animation/atom";
+import {
+  StockClickIdState,
+  SideBarTypeState,
+  isPortfolioState,
+} from "/src/recoil/animation/atom";
 // import { motion, AnimatePresence } from "framer-motion";
 
 function SideBar() {
@@ -13,8 +17,11 @@ function SideBar() {
 
   // const News = ["속보1", "속보2", "속보3", "속보4", "속보5"];
 
-  const [sideBarType, setSideBarType] = useState("portfolio");
+  const [sideBarType, setSideBarType] = useRecoilState(SideBarTypeState);
+
   const [stockId, setStockId] = useRecoilState(StockClickIdState);
+
+  const [isPortfolio, setIsPortfolio] = useRecoilState(isPortfolioState);
 
   // const [NewsClickIdx, setNewsClickIdx] = useRecoilState(NewsClickIdxState);
 
@@ -26,7 +33,13 @@ function SideBar() {
   } else if (sideBarType === "economicIndicator") {
     componentToRender = <EconomicIndicator setSideBarType={setSideBarType} />;
   } else if (sideBarType === "StockCheck") {
-    componentToRender = <StockCheck clickStockId={stockId} />;
+    componentToRender = (
+      <StockCheck
+        clickStockId={stockId}
+        isPortfolio={isPortfolio}
+        setIsPortfolio={setIsPortfolio}
+      />
+    );
   }
 
   // modal style
@@ -64,10 +77,20 @@ function SideBar() {
     <Modal isOpen={true} style={modalStyle}>
       <S.SideBar>
         <S.SideBarBtnSection>
-          <S.PushableButton onClick={() => setSideBarType("portfolio")}>
+          <S.PushableButton
+            onClick={() => {
+              setSideBarType("portfolio");
+              setIsPortfolio(true);
+            }}
+          >
             <span className="front">포트폴리오</span>
           </S.PushableButton>
-          <S.PushableButton onClick={() => setSideBarType("economicIndicator")}>
+          <S.PushableButton
+            onClick={() => {
+              setSideBarType("economicIndicator");
+              setIsPortfolio(false);
+            }}
+          >
             <span className="front">경제 지표</span>
           </S.PushableButton>
         </S.SideBarBtnSection>

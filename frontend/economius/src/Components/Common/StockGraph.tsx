@@ -50,8 +50,8 @@ function StockGraph({ data }) {
           plotOptions: {
             candlestick: {
               colors: {
-                upward: "#3C90EB",
-                downward: "#DF7D46",
+                upward: "#DF7D46",
+                downward: "#3C90EB",
               },
             },
           },
