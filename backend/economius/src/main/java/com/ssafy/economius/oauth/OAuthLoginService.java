@@ -30,10 +30,14 @@ public class OAuthLoginService {
     }
 
     private Member findOrCreateMember(OAuthInfoResponse oAuthInfoResponse) {
-        Member member = memberRepository.findByEmail(oAuthInfoResponse.getEmail());
-        if (member != null) {
-            return member;
-        } else {
+        if(oAuthInfoResponse.getEmail()!=null) {
+            Member member = memberRepository.findByEmail(oAuthInfoResponse.getEmail());
+            if (member != null) {
+                return member;
+            }
+            else return newMember(oAuthInfoResponse);
+        }
+         else {
             return newMember(oAuthInfoResponse);
         }
     }
