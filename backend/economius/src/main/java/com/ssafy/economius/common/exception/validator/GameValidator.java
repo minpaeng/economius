@@ -68,46 +68,46 @@ public class GameValidator {
     }
 
     private void checkRoomLimit(Game game, int roomId) {
-        log.error(roomId + "번 방 인원 제한 초과");
-        if (game.getPlayers().size() >= 4) {
-            throw CustomWebsocketException.builder()
-                    .roomId(roomId)
-                    .code(GameRoomMessage.ROOM_LIMIT.getCode())
-                    .message(GameRoomMessage.ROOM_LIMIT.getMessage())
-                    .build();
-        }
+//        log.error(roomId + "번 방 인원 제한 초과");
+//        if (game.getPlayers().size() >= 4) {
+//            throw CustomWebsocketException.builder()
+//                    .roomId(roomId)
+//                    .code(GameRoomMessage.ROOM_LIMIT.getCode())
+//                    .message(GameRoomMessage.ROOM_LIMIT.getMessage())
+//                    .build();
+//        }
     }
 
     private void checkPlayer(Game game, int roomId, Long player) {
-        log.error("이미 참여중인 플레이어: {roomId: " + roomId + ", player: " + player + "}");
-        if (game.getNicknames().containsKey(player)) {
-            throw CustomWebsocketException.builder()
-                    .roomId(roomId)
-                    .code(GameRoomMessage.ALREADY_JOIN_PLAYER.getCode())
-                    .message(GameRoomMessage.ALREADY_JOIN_PLAYER.getMessage())
-                    .build();
-        }
+//        log.error("이미 참여중인 플레이어: {roomId: " + roomId + ", player: " + player + "}");
+//        if (game.getNicknames().containsKey(player)) {
+//            throw CustomWebsocketException.builder()
+//                    .roomId(roomId)
+//                    .code(GameRoomMessage.ALREADY_JOIN_PLAYER.getCode())
+//                    .message(GameRoomMessage.ALREADY_JOIN_PLAYER.getMessage())
+//                    .build();
+//        }
     }
 
     private void notHostRequest(int roomId, Long hostPlayer, List<Long> players) {
-        if (!players.get(0).equals(hostPlayer)) {
-            log.error("호스트가 아닌 사용자의 요청: {요청자: " + hostPlayer + ", 방 호스트: " + players.get(0));
-            throw CustomWebsocketException.builder()
-                    .roomId(roomId)
-                    .code(GameRoomMessage.NOT_HOST_PLAYER.getCode())
-                    .message(GameRoomMessage.NOT_HOST_PLAYER.getMessage())
-                    .build();
-        }
+//        if (!players.get(0).equals(hostPlayer)) {
+//            log.error("호스트가 아닌 사용자의 요청: {요청자: " + hostPlayer + ", 방 호스트: " + players.get(0));
+//            throw CustomWebsocketException.builder()
+//                    .roomId(roomId)
+//                    .code(GameRoomMessage.NOT_HOST_PLAYER.getCode())
+//                    .message(GameRoomMessage.NOT_HOST_PLAYER.getMessage())
+//                    .build();
+//        }
     }
 
     private void underStartLimit(int limit, int roomId) {
-        if (limit != 4) {
-            log.error("인원 부족: " + limit);
-            throw CustomWebsocketException.builder()
-                    .roomId(roomId)
-                    .code(GameRoomMessage.UNDER_GAME_START_LIMIT.getCode())
-                    .message(GameRoomMessage.UNDER_GAME_START_LIMIT.getMessage())
-                    .build();
-        }
+//        if (limit != 4) {
+//            log.error("인원 부족: " + limit);
+//            throw CustomWebsocketException.builder()
+//                    .roomId(roomId)
+//                    .code(GameRoomMessage.UNDER_GAME_START_LIMIT.getCode())
+//                    .message(GameRoomMessage.UNDER_GAME_START_LIMIT.getMessage())
+//                    .build();
+//        }
     }
 }
