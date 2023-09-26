@@ -26,6 +26,7 @@ public class FinishTurnService {
 
     private final GameRepository gameRepository;
     private final GameValidator gameValidator;
+    private final ModelMapper modelMapper;
 
     public FinishTurnResponse finish(int roomId) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
@@ -48,8 +49,6 @@ public class FinishTurnService {
         }
 
         gameRepository.save(game);
-
-        ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(game, FinishTurnResponse.class);
     }
 
