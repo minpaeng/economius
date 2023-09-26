@@ -28,7 +28,7 @@ function RealEstate() {
         setTradeRealEstate([false, false]);
     };
 
-    const fee = [null, '식사 비용 : 500000', '쇼핑 비용 : 700000', '숙박 비용 : 1000000'];
+    const fee = [null, '식사 비용', '쇼핑 비용', '숙박 비용'];
     const name = [null, '레스토랑', '상점', '호텔'];
     const description = [null, '식사 비용을 지불합니다', '쇼핑 비용을 지불합니다', '숙박 비용을 지불합니다'];
     const realEstateImage = [null, restaurantimg, shopimg, hotelimg];
@@ -48,7 +48,7 @@ function RealEstate() {
                                 ? description[realEstateInfo.buildingId]
                                 : `가격 : ${realEstateInfo.buildingPrice}`}
                         </S.MidDesc>
-                        <S.MidDesc>{`${fee[realEstateInfo.buildingPriceprice & 9]}`}</S.MidDesc>
+                        <S.MidDesc>{`${fee[realEstateInfo.buildingId]} : ${realEstateInfo.buildingPrice / 10}`}</S.MidDesc>
                     </S.Mid>
 
                     <S.Divide />
