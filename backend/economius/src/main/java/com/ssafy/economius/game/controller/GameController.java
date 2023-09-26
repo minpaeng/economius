@@ -2,10 +2,12 @@ package com.ssafy.economius.game.controller;
 
 import com.ssafy.economius.game.dto.request.CalculateRequest;
 import com.ssafy.economius.game.dto.request.GameJoinRequest;
+import com.ssafy.economius.game.dto.request.GameRoomExitRequest;
 import com.ssafy.economius.game.dto.request.GameStartRequest;
 import com.ssafy.economius.game.dto.response.CalculateResponse;
 import com.ssafy.economius.game.dto.response.FinishTurnResponse;
 import com.ssafy.economius.game.dto.response.GameJoinResponse;
+import com.ssafy.economius.game.dto.response.GameRoomExitResponse;
 import com.ssafy.economius.game.dto.response.GameStartResponse;
 import com.ssafy.economius.game.service.GameService;
 import com.ssafy.economius.game.service.FinishTurnService;
@@ -22,7 +24,7 @@ import org.springframework.stereotype.Controller;
 @RequiredArgsConstructor
 public class GameController {
 
-    private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
+    private final SimpMessagingTemplate template;
     private final GameService gameService;
 
     // todo 추후에 하나의 서비스로 통합 예정
@@ -43,6 +45,15 @@ public class GameController {
 
         Map<String, Object> headers = Map.of("success", true, "type", "start");
         template.convertAndSend("/sub/" + roomId, gameStartResponse, headers);
+    }
+
+    @MessageMapping(value = "/{roomId}/exit")
+    public void exit(@DestinationVariable int roomId, GameRoomExitRequest gameRoomExitRequest) {
+        GameRoomExitResponse gameRoomExitResponse = gameService.exit(roomId,
+                gameRoomExitRequest.getPlayer());
+
+        Map<String, Object> headers = Map.of("success", true, "type", "exit");
+        template.convertAndSend("/sub/" + roomId, gameRoomExitResponse, headers);
     }
 
     @MessageMapping(value = "/{roomId}/calculate")

@@ -8,6 +8,7 @@ import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.dto.ReceiptDto;
 import com.ssafy.economius.game.dto.response.CalculateResponse;
 import com.ssafy.economius.game.dto.response.GameJoinResponse;
+import com.ssafy.economius.game.dto.response.GameRoomExitResponse;
 import com.ssafy.economius.game.dto.response.GameStartResponse;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Portfolio;
@@ -70,6 +71,20 @@ public class GameService {
         gameRepository.save(game);
 
         return new GameStartResponse(roomId);
+    }
+
+    public GameRoomExitResponse exit(int roomId, Long player) {
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
+        for (Long p : game.getPlayers()) {
+            if (p.equals(player)) {
+                game.getPlayers().remove(p);
+                gameRepository.save(game);
+                return new GameRoomExitResponse(player);
+            }
+        }
+
+        gameValidator.throwNotExistPlayerResponse(roomId, player);
+        return new GameRoomExitResponse(null);
     }
 
     private void uploadInitialPortfolioOnRedis(Game game) {

@@ -40,4 +40,12 @@ public class GameValidator {
                 .message(GameRoomMessage.PLAYER_BANKRUPTCY.getMessage() + ": 플레이어 아이디 " + player)
                 .build();
     }
+
+    public void throwNotExistPlayerResponse(int roomId, Long player) {
+        throw CustomWebsocketException.builder()
+                .roomId(roomId)
+                .code(GameRoomMessage.PLAYER_NOT_EXIST.getCode())
+                .message(GameRoomMessage.PLAYER_NOT_EXIST.getMessage() + ": 플레이어 아이디 " + player)
+                .build();
+    }
 }
