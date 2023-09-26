@@ -98,9 +98,7 @@
         }
 
         function sendEventCard() {
-            stompClient.send("/pub/4/eventCard", {}, JSON.stringify({
-                "player": 1 
-            }));
+            stompClient.send("/pub/1/eventCard", {});
         }
  
  

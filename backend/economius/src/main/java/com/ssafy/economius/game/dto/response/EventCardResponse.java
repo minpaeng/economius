@@ -8,9 +8,7 @@ import lombok.ToString;
 @Builder
 @Getter
 @ToString
-public class EventCardResponse {
-    private Long player;
-    private boolean isGood;
+public class EventCardResponse { 
     private EventDto eventDto;
 }
 
