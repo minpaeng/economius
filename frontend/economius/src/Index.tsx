@@ -7,6 +7,7 @@ import * as S from '../src/Components/Modals/GlobalModal.stye';
 import { UseridState } from './recoil/animation/atom';
 import { useRecoilState } from 'recoil';
 import Modal from 'react-modal'; 
+import { useNavigate } from 'react-router-dom';
 
 export default function Index() {
     // 최상단 컴포넌트에서 모달을 쓸 것이라고 명시 작업이 필요
@@ -26,6 +27,12 @@ export default function Index() {
     const REDIRECT_URI = import.meta.env.VITE_APP_REDIRECT_URI;
     const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        const token = localStorage.getItem('accessToken');
+        if (token) navigate('/room');
+    }, [navigate]);
 
     // 모달 열기
     const openModal = () => {

@@ -22,9 +22,8 @@ const KakaoCallback: React.FC = () => {
           
                 // localStorage에 accessToken 저장
                 localStorage.setItem('accessToken', accessToken);
-                console.log('Access Token has been saved to localStorage:', accessToken);
                 
-                navigate('/');
+                navigate('/room');
               })
               .catch((error) => {
                 // 요청이 실패하면 오류를 처리합니다.
