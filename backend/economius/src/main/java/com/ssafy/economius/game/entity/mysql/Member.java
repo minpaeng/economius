@@ -13,6 +13,9 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Builder
+@AllArgsConstructor
+@ToString
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,12 +28,5 @@ public class Member {
     @LastModifiedDate
     private LocalDateTime editDate;
 
-    @Builder
-    public Member(String name, String email, String nickname) {
-        this.name = name;
-        this.email = email;
-        this.nickname = nickname;
-        this.joinDate = LocalDateTime.now();
-        this.editDate = LocalDateTime.now();
-    }
+
 }

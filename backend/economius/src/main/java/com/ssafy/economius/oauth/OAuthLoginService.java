@@ -4,9 +4,13 @@ import com.ssafy.economius.game.entity.mysql.Member;
 import com.ssafy.economius.game.repository.mysql.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class OAuthLoginService {
     private final MemberRepository memberRepository;
@@ -32,9 +36,11 @@ public class OAuthLoginService {
         Member member = Member.builder()
                 .name(oAuthInfoResponse.getNickname())
                 .email(oAuthInfoResponse.getEmail())
-                .nickname("oauth")
+                .nickname(oAuthInfoResponse.getNickname())
+                .joinDate(LocalDateTime.now())
+                .editDate(LocalDateTime.now())
                 .build();
-
+        log.info(member.toString());
         return memberRepository.save(member).getMemberId();
     }
 }

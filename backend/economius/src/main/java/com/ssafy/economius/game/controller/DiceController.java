@@ -1,5 +1,6 @@
 package com.ssafy.economius.game.controller;
 
+import com.ssafy.economius.game.dto.message.DiceTurnMessage;
 import com.ssafy.economius.game.dto.request.MovePlayerRequest;
 import com.ssafy.economius.game.dto.request.ViewMovementCardRequest;
 import com.ssafy.economius.game.dto.response.MovePlayerResponse;
@@ -20,6 +21,17 @@ public class DiceController {
 
     private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
     private final DiceService diceService;
+
+    @MessageMapping(value = "/{roomId}/diceSequence")
+    public void getDiceSequence(@DestinationVariable int roomId) {
+        log.info(roomId + ": diceSequence 호출");
+
+        DiceTurnMessage diceSequence = diceService.getDiceSequence(roomId);
+
+        log.info(roomId + ": diceSequence 결과 -> " + diceSequence.toString());
+        Map<String, Object> headers = Map.of("success", true, "type", "diceSequence");
+        template.convertAndSend("/sub/" + roomId, diceSequence, headers);
+    }
 
     @MessageMapping(value = "/{roomId}/viewMovementCard")
     public void viewMovementCard(@DestinationVariable int roomId,
