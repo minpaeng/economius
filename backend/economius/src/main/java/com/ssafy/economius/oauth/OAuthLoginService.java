@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -17,22 +18,27 @@ public class OAuthLoginService {
     private final AuthTokensGenerator authTokensGenerator;
     private final RequestOAuthInfoService requestOAuthInfoService;
 
-    public AuthTokens login(OAuthLoginParams params) {
+    public AuthResponse login(OAuthLoginParams params) {
         OAuthInfoResponse oAuthInfoResponse = requestOAuthInfoService.request(params);
-        Long memberId = findOrCreateMember(oAuthInfoResponse);
-        return authTokensGenerator.generate(memberId);
+        Member member = findOrCreateMember(oAuthInfoResponse);
+        AuthResponse authResponse = AuthResponse.builder()
+                .authTokens(authTokensGenerator.generate(member.getMemberId()))
+                .player(member.getMemberId())
+                .nickname(member.getNickname())
+                .build();
+        return authResponse;
     }
 
-    private Long findOrCreateMember(OAuthInfoResponse oAuthInfoResponse) {
+    private Member findOrCreateMember(OAuthInfoResponse oAuthInfoResponse) {
         Member member = memberRepository.findByEmail(oAuthInfoResponse.getEmail());
         if (member != null) {
-            return member.getMemberId();
+            return member;
         } else {
             return newMember(oAuthInfoResponse);
         }
     }
 
-    private Long newMember(OAuthInfoResponse oAuthInfoResponse) {
+    private Member newMember(OAuthInfoResponse oAuthInfoResponse) {
         Member member = Member.builder()
                 .name(oAuthInfoResponse.getNickname())
                 .email(oAuthInfoResponse.getEmail())
@@ -41,6 +47,7 @@ public class OAuthLoginService {
                 .editDate(LocalDateTime.now())
                 .build();
         log.info(member.toString());
-        return memberRepository.save(member).getMemberId();
+        memberRepository.save(member);
+        return member;
     }
 }
