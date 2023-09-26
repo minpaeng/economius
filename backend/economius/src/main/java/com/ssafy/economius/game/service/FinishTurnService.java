@@ -143,7 +143,7 @@ public class FinishTurnService {
         });
     }
 
-    public void updateStock(Game game, Stock stock, int newRate, int round) {
+    private void updateStock(Game game, Stock stock, int newRate, int round) {
         stock.updateStockPriceAndRate(newRate, round);
         log.info("게임 턴 변경 ->" + stock);
         game.getPortfolios().values()

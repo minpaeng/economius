@@ -67,7 +67,6 @@ public class EventService {
             for(Long player : game.getPlayers()) {
                 int payment = insuranceService.applyInsurance(game, player, eventMoney.getInsuranceTypeId(), eventMoney.getEventMoneyId());
                 game.getPortfolios().get(player).setMoney(game.getPortfolios().get(player).getMoney()-payment);
-                gameRepository.save(game);
             }
         }
         // Stock 이벤트 발생
@@ -87,11 +86,16 @@ public class EventService {
             for(Stock stock : game.getStocks().values()) {
                 if(stock.getStockIndustryId() == eventStockDto.getStockIndustryId())  {
                     log.info(stock.toString());
-                    finishTurnService.updateStock(game, stock, eventStockDto.getRate(), game.getGameTurn()/4);
+
+                    stock.updateStockPriceAndRate(eventStockDto.getRate(), game.getGameTurn()/4);
+                    game.getPortfolios().values()
+                            .forEach(portfolio -> portfolio.getStocks().updatePortfolioStockByStockChange(stock));
+
                 }
             }
         }
 
+        gameRepository.save(game);
 
         // 어떤 이벤트인지 response 던져주기
         EventCardResponse eventCardResponse = EventCardResponse.builder()
