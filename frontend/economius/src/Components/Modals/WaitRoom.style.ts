@@ -77,6 +77,11 @@ export const InfoBar = styled.div`
         background-color: #ffaa55;
         transition: all 250ms ease-in-out;
     }
+
+    .no {
+        display: flex;
+        justify-content: space-between;
+    }
 `;
 
 export const RoomInput = styled.div`

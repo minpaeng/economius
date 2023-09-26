@@ -5,7 +5,7 @@ import { useState } from 'react';
 // import financecenterimg from '/FinanceCenter/financecenter.png';
 import * as S from './GlobalModal.stye';
 
-export default function StartAccess({ videoControl }) {
+export default function StartLoginCheck({ videoControl }) {
     const [isModalOpen, setIsModalOpen] = useState(true);
     const closeModal = () => {
         setIsModalOpen(false);
@@ -41,15 +41,15 @@ export default function StartAccess({ videoControl }) {
         <Modal isOpen={isModalOpen} style={modalStyle}>
             <S.Main>
                 <S.Top>
-                    <S.TopTitle>이코노미어스의 세계에 오신 것을 환영합니다!</S.TopTitle>
+                    <S.TopTitle>로그인이 완료되었습니다!</S.TopTitle>
                 </S.Top>
 
                 <S.MidNoImg>
                     <S.MidDesc>
                         이 게임은 픽션이며 등장하는 인물, 단체, 지명 등은 실존하는 것과 일체 관계없습니다.
                         <br />
-                        <br /> The Game, all names, characters, and incidents portrayed in this production are fictitious. No identification with actual persons
-                        (living or deceased), places, buildings, and products is intended or should be inferred.
+                        <br />
+                        즐기면서 배우는 경제, Enjoy Economious!
                         <br />
                         <br />
                         (※ FHD 이상의 환경에서 F11(전체화면)으로 플레이하시는 것을 권장합니다.)
