@@ -1,8 +1,9 @@
 import Modal from 'react-modal';
 import { useState } from 'react';
-import {useRecoilState} from 'recoil';
-import {IsModalOpenState} from '/src/recoil/animation/atom';
+import { useRecoilState } from 'recoil';
+import { IsModalOpenState } from '/src/recoil/animation/atom';
 import { TradeInsuranceConfirmState, TradeInsuranceState } from '/src/recoil/trading/atom';
+import { InsuranceInfoState } from '/src/recoil/modalInfo/atom';
 import * as S from './Insurance.style';
 import InsuranceCard from './InsuranceCard';
 
@@ -38,8 +39,6 @@ function Insurance() {
         ['산재사고', 'slip'],
         ['도둑', 'robbery'],
     ];
-
-
     // 보험 정보
     const InsuranceInfo: any = [
         {
@@ -81,6 +80,7 @@ function Insurance() {
         setIsModalOpen(false);
     };
     const [tradeInsurance, setTradeInsurance] = useRecoilState(TradeInsuranceState);
+    const [insuranceInfo, setInsuranceInfo] = useRecoilState(InsuranceInfoState);
 
     // modal style
     const modalStyle: any = {
@@ -114,7 +114,7 @@ function Insurance() {
             <S.InsuranceMain>
                 <S.InsuranceTop>
                     <img src='Insurance/Insurance.png' alt='img' style={{ width: '50px', marginRight: '10px' }} />
-                    <S.InsuranceTopTitle>한화생명</S.InsuranceTopTitle>
+                    <S.InsuranceTopTitle>삼성화재</S.InsuranceTopTitle>
                 </S.InsuranceTop>
                 <S.InsuranceMid>
                     {InsuranceInfo.map((insurance, index) => {
