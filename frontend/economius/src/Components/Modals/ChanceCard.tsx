@@ -37,10 +37,13 @@ function ChanceCard() {
             backgroundColor: 'rgba(255,255,255,0.95)',
             overflow: 'auto',
             zIndex: 10,
-            top: '200px',
-            left: '400px',
-            right: '800px',
-            bottom: '200px',
+            top: '225px',
+            left: '425px',
+            right: '825px',
+            bottom: '225px',
+            // width:"200px",
+            // height:"400px",
+
             border: '5px solid white',
             borderRadius: '20px',
             padding: '0px',
@@ -57,10 +60,10 @@ function ChanceCard() {
                 <S.ChanceCardDivide />
                 <S.ChanceCardBottom>
                     <div>{chanceCardInfo.description}</div>
-                    {chanceCardInfo.moneyCard ? (
-                        <div>현금 {chanceCardInfo.eventValue} 만원</div>
+                    {chanceCardInfo.moneyCard ? ( 
+                        <div>현금 {chanceCardInfo.eventValue} 만원 {chanceCardInfo.apply}</div> 
                     ) : (
-                        <div>주식 {chanceCardInfo.eventValue} %</div>
+                        <div>주식 {chanceCardInfo.eventValue} % {chanceCardInfo.apply}</div>
                     )}
                 </S.ChanceCardBottom>
 

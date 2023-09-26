@@ -4,9 +4,9 @@ const { persistAtom } = recoilPersist();
 
 // 현재 방 번호
 export const RoomIdState = atom<number>({
-  key: "RoomIdState",
-  default: 1, // 기본값
-  effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+    key: 'RoomIdState',
+    default: 0, // 기본값
+    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
 // 현재 플레이어

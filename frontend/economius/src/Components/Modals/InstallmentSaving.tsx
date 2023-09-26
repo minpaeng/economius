@@ -47,7 +47,7 @@ function InstallmentSaving() {
 
     return (
         <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
-            {!bankInfo ? (
+            {!(bankInfo === null) ? (
                 <S.BankMain>
                     <S.BankTop>
                         {/* title은 우리가 쥐고있는 은행코드로 띄워야 할듯 */}

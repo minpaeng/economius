@@ -32,7 +32,7 @@ function RealEstate() {
 
     return (
         <Modal isOpen={isModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
-            {!realEstateInfo ? (
+            {!(realEstateInfo === null) ? (
                 <S.Main>
                     <S.Top>
                         <S.TopTitle>{name[realEstateInfo.buildingId]}</S.TopTitle>
