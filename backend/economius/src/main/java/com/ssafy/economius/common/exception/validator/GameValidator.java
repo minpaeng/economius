@@ -68,8 +68,8 @@ public class GameValidator {
     }
 
     private void checkRoomLimit(Game game, int roomId) {
-        log.error(roomId + "번 방 인원 제한 초과");
         if (game.getPlayers().size() >= 4) {
+            log.error(roomId + "번 방 인원 제한 초과");
             throw CustomWebsocketException.builder()
                     .roomId(roomId)
                     .code(GameRoomMessage.ROOM_LIMIT.getCode())
