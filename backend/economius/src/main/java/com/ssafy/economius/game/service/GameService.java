@@ -33,7 +33,7 @@ public class GameService {
     private final GameRepository gameRepository;
     private final GameValidator gameValidator;
 
-    public GameJoinResponse join(int roomId, Long player) {
+    public GameJoinResponse join(int roomId, Long player, String nickname) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
         if (game.getPlayers().size() >= 4) {
@@ -41,9 +41,10 @@ public class GameService {
         }
 
         game.getPlayers().add(player);
+        game.getNicknames().put(player, nickname);
         gameRepository.save(game);
 
-        return new GameJoinResponse(roomId, game.getPlayers().get(0));
+        return makeGameJoinResponse(roomId, game);
     }
 
     public GameStartResponse start(int roomId, Long hostPlayer) {
@@ -179,5 +180,14 @@ public class GameService {
             .receipt(receipt)
             .player(player)
             .build();
+    }
+
+    private GameJoinResponse makeGameJoinResponse(int roomId, Game game) {
+        return GameJoinResponse.builder()
+                .roomId(roomId)
+                .players(game.getPlayers())
+                .nicknames(game.getNicknames())
+                .hostPlayer(game.getPlayers().get(0))
+                .build();
     }
 }

@@ -32,7 +32,10 @@ public class GameController {
 
     @MessageMapping(value = "/{roomId}/join")
     public void join(@DestinationVariable int roomId, GameJoinRequest gameJoinRequest) {
-        GameJoinResponse gameJoinResponse = gameService.join(roomId, gameJoinRequest.getPlayer());
+        GameJoinResponse gameJoinResponse = gameService.join(
+                roomId,
+                gameJoinRequest.getPlayer(),
+                gameJoinRequest.getNickname());
 
         Map<String, Object> headers = Map.of("success", true, "type", "join");
         template.convertAndSend("/sub/" + roomId, gameJoinResponse, headers);
