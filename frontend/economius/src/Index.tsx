@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import video1 from '/video/video_start.mp4'; // 1080p
 import video3 from '/video/video_repeat.mp4'; // sound
@@ -14,13 +13,14 @@ export default function Index() {
 
     // recoil
     const [userid, setUserid] = useRecoilState(UseridState);
-    // const memberType = useRecoilValue(memberTypeAtom);
-    // const settermemberName = useSetRecoilState(memberNameAtom); // react setState와 동일하게 동작함
 
     const videoRef = useRef(null);
     const [isOpen, setIsOpen] = useState(true);
     const [isMuted, setIsMuted] = useState(true); // 비디오 음소거 상태
     const [currentVideo, setCurrentVideo] = useState(video1);
+
+    const [isModalClosed, setIsModalClosed] = useState(false); // 모달이 닫힌 상태를 관리
+    const [renderContent, setRenderContent] = useState(false); // 모달이 닫힌 후 n초 뒤에 렌더링할 상태를 관리
 
     // 모달 열기
     const openModal = () => {
@@ -31,7 +31,13 @@ export default function Index() {
     // 모달 닫기
     const closeModal = () => {
         setIsOpen(false);
+        setIsModalClosed(true);
     };
+
+    // 시작하자마자 모달 열기
+    useEffect(() => {
+        openModal();
+    }, []);
 
     // 모달이 닫히면 적용
     useEffect(() => {
@@ -73,10 +79,19 @@ export default function Index() {
         }
     }, [currentVideo]);
 
-    // 시작하자마자 모달 열기
+    // 모달이 닫힌 상태후 n초 뒤 렌더링할 내용을 활성화
     useEffect(() => {
-        openModal();
-    }, []);
+        if (isModalClosed) {
+            const timeoutId = setTimeout(() => {
+                setRenderContent(true);
+            }, 9000);
+
+            // 컴포넌트가 언마운트될 때 타이머를 클리어합니다.
+            return () => {
+                clearTimeout(timeoutId);
+            };
+        }
+    }, [isModalClosed]);
 
     // 소리 허용 버튼을 클릭했을 때 실행
     const videoControl = () => {
@@ -89,7 +104,7 @@ export default function Index() {
         // 비디오 1을 재생한 후, 10초 후에 비디오 2로 변경합니다.
         setTimeout(() => {
             setCurrentVideo(video3);
-        }, 2000);
+        }, 5000);
     };
 
     // {!!!!!!!!!!!!!!!!!!!!} 카카오 로그인 시 실행할 함수
@@ -123,29 +138,24 @@ export default function Index() {
                         <StartAccess videoControl={videoControl} />
                     </>
                 )}
-                {/* <Link to={`/room`}>
-                    <h1>room</h1>
-                </Link> */}
-
-                {userid === 'a' ? (
-                    <S.ButtonOuter>
-                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                            <img onClick={loginHandler} src='/button/kakao.png' alt='kakao-login-btn' />
-                        </div>
-                        {/* <S.RoundButtonRoom onClick={loginHandler}>
-                            <span>카카오톡 로그인</span>
-                        </S.RoundButtonRoom> */}
-                    </S.ButtonOuter>
-                ) : (
-                    <S.ButtonOuter>
-                        <S.RoundButtonRoom onClick={roomMakeHandler}>
-                            <span>방 생성하기</span>
-                        </S.RoundButtonRoom>
-                        <S.RoundButtonRoom onClick={roomJoinHandler}>
-                            <span>방 입장하기</span>
-                        </S.RoundButtonRoom>
-                    </S.ButtonOuter>
-                )}
+                {/* 모달이 닫힌 후 5초 뒤에 렌더링할 내용을 렌더링합니다. */}
+                {renderContent &&
+                    (userid === 'a' ? (
+                        <S.ButtonOuter>
+                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                <img onClick={loginHandler} src='/button/kakao.png' alt='kakao-login-btn' />
+                            </div>
+                        </S.ButtonOuter>
+                    ) : (
+                        <S.ButtonOuter>
+                            <S.RoundButtonRoom onClick={roomMakeHandler}>
+                                <span>방 생성하기</span>
+                            </S.RoundButtonRoom>
+                            <S.RoundButtonRoom onClick={roomJoinHandler}>
+                                <span>방 입장하기</span>
+                            </S.RoundButtonRoom>
+                        </S.ButtonOuter>
+                    ))}
             </div>
         </>
     );
