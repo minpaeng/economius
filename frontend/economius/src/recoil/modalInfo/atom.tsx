@@ -55,16 +55,16 @@ export const InsuranceInfoState = atom({
 export const BankInfoState = atom({
     key: 'BankInfoState',
     default: {
-        player: 0,
-        have: 0,
-        money: 0,
-        bankId: 0,
-        name: 0,
-        monthlyDeposit: 0,
-        currentPrice: 0,
-        currentCount: 0,
-        finishCount: 0,
-        rate: 0,
+        player: null,
+        have: null,
+        money: null,
+        bankId: null,
+        name: null,
+        monthlyDeposit: null,
+        currentPrice: null,
+        currentCount: null,
+        finishCount: null,
+        rate: null,
     },
 });
 
