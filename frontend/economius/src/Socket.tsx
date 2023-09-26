@@ -12,7 +12,7 @@ import {
     BuyAmountState,
     SellAmountState,
 } from './recoil/trading/atom';
-import { ShowSpinnerState, StockInfoState, RealEstateInfoState, GoldInfoState } from './recoil/modalInfo/atom';
+import { ShowSpinnerState, StockInfoState, RealEstateInfoState, BankInfoState } from './recoil/modalInfo/atom';
 
 const buildingIds = {
     4: 1,
@@ -55,6 +55,7 @@ function PlayerSocket() {
     const [showSpinner, setShowSpinner] = useRecoilState(ShowSpinnerState);
     const [stockInfo, setStockInfo] = useRecoilState(StockInfoState);
     const [realEstateInfo, setRealEstateInfo] = useRecoilState(RealEstateInfoState);
+    const [bankInfo, setBankInfo] = useRecoilState(BankInfoState);
     // 자산별 거래 여부
     const [tradeRealEstate, setTradeRealEstate] = useRecoilState(TradeRealEstateState);
     const [tradeStock, setTradeStock] = useRecoilState(TradeStockState);
@@ -107,8 +108,20 @@ function PlayerSocket() {
                             });
                             setShowSpinner(true);
                         }
-                        // } else if (type == 'stockDetail') {
-                        //     setStockInfo({});
+                        if (type == 'bank') {
+                            setBankInfo({
+                                player: message.player,
+                                money: message.money,
+                                have: message.have,
+                                name: message.name,
+                                monthlyDeposit: message.monthlyDeposit,
+                                currentPrice: message.currentPrice,
+                                currentCount: message.currentCount,
+                                finishCount: message.finishCount,
+                                rate: message.rate,
+                            });
+                            setShowSpinner(true);
+                        }
                     });
                 }
             );
@@ -245,7 +258,7 @@ function PlayerSocket() {
         }
         if (tradeInsurance[1]) {
             if (stompClient.current) {
-                stompClient.current.send('/pub/1/finishInsurance', {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
+                stompClient.current.send('/pub/1/joinInsurance', {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
                 setTradeInsurance([false, false, false, false]);
             }
         }

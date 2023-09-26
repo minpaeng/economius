@@ -1,8 +1,9 @@
 import Modal from 'react-modal';
 import { useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { IsModalOpenState } from '/src/recoil/animation/atom';
 import { TradeBankState } from '/src/recoil/trading/atom';
+import { BankInfoState, ShowSpinnerState } from '/src/recoil/modalInfo/atom';
 import * as S from './InstallmentSaving.style';
 
 function InstallmentSaving() {
@@ -33,8 +34,19 @@ function InstallmentSaving() {
     };
 
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
-    const closeModal = () => setIsModalOpen(false);
     const [tradeBank, setTradeBank] = useRecoilState(TradeBankState);
+    const bankInfo = useRecoilValue(BankInfoState);
+    // 스피너
+    const [showSpinner, setShowSpinner] = useRecoilState(ShowSpinnerState);
+    // 모달 끄기
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setShowSpinner(false);
+    };
+    // 거래 종료
+    const closeTrade = () => {
+        setTradeBank([false, false]);
+    };
 
     // modal style
     const modalStyle: any = {
@@ -64,51 +76,63 @@ function InstallmentSaving() {
     };
 
     return (
-        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
-            <S.BankMain>
-                <S.BankTop>
-                    {/* title은 우리가 쥐고있는 은행코드로 띄워야 할듯 */}
-                    <img src='Bank/BankTitle.png' alt='img' style={{ width: '50px', marginRight: '10px' }} />
-                    <S.BankTopTitle>신한은행</S.BankTopTitle>
-                </S.BankTop>
-                <S.BankMid>
-                    <S.BankMidImg src='Bank/image 34.png' alt='img' />
-                    <S.BankMidDesc>
-                        <S.BankMidPriceDesc>
-                            <p>입금액 : 500</p>
-                            <img
-                                src='Bank/dollar-coin 15.png'
-                                alt='img'
-                                style={{
-                                    width: '25px',
-                                    height: '25px',
+        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={() => (closeModal(), closeTrade())}>
+            {showSpinner ? (
+                <S.BankMain>
+                    <S.BankTop>
+                        {/* title은 우리가 쥐고있는 은행코드로 띄워야 할듯 */}
+                        <img src='Bank/BankTitle.png' alt='img' style={{ width: '50px', marginRight: '10px' }} />
+                        <S.BankTopTitle>{bankInfo.name}</S.BankTopTitle>
+                    </S.BankTop>
+                    <S.BankMid>
+                        <S.BankMidImg src='Bank/image 34.png' alt='img' />
+                        <S.BankMidDesc>
+                            <S.BankMidPriceDesc>
+                                <p>
+                                    입금액 : {bankInfo.monthlyDeposit}
+                                    {bankInfo.have ? ` (잔여: ${bankInfo.monthlyDeposit * bankInfo.finishCount - bankInfo.currentPrice})` : null}
+                                </p>
+                                <img
+                                    src='Bank/dollar-coin 15.png'
+                                    alt='img'
+                                    style={{
+                                        width: '25px',
+                                        height: '25px',
 
-                                    marginLeft: '5px',
-                                }}
-                            />
-                        </S.BankMidPriceDesc>
-                        <S.BankMidCycle>
-                            <p>기간 : 3</p>
-                            <img
-                                src='Bank/BankCycle.png'
-                                alt='img'
-                                style={{
-                                    width: '25px',
-                                    height: '25px',
-                                    marginRight: '5px',
-                                    marginLeft: '5px',
-                                }}
-                            />
-                            <p>(3달)</p>
-                        </S.BankMidCycle>
-                        <div>이율(변동) : 기준금리 + 9%p</div>
-                        <div>중도 해지 : 원금만 수령</div>
-                    </S.BankMidDesc>
-                </S.BankMid>
-                <S.BankDivide />
-                <S.BankJoinBottom onClick={() => setTradeBank([true, false])}>적금 가입하기</S.BankJoinBottom>
-                {/* <S.BankJoinBottom onClick={() => setTradeBank([false, true])}>적금 해지하기</S.BankJoinBottom> */}
-            </S.BankMain>
+                                        marginLeft: '5px',
+                                    }}
+                                />
+                            </S.BankMidPriceDesc>
+                            <S.BankMidCycle>
+                                <p>
+                                    기간 : {bankInfo.finishCount}
+                                    {bankInfo.have ? ` (잔여: ${bankInfo.finishCount - bankInfo.currentCount})` : `(${bankInfo.finishCount}달)`}
+                                </p>
+                                <img
+                                    src='Bank/BankCycle.png'
+                                    alt='img'
+                                    style={{
+                                        width: '25px',
+                                        height: '25px',
+                                        marginRight: '5px',
+                                        marginLeft: '5px',
+                                    }}
+                                />
+                            </S.BankMidCycle>
+                            <div>이율(변동) : 기준금리 + {bankInfo.rate}%p</div>
+                            <div>중도 해지 : 원금만 수령</div>
+                        </S.BankMidDesc>
+                    </S.BankMid>
+                    <S.BankDivide />
+                    {bankInfo.have ? (
+                        <S.BankJoinBottom onClick={() => (setTradeBank([false, true]), closeModal())}>적금 해지하기</S.BankJoinBottom>
+                    ) : (
+                        <S.BankJoinBottom onClick={() => (setTradeBank([true, false]), closeModal())}>적금 가입하기</S.BankJoinBottom>
+                    )}
+                </S.BankMain>
+            ) : (
+                '로딩중입니다.'
+            )}
         </Modal>
     );
 }

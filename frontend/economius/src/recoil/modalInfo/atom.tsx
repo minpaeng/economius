@@ -38,6 +38,22 @@ export const InsuranceInfoState = atom({
     default: {},
 });
 
+// 은행 모달 정보
+export const BankInfoState = atom({
+    key: 'BankInfoState',
+    default: {
+        player: null,
+        money: null,
+        have: null,
+        name: null,
+        monthlyDeposit: null,
+        currentPrice: null,
+        currentCount: null,
+        finishCount: null,
+        rate: null,
+    },
+});
+
 // 찬스 카드 모달 정보
 export const ChanceCardInfoState = atom({
     key: 'ChanceCardInfoState',
