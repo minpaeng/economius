@@ -22,15 +22,8 @@ public class EventController {
 
     @MessageMapping(value = "/{roomId}/eventCard")
     public void visitEventCard(@DestinationVariable int roomId) {
-        Map<String, Object> headers;
+        Map<String, Object> headers = Map.of("success", true, "type", "eventCard");;
         EventCardResponse eventCardResponse = eventService.visitEventCard(roomId);
-        if(eventCardResponse.getEventDto().getEventMoneyDto()==null) {
-            headers = Map.of("success", true, "type", "eventCardMoney");
-        }
-        else {
-            headers = Map.of("success", true, "type", "eventCardStock");
-        }
-
         template.convertAndSend("/sub/" + roomId, eventCardResponse, headers);
     }
 }

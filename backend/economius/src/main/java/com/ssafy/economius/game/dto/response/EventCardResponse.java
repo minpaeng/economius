@@ -11,7 +11,12 @@ import java.util.List;
 @Getter
 @ToString
 public class EventCardResponse { 
-    private EventDto eventDto;
+    //private EventDto eventDto;
+    private boolean isMoneyCard;
+    private String name;
+    private String description;
+    private int eventValue;
+    private String url;
     private List<Long> bankruptcyPlayers;
 }
 
