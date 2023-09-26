@@ -4,8 +4,8 @@ import { useState } from "react";
 import Portfolio from "./Portfolio";
 import EconomicIndicator from "./EconomicIndicator";
 import StockCheck from "./StockCheck";
-// import { useRecoilState } from "recoil";
-// import { NewsClickIdxState } from "/src/recoil/animation/atom";
+import { useRecoilState } from "recoil";
+import { StockClickIdState } from "/src/recoil/animation/atom";
 // import { motion, AnimatePresence } from "framer-motion";
 
 function SideBar() {
@@ -14,6 +14,7 @@ function SideBar() {
   // const News = ["속보1", "속보2", "속보3", "속보4", "속보5"];
 
   const [sideBarType, setSideBarType] = useState("portfolio");
+  const [stockId, setStockId] = useRecoilState(StockClickIdState);
 
   // const [NewsClickIdx, setNewsClickIdx] = useRecoilState(NewsClickIdxState);
 
@@ -21,11 +22,11 @@ function SideBar() {
   let componentToRender;
 
   if (sideBarType === "portfolio") {
-    componentToRender = <Portfolio />;
+    componentToRender = <Portfolio setSideBarType={setSideBarType} />;
   } else if (sideBarType === "economicIndicator") {
-    componentToRender = <EconomicIndicator />;
+    componentToRender = <EconomicIndicator setSideBarType={setSideBarType} />;
   } else if (sideBarType === "StockCheck") {
-    componentToRender = <StockCheck />;
+    componentToRender = <StockCheck clickStockId={stockId} />;
   }
 
   // modal style
@@ -71,7 +72,16 @@ function SideBar() {
           </S.PushableButton>
         </S.SideBarBtnSection>
 
-        <S.SideBarMainSection>{componentToRender}</S.SideBarMainSection>
+        <S.SideBarMainSection
+          style={{
+            backgroundColor:
+              sideBarType === "StockCheck"
+                ? "white"
+                : "rgba(255, 255, 255, 0.5)",
+          }}
+        >
+          {componentToRender}
+        </S.SideBarMainSection>
       </S.SideBar>
     </Modal>
   );
