@@ -11,6 +11,7 @@ import lombok.Getter;
 public class VisitBuildingResponse {
 
     private int buildingId;
+    private int buildingPrice;
     private int changeAmount;
     private VisitBuildingDto visitor;
     private VisitBuildingDto owner;
