@@ -19,9 +19,6 @@ export default function WaitRoom(props) {
 
         // 모달 끄기
         props.setShowWaitRoom(false);
-        setIsModalOpen(true);
-
-        console.log('exit');
     };
 
     return (
