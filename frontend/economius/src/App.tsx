@@ -35,7 +35,7 @@ function App() {
 
         <Map />
         <Characters />
-      </Canvas> */}
+      </Canvas>
 
       <Controller />
 
