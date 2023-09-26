@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import sockjs from 'sockjs-client/dist/sockjs';
 import { Stomp } from '@stomp/stompjs';
-import { useRecoilState } from 'recoil';
+import {useRecoilState, useSetRecoilState} from 'recoil';
 import { RoomIdState, IsModalOpenState, NowPlayerState, NowPlayerPositionState, MovementCardsState } from './recoil/animation/atom';
 import {
     TradeRealEstateState,
@@ -11,7 +11,7 @@ import {
     TradeInsuranceState,
     BuyAmountState,
     SellAmountState,
-    StockDetailState,
+    StockDetailState, GoldDetailState,
 } from './recoil/trading/atom';
 import { ShowSpinnerState, StockInfoState, RealEstateInfoState, BankInfoState } from './recoil/modalInfo/atom';
 
@@ -67,7 +67,8 @@ function PlayerSocket() {
     const [buyAmount, setbuyAmount] = useRecoilState(BuyAmountState);
     const [sellAmount, setSellAmount] = useRecoilState(SellAmountState);
 
-    const[stockDetail, setStockDetail] = useRecoilState(StockDetailState);
+    const setStockDetail = useSetRecoilState(StockDetailState);
+    const setGoldDetail = useSetRecoilState(GoldDetailState);
 
     const stompClient = useRef(null);
 
@@ -96,18 +97,28 @@ function PlayerSocket() {
                         // 주식 변경 recoil 시작
                         if(type === "stockDetail"){
                             setStockDetail({
-                                "stockId": message["stockId"],
-                                "name": message["name"],
-                                "stockIndustryId": message["stockIndustryId"],
-                                "companyCategory": message["companyCategory"],
-                                "companySubCategory": message["companySubCategory"],
-                                "owners": message["owners"],
-                                "remainingAmount": message["remainingAmount"],
-                                "price": message["price"],
-                                "rate": message["rate"],
-                                "priceHistory": message["priceHistory"],
-                                "rateHistory": message["rateHistory"]
+                                stockId: message.stockId,
+                                name: message.name,
+                                stockIndustryId: message.stockIndustryId,
+                                companyCategory: message.companyCategory,
+                                companySubCategory: message.companySubCategory,
+                                owners: message.owners,
+                                remainingAmount: message.remainingAmount,
+                                price: message.price,
+                                rate: message.rate,
+                                priceHistory: message.priceHistory,
+                                rateHistory: message.rateHistory
                             })
+                        }
+                        if(type === "selectGolds"){
+                            setGoldDetail({
+                                player: message.player,
+                                price: message.price,
+                                rate: message.rate,
+                                priceHistory: message.priceHistory,
+                                rateHistory: message.rateHistory,
+                                }
+                            )
                         }
                         // 주식 recoil 종료
                     });
