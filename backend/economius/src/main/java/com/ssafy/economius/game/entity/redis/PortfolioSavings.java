@@ -31,7 +31,9 @@ public class PortfolioSavings {
     }
 
     public void updateSavings(){
-        this.savings.values().forEach(PortfolioSaving::updateCurrentCount);
+        if (savings != null){
+            this.savings.values().forEach(PortfolioSaving::updateCurrentCount);
+        }
     }
 
     public int calculateSavingPrice() {

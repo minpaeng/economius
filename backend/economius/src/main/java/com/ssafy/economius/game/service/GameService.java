@@ -137,7 +137,7 @@ public class GameService {
         PortfolioSavings savings = portfolio.getSavings();
         savings.updateSavings();
 
-        int finishSaving = portfolio.getSavings().calculateFinishSaving();
+        int finishSaving = savings.calculateFinishSaving();
         int savingPrice = savings.calculateSavingPrice();
         int insurancePrice = portfolio.getInsurances().getTotalPrice();
         int money = portfolio.getMoney();
