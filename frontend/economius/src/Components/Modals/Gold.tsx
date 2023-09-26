@@ -1,12 +1,13 @@
 import Modal from 'react-modal';
-import { useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
-import { GoldDetailState, TradeGoldState } from '/src/recoil/trading/atom';
+import {useState} from 'react';
+import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
+import {CallBackState, IsModalOpenState} from '/src/recoil/animation/atom';
+import {GoldDetailState, TradeGoldState} from '/src/recoil/trading/atom';
 import * as S from './Stock.style';
 
 import BuyOrSell from '../Common/BuyOrSell';
 import GoldGraph from '../Common/GoldGraph';
+import {PlayerIdState, PortfolioState} from "/src/recoil/game/atom.tsx";
 
 function makeGoldGraphData(goldPriceHistoryData) {
     const graphData = [];
@@ -42,6 +43,8 @@ function Gold() {
     // 금 매수, 매도 여부
     const [tradeGold, setTradeGold] = useRecoilState(TradeGoldState);
     const [goldDetail, setGoldDetail] = useRecoilState(GoldDetailState);
+    const player = useRecoilValue(PlayerIdState)
+    const portfolios = useRecoilValue(PortfolioState);
 
     //   const [isGoldOpen, setIsGoldOpen] = useState(false);
     // modal style
@@ -128,7 +131,7 @@ function Gold() {
                                         매도
                                     </S.BuyOrSellBtn>
                                 </S.BtnSection>
-                                <BuyOrSell isBuy={buyClick} StockOrGold='gold' price={goldDetail.price} />
+                                <BuyOrSell isBuy={buyClick} StockOrGold='gold' price={goldDetail.price} amount={portfolios[player].gold.amount} money={portfolios[player].money}/>
                             </S.Main>
                         </div>
                     </S.StockMidRight>

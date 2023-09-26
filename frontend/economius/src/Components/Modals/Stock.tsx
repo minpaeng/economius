@@ -1,11 +1,16 @@
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
 import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
 import { StockDetailState, TradeStockState } from '/src/recoil/trading/atom';
 import Modal from 'react-modal';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import * as S from './Stock.style';
 import StockGraph from '../Common/StockGraph';
 import BuyOrSell from '../Common/BuyOrSell';
+import {PlayerIdState, PortfolioState, StockState} from "/src/recoil/game/atom.tsx";
+
+function getStocks(stocks, stockId, userId) {
+    return stocks[stockId].owners[userId];
+}
 
 function makeStockGraphData(stockPriceHistoryData) {
     const graphData = [];
@@ -68,6 +73,9 @@ function Stock() {
     // 주식 매수, 매도 여부
     const [tradeStock, setTradeStock] = useRecoilState(TradeStockState);
     const [stockDetail, setStockDetail] = useRecoilState(StockDetailState);
+    const player = useRecoilValue(PlayerIdState)
+    const portfolios = useRecoilValue(PortfolioState);
+    const stocks = useRecoilValue(StockState);
 
     // modal style
     const modalStyle: any = {
@@ -102,7 +110,7 @@ function Stock() {
         <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
             <S.StockMain>
                 <S.StockTop>
-                    <S.StockTopImg src={`Stock/${imageUrl[stockDetail.stockId]}`} />
+                    <S.StockTopImg src={`Stock/${imageUrl[stockDetail.stockId]}`}/>
                     <S.StockTopTitle>
                         <S.StockTopTitleEnterprise>{stockDetail.name}</S.StockTopTitleEnterprise>
                         <S.StockTopTitleType>{stockDetail.companyCategory}</S.StockTopTitleType>
@@ -110,13 +118,13 @@ function Stock() {
                 </S.StockTop>
                 <S.StockMid>
                     <S.StockMidLeft>
-                        <StockGraph data={makeStockGraphData(stockDetail.priceHistory)} />
+                        <StockGraph data={makeStockGraphData(stockDetail.priceHistory)}/>
                         <S.StockMidLeftPrice>
                             현재가 : {stockDetail.price}
                             {stockDetail.rate >= 0 ? (
-                                <span style={{ color: '#DF7D46' }}> (+{stockDetail.rate}%)</span>
+                                <span style={{color: '#DF7D46'}}> (+{stockDetail.rate}%)</span>
                             ) : (
-                                <span style={{ color: '#DF7D46' }}> ({stockDetail.rate}%)</span>
+                                <span style={{color: '#DF7D46'}}> ({stockDetail.rate}%)</span>
                             )}
                         </S.StockMidLeftPrice>
                     </S.StockMidLeft>
@@ -154,12 +162,14 @@ function Stock() {
                                         매도
                                     </S.BuyOrSellBtn>
                                 </S.BtnSection>
-                                <BuyOrSell isBuy={buyClick} StockOrGold='stock' price={stockDetail.price} />
+                                <BuyOrSell isBuy={buyClick} StockOrGold='stock' price={stockDetail.price}
+                                           amount={getStocks(stocks, stockDetail.stockId, player)}
+                                           money={portfolios[player].money}/>
                             </S.Main>
                         </div>
                     </S.StockMidRight>
                 </S.StockMid>
-                <S.StockDivide />
+                <S.StockDivide/>
                 {buyClick ? (
                     <S.StockBuyBottom onClick={() => setTradeStock([true, false])}>매수하기</S.StockBuyBottom>
                 ) : (
