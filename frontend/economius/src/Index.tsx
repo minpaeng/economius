@@ -125,12 +125,12 @@ export default function Index() {
 
     // {!!!!!!!!!!!!!!!!!!!!} 카카오 로그인 시 실행할 함수
     const loginHandler = () => {
-        window.location.href = KAKAO_AUTH_URI;
-        // setUserid('shin');
-        // setTimeout(() => {
-        //     console.log(userid);
-        //     console.log('안녕하세요');
-        // }, 5000);
+        // window.location.href = KAKAO_AUTH_URI;
+        setUserid('shin');
+        setTimeout(() => {
+            console.log(userid);
+            console.log('안녕하세요');
+        }, 5000);
     };
 
     // {!!!!!!!!!!!!!!!!!!!!} 카카오 로그인 시 실행할 함수
@@ -141,7 +141,6 @@ export default function Index() {
     // {!!!!!!!!!!!!!!!!!!!!} 카카오 로그인 시 실행할 함수
     const roomMakeHandler = () => {
         // MakeRoom을 보여주기 위한 함수 호출
- 
     };
 
     return (

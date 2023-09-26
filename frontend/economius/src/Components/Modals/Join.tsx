@@ -3,6 +3,7 @@ import { useRecoilState } from 'recoil';
 import { TradeBankState } from '/src/recoil/trading/atom';
 import { useState } from 'react';
 import * as S from './Join.style';
+import charImg from '/navImg/join.png';
 
 export default function Join({ setShowJoin }) {
     const [isModalOpen, setIsModalOpen] = useState(true);
@@ -33,8 +34,10 @@ export default function Join({ setShowJoin }) {
         <Modal isOpen={isModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
             <S.Main>
                 <S.Mid>
+                    <S.MidImg src={charImg} alt='char-img'></S.MidImg>
+
                     {/* input 추가 */}
-                    <input type='text' value={inputValue} onChange={handleChange} />
+                    <input className='input_class' type='text' value={inputValue} onChange={handleChange} placeholder='방 번호를 입력해주세요.' />
                 </S.Mid>
                 <S.BankDivide />
                 <S.BankJoinBottom onClick={JoinButtonClickHandler}>방 입장하기</S.BankJoinBottom>

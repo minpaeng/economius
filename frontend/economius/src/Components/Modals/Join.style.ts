@@ -51,8 +51,16 @@ export const Main = styled.div`
 export const Mid = styled.div`
     flex: 7.85;
     display: flex;
+    flex-direction: column;
+    /* justify-content: flex-start; */
     justify-content: space-evenly;
     align-items: center;
+
+    input {
+        width: 50%;
+        height: 30px;
+        font-size: 20px;
+    }
 `;
 
 export const MidImg = styled.img`
@@ -78,6 +86,8 @@ export const BankJoinBottom = styled.button`
     background: #ffdaae;
     cursor: pointer; /* 커서를 포인터로 설정 */
     transition: all 250ms ease-in-out;
+
+    font-size: 24px;
 
     /* 호버 시 색상 변경 */
     &:hover {
