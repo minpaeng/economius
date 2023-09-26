@@ -157,24 +157,14 @@ export default function Index() {
                 )}
                 {/* 모달이 닫힌 후 5초 뒤에 렌더링할 내용을 렌더링합니다. */}
                 {renderContent &&
-                    (userid === 'a' ? (
+                    (
                         <S.ButtonOuter>
                             <div style={{ display: 'flex', justifyContent: 'center' }}>
                                 <img onClick={loginHandler} src='/button/kakao.png' alt='kakao-login-btn' />
                             </div>
                         </S.ButtonOuter>
-                    ) : (
-                        <S.ButtonOuter>
-                            {/* <div style={{ display: 'flex', justifyContent: 'center' }}> */}
-                            <S.RoundButtonRoom onClick={roomMakeHandler}>
-                                <span>방 생성하기</span>
-                            </S.RoundButtonRoom>
-                            <S.RoundButtonRoom onClick={roomJoinHandler}>
-                                <span>방 입장하기</span>
-                            </S.RoundButtonRoom>
-                            {/* </div> */}
-                        </S.ButtonOuter>
-                    ))}
+                    )
+                }
                 {showWaitRoom && <WaitRoom />}
                 {showJoin && <Join setShowJoin={setShowJoin} />}
             </div>
