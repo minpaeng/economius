@@ -19,13 +19,13 @@ import Socket from './Socket';
 function App() {
     return (
         <div className='canvas-outer' style={{ width: '100%', height: 'calc(100vw * 9 / 16)' }}>
-            <Canvas style={{ width: "100%", height: "100%" }}>
-        <OrthographicCamera makeDefault zoom={65} position={[4, 4.1, 4]} />
-        <OrbitControls />
-        <ambientLight intensity={3} />
-        <Map />
-        <Characters />
-      </Canvas>
+            <Canvas style={{ width: '100%', height: '100%' }}>
+                <OrthographicCamera makeDefault zoom={65} position={[4, 4.1, 4]} />
+                <OrbitControls />
+                <ambientLight intensity={3} />
+                <Map />
+                <Characters />
+            </Canvas>
 
             <Controller />
 

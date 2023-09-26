@@ -12,6 +12,7 @@ import {
     BuyAmountState,
     SellAmountState,
 } from './recoil/trading/atom';
+import { ShowSpinnerState, StockInfoState, RealEstateInfoState, GoldInfoState } from './recoil/modalInfo/atom';
 
 const buildingIds = {
     4: 1,
@@ -51,6 +52,9 @@ function PlayerSocket() {
     const [nowPlayerPosition, setNowPlayerPosition] = useRecoilState(NowPlayerPositionState);
     const [movementCards, setMovementCards] = useRecoilState(MovementCardsState);
     // 자산별 모달 정보
+    const [showSpinner, setShowSpinner] = useRecoilState(ShowSpinnerState);
+    const [stockInfo, setStockInfo] = useRecoilState(StockInfoState);
+    const [realEstateInfo, setRealEstateInfo] = useRecoilState(RealEstateInfoState);
     // 자산별 거래 여부
     const [tradeRealEstate, setTradeRealEstate] = useRecoilState(TradeRealEstateState);
     const [tradeStock, setTradeStock] = useRecoilState(TradeStockState);
@@ -81,18 +85,30 @@ function PlayerSocket() {
 
                     // 개인 메시지 구독 => sub/{roomId}/{playerId}
                     stompClient.current.subscribe(`/sub/${roomId}/1`, function (recievedMessage: any) {
-                        console.log('개인메시지', recievedMessage);
-                        console.log('개인메시지', recievedMessage.body);
                         const message = JSON.parse(recievedMessage.body); // 객체
                         const type = recievedMessage.headers.type; // 문자열
+                        console.log('개인메시지', type);
+                        console.log('개인메시지', message);
                     });
 
                     // 방 메시지 구독 => sub/{roomId}
                     stompClient.current.subscribe(`/sub/${roomId}`, function (recievedMessage: any) {
-                        console.log('전체메시지', recievedMessage);
-                        console.log('전체메시지', recievedMessage.body);
                         const message = JSON.parse(recievedMessage.body);
                         const type = recievedMessage.headers.type;
+                        console.log('전체메시지', type);
+                        console.log('전체메시지', message);
+                        if (type == 'visitBuilding') {
+                            setRealEstateInfo({
+                                buildingId: message.buildingId,
+                                buildingPrice: message.buildingPrice,
+                                changeAmount: message.changeAmount,
+                                visitor: message.visitor,
+                                owner: message.owner,
+                            });
+                            setShowSpinner(true);
+                        }
+                        // } else if (type == 'stockDetail') {
+                        //     setStockInfo({});
                     });
                 }
             );
@@ -132,11 +148,16 @@ function PlayerSocket() {
                 stompClient.current.send('/pub/1/bank', {}, JSON.stringify({ player: nowPlayer + 1, bankId: bankIds[nowPlayerPosition] }));
             }
         }
-
         // 보험 방문
         else if ([6, 26].includes(nowPlayerPosition)) {
             if (stompClient.current) {
                 stompClient.current.send(`/pub/${roomId}/insurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: '' }));
+            }
+        }
+        // 찬스 카드 방문
+        else if ([12, 20, 28].includes(nowPlayerPosition)) {
+            if (stompClient.current) {
+                stompClient.current.send(`/pub/${roomId}/eventCard`, {}, JSON.stringify({ player: nowPlayer + 1 }));
             }
         }
     }, [isOpen]);
@@ -145,7 +166,7 @@ function PlayerSocket() {
     useEffect(() => {
         if (tradeRealEstate[0]) {
             if (stompClient.current) {
-                stompClient.current.send('/pub/1/buyBuildings', {}, JSON.stringify({ player: nowPlayer + 1, buildingId: buildingIds[nowPlayerPosition] }));
+                stompClient.current.send('/pub/1/buyBuilding', {}, JSON.stringify({ player: nowPlayer + 1, buildingId: buildingIds[nowPlayerPosition] }));
                 setTradeRealEstate([false, false]);
                 // // 1초 후에 턴 종료
                 // setTimeout(() => {
@@ -154,7 +175,7 @@ function PlayerSocket() {
             }
         } else if (tradeRealEstate[1]) {
             if (stompClient.current) {
-                stompClient.current.send('/pub/1/sellBuildings', {}, JSON.stringify({ player: nowPlayer + 1, buildingId: buildingIds[nowPlayerPosition] }));
+                stompClient.current.send('/pub/1/sellBuilding', {}, JSON.stringify({ player: nowPlayer + 1, buildingId: buildingIds[nowPlayerPosition] }));
                 setTradeRealEstate([false, false]);
                 // stompClient.current.send('/pub/1/finishTurn', {});
             }
