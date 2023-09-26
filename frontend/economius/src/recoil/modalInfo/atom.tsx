@@ -2,12 +2,6 @@ import { atom } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
 const { persistAtom } = recoilPersist();
 
-// 모달 정보 스피너 플래그
-export const ShowSpinnerState = atom({
-    key: 'ShowSpinnerState',
-    default: false,
-});
-
 // 월말정산 모달 정보
 export const MonthlyInfoState = atom({
     key: 'MonthlyInfoState',

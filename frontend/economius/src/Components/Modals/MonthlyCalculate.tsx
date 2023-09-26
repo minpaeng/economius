@@ -2,7 +2,7 @@ import Modal from 'react-modal';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { MonthlyModalOpenState } from '/src/recoil/animation/atom';
-import { ShowSpinnerState, MonthlyInfoState } from '/src/recoil/modalInfo/atom';
+import { MonthlyInfoState } from '/src/recoil/modalInfo/atom';
 import monthlymalculate from '/MonthlyCalculate/monthlycalculate.png';
 import dollarcoin from '/MonthlyCalculate/dollarcoin.png';
 import plus from '/MonthlyCalculate/plus.png';
@@ -13,10 +13,8 @@ import * as S from './MonthlyCalculate.style';
 function MonthlyCalculate() {
     const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
     const [monthlyInfo, setMonthlyInfo] = useRecoilState(MonthlyInfoState);
-    const [showSpinner, setShowSpinner] = useRecoilState(ShowSpinnerState);
     const closeModal = () => {
         setMonthlyModalOpen(false);
-        setShowSpinner(false);
     };
 
     return (

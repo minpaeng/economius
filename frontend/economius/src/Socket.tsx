@@ -23,12 +23,10 @@ import {
   GoldDetailState,
 } from "./recoil/trading/atom";
 import {
-  ShowSpinnerState,
   StockInfoState,
   RealEstateInfoState,
   BankInfoState,
   ChanceCardInfoState,
-  MonthlyInfoState,
 } from "./recoil/modalInfo/atom";
 
 const buildingIds = {
@@ -160,6 +158,62 @@ function PlayerSocket() {
             }
           );
 
+          // 개인 메시지 구독 => sub/{roomId}/{playerId}
+          stompClient.current.subscribe(
+            `/sub/${roomId}/1`,
+            function (recievedMessage: any) {
+              console.log("개인메시지", recievedMessage);
+              console.log("개인메시지", recievedMessage.body);
+              const message = JSON.parse(recievedMessage.body); // 객체
+              const type = recievedMessage.headers.type || null; // 문자열
+              // 주식 변경 recoil 시작
+              if (type === "stockDetail") {
+                setStockDetail({
+                  stockId: message.stockId,
+                  name: message.name,
+                  stockIndustryId: message.stockIndustryId,
+                  companyCategory: message.companyCategory,
+                  companySubCategory: message.companySubCategory,
+                  owners: message.owners,
+                  remainingAmount: message.remainingAmount,
+                  price: message.price,
+                  rate: message.rate,
+                  priceHistory: message.priceHistory,
+                  rateHistory: message.rateHistory,
+                });
+              } else if (type === "selectGolds") {
+                setGoldDetail({
+                  player: message.player,
+                  price: message.price,
+                  rate: message.rate,
+                  priceHistory: message.priceHistory,
+                  rateHistory: message.rateHistory,
+                });
+              }
+              // 턴 종료 로직
+              else if (type === "buyStock") {
+                setCallBack(true);
+              } else if (type === "sellStock") {
+                setCallBack(true);
+              } else if (type === "buyGolds") {
+                setCallBack(true);
+              } else if (type === "sellGolds") {
+                setCallBack(true);
+              } else if (type === "buyBuilding") {
+                setCallBack(true);
+              } else if (type === "sellBuilding") {
+                setCallBack(true);
+                setCallBack(true);
+              } else if (type === "joinSavings") {
+                setCallBack(true);
+              } else if (type === "stopSavings") {
+                setCallBack(true);
+              }
+
+              // 주식 recoil 종료
+            }
+          );
+
           // 방 메시지 구독 => sub/{roomId}
           stompClient.current.subscribe(
             `/sub/${roomId}`,
@@ -176,7 +230,6 @@ function PlayerSocket() {
                   visitor: message.visitor,
                   owner: message.owner,
                 });
-                setShowSpinner(true);
               } else if (type == "bank") {
                 setBankInfo({
                   player: message.player,
@@ -189,7 +242,6 @@ function PlayerSocket() {
                   finishCount: message.finishCount,
                   rate: message.rate,
                 });
-                setShowSpinner(true);
               } else if (type == "calculate") {
                 setMonthlyInfo({
                   player: message.player,
@@ -201,7 +253,6 @@ function PlayerSocket() {
                   totalIncome: message.receipt.totalIncome,
                   money: message.receipt.money,
                 });
-                setShowSpinner(true);
               }
               if (type == "eventCard") {
                 setChanceCardInfo({

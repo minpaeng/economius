@@ -1,9 +1,9 @@
 import Modal from 'react-modal';
 import { useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { NowPlayerState, IsModalOpenState } from '/src/recoil/animation/atom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { NowPlayerState, IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
 import { TradeRealEstateState } from '/src/recoil/trading/atom';
-import { ShowSpinnerState, RealEstateInfoState } from '/src/recoil/modalInfo/atom';
+import { RealEstateInfoState } from '/src/recoil/modalInfo/atom';
 import hotelimg from '/RealState/hotel.png';
 import restaurantimg from '/RealState/restaurant.png';
 import shopimg from '/RealState/shop.png';
@@ -13,15 +13,16 @@ function RealEstate() {
     const [nowPlayer, setNowPlayer] = useRecoilState(NowPlayerState);
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     // 부동산 모달 정보
-    const realEstateInfo = useRecoilValue(RealEstateInfoState);
+    const [realEstateInfo, setRealEstateInfo] = useRecoilState(RealEstateInfoState);
     // 부동산 매수, 매도 여부
     const [tradeRealEstate, setTradeRealEstate] = useRecoilState(TradeRealEstateState);
-    // 스피너
-    const [showSpinner, setShowSpinner] = useRecoilState(ShowSpinnerState);
+    // 턴 종료 플래그
+    const setCallBack = useSetRecoilState(CallBackState);
     // 모달 끄기
     const closeModal = () => {
+        setRealEstateInfo(null);
         setIsModalOpen(false);
-        setShowSpinner(false);
+        setCallBack(true);
     };
 
     const fee = [null, '식사 비용', '쇼핑 비용', '숙박 비용'];
@@ -31,7 +32,7 @@ function RealEstate() {
 
     return (
         <Modal isOpen={isModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
-            {showSpinner ? (
+            {!realEstateInfo ? (
                 <S.Main>
                     <S.Top>
                         <S.TopTitle>{name[realEstateInfo.buildingId]}</S.TopTitle>

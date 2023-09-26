@@ -33,8 +33,8 @@ function makeStockGraphData(stockPriceHistoryData) {
     return graphData;
 }
 
-
 function Stock() {
+    // 턴 종료 플래그
     const setCallBack = useSetRecoilState(CallBackState);
 
     const imageUrl = [
