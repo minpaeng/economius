@@ -1,45 +1,58 @@
 import { useRecoilState } from 'recoil';
 import { IsModalOpenState } from '/src/recoil/animation/atom';
-import { TradeStockState } from '/src/recoil/trading/atom';
+import {StockDetailState, TradeStockState} from '/src/recoil/trading/atom';
 import Modal from 'react-modal';
 import { useState } from 'react';
 import * as S from './Stock.style';
 import StockGraph from '../Common/StockGraph';
 import BuyOrSell from '../Common/BuyOrSell';
 
+function makeStockGraphData (stockPriceHistoryData) {
+    const graphData = [];
+    let index = 0;
+    for (index; index < stockPriceHistoryData.length ; index++){
+        graphData.push(
+            {
+                turn: index + 1,
+                open: stockPriceHistoryData[index].openingPrice,
+                high: stockPriceHistoryData[index].highPrice,
+                low: stockPriceHistoryData[index].lowPrice,
+                close: stockPriceHistoryData[index].closingPrice,
+            }
+        )
+    }
+
+    for (index; index< 20; index++){
+        graphData.push(
+            {
+                turn: index + 1,
+                open: null,
+                high: null,
+                low: null,
+                close: null,
+            }
+        )
+    }
+
+    return graphData;
+}
+
 function Stock() {
-  const data: any = [
-    { turn: 1, open: 6629.81, high: 6650.5, low: 6623.04, close: 6633.33 },
-    { turn: 2, open: 6632.01, high: 6643.59, low: 6620, close: 6630.11 },
-    { turn: 3, open: 6630.71, high: 6648.95, low: 6623.34, close: 6635.65 },
-    { turn: 4, open: 6635.651, high: 6651, low: 6629.67, close: 6638.24 },
-    { turn: 5, open: 6638.24, high: 6640, low: 6620, close: 6624.47 },
-    { turn: 6, open: 6624.53, high: 6636.03, low: 6621.68, close: 6624.31 },
-    { turn: 7, open: 6624.61, high: 6632.2, low: 6617, close: 6626.02 },
-    { turn: 8, open: 6627, high: 6627.62, low: 6584.22, close: 6603.02 },
-    { turn: 9, open: 6605, high: 6608.03, low: 6598.95, close: 6604.01 },
-    { turn: 10, open: 6604.5, high: 6614.4, low: 6602.26, close: 6608.02 },
-    { turn: 11, open: 6608.02, high: 6610.68, low: 6601.99, close: 6608.91 },
-    { turn: 12, open: 6608.91, high: 6618.99, low: 6608.01, close: 6612 },
-    { turn: 13, open: null, high: null, low: null, close: null },
-    { turn: 14, open: null, high: null, low: null, close: null },
-    { turn: 15, open: null, high: null, low: null, close: null },
-    { turn: 16, open: null, high: null, low: null, close: null },
-    { turn: 17, open: null, high: null, low: null, close: null },
-    { turn: 18, open: null, high: null, low: null, close: null },
-    { turn: 19, open: null, high: null, low: null, close: null },
-    { turn: 20, open: null, high: null, low: null, close: null },
-  ];
+    const imageUrl = [null, "koreaElectro.png", "Aramco.png", "Posco.png", "LGchemi.png", "pfizer.png",
+        "celltrion.png", "Nike.png", "CocaCola.png",  "airbnb.png", "CJE&M.png", "KT.png", "MS.png",
+        "CJdistribution.png", "hyundaiConstruct.png", "Lexus.png", "samsung.png"
+    ]
 
     //  매수,매도 탭 구분 플래그
     const [buyClick, isBuyClick] = useState(true);
-
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const closeModal = () => {
+        setStockDetail(null);
         setIsModalOpen(false);
     };
     // 주식 매수, 매도 여부
     const [tradeStock, setTradeStock] = useRecoilState(TradeStockState);
+    const [stockDetail, setStockDetail] = useRecoilState(StockDetailState);
 
   // modal style
   const modalStyle: any = {
@@ -68,21 +81,25 @@ function Stock() {
     },
   };
 
-    return (
+    return stockDetail === null ? <span>loading...</span> : (
         <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
             <S.StockMain>
                 <S.StockTop>
-                    <S.StockTopImg src='Stock/samsung.png' />
+                    <S.StockTopImg src={`Stock/${imageUrl[stockDetail.stockId]}`} />
                     <S.StockTopTitle>
-                        <S.StockTopTitleEnterprise>삼성전자</S.StockTopTitleEnterprise>
-                        <S.StockTopTitleType>반도체</S.StockTopTitleType>
+                        <S.StockTopTitleEnterprise>{stockDetail.name}</S.StockTopTitleEnterprise>
+                        <S.StockTopTitleType>{stockDetail.companyCategory}</S.StockTopTitleType>
                     </S.StockTopTitle>
                 </S.StockTop>
                 <S.StockMid>
                     <S.StockMidLeft>
-                        <StockGraph data={data} />
+                        <StockGraph data={makeStockGraphData(stockDetail.priceHistory)} />
                         <S.StockMidLeftPrice>
-                            현재가 : 70700 <span style={{ color: '#DF7D46' }}>(+3%)</span>
+                            현재가 : {stockDetail.price}
+                            {stockDetail.rate >= 0 ?
+                                <span style={{ color: '#DF7D46' }}> (+{stockDetail.rate}%)</span>
+                                : <span style={{ color: '#DF7D46' }}> ({stockDetail.rate}%)</span>
+                            }
                         </S.StockMidLeftPrice>
                     </S.StockMidLeft>
                     <S.StockMidRight>
@@ -119,7 +136,7 @@ function Stock() {
                                         매도
                                     </S.BuyOrSellBtn>
                                 </S.BtnSection>
-                                <BuyOrSell isBuy={buyClick} StockOrGold='stock' />
+                                <BuyOrSell isBuy={buyClick} StockOrGold='stock' price={stockDetail.price}/>
                             </S.Main>
                         </div>
                     </S.StockMidRight>

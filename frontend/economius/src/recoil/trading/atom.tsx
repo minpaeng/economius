@@ -49,3 +49,13 @@ export const SellAmountState = atom<number>({
     key: 'SellAmountState',
     default: 1,
 });
+
+export const StockDetailState = atom({
+    key: 'StockDetailState',
+    default: null,
+})
+
+export const GoldDetailState = atom({
+    key: 'GoldDetailState',
+    default: null,
+})

@@ -8,6 +8,7 @@ import { useRecoilState } from 'recoil';
 import Modal from 'react-modal'; 
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import WaitRoom from './Components/Modals/WaitRoom';
 
 export default function Room() {
     // 최상단 컴포넌트에서 모달을 쓸 것이라고 명시 작업이 필요
@@ -30,9 +31,15 @@ export default function Room() {
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
         if (token===null) navigate('/');
+
+        if (!window.Kakao.isInitialized()) {
+            window.Kakao.init(import.meta.env.VITE_APP_JavaScript_URI);
+          }
+
     }, [navigate]);
     const [isModalClosed, setIsModalClosed] = useState(false); // 모달이 닫힌 상태를 관리
     const [renderContent, setRenderContent] = useState(false); // 모달이 닫힌 후 n초 뒤에 렌더링할 상태를 관리
+    const [showWaitRoom, setShowWaitRoom] = useState(false);
 
     // 모달 열기
     const openModal = () => {
@@ -131,6 +138,7 @@ export default function Room() {
                 player: Number(player) // 문자열을 숫자로 변환해주기 위해 Number를 사용합니다.
             });
     
+            setShowWaitRoom(true);
             console.log(response.data); // { roomId: 2 }와 같은 응답 출력
         } catch (error) {
             console.error('Axios error: ' + error.message); // 네트워크 오류 처리
@@ -142,6 +150,12 @@ export default function Room() {
     const roomJoinHandler = () => {
         //
     };
+
+    const shareKakao = () => {
+        window.Kakao.Link.sendCustom({
+          templateId: 98901, // 내가 만든 템플릿 아이디를 넣어주면 된다
+        });
+      };
 
     return (
         <>
@@ -161,12 +175,12 @@ export default function Room() {
                         <S.RoundButtonRoom onClick={roomMakeHandler}>
                             <span>방 생성하기</span>
                         </S.RoundButtonRoom>
-                        <S.RoundButtonRoom onClick={roomJoinHandler}>
+                        <S.RoundButtonRoom onClick={shareKakao}>
                             <span>방 입장하기</span>
                         </S.RoundButtonRoom>
                     </S.ButtonOuter>
                 )}
-
+                {showWaitRoom && <WaitRoom />}
             </div>
         </>
     );

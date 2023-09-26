@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import sockjs from 'sockjs-client/dist/sockjs';
 import { Stomp } from '@stomp/stompjs';
-import { useRecoilState } from 'recoil';
+import {useRecoilState, useSetRecoilState} from 'recoil';
 import { RoomIdState, IsModalOpenState, NowPlayerState, NowPlayerPositionState, MovementCardsState } from './recoil/animation/atom';
 import {
     TradeRealEstateState,
@@ -11,8 +11,9 @@ import {
     TradeInsuranceState,
     BuyAmountState,
     SellAmountState,
+    StockDetailState, GoldDetailState,
 } from './recoil/trading/atom';
-import { ShowSpinnerState, StockInfoState, RealEstateInfoState, GoldInfoState } from './recoil/modalInfo/atom';
+import { ShowSpinnerState, StockInfoState, RealEstateInfoState, BankInfoState } from './recoil/modalInfo/atom';
 
 const buildingIds = {
     4: 1,
@@ -55,6 +56,7 @@ function PlayerSocket() {
     const [showSpinner, setShowSpinner] = useRecoilState(ShowSpinnerState);
     const [stockInfo, setStockInfo] = useRecoilState(StockInfoState);
     const [realEstateInfo, setRealEstateInfo] = useRecoilState(RealEstateInfoState);
+    const [bankInfo, setBankInfo] = useRecoilState(BankInfoState);
     // 자산별 거래 여부
     const [tradeRealEstate, setTradeRealEstate] = useRecoilState(TradeRealEstateState);
     const [tradeStock, setTradeStock] = useRecoilState(TradeStockState);
@@ -64,6 +66,9 @@ function PlayerSocket() {
     // 매수량, 매도량
     const [buyAmount, setbuyAmount] = useRecoilState(BuyAmountState);
     const [sellAmount, setSellAmount] = useRecoilState(SellAmountState);
+
+    const setStockDetail = useSetRecoilState(StockDetailState);
+    const setGoldDetail = useSetRecoilState(GoldDetailState);
 
     const stompClient = useRef(null);
 
@@ -85,10 +90,37 @@ function PlayerSocket() {
 
                     // 개인 메시지 구독 => sub/{roomId}/{playerId}
                     stompClient.current.subscribe(`/sub/${roomId}/1`, function (recievedMessage: any) {
+                        console.log('개인메시지', recievedMessage);
+                        console.log('개인메시지', recievedMessage.body);
                         const message = JSON.parse(recievedMessage.body); // 객체
                         const type = recievedMessage.headers.type; // 문자열
-                        console.log('개인메시지', type);
-                        console.log('개인메시지', message);
+                        // 주식 변경 recoil 시작
+                        if(type === "stockDetail"){
+                            setStockDetail({
+                                stockId: message.stockId,
+                                name: message.name,
+                                stockIndustryId: message.stockIndustryId,
+                                companyCategory: message.companyCategory,
+                                companySubCategory: message.companySubCategory,
+                                owners: message.owners,
+                                remainingAmount: message.remainingAmount,
+                                price: message.price,
+                                rate: message.rate,
+                                priceHistory: message.priceHistory,
+                                rateHistory: message.rateHistory
+                            })
+                        }
+                        if(type === "selectGolds"){
+                            setGoldDetail({
+                                player: message.player,
+                                price: message.price,
+                                rate: message.rate,
+                                priceHistory: message.priceHistory,
+                                rateHistory: message.rateHistory,
+                                }
+                            )
+                        }
+                        // 주식 recoil 종료
                     });
 
                     // 방 메시지 구독 => sub/{roomId}
@@ -107,8 +139,20 @@ function PlayerSocket() {
                             });
                             setShowSpinner(true);
                         }
-                        // } else if (type == 'stockDetail') {
-                        //     setStockInfo({});
+                        if (type == 'bank') {
+                            setBankInfo({
+                                player: message.player,
+                                money: message.money,
+                                have: message.have,
+                                name: message.name,
+                                monthlyDeposit: message.monthlyDeposit,
+                                currentPrice: message.currentPrice,
+                                currentCount: message.currentCount,
+                                finishCount: message.finishCount,
+                                rate: message.rate,
+                            });
+                            setShowSpinner(true);
+                        }
                     });
                 }
             );
@@ -245,7 +289,7 @@ function PlayerSocket() {
         }
         if (tradeInsurance[1]) {
             if (stompClient.current) {
-                stompClient.current.send('/pub/1/finishInsurance', {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
+                stompClient.current.send('/pub/1/joinInsurance', {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
                 setTradeInsurance([false, false, false, false]);
             }
         }

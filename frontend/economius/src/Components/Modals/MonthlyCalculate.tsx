@@ -10,15 +10,16 @@ import equal from '/MonthlyCalculate/equal.png';
 import * as S from './MonthlyCalculate.style';
 
 function MonthlyCalculate() {
-    const [isOpen, setIsOpen] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
+
     const closeModal = () => {
-        setIsOpen(false);
+        setIsModalOpen(false);
     };
 
     const dummy: number[] = [3344, 324, 52, 643, 234, 55234];
 
     return (
-        <Modal isOpen={isOpen} style={S.modalStyle} onRequestClose={closeModal}>
+        <Modal isOpen={isModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
             <S.Main>
                 <S.Top>
                     <S.TopImg src={monthlymalculate} alt='monthlymalculate' />
