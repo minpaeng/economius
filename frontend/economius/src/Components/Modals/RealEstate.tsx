@@ -23,10 +23,6 @@ function RealEstate() {
         setIsModalOpen(false);
         setShowSpinner(false);
     };
-    // 거래 종료
-    const closeTrade = () => {
-        setTradeRealEstate([false, false]);
-    };
 
     const fee = [null, '식사 비용', '쇼핑 비용', '숙박 비용'];
     const name = [null, '레스토랑', '상점', '호텔'];
@@ -53,11 +49,11 @@ function RealEstate() {
 
                     <S.Divide />
                     {!realEstateInfo.owner ? (
-                        <S.Botton onClick={() => (setTradeRealEstate([true, false]), closeModal())}>매수하기</S.Botton>
+                        <S.Botton onClick={() => setTradeRealEstate([true, false])}>매수하기</S.Botton>
                     ) : realEstateInfo.owner.player === nowPlayer + 1 ? (
-                        <S.Botton onClick={() => (setTradeRealEstate([false, true]), closeModal())}>매도하기</S.Botton>
+                        <S.Botton onClick={() => setTradeRealEstate([false, true])}>매도하기</S.Botton>
                     ) : (
-                        <S.Botton onClick={() => (closeModal(), closeTrade())}>확인</S.Botton>
+                        <S.Botton onClick={() => closeModal}>확인</S.Botton>
                     )}
                 </S.Main>
             ) : (

@@ -8,6 +8,21 @@ export const ShowSpinnerState = atom({
     default: false,
 });
 
+// 월말정산 모달 정보
+export const MonthlyInfoState = atom({
+    key: 'MonthlyInfoState',
+    default: {
+        player: 0,
+        salary: 0,
+        savingFinishBenefit: 0,
+        tax: 0,
+        savingsPrice: 0,
+        insurancePrice: 0,
+        totalIncome: 0,
+        money: 0,
+    },
+});
+
 // 주식 모달 정보
 export const StockInfoState = atom({
     key: 'StockInfoState',

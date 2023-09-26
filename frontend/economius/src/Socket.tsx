@@ -22,7 +22,7 @@ import {
     StockDetailState,
     GoldDetailState,
 } from './recoil/trading/atom';
-import { ShowSpinnerState, StockInfoState, RealEstateInfoState, BankInfoState } from './recoil/modalInfo/atom';
+import { ShowSpinnerState, MonthlyInfoState, StockInfoState, RealEstateInfoState, BankInfoState } from './recoil/modalInfo/atom';
 
 const buildingIds = {
     4: 1,
@@ -57,16 +57,17 @@ const bankIds = {
 
 function PlayerSocket() {
     const [roomId, setRoomId] = useRecoilState(RoomIdState);
-    const [isOpen, setIsOpen] = useRecoilState(IsModalOpenState);
+    const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const [nowPlayer, setNowPlayerState] = useRecoilState(NowPlayerState);
     const [nowPlayerPosition, setNowPlayerPosition] = useRecoilState(NowPlayerPositionState);
     const [movementCards, setMovementCards] = useRecoilState(MovementCardsState);
+    const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
     // 자산별 모달 정보
     const [showSpinner, setShowSpinner] = useRecoilState(ShowSpinnerState);
     const [stockInfo, setStockInfo] = useRecoilState(StockInfoState);
     const [realEstateInfo, setRealEstateInfo] = useRecoilState(RealEstateInfoState);
     const [bankInfo, setBankInfo] = useRecoilState(BankInfoState);
-    const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
+    const [monthlyInfo, setMonthlyInfo] = useRecoilState(MonthlyInfoState);
     // 자산별 거래 여부
     const [tradeRealEstate, setTradeRealEstate] = useRecoilState(TradeRealEstateState);
     const [tradeStock, setTradeStock] = useRecoilState(TradeStockState);
@@ -120,8 +121,7 @@ function PlayerSocket() {
                                 priceHistory: message.priceHistory,
                                 rateHistory: message.rateHistory,
                             });
-                        }
-                        if (type === 'selectGolds') {
+                        } else if (type === 'selectGolds') {
                             setGoldDetail({
                                 player: message.player,
                                 price: message.price,
@@ -129,11 +129,9 @@ function PlayerSocket() {
                                 priceHistory: message.priceHistory,
                                 rateHistory: message.rateHistory,
                             });
-                        }
-                        if (type === 'buyStock') {
+                        } else if (type === 'buyStock') {
                             setCallBack(true);
-                        }
-                        if (type === 'buyGolds'){
+                        } else if (type === 'buyGolds') {
                             setCallBack(true);
                         }
 
@@ -155,8 +153,7 @@ function PlayerSocket() {
                                 owner: message.owner,
                             });
                             setShowSpinner(true);
-                        }
-                        if (type == 'bank') {
+                        } else if (type == 'bank') {
                             setBankInfo({
                                 player: message.player,
                                 money: message.money,
@@ -167,6 +164,18 @@ function PlayerSocket() {
                                 currentCount: message.currentCount,
                                 finishCount: message.finishCount,
                                 rate: message.rate,
+                            });
+                            setShowSpinner(true);
+                        } else if (type == 'calculate') {
+                            setMonthlyInfo({
+                                player: message.player,
+                                salary: message.receipt.salary,
+                                savingFinishBenefit: message.receipt.savingFinishBenefit,
+                                tax: message.receipt.tax,
+                                savingsPrice: message.receipt.savingsPrice,
+                                insurancePrice: message.receipt.insurancePrice,
+                                totalIncome: message.receipt.totalIncome,
+                                money: message.receipt.money,
                             });
                             setShowSpinner(true);
                         }
@@ -180,7 +189,7 @@ function PlayerSocket() {
 
     // 자산별 방문
     useEffect(() => {
-        if (!isOpen) return;
+        if (!isModalOpen) return;
 
         // 부동산 방문
         if ([4, 14, 22].includes(nowPlayerPosition)) {
@@ -221,7 +230,7 @@ function PlayerSocket() {
                 stompClient.current.send(`/pub/${roomId}/eventCard`, {}, JSON.stringify({ player: nowPlayer + 1 }));
             }
         }
-    }, [isOpen]);
+    }, [isModalOpen]);
 
     // 월말정산
     useEffect(() => {
@@ -333,11 +342,13 @@ function PlayerSocket() {
         }
     }, [tradeInsurance]);
 
+    //턴 종료
     useEffect(() => {
         if (!callBack) return;
         if (stompClient.current) {
             stompClient.current.send(`/pub/1/finishTurn`, {}, {});
             setCallBack(false);
+            setIsModalOpen(false);
         }
     }, [callBack]);
 
