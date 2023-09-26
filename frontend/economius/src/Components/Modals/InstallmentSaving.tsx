@@ -1,49 +1,21 @@
 import Modal from 'react-modal';
 import { useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { IsModalOpenState } from '/src/recoil/animation/atom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
 import { TradeBankState } from '/src/recoil/trading/atom';
 import { BankInfoState } from '/src/recoil/modalInfo/atom';
 import * as S from './InstallmentSaving.style';
 
 function InstallmentSaving() {
-    // 원래는 초기값 false로 두고 해당 위치 되면 true로 바꿔줘야할듯
-
-    // 은행 방문 시, savings 배열이 비어있으면 가입모달
-    // 아니면 해지 모달
-    const dummy: any = {
-        player: 0,
-        owner: 1,
-        money: 0,
-        savings: {
-            totalPrice: 0, //적금 총 액
-            amount: 0, //적금 총 개수
-            savings: [
-                //포트폴리오에 바로 적용
-                {
-                    bankCode: '',
-                    savingName: '',
-                    perPrice: 0, //회당 적금액
-                    currentPrice: 0, //지금까지 낸 금액
-                    currentCount: 0, //지금까지 낸 횟수
-                    totalCount: 0, //총 적금 횟수
-                    rate: 0, //이율
-                },
-            ],
-        },
-    };
-
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const [tradeBank, setTradeBank] = useRecoilState(TradeBankState);
     const [bankInfo, setBankInfo] = useRecoilState(BankInfoState);
+    const setCallBack = useSetRecoilState(CallBackState);
     // 모달 끄기
     const closeModal = () => {
-        setIsModalOpen(false);
         setBankInfo(null);
-    };
-    // 거래 종료
-    const closeTrade = () => {
-        setTradeBank([false, false]);
+        setIsModalOpen(false);
+        setCallBack(true);
     };
 
     // modal style
@@ -74,7 +46,7 @@ function InstallmentSaving() {
     };
 
     return (
-        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={() => (closeModal(), closeTrade())}>
+        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
             {!bankInfo ? (
                 <S.BankMain>
                     <S.BankTop>
@@ -123,9 +95,9 @@ function InstallmentSaving() {
                     </S.BankMid>
                     <S.BankDivide />
                     {bankInfo.have ? (
-                        <S.BankJoinBottom onClick={() => (setTradeBank([false, true]), closeModal())}>적금 해지하기</S.BankJoinBottom>
+                        <S.BankJoinBottom onClick={() => setTradeBank([false, true])}>적금 해지하기</S.BankJoinBottom>
                     ) : (
-                        <S.BankJoinBottom onClick={() => (setTradeBank([true, false]), closeModal())}>적금 가입하기</S.BankJoinBottom>
+                        <S.BankJoinBottom onClick={() => setTradeBank([true, false])}>적금 가입하기</S.BankJoinBottom>
                     )}
                 </S.BankMain>
             ) : (

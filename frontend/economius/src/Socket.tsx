@@ -128,9 +128,24 @@ function PlayerSocket() {
                                 priceHistory: message.priceHistory,
                                 rateHistory: message.rateHistory,
                             });
-                        } else if (type === 'buyStock') {
+                        }
+                        // 턴 종료 로직
+                        else if (type === 'buyStock') {
+                            setCallBack(true);
+                        } else if (type === 'sellStock') {
                             setCallBack(true);
                         } else if (type === 'buyGolds') {
+                            setCallBack(true);
+                        } else if (type === 'sellGolds') {
+                            setCallBack(true);
+                        } else if (type === 'buyBuilding') {
+                            setCallBack(true);
+                        } else if (type === 'sellBuilding') {
+                            setCallBack(true);
+                            setCallBack(true);
+                        } else if (type === 'joinSavings') {
+                            setCallBack(true);
+                        } else if (type === 'stopSavings') {
                             setCallBack(true);
                         }
 
@@ -151,7 +166,6 @@ function PlayerSocket() {
                                 visitor: message.visitor,
                                 owner: message.owner,
                             });
-                            setShowSpinner(true);
                         } else if (type == 'bank') {
                             setBankInfo({
                                 player: message.player,
@@ -164,7 +178,6 @@ function PlayerSocket() {
                                 finishCount: message.finishCount,
                                 rate: message.rate,
                             });
-                            setShowSpinner(true);
                         } else if (type == 'calculate') {
                             setMonthlyInfo({
                                 player: message.player,
@@ -176,7 +189,6 @@ function PlayerSocket() {
                                 totalIncome: message.receipt.totalIncome,
                                 money: message.receipt.money,
                             });
-                            setShowSpinner(true);
                         }
                     });
                 }
