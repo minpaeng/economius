@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import sockjs from 'sockjs-client/dist/sockjs';
 import { Stomp } from '@stomp/stompjs';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { RoomIdState, IsModalOpenState, NowPlayerState, NowPlayerPositionState, MovementCardsState } from './recoil/animation/atom';
+import { RoomIdState, IsModalOpenState, MonthlyModalOpenState, NowPlayerState, NowPlayerPositionState, MovementCardsState } from './recoil/animation/atom';
 import {
     TradeRealEstateState,
     TradeStockState,
