@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import sockjs from 'sockjs-client/dist/sockjs';
 import { Stomp } from '@stomp/stompjs';
 import { useRecoilState } from 'recoil';
-import { RoomIdState, IsModalOpenState, NowPlayerState, NowPlayerPositionState, MovementCardsState } from './recoil/animation/atom';
+import { RoomIdState, IsModalOpenState, MonthlyModalOpenState, NowPlayerState, NowPlayerPositionState, MovementCardsState } from './recoil/animation/atom';
 import {
     TradeRealEstateState,
     TradeStockState,
@@ -57,6 +57,7 @@ function PlayerSocket() {
     const [stockInfo, setStockInfo] = useRecoilState(StockInfoState);
     const [realEstateInfo, setRealEstateInfo] = useRecoilState(RealEstateInfoState);
     const [bankInfo, setBankInfo] = useRecoilState(BankInfoState);
+    const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
     // 자산별 거래 여부
     const [tradeRealEstate, setTradeRealEstate] = useRecoilState(TradeRealEstateState);
     const [tradeStock, setTradeStock] = useRecoilState(TradeStockState);
@@ -67,7 +68,7 @@ function PlayerSocket() {
     const [buyAmount, setbuyAmount] = useRecoilState(BuyAmountState);
     const [sellAmount, setSellAmount] = useRecoilState(SellAmountState);
 
-    const[stockDetail, setStockDetail] = useRecoilState(StockDetailState);
+    const [stockDetail, setStockDetail] = useRecoilState(StockDetailState);
 
     const stompClient = useRef(null);
 
@@ -94,20 +95,20 @@ function PlayerSocket() {
                         const message = JSON.parse(recievedMessage.body); // 객체
                         const type = recievedMessage.headers.type; // 문자열
                         // 주식 변경 recoil 시작
-                        if(type === "stockDetail"){
+                        if (type === 'stockDetail') {
                             setStockDetail({
-                                "stockId": message["stockId"],
-                                "name": message["name"],
-                                "stockIndustryId": message["stockIndustryId"],
-                                "companyCategory": message["companyCategory"],
-                                "companySubCategory": message["companySubCategory"],
-                                "owners": message["owners"],
-                                "remainingAmount": message["remainingAmount"],
-                                "price": message["price"],
-                                "rate": message["rate"],
-                                "priceHistory": message["priceHistory"],
-                                "rateHistory": message["rateHistory"]
-                            })
+                                stockId: message['stockId'],
+                                name: message['name'],
+                                stockIndustryId: message['stockIndustryId'],
+                                companyCategory: message['companyCategory'],
+                                companySubCategory: message['companySubCategory'],
+                                owners: message['owners'],
+                                remainingAmount: message['remainingAmount'],
+                                price: message['price'],
+                                rate: message['rate'],
+                                priceHistory: message['priceHistory'],
+                                rateHistory: message['rateHistory'],
+                            });
                         }
                         // 주식 recoil 종료
                     });
@@ -194,6 +195,15 @@ function PlayerSocket() {
             }
         }
     }, [isOpen]);
+
+    // 월말정산
+    useEffect(() => {
+        if (!monthlyModalOpen) return;
+        // 출발점 통과
+        if (stompClient.current) {
+            stompClient.current.send(`/pub/${roomId}/calculate`, {}, JSON.stringify({ player: nowPlayer + 1 }));
+        }
+    }, [monthlyModalOpen]);
 
     // 부동산 거래
     useEffect(() => {

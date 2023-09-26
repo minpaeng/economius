@@ -1,7 +1,7 @@
 import Modal from 'react-modal';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { IsModalOpenState } from '/src/recoil/animation/atom';
+import { MonthlyModalOpenState } from '/src/recoil/animation/atom';
 import monthlymalculate from '/MonthlyCalculate/monthlycalculate.png';
 import dollarcoin from '/MonthlyCalculate/dollarcoin.png';
 import plus from '/MonthlyCalculate/plus.png';
@@ -10,16 +10,12 @@ import equal from '/MonthlyCalculate/equal.png';
 import * as S from './MonthlyCalculate.style';
 
 function MonthlyCalculate() {
-    const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
-
+    const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
+    const closeModal = () => setMonthlyModalOpen(false);
     const dummy: number[] = [3344, 324, 52, 643, 234, 55234];
 
     return (
-        <Modal isOpen={isModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
+        <Modal isOpen={monthlyModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
             <S.Main>
                 <S.Top>
                     <S.TopImg src={monthlymalculate} alt='monthlymalculate' />
@@ -100,7 +96,7 @@ function MonthlyCalculate() {
                 </S.Mid>
 
                 <S.Footer>
-                    <S.RoundButton>확인</S.RoundButton>
+                    <S.RoundButton onClick={closeModal}>확인</S.RoundButton>
                 </S.Footer>
             </S.Main>
         </Modal>

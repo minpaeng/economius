@@ -1,5 +1,5 @@
-import { atom } from "recoil";
-import { recoilPersist } from "recoil-persist";
+import { atom } from 'recoil';
+import { recoilPersist } from 'recoil-persist';
 const { persistAtom } = recoilPersist();
 
 // 현재 방 번호
@@ -18,9 +18,9 @@ export const UseridState = atom({
 
 // 현재 플레이어
 export const NowPlayerState = atom<number>({
-  key: "NowPlayerState",
-  default: 0, // 기본값
-  // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+    key: 'NowPlayerState',
+    default: 0, // 기본값
+    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
 // 현재 플레이어 최종 위치
@@ -39,37 +39,43 @@ export const MovementCardsState = atom<number[]>({
 
 // 캐릭터 이동 여부
 export const IsMovingState = atom<boolean>({
-  key: "IsMovingState",
-  default: false,
+    key: 'IsMovingState',
+    default: false,
 });
 
 // 캐릭터 이동 거리
 export const MoveDistState = atom<number>({
-  key: "MoveDistState",
-  default: 0,
+    key: 'MoveDistState',
+    default: 0,
 });
 
 // 맵 애니메이션 칸
 export const MapAnimationIndexState = atom<number>({
-  key: "MapAnimationIndexState",
-  default: 0,
+    key: 'MapAnimationIndexState',
+    default: 0,
 });
 
 // 자산 모달 오픈 여부
 export const IsModalOpenState = atom<boolean>({
-  key: "IsModalOpenState",
-  default: false,
+    key: 'IsModalOpenState',
+    default: false,
+});
+
+// 월말정산 모달 오픈 여부
+export const MonthlyModalOpenState = atom<boolean>({
+    key: 'MonthlyModalOpenState',
+    default: false,
 });
 
 // 부동산 구입
 export const BuyRealEstateState = atom<boolean>({
-  key: "BuyRealEstateState",
-  default: false,
+    key: 'BuyRealEstateState',
+    default: false,
 });
 
 // 뉴스 클릭
 
 export const NewsClickIdxState = atom<boolean>({
-  key: "NewsClickIdxState",
-  default: null,
+    key: 'NewsClickIdxState',
+    default: null,
 });

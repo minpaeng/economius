@@ -38,7 +38,7 @@ function FinanceCenter() {
     };
 
     return (
-        <Modal isOpen={true} style={modalStyle} onRequestClose={closeModal}>
+        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
             <S.Main>
                 <S.Top>
                     <S.TopTitle>종합거래소</S.TopTitle>

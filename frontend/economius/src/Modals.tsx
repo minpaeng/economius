@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import MonthlyCalculate from './Components/Modals/MonthlyCalculate';
 import Stock from './Components/Modals/Stock';
 import InstallmentSaving from './Components/Modals/InstallmentSaving';
@@ -11,8 +12,7 @@ import Bankrupt from './Components/Modals/Bankrupt';
 import BeforeBankrupt from './Components/Modals/BeforeBankrupt';
 import GoldModal from './Components/Modals/Gold';
 import { useRecoilState } from 'recoil';
-import { NowPlayerPositionState, MoveDistState, IsModalOpenState, IsMovingState } from './recoil/animation/atom';
-import { useEffect } from 'react';
+import { NowPlayerPositionState, IsModalOpenState, MonthlyModalOpenState, IsMovingState } from './recoil/animation/atom';
 
 const modalComponent = {
     1: Stock,
@@ -51,24 +51,12 @@ let SelectedModal;
 
 function Modals() {
     const [nowPlayerPosition, setNowPlayerPosition] = useRecoilState(NowPlayerPositionState);
-    const [moveDist, setMoveDist] = useRecoilState(MoveDistState);
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
+    const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
     const [isMoving, setIsMoving] = useRecoilState(IsMovingState);
     SelectedModal = modalComponent[nowPlayerPosition];
 
-    return (
-        <>
-            {!isMoving ? (
-                <>
-                    {isModalOpen ? SelectedModal && <SelectedModal /> : null}
-                    {nowPlayerPosition < moveDist ? <MonthlyCalculate /> : null}
-                    {/* <MonthlyCalculate />
-        <Bankrupt />
-        <BeforeBankrupt /> */}
-                </>
-            ) : null}
-        </>
-    );
+    return <>{!isMoving ? <>{monthlyModalOpen ? <MonthlyCalculate /> : isModalOpen ? SelectedModal && <SelectedModal /> : null}</> : null}</>;
 }
 
 export default Modals;
