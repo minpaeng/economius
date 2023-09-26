@@ -1,5 +1,5 @@
-import { UserBox as ImportedUserBox } from './WaitRoom.style';  
-import styled from 'styled-components';  
+import { UserBox } from './WaitRoom.style';
+import { styled } from 'styled-components';
 
 // modal style
 export const modalStyle: any = {
@@ -14,7 +14,7 @@ export const modalStyle: any = {
     },
     content: {
         display: 'flex',
-        flexDirection: 'column',
+        flexDirextion: 'column',
         backgroundColor: 'rgba(255,255,255,0.85)',
         overflow: 'auto',
         zIndex: 10,
@@ -36,7 +36,7 @@ export const UserBoxOuter = styled.div`
     flex-wrap: wrap;
 `;
 
-export const LocalUserBox = styled.div`
+export const UserBox = styled.div`
     width: 300px;
     height: 200px;
     /* flex-basis: 50%; */
