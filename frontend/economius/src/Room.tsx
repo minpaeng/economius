@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import WaitRoom from './Components/Modals/WaitRoom';
 import Join from './Components/Modals/Join';
+import StartLoginCheck from './Components/Modals/StartLoginCheck';
 
 export default function Room() {
     // 최상단 컴포넌트에서 모달을 쓸 것이라고 명시 작업이 필요
@@ -37,11 +38,11 @@ export default function Room() {
 
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
-        //if (token===null) navigate('/');
+        if (token === null) navigate('/');
 
         // if (!window.Kakao.isInitialized()) {
         //     window.Kakao.init(import.meta.env.VITE_APP_JavaScript_URI);
-        //   }
+        // }
     }, [navigate]);
 
     // 모달 열기
@@ -134,10 +135,12 @@ export default function Room() {
         try {
             // localStorage에서 player 값을 가져옵니다.
             const player = localStorage.getItem('player');
+            const nickname = localStorage.getItem('nickname');
             if (!player) throw new Error('Player not found in local storage');
 
             const response = await axios.post('https://j9b109.p.ssafy.io/api/room/create', {
                 player: Number(player), // 문자열을 숫자로 변환해주기 위해 Number를 사용합니다.
+                nickname: nickname, // 문자열을 숫자로 변환해주기 위해 Number를 사용합니다.
             });
 
             // 룸 번호 저장
@@ -170,7 +173,7 @@ export default function Room() {
                 {/* 화면 처음 들어오면 자동으로 켜지는 모달 */}
                 {isOpen && (
                     <>
-                        <StartAccess videoControl={videoControl} />
+                        <StartLoginCheck videoControl={videoControl} />
                     </>
                 )}
                 {/* 모달이 닫힌 후 5초 뒤에 렌더링할 내용을 렌더링합니다. */}

@@ -41,19 +41,20 @@ export default function StartLoginCheck({ videoControl }) {
         <Modal isOpen={isModalOpen} style={modalStyle}>
             <S.Main>
                 <S.Top>
-                    <S.TopTitle>로그인이 완료되었습니다!</S.TopTitle>
+                    <S.TopTitle>{localStorage.getItem('nickname')}님 환영합니다!</S.TopTitle>
                 </S.Top>
 
                 <S.MidNoImg>
                     <S.MidDesc>
-                        이 게임은 픽션이며 등장하는 인물, 단체, 지명 등은 실존하는 것과 일체 관계없습니다.
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                            <img src='/navImg/hola.png' alt='hola-img' style={{ width: '200px' }}></img>
+                        </div>
                         <br />
+                        <span>즐기면서 배우는 경제, Enjoy Economious!</span>
                         <br />
-                        즐기면서 배우는 경제, Enjoy Economious!
-                        <br />
-                        <br />
-                        (※ FHD 이상의 환경에서 F11(전체화면)으로 플레이하시는 것을 권장합니다.)
-                        <br />
+                        <span>
+                            (※ FHD 이상의 환경에서 <span style={{ color: 'red', display: 'inline' }}>F11(전체화면)</span>으로 플레이하시는 것을 권장합니다.)
+                        </span>
                     </S.MidDesc>
                 </S.MidNoImg>
 
@@ -64,7 +65,7 @@ export default function StartLoginCheck({ videoControl }) {
                         closeModal();
                     }}
                 >
-                    확인
+                    <p style={{ fontSize: '20px' }}>확인</p>
                 </S.Button>
             </S.Main>
         </Modal>

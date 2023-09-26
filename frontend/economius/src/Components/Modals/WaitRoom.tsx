@@ -1,13 +1,17 @@
 import Modal from 'react-modal';
 import * as S from './WaitRoom.style';
-import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { RoomIdState } from '/src/recoil/animation/atom';
+import { useEffect, useRef, useState } from 'react';
 
 export default function WaitRoom(props) {
     const [roomid, setRoomid] = useRecoilState(RoomIdState);
     const [isModalOpen, setIsModalOpen] = useState(true);
     // const [isHost, setIsHost] = useState(false);
+
+    useEffect(() => {
+        console.log('hi');
+    }, []);
 
     const closeModal = () => {
         setIsModalOpen(false);
@@ -21,6 +25,19 @@ export default function WaitRoom(props) {
         props.setShowWaitRoom(false);
     };
 
+    // 룸 번호 복사
+    const roomNumHandler = () => {
+        // here
+        const tempElement = document.createElement('textarea');
+        document.body.appendChild(tempElement);
+        tempElement.value = String(roomid);
+        tempElement.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempElement);
+        alert('방 번호가 복사되었습니다.');
+        console.log('wow');
+    };
+
     return (
         <>
             <Modal isOpen={isModalOpen} style={S.modalStyle}>
@@ -31,7 +48,7 @@ export default function WaitRoom(props) {
                     <S.UserBox></S.UserBox>
                     <S.InfoBar>
                         <div className='no'>
-                            <span>Room No : {roomid} </span>
+                            <span onClick={roomNumHandler}>Room No : {roomid} </span>
                             <img src='/navImg/copy.png' alt='' style={{ width: '20px', paddingLeft: '5px' }} />
                         </div>
 
