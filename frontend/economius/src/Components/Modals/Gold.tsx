@@ -112,7 +112,7 @@ function Gold() {
                                         매도
                                     </S.BuyOrSellBtn>
                                 </S.BtnSection>
-                                <BuyOrSell isBuy={buyClick} StockOrGold='gold' />
+                                <BuyOrSell isBuy={buyClick} StockOrGold='gold' price={13} />
                             </S.Main>
                         </div>
                     </S.StockMidRight>
