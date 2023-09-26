@@ -45,9 +45,15 @@ export const GoldInfoState = atom({
 export const InsuranceInfoState = atom({
     key: 'InsuranceInfoState',
     default: {
-        player: 0,
-        have: { 1: false, 2: false, 3: false, 4: false },
-        insuranceDto: {},
+        player: null,
+        have1: null,
+        have2: null,
+        have3: null,
+        have4: null,
+        insurance1: null,
+        insurance2: null,
+        insurance3: null,
+        insurance4: null,
     },
 });
 
