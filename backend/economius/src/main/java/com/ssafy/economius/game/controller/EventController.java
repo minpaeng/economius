@@ -22,7 +22,7 @@ public class EventController {
 
     @MessageMapping(value = "/{roomId}/eventCard")
     public void visitEventCard(@DestinationVariable int roomId) {
-        Map<String, Object> headers = Map.of("success", true);
+        Map<String, Object> headers = Map.of("success", true, "type", "eventCard");
         EventCardResponse eventCardResponse = eventService.visitEventCard(roomId);
         template.convertAndSend("/sub/" + roomId, eventCardResponse, headers);
     }
