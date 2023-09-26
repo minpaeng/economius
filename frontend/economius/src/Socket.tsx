@@ -22,7 +22,7 @@ import {
     StockDetailState,
     GoldDetailState,
 } from './recoil/trading/atom';
-import { ShowSpinnerState, MonthlyInfoState, StockInfoState, RealEstateInfoState, BankInfoState } from './recoil/modalInfo/atom';
+import { MonthlyInfoState, StockInfoState, RealEstateInfoState, BankInfoState } from './recoil/modalInfo/atom';
 
 const buildingIds = {
     4: 1,
@@ -63,7 +63,6 @@ function PlayerSocket() {
     const [movementCards, setMovementCards] = useRecoilState(MovementCardsState);
     const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
     // 자산별 모달 정보
-    const [showSpinner, setShowSpinner] = useRecoilState(ShowSpinnerState);
     const [stockInfo, setStockInfo] = useRecoilState(StockInfoState);
     const [realEstateInfo, setRealEstateInfo] = useRecoilState(RealEstateInfoState);
     const [bankInfo, setBankInfo] = useRecoilState(BankInfoState);

@@ -1,9 +1,9 @@
 import Modal from 'react-modal';
 import { useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { IsModalOpenState } from '/src/recoil/animation/atom';
 import { TradeBankState } from '/src/recoil/trading/atom';
-import { BankInfoState, ShowSpinnerState } from '/src/recoil/modalInfo/atom';
+import { BankInfoState } from '/src/recoil/modalInfo/atom';
 import * as S from './InstallmentSaving.style';
 
 function InstallmentSaving() {
@@ -35,13 +35,11 @@ function InstallmentSaving() {
 
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const [tradeBank, setTradeBank] = useRecoilState(TradeBankState);
-    const bankInfo = useRecoilValue(BankInfoState);
-    // 스피너
-    const [showSpinner, setShowSpinner] = useRecoilState(ShowSpinnerState);
+    const [bankInfo, setBankInfo] = useRecoilState(BankInfoState);
     // 모달 끄기
     const closeModal = () => {
         setIsModalOpen(false);
-        setShowSpinner(false);
+        setBankInfo(null);
     };
     // 거래 종료
     const closeTrade = () => {
@@ -77,7 +75,7 @@ function InstallmentSaving() {
 
     return (
         <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={() => (closeModal(), closeTrade())}>
-            {showSpinner ? (
+            {!bankInfo ? (
                 <S.BankMain>
                     <S.BankTop>
                         {/* title은 우리가 쥐고있는 은행코드로 띄워야 할듯 */}
@@ -131,7 +129,7 @@ function InstallmentSaving() {
                     )}
                 </S.BankMain>
             ) : (
-                '로딩중입니다.'
+                '로딩중입니다...'
             )}
         </Modal>
     );
