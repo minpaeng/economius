@@ -123,8 +123,12 @@ export default function Room() {
     // 방 생성
     const roomMakeHandler = async () => {
         try {
+            // localStorage에서 player 값을 가져옵니다.
+            const player = localStorage.getItem('player');
+            if(!player) throw new Error("Player not found in local storage");
+
             const response = await axios.post('https://j9b109.p.ssafy.io/api/room/create', {
-                player: 1
+                player: Number(player) // 문자열을 숫자로 변환해주기 위해 Number를 사용합니다.
             });
     
             console.log(response.data); // { roomId: 2 }와 같은 응답 출력
