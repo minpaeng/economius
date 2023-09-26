@@ -7,6 +7,7 @@ import { UseridState } from './recoil/animation/atom';
 import { useRecoilState } from 'recoil';
 import Modal from 'react-modal';
 import WaitRoom from './Components/Modals/WaitRoom';
+import Join from './Components/Modals/Join';
 
 export default function Index() {
     // 최상단 컴포넌트에서 모달을 쓸 것이라고 명시 작업이 필요
@@ -24,6 +25,7 @@ export default function Index() {
     const [renderContent, setRenderContent] = useState(false); // 모달이 닫힌 후 n초 뒤에 렌더링할 상태를 관리
 
     const [showWaitRoom, setShowWaitRoom] = useState(false);
+    const [showJoin, setShowJoin] = useState(false);
 
     // 모달 열기
     const openModal = () => {
@@ -121,7 +123,7 @@ export default function Index() {
 
     // {!!!!!!!!!!!!!!!!!!!!} 카카오 로그인 시 실행할 함수
     const roomJoinHandler = () => {
-        //
+        setShowJoin(true);
     };
 
     // {!!!!!!!!!!!!!!!!!!!!} 카카오 로그인 시 실행할 함수
@@ -164,6 +166,7 @@ export default function Index() {
                         </S.ButtonOuter>
                     ))}
                 {showWaitRoom && <WaitRoom />}
+                {showJoin && <Join setShowJoin={setShowJoin} />}
             </div>
         </>
     );
