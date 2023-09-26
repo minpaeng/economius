@@ -2,6 +2,7 @@ import Modal from 'react-modal';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { MonthlyModalOpenState } from '/src/recoil/animation/atom';
+import { MonthlyInfoState } from '/src/recoil/modalInfo/atom';
 import monthlymalculate from '/MonthlyCalculate/monthlycalculate.png';
 import dollarcoin from '/MonthlyCalculate/dollarcoin.png';
 import plus from '/MonthlyCalculate/plus.png';
@@ -11,8 +12,10 @@ import * as S from './MonthlyCalculate.style';
 
 function MonthlyCalculate() {
     const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
-    const closeModal = () => setMonthlyModalOpen(false);
-    const dummy: number[] = [3344, 324, 52, 643, 234, 55234];
+    const [monthlyInfo, setMsonthlyInfo] = useRecoilState(MonthlyInfoState);
+    const closeModal = () => {
+        setMonthlyModalOpen(false);
+    };
 
     return (
         <Modal isOpen={monthlyModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
@@ -28,14 +31,14 @@ function MonthlyCalculate() {
                         <S.MidItem>
                             <S.MidDesc>월급</S.MidDesc>
                             <S.MidAmount>
-                                + {dummy[0]}
+                                + {monthlyInfo.salary}
                                 <S.MidImg src={dollarcoin}></S.MidImg>
                             </S.MidAmount>
                         </S.MidItem>
                         <S.MidItem>
                             <S.MidDesc>적금 만기</S.MidDesc>
                             <S.MidAmount>
-                                + {dummy[1]}
+                                + {monthlyInfo.savingFinishBenefit}
                                 <S.MidImg src={dollarcoin}></S.MidImg>
                             </S.MidAmount>
                         </S.MidItem>
@@ -45,21 +48,21 @@ function MonthlyCalculate() {
                         <S.MidItem>
                             <S.MidDesc>적금</S.MidDesc>
                             <S.MidAmount>
-                                - {dummy[2]}
+                                - {monthlyInfo.savingsPrice}
                                 <S.MidImg src={dollarcoin}></S.MidImg>
                             </S.MidAmount>
                         </S.MidItem>
                         <S.MidItem>
                             <S.MidDesc>보험비</S.MidDesc>
                             <S.MidAmount>
-                                - {dummy[3]}
+                                - {monthlyInfo.insurancePrice}
                                 <S.MidImg src={dollarcoin}></S.MidImg>
                             </S.MidAmount>
                         </S.MidItem>
                         <S.MidItem>
                             <S.MidDesc>세금</S.MidDesc>
                             <S.MidAmount>
-                                - {dummy[4]}
+                                - {monthlyInfo.tax}
                                 <S.MidImg src={dollarcoin}></S.MidImg>
                             </S.MidAmount>
                         </S.MidItem>
@@ -69,8 +72,8 @@ function MonthlyCalculate() {
                         <S.MidItem>
                             <S.MidDesc>총 명세액</S.MidDesc>
                             <S.MidAmount>
-                                {dummy[0] + dummy[1] >= dummy[2] + dummy[3] + dummy[4] ? <span>+</span> : <span>-</span>}
-                                {dummy[0] + dummy[1] - dummy[2] - dummy[3] - dummy[4]}
+                                {monthlyInfo.totalIncome >= 0 ? `+` : `-`}
+                                {monthlyInfo.totalIncome}
                                 <S.MidImg src={dollarcoin}></S.MidImg>
                             </S.MidAmount>
                         </S.MidItem>
@@ -85,8 +88,8 @@ function MonthlyCalculate() {
                         >
                             <S.MidDesc>내 예금</S.MidDesc>
                             <S.MidAmount>
-                                {dummy[5]}({dummy[0] + dummy[1] >= dummy[2] + dummy[3] + dummy[4] ? <span>+</span> : <span>-</span>}
-                                {dummy[0] + dummy[1] - dummy[2] - dummy[3] - dummy[4]})<S.MidImg src={dollarcoin}></S.MidImg>
+                                {monthlyInfo.money}({monthlyInfo.totalIncome >= 0 ? `+` : `-`}
+                                {monthlyInfo.totalIncome})<S.MidImg src={dollarcoin}></S.MidImg>
                             </S.MidAmount>
                         </S.MidItem>
                     </div>

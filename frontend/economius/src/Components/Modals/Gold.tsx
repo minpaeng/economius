@@ -1,50 +1,46 @@
 import Modal from 'react-modal';
 import { useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { IsModalOpenState } from '/src/recoil/animation/atom';
-import {GoldDetailState, TradeGoldState} from '/src/recoil/trading/atom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
+import { GoldDetailState, TradeGoldState } from '/src/recoil/trading/atom';
 import * as S from './Stock.style';
 
 import BuyOrSell from '../Common/BuyOrSell';
 import GoldGraph from '../Common/GoldGraph';
 
-function makeGoldGraphData (goldPriceHistoryData) {
+function makeGoldGraphData(goldPriceHistoryData) {
     const graphData = [];
 
     let index = 0;
-    for (index; index < goldPriceHistoryData.length ; index++){
-        graphData.push(
-            {
-                turn: index + 1,
-                price: goldPriceHistoryData[index],
-            }
-        )
+    for (index; index < goldPriceHistoryData.length; index++) {
+        graphData.push({
+            turn: index + 1,
+            price: goldPriceHistoryData[index],
+        });
     }
 
-    for (index; index< 20; index++){
-        graphData.push(
-            {
-                turn: index + 1,
-                price: null,
-            }
-        )
+    for (index; index < 20; index++) {
+        graphData.push({
+            turn: index + 1,
+            price: null,
+        });
     }
 
     return graphData;
 }
 
 function Gold() {
-
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
+    const setCallBack = useSetRecoilState(CallBackState);
     const closeModal = () => {
-        setIsModalOpen(false)
+        setIsModalOpen(false);
         setGoldDetail(null);
+        setCallBack(true);
     };
     //  매수,매도 탭 구분 플래그
     const [buyClick, isBuyClick] = useState(true);
     // 금 매수, 매도 여부
     const [tradeGold, setTradeGold] = useRecoilState(TradeGoldState);
-
     const [goldDetail, setGoldDetail] = useRecoilState(GoldDetailState);
 
     //   const [isGoldOpen, setIsGoldOpen] = useState(false);
@@ -75,7 +71,9 @@ function Gold() {
         },
     };
 
-    return goldDetail === null ? <span>loading...</span>  : (
+    return goldDetail === null ? (
+        <span>loading...</span>
+    ) : (
         <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
             <S.StockMain>
                 <S.StockTop>
@@ -89,10 +87,11 @@ function Gold() {
                         <GoldGraph data={makeGoldGraphData(goldDetail.priceHistory)} />
                         <S.StockMidLeftPrice>
                             현재가 : {goldDetail.price}
-                            {goldDetail.rate >= 0 ?
+                            {goldDetail.rate >= 0 ? (
                                 <span style={{ color: '#DF7D46' }}> (+{goldDetail.rate}%)</span>
-                                : <span style={{ color: '#DF7D46' }}> ({goldDetail.rate}%)</span>
-                            }
+                            ) : (
+                                <span style={{ color: '#DF7D46' }}> ({goldDetail.rate}%)</span>
+                            )}
                         </S.StockMidLeftPrice>
                     </S.StockMidLeft>
                     <S.StockMidRight>

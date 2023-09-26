@@ -68,11 +68,6 @@ function GoldGraph({ data }) {
           yaxis: {
             show: false,
           },
-          //   tooltip: {
-          //     y: {
-          //       formatter: (v) => `$ ${v.toFixed(2)}`,
-          //     },
-          //   },
         }}
       />
     </div>

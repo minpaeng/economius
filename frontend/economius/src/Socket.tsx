@@ -22,7 +22,7 @@ import {
     StockDetailState,
     GoldDetailState,
 } from './recoil/trading/atom';
-import { ShowSpinnerState, StockInfoState, RealEstateInfoState, BankInfoState } from './recoil/modalInfo/atom';
+import { MonthlyInfoState, StockInfoState, RealEstateInfoState, BankInfoState, ChanceCardInfoState } from './recoil/modalInfo/atom';
 
 const buildingIds = {
     4: 1,
@@ -57,16 +57,16 @@ const bankIds = {
 
 function PlayerSocket() {
     const [roomId, setRoomId] = useRecoilState(RoomIdState);
-    const [isOpen, setIsOpen] = useRecoilState(IsModalOpenState);
+    const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const [nowPlayer, setNowPlayerState] = useRecoilState(NowPlayerState);
     const [nowPlayerPosition, setNowPlayerPosition] = useRecoilState(NowPlayerPositionState);
     const [movementCards, setMovementCards] = useRecoilState(MovementCardsState);
+    const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
     // 자산별 모달 정보
-    const [showSpinner, setShowSpinner] = useRecoilState(ShowSpinnerState);
     const [stockInfo, setStockInfo] = useRecoilState(StockInfoState);
     const [realEstateInfo, setRealEstateInfo] = useRecoilState(RealEstateInfoState);
     const [bankInfo, setBankInfo] = useRecoilState(BankInfoState);
-    const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
+    const [monthlyInfo, setMonthlyInfo] = useRecoilState(MonthlyInfoState);
     // 자산별 거래 여부
     const [tradeRealEstate, setTradeRealEstate] = useRecoilState(TradeRealEstateState);
     const [tradeStock, setTradeStock] = useRecoilState(TradeStockState);
@@ -81,11 +81,14 @@ function PlayerSocket() {
     const setGoldDetail = useSetRecoilState(GoldDetailState);
     const [callBack, setCallBack] = useRecoilState(CallBackState);
 
+    //이벤트 카드
+    const [chanceCardInfo, setChanceCardInfo] = useRecoilState(ChanceCardInfoState);
+
     const stompClient = useRef(null);
 
     useEffect(() => {
         // 소켓 연결
-        stompClient.current = Stomp.over(() => new sockjs('http://j9b109.p.ssafy.io:8080/ws'));
+        stompClient.current = Stomp.over(() => new sockjs('https://j9b109.p.ssafy.io/ws'));
 
         const connectHandler = () => {
             // stompClient가 null인 경우 연결하지 않음
@@ -120,8 +123,7 @@ function PlayerSocket() {
                                 priceHistory: message.priceHistory,
                                 rateHistory: message.rateHistory,
                             });
-                        }
-                        if (type === 'selectGolds') {
+                        } else if (type === 'selectGolds') {
                             setGoldDetail({
                                 player: message.player,
                                 price: message.price,
@@ -130,13 +132,25 @@ function PlayerSocket() {
                                 rateHistory: message.rateHistory,
                             });
                         }
-                        if (type === 'buyStock') {
+                        // 턴 종료 로직
+                        else if (type === 'buyStock') {
+                            setCallBack(true);
+                        } else if (type === 'sellStock') {
+                            setCallBack(true);
+                        } else if (type === 'buyGolds') {
+                            setCallBack(true);
+                        } else if (type === 'sellGolds') {
+                            setCallBack(true);
+                        } else if (type === 'buyBuilding') {
+                            setCallBack(true);
+                        } else if (type === 'sellBuilding') {
+                            setCallBack(true);
+                            setCallBack(true);
+                        } else if (type === 'joinSavings') {
+                            setCallBack(true);
+                        } else if (type === 'stopSavings') {
                             setCallBack(true);
                         }
-                        if (type === 'buyGolds'){
-                            setCallBack(true);
-                        }
-
                         // 주식 recoil 종료
                     });
 
@@ -154,21 +168,40 @@ function PlayerSocket() {
                                 visitor: message.visitor,
                                 owner: message.owner,
                             });
-                            setShowSpinner(true);
-                        }
-                        if (type == 'bank') {
+                        } else if (type == 'bank') {
                             setBankInfo({
                                 player: message.player,
                                 money: message.money,
                                 have: message.have,
-                                name: message.name,
-                                monthlyDeposit: message.monthlyDeposit,
-                                currentPrice: message.currentPrice,
-                                currentCount: message.currentCount,
-                                finishCount: message.finishCount,
-                                rate: message.rate,
+                                bankId: message.savingDto.bankId,
+                                name: message.savingDto.name,
+                                monthlyDeposit: message.savingDto.monthlyDeposit,
+                                currentPrice: message.savingDto.currentPrice,
+                                currentCount: message.savingDto.currentCount,
+                                finishCount: message.savingDto.finishCount,
+                                rate: message.savingDto.rate,
                             });
-                            setShowSpinner(true);
+                        } else if (type == 'calculate') {
+                            setMonthlyInfo({
+                                player: message.player,
+                                salary: message.receipt.salary,
+                                savingFinishBenefit: message.receipt.savingFinishBenefit,
+                                tax: message.receipt.tax,
+                                savingsPrice: message.receipt.savingsPrice,
+                                insurancePrice: message.receipt.insurancePrice,
+                                totalIncome: message.receipt.totalIncome,
+                                money: message.receipt.money,
+                            });
+                        }
+                        if (type == 'eventCard') {
+                            setChanceCardInfo({
+                                moneyCard: message.moneyCard,
+                                name: message.name,
+                                description: message.description,
+                                eventValue: message.eventValue,
+                                url: message.url,
+                                apply: message.apply,
+                            })
                         }
                     });
                 }
@@ -180,21 +213,42 @@ function PlayerSocket() {
 
     // 자산별 방문
     useEffect(() => {
-        if (!isOpen) return;
+        if (!isModalOpen) return;
 
         // 부동산 방문
         if ([4, 14, 22].includes(nowPlayerPosition)) {
             // isOpen 상태가 true일 때 메시지를 보내는 코드를 추가
             if (stompClient.current) {
-                stompClient.current.send('/pub/1/visitBuilding', {}, JSON.stringify({ player: nowPlayer + 1, buildingId: buildingIds[nowPlayerPosition] }));
+                stompClient.current.send(
+                    '/pub/1/visitBuilding',
+                    {},
+                    JSON.stringify({
+                        player: nowPlayer + 1,
+                        buildingId: buildingIds[nowPlayerPosition],
+                    })
+                );
                 // 0번째 player를 서버에 1로 보내줘야 해서
             }
         }
         //주식 방문
         else if (nowPlayerPosition & 1) {
             if (stompClient.current) {
-                stompClient.current.send('/pub/1/buyItem', {}, JSON.stringify({ player: nowPlayer + 1, stockId: stockIds[nowPlayerPosition] })); // 상품구매
-                stompClient.current.send('/pub/1/stockDetail', {}, JSON.stringify({ player: nowPlayer + 1, stockId: stockIds[nowPlayerPosition] }));
+                stompClient.current.send(
+                    '/pub/1/buyItem',
+                    {},
+                    JSON.stringify({
+                        player: nowPlayer + 1,
+                        stockId: stockIds[nowPlayerPosition],
+                    })
+                ); // 상품구매
+                stompClient.current.send(
+                    '/pub/1/stockDetail',
+                    {},
+                    JSON.stringify({
+                        player: nowPlayer + 1,
+                        stockId: stockIds[nowPlayerPosition],
+                    })
+                );
             }
         }
         // 금거래소 방문
@@ -206,7 +260,14 @@ function PlayerSocket() {
         // 은행 방문
         else if ([2, 10, 18].includes(nowPlayerPosition)) {
             if (stompClient.current) {
-                stompClient.current.send('/pub/1/bank', {}, JSON.stringify({ player: nowPlayer + 1, bankId: bankIds[nowPlayerPosition] }));
+                stompClient.current.send(
+                    '/pub/1/bank',
+                    {},
+                    JSON.stringify({
+                        player: nowPlayer + 1,
+                        bankId: bankIds[nowPlayerPosition],
+                    })
+                );
             }
         }
         // 보험 방문
@@ -221,7 +282,7 @@ function PlayerSocket() {
                 stompClient.current.send(`/pub/${roomId}/eventCard`, {}, JSON.stringify({ player: nowPlayer + 1 }));
             }
         }
-    }, [isOpen]);
+    }, [isModalOpen]);
 
     // 월말정산
     useEffect(() => {
@@ -236,7 +297,14 @@ function PlayerSocket() {
     useEffect(() => {
         if (tradeRealEstate[0]) {
             if (stompClient.current) {
-                stompClient.current.send('/pub/1/buyBuilding', {}, JSON.stringify({ player: nowPlayer + 1, buildingId: buildingIds[nowPlayerPosition] }));
+                stompClient.current.send(
+                    '/pub/1/buyBuilding',
+                    {},
+                    JSON.stringify({
+                        player: nowPlayer + 1,
+                        buildingId: buildingIds[nowPlayerPosition],
+                    })
+                );
                 setTradeRealEstate([false, false]);
                 // // 1초 후에 턴 종료
                 // setTimeout(() => {
@@ -245,7 +313,14 @@ function PlayerSocket() {
             }
         } else if (tradeRealEstate[1]) {
             if (stompClient.current) {
-                stompClient.current.send('/pub/1/sellBuilding', {}, JSON.stringify({ player: nowPlayer + 1, buildingId: buildingIds[nowPlayerPosition] }));
+                stompClient.current.send(
+                    '/pub/1/sellBuilding',
+                    {},
+                    JSON.stringify({
+                        player: nowPlayer + 1,
+                        buildingId: buildingIds[nowPlayerPosition],
+                    })
+                );
                 setTradeRealEstate([false, false]);
                 // stompClient.current.send('/pub/1/finishTurn', {});
             }
@@ -259,7 +334,11 @@ function PlayerSocket() {
                 stompClient.current.send(
                     '/pub/1/buyStock',
                     {},
-                    JSON.stringify({ player: nowPlayer + 1, stockId: stockIds[nowPlayerPosition], stockAmount: buyAmount })
+                    JSON.stringify({
+                        player: nowPlayer + 1,
+                        stockId: stockIds[nowPlayerPosition],
+                        stockAmount: buyAmount,
+                    })
                 );
                 setTradeStock([false, false]);
             }
@@ -268,7 +347,11 @@ function PlayerSocket() {
                 stompClient.current.send(
                     '/pub/1/sellStock',
                     {},
-                    JSON.stringify({ player: nowPlayer + 1, stockId: stockIds[nowPlayerPosition], stockAmount: sellAmount })
+                    JSON.stringify({
+                        player: nowPlayer + 1,
+                        stockId: stockIds[nowPlayerPosition],
+                        stockAmount: sellAmount,
+                    })
                 );
                 setTradeStock([false, false]);
             }
@@ -294,12 +377,26 @@ function PlayerSocket() {
     useEffect(() => {
         if (tradeBank[0]) {
             if (stompClient.current) {
-                stompClient.current.send('/pub/1/joinSavings', {}, JSON.stringify({ player: nowPlayer + 1, bankId: bankIds[nowPlayerPosition] }));
+                stompClient.current.send(
+                    '/pub/1/joinSavings',
+                    {},
+                    JSON.stringify({
+                        player: nowPlayer + 1,
+                        bankId: bankIds[nowPlayerPosition],
+                    })
+                );
                 setTradeBank([false, false]);
             }
         } else if (tradeBank[1]) {
             if (stompClient.current) {
-                stompClient.current.send('/pub/1/stopSavings', {}, JSON.stringify({ player: nowPlayer + 1, bankId: bankIds[nowPlayerPosition] }));
+                stompClient.current.send(
+                    '/pub/1/stopSavings',
+                    {},
+                    JSON.stringify({
+                        player: nowPlayer + 1,
+                        bankId: bankIds[nowPlayerPosition],
+                    })
+                );
                 setTradeBank([false, false]);
             }
         }
@@ -333,11 +430,13 @@ function PlayerSocket() {
         }
     }, [tradeInsurance]);
 
+    //턴 종료
     useEffect(() => {
         if (!callBack) return;
         if (stompClient.current) {
             stompClient.current.send(`/pub/1/finishTurn`, {}, {});
             setCallBack(false);
+            setIsModalOpen(false);
         }
     }, [callBack]);
 

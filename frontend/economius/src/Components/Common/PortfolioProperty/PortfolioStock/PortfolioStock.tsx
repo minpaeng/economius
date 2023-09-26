@@ -3,9 +3,10 @@ import SlideToggle from "react-slide-toggle";
 import PortforlioStockItem from "./PortfolioStockItem";
 import { useState } from "react";
 
-function PortfolioStock() {
+function PortfolioStock({ setSideBarType }) {
   const dummy = [
     {
+      id: 10,
       imgPath: "samsung",
       title: "삼성전자",
       type: "반도체",
@@ -16,6 +17,7 @@ function PortfolioStock() {
       expectedProfit: 12000,
     },
     {
+      id: 11,
       imgPath: "Aramco",
       title: "아람쿠",
       type: "석유",
@@ -75,6 +77,7 @@ function PortfolioStock() {
               {dummy.map((item) => {
                 return (
                   <PortforlioStockItem
+                    id={item.id}
                     imgPath={item.imgPath}
                     title={item.title}
                     type={item.type}
@@ -83,6 +86,7 @@ function PortfolioStock() {
                     valueChange={item.valueChange}
                     incDecAmount={item.incDecAmount}
                     expectedProfit={item.expectedProfit}
+                    setSideBarType={setSideBarType}
                   />
                 );
               })}
