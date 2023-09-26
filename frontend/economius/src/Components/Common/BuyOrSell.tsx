@@ -3,14 +3,14 @@ import { useRecoilState } from 'recoil';
 import { BuyAmountState, SellAmountState } from '/src/recoil/trading/atom';
 import * as S from './BuyOrSell.style';
 
-function BuyOrSell({ isBuy, StockOrGold, price }) {
+function BuyOrSell({ isBuy, StockOrGold, price, money, amount }) {
     const [buyAmount, setBuyAmount] = useRecoilState(BuyAmountState);
     const [sellAmount, setSellAmount] = useRecoilState(SellAmountState);
 
     // TODO: 실제 현재 가격으로 변경하기
-    const canUseMoney = 3000000;
+    const canUseMoney = money;
     const currentPrice = price;
-    const haveStock = 7;
+    const haveStock = amount;
 
     const handleIncrement = () => {
         if (isBuy) {

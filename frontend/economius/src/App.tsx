@@ -21,12 +21,26 @@ import Modals from "./Modals";
 import PlayerPlaceAll from "./Components/Common/PlayerPlaceAll";
 import SideBar from "./Components/Common/SideBar";
 
-import Socket from "./Socket";
-import * as THREE from "three";
+import Socket from './Socket';
+import * as THREE from 'three';
+import {useSetRecoilState} from "recoil";
+import {PortfolioState, StockState} from "/src/recoil/game/atom.tsx";
+import axios from "axios";
 
 function App() {
   const light = useRef();
   //   useHelper(light, THREE.DirectionalLightHelper);
+
+    const setPortfolioState = useSetRecoilState(PortfolioState)
+    const setStockState = useSetRecoilState(StockState);
+
+    useEffect(() => {
+        axios.get("http://localhost:8080/api/room/1/start")
+            .then((data) => {
+                setPortfolioState(data.data.portfolios);
+                setStockState(data.data.stocks);
+            })
+    }, []);
 
   return (
     <div

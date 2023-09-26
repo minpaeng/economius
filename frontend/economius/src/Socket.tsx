@@ -22,6 +22,8 @@ import {
     StockDetailState,
     GoldDetailState,
 } from './recoil/trading/atom';
+import {PortfolioState, StockState} from "/src/recoil/game/atom.tsx";
+import {func} from "three/examples/jsm/nodes/shadernode/ShaderNodeBaseElements";
 import { MonthlyInfoState, StockInfoState, RealEstateInfoState, BankInfoState, ChanceCardInfoState, InsuranceInfoState } from './recoil/modalInfo/atom';
 
 const buildingIds = {
@@ -80,6 +82,8 @@ function PlayerSocket() {
 
     const setStockDetail = useSetRecoilState(StockDetailState);
     const setGoldDetail = useSetRecoilState(GoldDetailState);
+    const setPortfolio = useSetRecoilState(PortfolioState);
+    const setStocks = useSetRecoilState(StockState);
     const [callBack, setCallBack] = useRecoilState(CallBackState);
 
     //이벤트 카드
@@ -89,7 +93,7 @@ function PlayerSocket() {
 
     useEffect(() => {
         // 소켓 연결
-        stompClient.current = Stomp.over(() => new sockjs('https://j9b109.p.ssafy.io/ws'));
+        stompClient.current = Stomp.over(() => new sockjs('http://j9b109.p.ssafy.io:8080/ws'));
 
         const connectHandler = () => {
             // stompClient가 null인 경우 연결하지 않음
@@ -146,7 +150,6 @@ function PlayerSocket() {
                             setCallBack(true);
                         } else if (type === 'sellBuilding') {
                             setCallBack(true);
-                            setCallBack(true);
                         } else if (type === 'joinSavings') {
                             setCallBack(true);
                         } else if (type === 'stopSavings') {
@@ -161,6 +164,10 @@ function PlayerSocket() {
                         const type = recievedMessage.headers.type || null;
                         console.log('전체메시지', type);
                         console.log('전체메시지', message);
+                        if (type === "finishTurn"){
+                            setStocks(message.stocks);
+                            setPortfolio(message.portfolios);
+                        }
                         if (type == 'visitBuilding') {
                             setRealEstateInfo({
                                 buildingId: message.buildingId,
