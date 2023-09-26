@@ -8,10 +8,11 @@ import com.ssafy.economius.game.dto.response.CalculateResponse;
 import com.ssafy.economius.game.dto.response.FinishTurnResponse;
 import com.ssafy.economius.game.dto.response.GameJoinResponse;
 import com.ssafy.economius.game.dto.response.GameRoomExitResponse;
-import com.ssafy.economius.game.dto.response.GameStartResponse;
 import com.ssafy.economius.game.service.GameService;
 import com.ssafy.economius.game.service.FinishTurnService;
+
 import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -32,7 +33,10 @@ public class GameController {
 
     @MessageMapping(value = "/{roomId}/join")
     public void join(@DestinationVariable int roomId, GameJoinRequest gameJoinRequest) {
-        GameJoinResponse gameJoinResponse = gameService.join(roomId, gameJoinRequest.getPlayer());
+        GameJoinResponse gameJoinResponse = gameService.join(
+                roomId,
+                gameJoinRequest.getPlayer(),
+                gameJoinRequest.getNickname());
 
         Map<String, Object> headers = Map.of("success", true, "type", "join");
         template.convertAndSend("/sub/" + roomId, gameJoinResponse, headers);
@@ -40,8 +44,8 @@ public class GameController {
 
     @MessageMapping(value = "/{roomId}/start")
     public void start(@DestinationVariable int roomId, GameStartRequest gameStartRequest) {
-        GameStartResponse gameStartResponse = gameService.start(roomId,
-            gameStartRequest.getHostPlayer());
+        FinishTurnResponse gameStartResponse = gameService.start(roomId,
+                gameStartRequest.getHostPlayer());
 
         Map<String, Object> headers = Map.of("success", true, "type", "start");
         template.convertAndSend("/sub/" + roomId, gameStartResponse, headers);
@@ -59,7 +63,7 @@ public class GameController {
     @MessageMapping(value = "/{roomId}/calculate")
     public void calculate(@DestinationVariable int roomId, CalculateRequest calculateRequest) {
         CalculateResponse calculateResponse = gameService.calculate(
-            roomId, calculateRequest.getPlayer());
+                roomId, calculateRequest.getPlayer());
 
         Map<String, Object> headers = Map.of("success", true, "type", "calculate");
         template.convertAndSend("/sub/" + roomId, calculateResponse, headers);
@@ -67,7 +71,7 @@ public class GameController {
 
 
     @MessageMapping(value = "/{roomId}/finishTurn")
-    public void finishTurn(@DestinationVariable int roomId){
+    public void finishTurn(@DestinationVariable int roomId) {
         FinishTurnResponse finishTurnResponse = finishTurnService.finish(roomId);
 
         Map<String, Object> headers = Map.of("success", true, "type", "finishTurn");

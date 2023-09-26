@@ -56,7 +56,7 @@ public class GameRoomService {
 
     private final GameRepository gameRepository;
 
-    public CreateRoomResponse createRoom(Long player) {
+    public CreateRoomResponse createRoom(Long player, String nickname) {
         // Redis에서 현제 키값들을 다 불러오는 기능
         Iterable<Game> all = gameRepository.findAll();
 
@@ -66,16 +66,17 @@ public class GameRoomService {
             roomId = Math.max(game.getRoomId(), roomId);
         }
         roomId++;
-        creatRoomOnRedis(roomId, player);
+        creatRoomOnRedis(roomId, player, nickname);
 
         return new CreateRoomResponse(roomId);
     }
 
-    private void creatRoomOnRedis(int roomId, Long player) {
+    private void creatRoomOnRedis(int roomId, Long player, String nickname) {
         List<Issue> issues = makeIssues();
 
         Game game = Game.builder()
                 .players(new ArrayList<>(List.of(player)))
+                .nicknames(new HashMap<>(){{put(player, nickname);}})
                 .gameTurn(0)
                 .roomId(roomId)
                 .interestRate(makeInterestRate())
