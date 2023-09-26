@@ -14,8 +14,8 @@ import java.util.Optional;
 public class GameValidator {
 
     public Game checkValidGameRoom(Optional<Game> game, int roomId) {
-        log.error("방이 존재하지 않음: " + roomId);
         if (game.isEmpty()) {
+            log.error("방이 존재하지 않음: " + roomId);
             throw CustomWebsocketException.builder()
                     .roomId(roomId)
                     .code(GameRoomMessage.GAME_NOT_EXIST.getCode())
@@ -55,15 +55,6 @@ public class GameValidator {
                     .message(GameRoomMessage.PLAYER_NOT_EXIST.getMessage() + ": 플레이어 아이디 " + player)
                     .build();
         }
-    }
-
-    public void throwBankruptcyResponse(int roomId, List<Long> players) {
-        log.warn("플레이어 파산: " + players.toString());
-        throw CustomWebsocketException.builder()
-                .roomId(roomId)
-                .code(GameRoomMessage.PLAYER_BANKRUPTCY.getCode())
-                .message(GameRoomMessage.PLAYER_BANKRUPTCY.getMessage() + ": 플레이어 아이디 " + players)
-                .build();
     }
 
     public void checkCanJoin(Game game, int roomId, Long player) {
