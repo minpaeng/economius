@@ -22,7 +22,7 @@ import {
     StockDetailState,
     GoldDetailState,
 } from './recoil/trading/atom';
-import { MonthlyInfoState, StockInfoState, RealEstateInfoState, BankInfoState } from './recoil/modalInfo/atom';
+import { ShowSpinnerState, StockInfoState, RealEstateInfoState, BankInfoState, ChanceCardInfoState} from './recoil/modalInfo/atom';
 
 const buildingIds = {
     4: 1,
@@ -80,6 +80,9 @@ function PlayerSocket() {
     const setStockDetail = useSetRecoilState(StockDetailState);
     const setGoldDetail = useSetRecoilState(GoldDetailState);
     const [callBack, setCallBack] = useRecoilState(CallBackState);
+
+//이벤트 카드
+    const [chanceCardInfo, setChanceCardInfo] = useRecoilState(ChanceCardInfoState);
 
     const stompClient = useRef(null);
 
@@ -178,7 +181,16 @@ function PlayerSocket() {
                             });
                             setShowSpinner(true);
                         }
-                    });
+                        if(type == 'eventCard') {
+                            setChanceCardInfo({
+                                moneyCard: message.moneyCard,
+                                name: message.name,
+                                description: message.description,
+                                eventValue: message.eventValue,
+                                url: message.url,
+                            })
+                        }
+                     });
                 }
             );
         };
