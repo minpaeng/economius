@@ -1,10 +1,8 @@
 package com.ssafy.economius.game.controller;
 
 import com.ssafy.economius.game.dto.request.CreateRoomRequest;
-import com.ssafy.economius.game.dto.request.GameStartRequest;
 import com.ssafy.economius.game.dto.response.CreateRoomResponse;
 import com.ssafy.economius.game.dto.response.FinishTurnResponse;
-import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.service.GameRoomService;
 import com.ssafy.economius.game.service.GameService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 
 @RestController
 @Slf4j

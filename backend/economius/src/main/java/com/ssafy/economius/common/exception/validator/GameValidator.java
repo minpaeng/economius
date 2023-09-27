@@ -1,6 +1,7 @@
 package com.ssafy.economius.common.exception.validator;
 
 import com.ssafy.economius.common.exception.CustomWebsocketException;
+import com.ssafy.economius.common.exception.CustomWebsocketRoomException;
 import com.ssafy.economius.common.exception.message.GameRoomMessage;
 import com.ssafy.economius.game.entity.redis.Game;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,19 @@ public class GameValidator {
             log.error("방이 존재하지 않음: " + roomId);
             throw CustomWebsocketException.builder()
                     .roomId(roomId)
+                    .code(GameRoomMessage.GAME_NOT_EXIST.getCode())
+                    .message(GameRoomMessage.GAME_NOT_EXIST.getMessage())
+                    .build();
+        }
+
+        return game.get();
+    }
+
+    public Game checkValidGameRoom(Optional<Game> game, int roomId, Long player) {
+        if (game.isEmpty()) {
+            log.error("방이 존재하지 않음: " + roomId);
+            throw CustomWebsocketRoomException.builder()
+                    .player(player)
                     .code(GameRoomMessage.GAME_NOT_EXIST.getCode())
                     .message(GameRoomMessage.GAME_NOT_EXIST.getMessage())
                     .build();
