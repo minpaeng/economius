@@ -96,16 +96,3 @@ export const LayoutBottomitemLeft = styled.div``;
 
 export const LayoutBottomitemRight = styled.div``;
 // 주식
-
-export const StockItem = styled.div`
-  border-radius: 12px;
-  /* transition: all 250ms ease-in-out; */
-
-  &:hover {
-    cursor: pointer;
-    /* border: 1px solid black; */
-    background-color: #ffdaae;
-    box-shadow: 0px 4px 4px 0px #ffdaae;
-    /* transform: scale(1.01); */
-  }
-`;
