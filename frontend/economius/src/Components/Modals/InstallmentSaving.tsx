@@ -46,7 +46,7 @@ function InstallmentSaving() {
     };
 
     return (
-        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}> 
+        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
             {!(bankInfo === null) ? (
                 <S.BankMain>
                     <S.BankTop>
@@ -59,7 +59,7 @@ function InstallmentSaving() {
                         <S.BankMidDesc>
                             <S.BankMidPriceDesc>
                                 <p>
-                                    입금액 : {bankInfo.monthlyDeposit}
+                                    월 납입액 : {bankInfo.monthlyDeposit}
                                     {bankInfo.have ? ` (잔여: ${bankInfo.monthlyDeposit * bankInfo.finishCount - bankInfo.currentPrice})` : null}
                                 </p>
                                 <img
