@@ -73,7 +73,7 @@ public class GameRoomService {
 
     private void creatRoomOnRedis(int roomId, Long player, String nickname) {
         List<Issue> issues = makeIssues();
-
+        log.info(roomId + " " +  player + " " +  nickname);
         Game game = Game.builder()
                 .players(new ArrayList<>(List.of(player)))
                 .nicknames(new HashMap<>(){{put(player, nickname);}})
@@ -92,6 +92,8 @@ public class GameRoomService {
                 .event(makeEvents())
                 .build();
 
+        log.info(game.getPlayers().toString());
+        log.info(game.getNicknames().toString());
         gameRepository.save(game);
     }
 
