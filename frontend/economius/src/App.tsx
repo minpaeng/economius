@@ -35,7 +35,7 @@ function App() {
     const setStockState = useSetRecoilState(StockState);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/api/room/1/start")
+        axios.get("https://j9b109.p.ssafy.io/api/room/1/start")
             .then((data) => {
                 setPortfolioState(data.data.portfolios);
                 setStockState(data.data.stocks);
