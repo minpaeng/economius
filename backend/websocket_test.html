@@ -79,6 +79,28 @@
             }));
         }
 
+        function sendBankVisit() {
+            stompClient.send("/pub/1/bank", {}, JSON.stringify({
+                "player": 1 ,
+                "bankId" : 1
+            }));
+        }
+
+        function sendBankJoin() {
+            stompClient.send("/pub/1/joinSavings", {}, JSON.stringify({
+                "player": 1 ,
+                "bankId" : 1
+            }));
+        }
+
+
+        function sendBankStop() {
+            stompClient.send("/pub/1/stopSavings", {}, JSON.stringify({
+                "player": 1 ,
+                "bankId" : 1
+            }));
+        }
+
         function sendInsuranceVisit() {
             stompClient.send("/pub/1/insurance", {}, JSON.stringify({
                 "player": 1 ,
@@ -127,9 +149,15 @@
 </div>
 
 <div class="button-container">
-    <button onclick="sendInsuranceVisit();">보험사 방문 발생 테스트</button>
-    <button onclick="sendInsuranceJoin();">보험사 방문 발생 테스트</button>
-    <button onclick="sendInsuranceStop();">보험사 방문 발생 테스트</button>
+    <button onclick="sendBankVisit();">은행 방문 테스트</button>
+    <button onclick="sendBankJoin();">은행 가입 테스트</button>
+    <button onclick="sendBankStop();">은행 해지 테스트</button>
+</div>
+
+<div class="button-container">
+    <button onclick="sendInsuranceVisit();">보험사 방문 테스트</button>
+    <button onclick="sendInsuranceJoin();">보험사 가입 테스트</button>
+    <button onclick="sendInsuranceStop();">보험사 해지 테스트</button>
 </div>
 
 <div class="button-container">
