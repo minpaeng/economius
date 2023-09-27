@@ -35,7 +35,7 @@ public class GameService {
     private final ModelMapper modelMapper;
 
     public GameJoinResponse join(int roomId, Long player, String nickname) {
-        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId, player);
 
         gameValidator.checkCanJoin(game, roomId, player);
 
