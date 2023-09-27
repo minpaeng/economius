@@ -5,6 +5,9 @@ export const ChanceCard = styled.div`
   width: 100%;
   height: 100%;
   flex-direction: column;
+   
+  justify-content: center;
+  text-align: center;
 `;
 
 export const ChanceCardTop = styled.div`

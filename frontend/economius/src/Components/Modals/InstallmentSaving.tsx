@@ -46,7 +46,7 @@ function InstallmentSaving() {
     };
 
     return (
-        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
+        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}> 
             {!(bankInfo === null) ? (
                 <S.BankMain>
                     <S.BankTop>

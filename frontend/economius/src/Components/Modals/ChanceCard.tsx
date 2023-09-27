@@ -29,7 +29,7 @@ function ChanceCard() {
             right: 0,
             bottom: 0,
             backgroundColor: 'rgba(0,0,0,0.6)',
-            zIndex: 10,
+            zIndex: 10, 
         },
         content: {
             display: 'flex',
@@ -59,12 +59,44 @@ function ChanceCard() {
                 </S.ChanceCardTop>
                 <S.ChanceCardDivide />
                 <S.ChanceCardBottom>
-                    <div>{chanceCardInfo.description}</div>
-                    {chanceCardInfo.moneyCard ? ( 
-                        <div>현금 {chanceCardInfo.eventValue} 만원 {chanceCardInfo.apply}</div> 
-                    ) : (
-                        <div>주식 {chanceCardInfo.eventValue} % {chanceCardInfo.apply}</div>
-                    )}
+                <div>
+                    {chanceCardInfo.description.split('.').map((line, index, array) => (
+                        <span key={index}>
+                        {line}
+                        {/* 마지막 요소가 아닌 경우에만 .과 줄바꿈을 추가합니다. */}
+                        {index < array.length - 1 && <><span>.</span><br /></>}
+                        </span>
+                    ))}
+                </div>
+                <div>
+                    { chanceCardInfo.moneyCard ? (
+                        <div>
+                            <div>
+                                현금 -{chanceCardInfo.eventValue} 
+                            </div> 
+                            <div>
+                                {chanceCardInfo.apply === 'HX' ? '의료 보험 적용' :
+                                chanceCardInfo.apply === 'HS' ? '의료 특약 보험 적용' :
+                                chanceCardInfo.apply === 'MX' ? '상해 보험 적용' :
+                                chanceCardInfo.apply === 'MS' ? '상해 특약 보험 적용' :
+                                chanceCardInfo.apply}
+                            </div>
+                        </div>
+
+                        ) : (
+                            <div>
+                                {chanceCardInfo.apply} 업종
+                                {chanceCardInfo.eventValue > 0 ? (
+                                    ` ${chanceCardInfo.eventValue} % 상승`
+                                ) : (
+                                    ` ${Math.abs(chanceCardInfo.eventValue)} % 하락`
+                                )}
+                            </div>
+                        )
+                    }
+                </div> 
+                            
+                    
                 </S.ChanceCardBottom>
 
             </S.ChanceCard>
