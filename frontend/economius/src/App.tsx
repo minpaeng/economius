@@ -21,33 +21,46 @@ import Modals from "./Modals";
 import PlayerPlaceAll from "./Components/Common/PlayerPlaceAll";
 import SideBar from "./Components/Common/SideBar";
 
-import Socket from './Socket';
-import * as THREE from 'three';
-import {useSetRecoilState} from "recoil";
-import {PortfolioState, StockState} from "/src/recoil/game/atom.tsx";
+import Socket from "./Socket";
+import * as THREE from "three";
+import { useSetRecoilState } from "recoil";
+import { PortfolioState, StockState } from "/src/recoil/game/atom.tsx";
 import axios from "axios";
 
 function App() {
+  // render test
+  const objectsToRender = 1;
+  const [renderedObjectsCount, setRenderedObjectsCount] = useState(0);
+  useEffect(() => {
+    console.log("========================");
+    console.log(renderedObjectsCount);
+    if (renderedObjectsCount === objectsToRender) {
+      console.log("모든 객체가 렌더링되었습니다.");
+    }
+  }, [renderedObjectsCount]);
+
   const light = useRef();
   //   useHelper(light, THREE.DirectionalLightHelper);
 
-    const setPortfolioState = useSetRecoilState(PortfolioState)
-    const setStockState = useSetRecoilState(StockState);
+  const setPortfolioState = useSetRecoilState(PortfolioState);
+  const setStockState = useSetRecoilState(StockState);
 
-    useEffect(() => {
-        axios.get("https://j9b109.p.ssafy.io/api/room/1/start")
-            .then((data) => {
-                setPortfolioState(data.data.portfolios);
-                setStockState(data.data.stocks);
-            })
-    }, []);
+  useEffect(() => {
+    axios.get("https://j9b109.p.ssafy.io/api/room/1/start").then((data) => {
+      setPortfolioState(data.data.portfolios);
+      setStockState(data.data.stocks);
+    });
+  }, []);
 
   return (
     <div
       className="canvas-outer"
       style={{ width: "100%", height: "calc(100vw * 9 / 16)" }}
     >
-      <Canvas style={{ width: "100%", height: "100%" }}>
+      <Canvas
+        style={{ width: "100%", height: "100%" }}
+        onCreated={() => setRenderedObjectsCount(1)}
+      >
         <OrthographicCamera makeDefault zoom={65} position={[4, 4.1, 4]} />
         <OrbitControls />
         <ambientLight intensity={1} />
