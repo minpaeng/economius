@@ -88,7 +88,7 @@ function App() {
       <SideBar />
 
       <Modals />
-      {/* <Socket /> */}
+      <Socket />
     </div>
   );
 }

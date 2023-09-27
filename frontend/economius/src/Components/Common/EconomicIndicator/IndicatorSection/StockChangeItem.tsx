@@ -31,21 +31,23 @@ function StockChangeItem({
   };
 
   return (
-    <S.PropertyLayoutItem onClick={handleButtonClick}>
-      <S.LayoutTop>
-        <S.LayoutTopLeft>
-          <img src={`Stock/${imgPath}.png`} alt="img" />
-          <div>
-            <div>{title}</div>
-            <div style={{ color: "gray" }}>{type}</div>
-          </div>
-        </S.LayoutTopLeft>
-        <S.LayoutTopRight>
-          현재가: {value.toLocaleString()}
-          {percentStyleSpan}
-        </S.LayoutTopRight>
-      </S.LayoutTop>
-    </S.PropertyLayoutItem>
+    <S.StockItem>
+      <S.PropertyLayoutItem onClick={handleButtonClick}>
+        <S.LayoutTop>
+          <S.LayoutTopLeft>
+            <img src={`Stock/${imgPath}.png`} alt="img" />
+            <div>
+              <div>{title}</div>
+              <div style={{ color: "gray" }}>{type}</div>
+            </div>
+          </S.LayoutTopLeft>
+          <S.LayoutTopRight>
+            현재가: {value.toLocaleString()}
+            {percentStyleSpan}
+          </S.LayoutTopRight>
+        </S.LayoutTop>
+      </S.PropertyLayoutItem>
+    </S.StockItem>
   );
 }
 export default StockChangeItem;
