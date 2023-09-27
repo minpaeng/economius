@@ -67,9 +67,8 @@ public class Game {
     public Issue getNextIssue(){
         if (this.issueIdx < issues.size() - 1) {
             return issues.get(issueIdx + 1);
-        } else {
-            return null;
         }
+        return null;
     }
 
     public void initializeLocations(){
