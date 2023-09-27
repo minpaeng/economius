@@ -9,7 +9,28 @@ export const RoomIdState = atom<number>({
     effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
-// 현재 플레이어
+// 방 참가 신청 여부
+export const SetShowJoinState = atom<boolean>({
+    key: 'SetShowJoinState',
+    default: false, // 1이 호출
+    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+});
+
+// 방 참가 신청 여부
+export const RoomJoinState = atom<number>({
+    key: 'RoomJoinState',
+    default: 0, // 1이 호출
+    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+});
+
+// 방 참가 인원 닉네임 보기
+export const RoomJoinUsersNicknameState = atom<string[]>({
+    key: 'RoomJoinUsersNicknameState',
+    default: ['', '', '', ''],
+    // effects_UNSTABLE: [persistAtom],
+});
+
+// 유저 아이디
 export const UseridState = atom({
     key: 'UseridState',
     default: 'a', // 기본값

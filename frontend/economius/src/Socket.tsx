@@ -10,6 +10,9 @@ import {
     NowPlayerPositionState,
     MovementCardsState,
     CallBackState,
+    UseridState,
+    RoomJoinState,
+    RoomJoinUsersNicknameState,
 } from './recoil/animation/atom';
 import {
     TradeRealEstateState,
@@ -58,7 +61,6 @@ const bankIds = {
 };
 
 function PlayerSocket() {
-    const [roomId, setRoomId] = useRecoilState(RoomIdState);
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const [nowPlayer, setNowPlayerState] = useRecoilState(NowPlayerState);
     const [nowPlayerPosition, setNowPlayerPosition] = useRecoilState(NowPlayerPositionState);
@@ -89,6 +91,14 @@ function PlayerSocket() {
     //이벤트 카드
     const [chanceCardInfo, setChanceCardInfo] = useRecoilState(ChanceCardInfoState);
 
+    // 방 연결을 위한 recoil
+    const [userId, setUserId] = useRecoilState(UseridState);
+    const [roomId, setRoomId] = useRecoilState(RoomIdState);
+    const [roomJoin, setRoomJoin] = useRecoilState(RoomJoinState);
+    const [roomJoinUsersNickname, setRoomJoinUsersNickname] = useRecoilState(RoomJoinUsersNicknameState);
+    const nickname = localStorage.getItem('nickname');
+    const playername = localStorage.getItem('player');
+
     const stompClient = useRef(null);
 
     useEffect(() => {
@@ -105,61 +115,40 @@ function PlayerSocket() {
                     // Authorization: "access token"
                 },
                 function () {
-                    // 방 입장은 이전 페이지에서
+                    // 방 참가 => sub/{player}
+                    // 방 입장 중 잘못된 방식으로 입장하는 경우
+                    stompClient.current.subscribe(`/sub/${playername}`, function (recievedMessage: any) {
+                        const message = JSON.parse(recievedMessage.body);
+                        console.log('전체메시지', message);
+                        if (message.code == '') {
+                            console.log('정상');
 
-                    // 개인 메시지 구독 => sub/{roomId}/{playerId}
-                    stompClient.current.subscribe(`/sub/1/1`, function (recievedMessage: any) {
-                        console.log('개인메시지', recievedMessage);
-                        console.log('개인메시지', recievedMessage.body);
-                        const message = JSON.parse(recievedMessage.body); // 객체
-                        const type = recievedMessage.headers.type || null; // 문자열
-                        // 주식 변경 recoil 시작
-                        if (type === 'stockDetail') {
-                            setStockDetail({
-                                stockId: message.stockId,
-                                name: message.name,
-                                stockIndustryId: message.stockIndustryId,
-                                companyCategory: message.companyCategory,
-                                companySubCategory: message.companySubCategory,
-                                owners: message.owners,
-                                remainingAmount: message.remainingAmount,
-                                price: message.price,
-                                rate: message.rate,
-                                priceHistory: message.priceHistory,
-                                rateHistory: message.rateHistory,
-                            });
-                        } else if (type === 'selectGolds') {
-                            setGoldDetail({
-                                player: message.player,
-                                price: message.price,
-                                rate: message.rate,
-                                priceHistory: message.priceHistory,
-                                rateHistory: message.rateHistory,
-                            });
+                            // 없는 방인 경우
+                        } else if (message.code == 1000) {
+                            alert('해당 번호는 없는 방입니다.');
                         }
-                        // 턴 종료 로직
-                        else if (type === 'buyStock') {
-                            setCallBack(true);
-                        } else if (type === 'sellStock') {
-                            setCallBack(true);
-                        } else if (type === 'buyGolds') {
-                            setCallBack(true);
-                        } else if (type === 'sellGolds') {
-                            setCallBack(true);
-                        } else if (type === 'buyBuilding') {
-                            setCallBack(true);
-                        } else if (type === 'sellBuilding') {
-                            setCallBack(true);
-                        } else if (type === 'joinSavings') {
-                            setCallBack(true);
-                        } else if (type === 'stopSavings') {
-                            setCallBack(true);
+                        // 이미 들어간 방인 경우
+                        else if (message.code == 1006) {
+                            alert('이미 있는 접속한 방에 다시 접속하였습니다.');
                         }
-                        // 주식 recoil 종료
+                        // else if (type == 'bank') {
+                        //     setBankInfo({
+                        //         player: message.player,
+                        //         money: message.money,
+                        //         have: message.have,
+                        //         bankId: message.savingDto.bankId,
+                        //         name: message.savingDto.name,
+                        //         monthlyDeposit: message.savingDto.monthlyDeposit,
+                        //         currentPrice: message.savingDto.currentPrice,
+                        //         currentCount: message.savingDto.currentCount,
+                        //         finishCount: message.savingDto.finishCount,
+                        //         rate: message.savingDto.rate,
+                        //     });
+                        // }
                     });
 
                     // 방 메시지 구독 => sub/{roomId}
-                    stompClient.current.subscribe(`/sub/1`, function (recievedMessage: any) {
+                    stompClient.current.subscribe(`/sub/5`, function (recievedMessage: any) {
                         const message = JSON.parse(recievedMessage.body);
                         const type = recievedMessage.headers.type || null;
                         console.log('전체메시지', type);
@@ -222,6 +211,29 @@ function PlayerSocket() {
                                 insurance4: message.insuranceDto[4],
                             });
                         }
+                        // 새로운 방을 입장하는 경우
+                        else if (type == 'join') {
+                            console.log('JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJjjjjjjjjjjjjjJJJoin');
+
+                            const player1 = message.players[0];
+                            const player2 = message.players[1];
+                            const player3 = message.players[2];
+                            const player4 = message.players[3];
+                            console.log('player1');
+
+                            let nick1 = message.nicknames[player1];
+                            let nick2 = message.nicknames[player2];
+                            let nick3 = message.nicknames[player3];
+                            let nick4 = message.nicknames[player4];
+
+                            if (nick1 == undefined) nick1 = '';
+                            if (nick2 == undefined) nick2 = '';
+                            if (nick3 == undefined) nick3 = '';
+                            if (nick4 == undefined) nick4 = '';
+
+                            setRoomJoinUsersNickname([nick1, nick2, nick3, nick4]);
+                            console.log(roomJoinUsersNickname);
+                        }
                     });
                 }
             );
@@ -229,6 +241,12 @@ function PlayerSocket() {
 
         connectHandler();
     }, []);
+
+    useEffect(() => {
+        console.log('hello');
+
+        console.log(roomJoinUsersNickname);
+    }, [roomJoinUsersNickname]);
 
     // 자산별 방문
     useEffect(() => {
@@ -453,6 +471,18 @@ function PlayerSocket() {
             setIsModalOpen(false);
         }
     }, [callBack]);
+
+    // 방 입장 시
+    useEffect(() => {
+        if (roomJoin == 0) return;
+        if (stompClient.current) {
+            // 두 번째 : 헤더 / 세 번째 : 보낼 데이터
+            stompClient.current.send(`/pub/${roomId}/join`, {}, JSON.stringify({ player: playername, nickname: nickname }));
+
+            // 요청 완료했으면 다시 fefault로 변경
+            setRoomJoin(0);
+        }
+    }, [roomJoin]);
 
     return <></>;
 }
