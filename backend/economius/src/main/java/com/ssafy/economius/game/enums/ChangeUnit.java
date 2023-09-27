@@ -1,9 +1,7 @@
 package com.ssafy.economius.game.enums;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 @Getter
 public enum ChangeUnit {
     LOWER(1, -30, "급격한 하락"),
