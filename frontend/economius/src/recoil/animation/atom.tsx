@@ -9,6 +9,13 @@ export const RoomIdState = atom<number>({
     effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
+// wait room 모달 오픈 여부
+export const SetShowWaitRoomState = atom<boolean>({
+    key: 'SetShowWaitRoomState',
+    default: false, // 1이 호출
+    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+});
+
 // 방 참가 신청 여부
 export const SetShowJoinState = atom<boolean>({
     key: 'SetShowJoinState',
@@ -26,7 +33,7 @@ export const RoomJoinState = atom<number>({
 // 방 참가 인원 닉네임 보기
 export const RoomJoinUsersNicknameState = atom<string[]>({
     key: 'RoomJoinUsersNicknameState',
-    default: ['', '', '', ''],
+    default: ['wait..', 'wait..', 'wait..', 'wait..'],
     // effects_UNSTABLE: [persistAtom],
 });
 

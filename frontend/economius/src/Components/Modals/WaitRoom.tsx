@@ -1,14 +1,15 @@
 import Modal from 'react-modal';
 import * as S from './WaitRoom.style';
 import { useRecoilState } from 'recoil';
-import { RoomIdState, RoomJoinState, RoomJoinUsersNicknameState } from '/src/recoil/animation/atom';
+import { RoomIdState, RoomJoinState, RoomJoinUsersNicknameState, SetShowWaitRoomState } from '/src/recoil/animation/atom';
 import { useEffect, useRef, useState } from 'react';
 
-export default function WaitRoom(props) {
+export default function WaitRoom() {
     const [roomid, setRoomid] = useRecoilState(RoomIdState);
     const [isModalOpen, setIsModalOpen] = useState(true);
     // const [isHost, setIsHost] = useState(false);
     const [roomJoinUsersNickname, setRoomJoinUsersNickname] = useRecoilState(RoomJoinUsersNicknameState);
+    const [showWaitRoom, setShowWaitRoom] = useRecoilState(SetShowWaitRoomState);
 
     useEffect(() => {
         console.log('hi');
@@ -25,7 +26,7 @@ export default function WaitRoom(props) {
         setRoomJoinUsersNickname(['', '', '', '']);
 
         // 모달 끄기
-        props.setShowWaitRoom(false);
+        setShowWaitRoom(false);
     };
 
     // 룸 번호 복사

@@ -288,10 +288,10 @@ function PlayerSocket() {
                             let nick3 = message.nicknames[player3];
                             let nick4 = message.nicknames[player4];
 
-                            if (nick1 == undefined) nick1 = '';
-                            if (nick2 == undefined) nick2 = '';
-                            if (nick3 == undefined) nick3 = '';
-                            if (nick4 == undefined) nick4 = '';
+                            if (nick1 == undefined) nick1 = 'wait..';
+                            if (nick2 == undefined) nick2 = 'wait..';
+                            if (nick3 == undefined) nick3 = 'wait..';
+                            if (nick4 == undefined) nick4 = 'wait..';
 
                             setRoomJoinUsersNickname([nick1, nick2, nick3, nick4]);
                             console.log(roomJoinUsersNickname);
