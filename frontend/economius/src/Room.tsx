@@ -3,7 +3,7 @@ import video1 from '/video/video_start.mp4'; // 1080p
 import video3 from '/video/video_repeat.mp4'; // sound
 import StartAccess from './Components/Modals/StartAccess';
 import * as S from '../src/Components/Modals/GlobalModal.stye';
-import { RoomIdState, UseridState } from './recoil/animation/atom';
+import { RoomIdState, SetShowJoinState, UseridState } from './recoil/animation/atom';
 import { useRecoilState } from 'recoil';
 import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +11,8 @@ import axios from 'axios';
 import WaitRoom from './Components/Modals/WaitRoom';
 import Join from './Components/Modals/Join';
 import StartLoginCheck from './Components/Modals/StartLoginCheck';
+
+import Socket from './Socket';
 
 export default function Room() {
     // 최상단 컴포넌트에서 모달을 쓸 것이라고 명시 작업이 필요
@@ -32,7 +34,9 @@ export default function Room() {
     const [isModalClosed, setIsModalClosed] = useState(false); // 모달이 닫힌 상태를 관리
     const [renderContent, setRenderContent] = useState(false); // 모달이 닫힌 후 n초 뒤에 렌더링할 상태를 관리
     const [showWaitRoom, setShowWaitRoom] = useState(false);
-    const [showJoin, setShowJoin] = useState(false);
+    const [showJoin, setShowJoin] = useRecoilState(SetShowJoinState);
+
+    // const [showJoin, setShowJoin] = useState(false);
 
     const navigate = useNavigate();
 
@@ -188,8 +192,10 @@ export default function Room() {
                     </S.ButtonOuter>
                 )}
                 {showWaitRoom && <WaitRoom setShowWaitRoom={setShowWaitRoom} />}
-                {showJoin && <Join setShowJoin={setShowJoin} />}
+                {showJoin && <Join />}
             </div>
+
+            <Socket />
         </>
     );
 }
