@@ -17,6 +17,7 @@ import {
     TradeGoldState,
     TradeBankState,
     TradeInsuranceState,
+    TradeInsuranceConfirmState,
     BuyAmountState,
     SellAmountState,
     StockDetailState,
@@ -76,6 +77,9 @@ function PlayerSocket() {
     const [tradeGold, setTradeGold] = useRecoilState(TradeGoldState);
     const [tradeBank, setTradeBank] = useRecoilState(TradeBankState);
     const [tradeInsurance, setTradeInsurance] = useRecoilState(TradeInsuranceState);
+    const [tradeInsuranceConfirm, setTradeInsuranceConfirm] = useRecoilState(TradeInsuranceConfirmState); // 보험 확인 버튼
+    const [insuranceCnt, setInsuranceCnt] = useState(0); // 보험 응답 카운트
+
     // 매수량, 매도량
     const [buyAmount, setbuyAmount] = useRecoilState(BuyAmountState);
     const [sellAmount, setSellAmount] = useRecoilState(SellAmountState);
@@ -109,10 +113,10 @@ function PlayerSocket() {
 
                     // 개인 메시지 구독 => sub/{roomId}/{playerId}
                     stompClient.current.subscribe(`/sub/1/1`, function (recievedMessage: any) {
-                        console.log('개인메시지', recievedMessage);
-                        console.log('개인메시지', recievedMessage.body);
-                        const message = JSON.parse(recievedMessage.body); // 객체
+                        const message = JSON.parse(recievedMessage.body) || null; // 객체
                         const type = recievedMessage.headers.type || null; // 문자열
+                        console.log('개인메시지 type: ', type);
+                        console.log('개인메시지 message: ', message);
                         // 주식 변경 recoil 시작
                         if (type === 'stockDetail') {
                             setStockDetail({
@@ -154,16 +158,23 @@ function PlayerSocket() {
                             setCallBack(true);
                         } else if (type === 'stopSavings') {
                             setCallBack(true);
+                        } else if (type in ['joinInsurance', 'finishInsurance']) {
+                            if (insuranceCnt === 3) {
+                                setCallBack(true);
+                                setInsuranceCnt(0);
+                            } else {
+                                setInsuranceCnt(prev => prev + 1);
+                            }
                         }
                         // 주식 recoil 종료
                     });
 
                     // 방 메시지 구독 => sub/{roomId}
                     stompClient.current.subscribe(`/sub/1`, function (recievedMessage: any) {
-                        const message = JSON.parse(recievedMessage.body);
+                        const message = JSON.parse(recievedMessage.body) || null;
                         const type = recievedMessage.headers.type || null;
-                        console.log('전체메시지', type);
-                        console.log('전체메시지', message);
+                        console.log('전체메시지 type: ', type);
+                        console.log('전체메시지 message: ', message);
                         if (type === 'finishTurn') {
                             setStocks(message.stocks);
                             setPortfolio(message.portfolios);
@@ -212,15 +223,12 @@ function PlayerSocket() {
                         } else if (type == 'insurance') {
                             setInsuranceInfo({
                                 player: message.player,
-                                have1: message.have[1],
-                                have2: message.have[2],
-                                have3: message.have[3],
-                                have4: message.have[4],
                                 insurance1: message.insuranceDto[1],
                                 insurance2: message.insuranceDto[2],
                                 insurance3: message.insuranceDto[3],
                                 insurance4: message.insuranceDto[4],
                             });
+                            setTradeInsurance([message.have[3], message.have[4], message.have[1], message.have[2]]);
                         }
                     });
                 }
@@ -418,31 +426,47 @@ function PlayerSocket() {
 
     // 보험 거래
     useEffect(() => {
+        if (!tradeInsuranceConfirm) return;
+
+        // if 가입 else 해지
         if (tradeInsurance[0]) {
             if (stompClient.current) {
                 stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 1 }));
-                setTradeInsurance([false, false, false, false]);
+            }
+        } else {
+            if (stompClient.current) {
+                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 1 }));
             }
         }
         if (tradeInsurance[1]) {
             if (stompClient.current) {
                 stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
-                setTradeInsurance([false, false, false, false]);
+            }
+        } else {
+            if (stompClient.current) {
+                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
             }
         }
         if (tradeInsurance[2]) {
             if (stompClient.current) {
                 stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 3 }));
-                setTradeInsurance([false, false, false, false]);
+            }
+        } else {
+            if (stompClient.current) {
+                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 3 }));
             }
         }
         if (tradeInsurance[3]) {
             if (stompClient.current) {
                 stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 4 }));
-                setTradeInsurance([false, false, false, false]);
+            }
+        } else {
+            if (stompClient.current) {
+                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 4 }));
             }
         }
-    }, [tradeInsurance]);
+        setTradeInsuranceConfirm(false);
+    }, [tradeInsuranceConfirm]);
 
     //턴 종료
     useEffect(() => {

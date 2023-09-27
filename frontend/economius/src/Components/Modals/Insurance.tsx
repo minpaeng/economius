@@ -1,13 +1,24 @@
 import Modal from 'react-modal';
-import { useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { IsModalOpenState } from '/src/recoil/animation/atom';
-import { TradeInsuranceConfirmState, TradeInsuranceState } from '/src/recoil/trading/atom';
+import { useEffect, useState } from 'react';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
+import { TradeInsuranceConfirmState } from '/src/recoil/trading/atom';
 import { InsuranceInfoState } from '/src/recoil/modalInfo/atom';
 import * as S from './Insurance.style';
 import InsuranceCard from './InsuranceCard';
 
 function Insurance() {
+    const [tradeInsuranceConfirm, setTradeInsuranceConfirm] = useRecoilState(TradeInsuranceConfirmState);
+    const [insuranceInfo, setInsuranceInfo] = useRecoilState(InsuranceInfoState);
+    const setCallBack = useSetRecoilState(CallBackState);
+    const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
+    const closeModal = () => {
+        setInsuranceInfo(null);
+        setTradeInsuranceConfirm(false);
+        setIsModalOpen(false);
+        setCallBack(true);
+    };
+
     // 의료보험 - 일반
     const Life: any = [
         ['교통사고', 'car-accident-medical'],
@@ -39,48 +50,8 @@ function Insurance() {
         ['산재사고', 'slip'],
         ['도둑', 'robbery'],
     ];
-    // 보험 정보
-    const InsuranceInfo: any = [
-        {
-            type: 1,
-            title: '의료',
-            perPrice: 100000,
-            ensurePercent: 30,
-            ensureInfo: Life,
-            isJoin: true,
-        },
-        {
-            type: 2,
-            title: '의료 + 특약',
-            perPrice: 300000,
-            ensurePercent: 70,
-            ensureInfo: LifeSpecial,
-            isJoin: false,
-        },
-        {
-            type: 3,
-            title: '손해',
-            perPrice: 100000,
-            ensurePercent: 30,
-            ensureInfo: NonLife,
-            isJoin: false,
-        },
-        {
-            type: 4,
-            title: '손해 + 특약',
-            perPrice: 100000,
-            ensurePercent: 70,
-            ensureInfo: NonLifeSpecial,
-            isJoin: true,
-        },
-    ];
-
-    const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
-    const [tradeInsurance, setTradeInsurance] = useRecoilState(TradeInsuranceState);
-    const [insuranceInfo, setInsuranceInfo] = useRecoilState(InsuranceInfoState);
+    const Items = [Life, LifeSpecial, NonLife, NonLifeSpecial];
+    const order = [3, 4, 1, 2];
 
     // modal style
     const modalStyle: any = {
@@ -111,18 +82,22 @@ function Insurance() {
 
     return (
         <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
-            <S.InsuranceMain>
-                <S.InsuranceTop>
-                    <img src='Insurance/Insurance.png' alt='img' style={{ width: '50px', marginRight: '10px' }} />
-                    <S.InsuranceTopTitle>삼성화재</S.InsuranceTopTitle>
-                </S.InsuranceTop>
-                <S.InsuranceMid>
-                    {InsuranceInfo.map((insurance, index) => {
-                        return <InsuranceCard CardInfo={insurance} index={index}></InsuranceCard>;
-                    })}
-                </S.InsuranceMid>
-                <S.InsuranceConfirmButton onClick={() => setTradeInsurance([false, true, false, false])}>확인</S.InsuranceConfirmButton>
-            </S.InsuranceMain>
+            {!(insuranceInfo === null) ? (
+                <S.InsuranceMain>
+                    <S.InsuranceTop>
+                        <img src='Insurance/Insurance.png' alt='img' style={{ width: '50px', marginRight: '10px' }} />
+                        <S.InsuranceTopTitle>삼성화재</S.InsuranceTopTitle>
+                    </S.InsuranceTop>
+                    <S.InsuranceMid>
+                        {order.map(index => {
+                            return <InsuranceCard index={index} CardInfo={insuranceInfo[`insurance${index}`]} ItemInfo={Items[index - 1]}></InsuranceCard>;
+                        })}
+                    </S.InsuranceMid>
+                    <S.InsuranceConfirmButton onClick={() => setTradeInsuranceConfirm(true)}>확인</S.InsuranceConfirmButton>
+                </S.InsuranceMain>
+            ) : (
+                '로딩중입니다'
+            )}
         </Modal>
     );
 }

@@ -44,17 +44,7 @@ export const GoldInfoState = atom({
 // 보험 모달 정보
 export const InsuranceInfoState = atom({
     key: 'InsuranceInfoState',
-    default: {
-        player: null,
-        have1: null,
-        have2: null,
-        have3: null,
-        have4: null,
-        insurance1: null,
-        insurance2: null,
-        insurance3: null,
-        insurance4: null,
-    },
+    default: null,
 });
 
 // 은행 모달 정보

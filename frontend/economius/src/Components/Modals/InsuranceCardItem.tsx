@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 
 const CardItem = styled.div`
+    margin: 1px 0;
     display: flex;
+    justify-content: center;
     width: 70%;
-    justify-content: flex-start;
 `;
 
 const CardItemImg = styled.img`
