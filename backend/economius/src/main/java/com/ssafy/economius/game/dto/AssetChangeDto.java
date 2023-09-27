@@ -1,6 +1,5 @@
 package com.ssafy.economius.game.dto;
 
-import com.ssafy.economius.game.enums.IssueEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
