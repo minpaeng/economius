@@ -5,6 +5,7 @@ import com.ssafy.economius.game.dto.response.FinishTurnResponse;
 import com.ssafy.economius.game.entity.redis.AssetChange;
 import com.ssafy.economius.game.entity.redis.Building;
 import com.ssafy.economius.game.entity.redis.Game;
+import com.ssafy.economius.game.entity.redis.Gold;
 import com.ssafy.economius.game.entity.redis.Stock;
 import com.ssafy.economius.game.enums.InitialData;
 import com.ssafy.economius.game.enums.VolatileEnum;
@@ -127,7 +128,11 @@ public class FinishTurnService {
     private void goldRearrange(Game game) {
         int newRate = RandomUtil.getRanges(GOLD_RATE_LOWER_BOUND.getValue(),
                 GOLD_RATE_UPPER_BOUND.getValue());
-        game.getGold().updateGoldPrice(newRate);
+        Gold gold = game.getGold();
+        gold.updateGoldPrice(newRate);
+
+        game.getPortfolios().values()
+            .forEach(portfolio -> portfolio.getGold().updatePortfolioGold(gold.getPrice()));
     }
 
     private void stockRearrange(Game game, int round) {
