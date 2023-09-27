@@ -88,6 +88,9 @@ function PlayerSocket() {
     const setGoldDetail = useSetRecoilState(GoldDetailState);
     const setPortfolio = useSetRecoilState(PortfolioState);
     const setStocks = useSetRecoilState(StockState);
+    const setPrediction = useSetRecoilState(PredictionState);
+    const getPrediction = useRecoilValue(GetPredictionState);
+
     const [callBack, setCallBack] = useRecoilState(CallBackState);
 
     //이벤트 카드
@@ -366,6 +369,7 @@ function PlayerSocket() {
                     })
                 );
                 setTradeStock([false, false]);
+                setCallBack(true);
             }
         } else if (tradeStock[1]) {
             if (stompClient.current) {
@@ -379,6 +383,7 @@ function PlayerSocket() {
                     })
                 );
                 setTradeStock([false, false]);
+                setCallBack(true);
             }
         }
     }, [tradeStock]);
