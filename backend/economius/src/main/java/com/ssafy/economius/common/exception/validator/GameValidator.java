@@ -68,8 +68,8 @@ public class GameValidator {
     }
 
     private void checkRoomLimit(Game game, int roomId) {
-        log.error(roomId + "번 방 인원 제한 초과");
         if (game.getPlayers().size() >= 4) {
+            log.error(roomId + "번 방 인원 제한 초과");
             throw CustomWebsocketException.builder()
                     .roomId(roomId)
                     .code(GameRoomMessage.ROOM_LIMIT.getCode())
@@ -79,8 +79,8 @@ public class GameValidator {
     }
 
     private void checkPlayer(Game game, int roomId, Long player) {
-        log.error("이미 참여중인 플레이어: {roomId: " + roomId + ", player: " + player + "}");
         if (game.getNicknames().containsKey(player)) {
+            log.error("이미 참여중인 플레이어: {roomId: " + roomId + ", player: " + player + "}");
             throw CustomWebsocketException.builder()
                     .roomId(roomId)
                     .code(GameRoomMessage.ALREADY_JOIN_PLAYER.getCode())
