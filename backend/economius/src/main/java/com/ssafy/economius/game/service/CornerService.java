@@ -41,7 +41,6 @@ public class CornerService {
         String type;
         for (AssetChange assetChange : assetChanges) {
             type = assetChange.getAssetType();
-            log.info(assetChange.getStockType());
             if (type.equals(VolatileEnum.GOLD.getValue())) {
                 oracleResponse.setGoldChange(makeAssetChangeDto(assetChange, null));
             } else if (type.equals(VolatileEnum.INTEREST_RATE.getValue())) {
