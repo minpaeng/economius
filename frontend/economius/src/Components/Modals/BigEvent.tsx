@@ -5,26 +5,23 @@ import { IsModalOpenState } from '/src/recoil/animation/atom';
 
 import { useEffect, useState } from 'react';
 
-function BigEvent() {
-    // TODO: axios 데이터
-    const dummy: any = {
-        title: '대공황',
-        desc: '월 스트리트 대폭락에서 시작되어, 미국을 중심으로 세계적으로 경제 침체가 발생하였습니다. 이로 인해 실업률 급증과 빈곤이 확산되었으며 금융 시스템 붕괴와 물가 하락으로 인한 어려움이 지속되었습니다.',
-        change1: '',
-    };
-
+function BigEvent({issue}) {
     // 원래는 초기값 false로 두고 해당 턴이 되면 true로 바꿔줘야할듯
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
+    const [wordColor, setWordColor] = useState("white");
+
     const closeModal = () => {
         setIsModalOpen(false);
     };
 
-    //   useEffect(() => {
-    //     setTimeout(() => {
-    //       setIsBigEventOpen(false);
-    //     }, 500);
-    //   }, []);
-
+    useEffect(() => {
+        if (issue.type === "BOOM"){
+            setWordColor("black");
+        }
+        else{
+            setWordColor("white");
+        }
+    })
     // modal style
     const modalStyle: any = {
         overlay: {
@@ -46,9 +43,9 @@ function BigEvent() {
             left: '50px',
             right: '400px',
             bottom: '80px',
-            border: '5px solid white',
+            border: `5px solid white`,
             borderRadius: '20px',
-            backgroundImage: 'url("BigEvent/불황 (11).png")',
+            backgroundImage: `url("${issue.url}")`,
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
         },
@@ -58,9 +55,10 @@ function BigEvent() {
         <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
             <S.BigEvent>
                 <S.BigEventLeft />
-                <S.BigEventRight>
-                    <S.BigEventRightTitle>{dummy.title}</S.BigEventRightTitle>
-                    <S.BigEventRightDesc>{dummy.desc}</S.BigEventRightDesc>
+                <S.BigEventRight style={{color: wordColor}}>
+                    <S.BigEventRightTitle>{issue.name}</S.BigEventRightTitle>
+                    <S.BigEventRightChange1>{issue.year}</S.BigEventRightChange1>
+                    <S.BigEventRightDesc>{issue.description}</S.BigEventRightDesc>
                     <S.BigEventRightChange1>금리 변동</S.BigEventRightChange1>
                     <S.BigEventRightChange2>주식 변동</S.BigEventRightChange2>
                 </S.BigEventRight>

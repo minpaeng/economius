@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import sockjs from 'sockjs-client/dist/sockjs';
 import { Stomp } from '@stomp/stompjs';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
 import {
     RoomIdState,
     IsModalOpenState,
@@ -21,9 +21,9 @@ import {
     BuyAmountState,
     SellAmountState,
     StockDetailState,
-    GoldDetailState,
+    GoldDetailState, GetPredictionState,
 } from './recoil/trading/atom';
-import { PortfolioState, StockState } from '/src/recoil/game/atom.tsx';
+import {PortfolioState, PredictionState, StockState} from '/src/recoil/game/atom.tsx';
 import { func } from 'three/examples/jsm/nodes/shadernode/ShaderNodeBaseElements';
 import { MonthlyInfoState, StockInfoState, RealEstateInfoState, BankInfoState, ChanceCardInfoState, InsuranceInfoState } from './recoil/modalInfo/atom';
 
@@ -140,6 +140,9 @@ function PlayerSocket() {
                                 priceHistory: message.priceHistory,
                                 rateHistory: message.rateHistory,
                             });
+                        }
+                        else if (type === 'oracle') {
+                            setPrediction(message);
                         }
                         // 턴 종료 로직
                         else if (type === 'buyStock') {
@@ -468,6 +471,14 @@ function PlayerSocket() {
         setTradeInsuranceConfirm(false);
     }, [tradeInsuranceConfirm]);
 
+    //예언소
+    useEffect(() => {
+        if (getPrediction) {
+            if (stompClient.current) {
+                stompClient.current.send(`/pub/${roomId}/oracle`, {}, JSON.stringify({player: nowPlayer + 1}));
+            }
+        }
+    }, [getPrediction])
     //턴 종료
     useEffect(() => {
         if (!callBack) return;
