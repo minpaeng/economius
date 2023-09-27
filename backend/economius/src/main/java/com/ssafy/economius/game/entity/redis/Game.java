@@ -60,6 +60,13 @@ public class Game {
     // 찬스 이벤트 -
     private Event event;
 
+    public Issue getNextIssue(){
+        if (this.issueIdx < issues.size() - 1) {
+            return issues.get(issueIdx + 1);
+        } else {
+            return null;
+        }
+    }
 
     public void initializeLocations(){
         log.info("사용자 위치 초기화");
