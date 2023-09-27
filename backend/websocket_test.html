@@ -28,7 +28,7 @@
         let playUser = 1; //플레이 테스트 할 유저 (호스트 1번으로 해둠)
 
         function connect() {
-            const socket = new SockJS('http://localhost:8080/ws'); // 여기서 서버의 엔드포인트를 지정합니다.
+            const socket = new SockJS('http://j9b109.p.ssafy.io:8080/ws'); // 여기서 서버의 엔드포인트를 지정합니다.
             stompClient = Stomp.over(socket);
 
             stompClient.connect({}, function () {
@@ -54,20 +54,24 @@
 
         function sendJoin2() {
             stompClient.send("/pub/1/join", {}, JSON.stringify({
-                "player": 2
+                "player": 2,
+                "nickname" : "1"
             }));
         }
         function sendJoin3() {
             stompClient.send("/pub/1/join", {}, JSON.stringify({
-                "player": 3
+                "player": 3,
+                "nickname" : "1"
             }));
         }
         function sendJoin4() {
             stompClient.send("/pub/1/join", {}, JSON.stringify({
-                "player": 4
+                "player": 4,
+                "nickname" : "1"
             }));
         }
 
+ 
 
         function sendStart() {
             stompClient.send("/pub/1/start", {}, JSON.stringify({
@@ -115,7 +119,7 @@
 <div class="button-container">
     <button onclick="sendJoin2();">게임방 참가 (2번 플레이어)</button>
     <button onclick="sendJoin3();">게임방 참가 (3번 플레이어)</button>
-    <button onclick="sendJoin4();">게임방 참가 (4번 플레이어)</button>
+    <button onclick="sendJoin4();">게임방 참가 (4번 플레이어)</button> 
 </div>
 
 <div class="button-container">
