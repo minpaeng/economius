@@ -14,3 +14,8 @@ export const StockState = atom({
     key: 'StockState',
     default: null,
 })
+
+export const PredictionState = atom({
+    key: 'PredictionState',
+    default: null,
+})

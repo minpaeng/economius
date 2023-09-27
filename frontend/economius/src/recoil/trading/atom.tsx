@@ -50,6 +50,10 @@ export const SellAmountState = atom<number>({
     default: 1,
 });
 
+export const GetPredictionState = atom({
+    key: 'GetPredictionState',
+    default: false,
+})
 export const StockDetailState = atom({
     key: 'StockDetailState',
     default: null,
