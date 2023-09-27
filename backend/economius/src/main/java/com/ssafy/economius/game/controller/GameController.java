@@ -33,6 +33,7 @@ public class GameController {
 
     @MessageMapping(value = "/{roomId}/join")
     public void join(@DestinationVariable int roomId, GameJoinRequest gameJoinRequest) {
+        log.info(roomId + "번 방 " + gameJoinRequest.getNickname() + " 입장 요청");
         GameJoinResponse gameJoinResponse = gameService.join(
                 roomId,
                 gameJoinRequest.getPlayer(),
@@ -40,6 +41,7 @@ public class GameController {
 
         Map<String, Object> headers = Map.of("success", true, "type", "join");
         template.convertAndSend("/sub/" + roomId, gameJoinResponse, headers);
+        log.info(roomId + "번 방 " + gameJoinRequest.getNickname() + " 입장 완료");
     }
 
     @MessageMapping(value = "/{roomId}/start")
