@@ -1,14 +1,30 @@
 import Modal from 'react-modal';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import predictionimg from '/Prediction/prediction.png';
 import * as S from './GlobalModal.stye';
-import { useRecoilState } from 'recoil';
+import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
 import { NowPlayerPositionState, IsModalOpenState } from '/src/recoil/animation/atom';
+import {GetPredictionState} from "/src/recoil/trading/atom.tsx";
+import {PredictionState} from "/src/recoil/game/atom.tsx";
+import BigEvent from "/src/Components/Modals/BigEvent.tsx";
 
 function Prediction() {
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
+    const setGetPrediction = useSetRecoilState(GetPredictionState);
+    const [prediction, setPrediction] = useRecoilState(PredictionState);
+
+    // const [event, setEvent] = useState();
+
+    useEffect(() => {
+        if (prediction !== null) {
+            console.log(prediction);
+        }
+    }, [prediction]);
+
     const closeModal = () => {
         setIsModalOpen(false);
+        setGetPrediction(false);
+        setPrediction(null);
     };
 
     // modal style
@@ -37,7 +53,7 @@ function Prediction() {
         },
     };
 
-    return (
+    return prediction == null ? (
         <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
             <S.Main>
                 <S.Top>
@@ -45,15 +61,17 @@ function Prediction() {
                 </S.Top>
 
                 <S.Mid>
-                    <S.MidImg src={predictionimg} alt='predictionimg' />
+                    <S.MidImg src={predictionimg} alt='predictionimg'/>
                     <S.MidDesc>다음에 일어날 경제 이슈를 예언해줍니다.</S.MidDesc>
                 </S.Mid>
 
-                <S.RoundButton>
+                <S.RoundButton onClick={() => setGetPrediction(true)}>
                     <span>예언듣기</span>
                 </S.RoundButton>
             </S.Main>
         </Modal>
+    ) : (
+        <BigEvent issue={prediction}></BigEvent>
     );
 }
 
