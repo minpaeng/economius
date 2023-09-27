@@ -46,8 +46,8 @@ function InsuranceCard({ CardInfo, ItemInfo, index }) {
                     <hr style={{ width: '80%', margin: '0 10%' }} />
                 </div>
                 <S.CardMainBottom>
-                    {ItemInfo.map(item => {
-                        return <InsuranceCardItem img_path={item[1]} name={item[0]} />;
+                    {ItemInfo.map((item, key) => {
+                        return <InsuranceCardItem key={key} img_path={item[1]} name={item[0]} />;
                     })}
                 </S.CardMainBottom>
             </S.CardMain>

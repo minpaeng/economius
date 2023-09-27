@@ -1,7 +1,6 @@
 import Modal from 'react-modal';
-import { useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { IsModalOpenState } from '/src/recoil/animation/atom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
 import { ChanceCardInfoState } from '/src/recoil/modalInfo/atom';
 import * as S from './ChanceCard.style';
 
@@ -16,90 +15,67 @@ function ChanceCard() {
     // 원래는 초기값 false로 두고 해당 위치 되면 true로 바꿔줘야할듯
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const [chanceCardInfo, setChanceCardInfo] = useRecoilState(ChanceCardInfoState);
+    // 턴 종료 플래그
+    const setCallBack = useSetRecoilState(CallBackState);
     console.log(chanceCardInfo);
     const closeModal = () => {
+        setChanceCardInfo(null);
         setIsModalOpen(false);
-    };
-    // modal style
-    const modalStyle: any = {
-        overlay: {
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.6)',
-            zIndex: 10, 
-        },
-        content: {
-            display: 'flex',
-            flexDirextion: 'column',
-            backgroundColor: 'rgba(255,255,255,0.95)',
-            overflow: 'auto',
-            zIndex: 10,
-            top: '225px',
-            left: '425px',
-            right: '825px',
-            bottom: '225px',
-            // width:"200px",
-            // height:"400px",
-
-            border: '5px solid white',
-            borderRadius: '20px',
-            padding: '0px',
-        },
+        setCallBack(true);
     };
 
     return (
-        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
-            <S.ChanceCard>
-                <S.ChanceCardTop>
-                    <S.ChanceCardTopTitle>{chanceCardInfo.name}</S.ChanceCardTopTitle>
-                    <S.ChanceCardTopImg src={chanceCardInfo.url} alt='Image' />
-                </S.ChanceCardTop>
-                <S.ChanceCardDivide />
-                <S.ChanceCardBottom>
-                <div>
-                    {chanceCardInfo.description.split('.').map((line, index, array) => (
-                        <span key={index}>
-                        {line}
-                        {/* 마지막 요소가 아닌 경우에만 .과 줄바꿈을 추가합니다. */}
-                        {index < array.length - 1 && <><span>.</span><br /></>}
-                        </span>
-                    ))}
-                </div>
-                <div>
-                    { chanceCardInfo.moneyCard ? (
+        <Modal isOpen={isModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
+            {!(chanceCardInfo === null) ? (
+                <S.ChanceCard>
+                    <S.ChanceCardTop>
+                        <S.ChanceCardTopTitle>{chanceCardInfo.name}</S.ChanceCardTopTitle>
+                        <S.ChanceCardTopImg src={chanceCardInfo.url} alt='chanceCardImage' />
+                    </S.ChanceCardTop>
+                    <S.ChanceCardDivide />
+                    <S.ChanceCardBottom>
                         <div>
-                            <div>
-                                현금 -{chanceCardInfo.eventValue} 
-                            </div> 
-                            <div>
-                                {chanceCardInfo.apply === 'HX' ? '의료 보험 적용' :
-                                chanceCardInfo.apply === 'HS' ? '의료 특약 보험 적용' :
-                                chanceCardInfo.apply === 'MX' ? '상해 보험 적용' :
-                                chanceCardInfo.apply === 'MS' ? '상해 특약 보험 적용' :
-                                chanceCardInfo.apply}
-                            </div>
+                            {chanceCardInfo.description.split('.').map((line, index, array) => (
+                                <span key={index}>
+                                    {line}
+                                    {/* 마지막 요소가 아닌 경우에만 .과 줄바꿈을 추가합니다. */}
+                                    {index < array.length - 1 && (
+                                        <>
+                                            <span>.</span>
+                                            <br />
+                                        </>
+                                    )}
+                                </span>
+                            ))}
                         </div>
-
-                        ) : (
-                            <div>
-                                {chanceCardInfo.apply} 업종
-                                {chanceCardInfo.eventValue > 0 ? (
-                                    ` ${chanceCardInfo.eventValue} % 상승`
-                                ) : (
-                                    ` ${Math.abs(chanceCardInfo.eventValue)} % 하락`
-                                )}
-                            </div>
-                        )
-                    }
-                </div> 
-                            
-                    
-                </S.ChanceCardBottom>
-
-            </S.ChanceCard>
+                        <div>
+                            {chanceCardInfo.moneyCard ? (
+                                <div>
+                                    <div>현금 -{chanceCardInfo.eventValue}</div>
+                                    <div>
+                                        {chanceCardInfo.apply === 'HX'
+                                            ? '의료 보험 적용'
+                                            : chanceCardInfo.apply === 'HS'
+                                            ? '의료 특약 보험 적용'
+                                            : chanceCardInfo.apply === 'MX'
+                                            ? '상해 보험 적용'
+                                            : chanceCardInfo.apply === 'MS'
+                                            ? '상해 특약 보험 적용'
+                                            : chanceCardInfo.apply}
+                                    </div>
+                                </div>
+                            ) : (
+                                <div>
+                                    {chanceCardInfo.apply} 업종
+                                    {chanceCardInfo.eventValue > 0 ? ` ${chanceCardInfo.eventValue} % 상승` : ` ${Math.abs(chanceCardInfo.eventValue)} % 하락`}
+                                </div>
+                            )}
+                        </div>
+                    </S.ChanceCardBottom>
+                </S.ChanceCard>
+            ) : (
+                `로딩중입니다...`
+            )}
         </Modal>
     );
 }

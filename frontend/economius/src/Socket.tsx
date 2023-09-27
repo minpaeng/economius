@@ -112,7 +112,7 @@ function PlayerSocket() {
                     // 방 입장은 이전 페이지에서
 
                     // 개인 메시지 구독 => sub/{roomId}/{playerId}
-                    stompClient.current.subscribe(`/sub/1/1`, function (recievedMessage: any) {
+                    stompClient.current.subscribe(`/sub/${roomId}/1`, function (recievedMessage: any) {
                         const message = JSON.parse(recievedMessage.body) || null; // 객체
                         const type = recievedMessage.headers.type || null; // 문자열
                         console.log('개인메시지 type: ', type);
@@ -169,8 +169,8 @@ function PlayerSocket() {
                         // 주식 recoil 종료
                     });
 
-                    // 방 메시지 구독 => sub/{roomId}
-                    stompClient.current.subscribe(`/sub/1`, function (recievedMessage: any) {
+                    // 방 전체 메시지 구독 => sub/{roomId}
+                    stompClient.current.subscribe(`/sub/${roomId}`, function (recievedMessage: any) {
                         const message = JSON.parse(recievedMessage.body) || null;
                         const type = recievedMessage.headers.type || null;
                         console.log('전체메시지 type: ', type);
@@ -244,6 +244,7 @@ function PlayerSocket() {
 
         // 부동산 방문
         if ([4, 14, 22].includes(nowPlayerPosition)) {
+            console.log(nowPlayer + 1, buildingIds[nowPlayerPosition]);
             // isOpen 상태가 true일 때 메시지를 보내는 코드를 추가
             if (stompClient.current) {
                 stompClient.current.send(

@@ -27,14 +27,14 @@ export const NowPlayerState = atom<number>({
 export const NowPlayerPositionState = atom<number>({
     key: 'NowPlayerPositionState',
     default: 0, // 기본값
-    effects_UNSTABLE: [persistAtom],
+    // effects_UNSTABLE: [persistAtom],
 });
 
 // 이동 카드 번호
 export const MovementCardsState = atom<number[]>({
     key: 'MovementCardState',
     default: [1, 1, 1],
-    effects_UNSTABLE: [persistAtom],
+    // effects_UNSTABLE: [persistAtom],
 });
 
 // 캐릭터 이동 여부
