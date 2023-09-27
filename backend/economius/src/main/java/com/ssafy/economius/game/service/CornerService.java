@@ -2,11 +2,11 @@ package com.ssafy.economius.game.service;
 
 import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.dto.AssetChangeDto;
-import com.ssafy.economius.game.dto.ChangeUnitDto;
 import com.ssafy.economius.game.dto.response.OracleResponse;
 import com.ssafy.economius.game.entity.redis.AssetChange;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Issue;
+import com.ssafy.economius.game.enums.InitialData;
 import com.ssafy.economius.game.enums.VolatileEnum;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +28,10 @@ public class CornerService {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
         Issue nextIssue = game.getNextIssue();
-        List<AssetChange> assetChanges = game.getIssues().get(game.getIssueIdx()).getCurrentAssetChanges();
-        OracleResponse oracleResponse = makeOracleResponse(nextIssue, assetChanges);
+        OracleResponse oracleResponse = makeOracleResponse(nextIssue);
+        List<AssetChange> assetChanges = game.getIssues()
+                .get(game.getIssueIdx() + 1)
+                .getCurrentAssetChanges();
         setAssetChanges(assetChanges, oracleResponse);
 
         return oracleResponse;
@@ -39,32 +41,31 @@ public class CornerService {
         String type;
         for (AssetChange assetChange : assetChanges) {
             type = assetChange.getAssetType();
+            log.info(assetChange.getStockType());
             if (type.equals(VolatileEnum.GOLD.getValue())) {
-                oracleResponse.setGoldChange(makeAssetChangeDto(assetChange));
+                oracleResponse.setGoldChange(makeAssetChangeDto(assetChange, null));
             } else if (type.equals(VolatileEnum.INTEREST_RATE.getValue())) {
-                oracleResponse.setInterestRateChange(makeAssetChangeDto(assetChange));
+                oracleResponse.setInterestRateChange(makeAssetChangeDto(assetChange, null));
             } else if (type.equals(VolatileEnum.BUIDING.getValue())) {
-                oracleResponse.setBuildingChange(makeAssetChangeDto(assetChange));
+                oracleResponse.setBuildingChange(makeAssetChangeDto(assetChange, null));
             } else if (type.equals(VolatileEnum.STOCK.getValue())) {
-                oracleResponse.getStockChanges().add(makeAssetChangeDto(assetChange));
+                int stockId = assetChange.getAssetId();
+                oracleResponse.getStockChanges().add(makeAssetChangeDto(assetChange, InitialData.STOCKS.get(stockId).getType()));
             }
         }
     }
 
-    private AssetChangeDto makeAssetChangeDto(AssetChange assetChange) {
+    private AssetChangeDto makeAssetChangeDto(AssetChange assetChange, String stockType) {
         return AssetChangeDto.builder()
                 .assetType(assetChange.getAssetType())
                 .assetId(assetChange.getAssetId())
-                .stockType(assetChange.getStockType())
-                .changeRate(ChangeUnitDto.builder()
-                        .value(assetChange.getChangeRate().getValue())
-                        .message(assetChange.getChangeRate().getMessage())
-                        .build())
-                .changeReason(assetChange.getChangeReason())
+                .stockType(stockType)
+                .changePercentage(assetChange.getChangeRate().getValue())
+                .changeCategory(assetChange.getChangeRate().getMessage())
                 .build();
     }
 
-    private OracleResponse makeOracleResponse(Issue nextIssue, List<AssetChange> assetChanges) {
+    private OracleResponse makeOracleResponse(Issue nextIssue) {
         if (nextIssue == null) return null;
 
         return OracleResponse.builder()

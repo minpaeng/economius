@@ -15,6 +15,6 @@ public class AssetChangeDto {
     private String assetType;
     private Integer assetId;
     private String stockType;
-    private ChangeUnitDto changeRate;
-    private String changeReason;
+    private int changePercentage;
+    private String changeCategory;
 }

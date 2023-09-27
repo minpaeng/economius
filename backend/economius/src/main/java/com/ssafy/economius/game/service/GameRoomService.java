@@ -181,6 +181,7 @@ public class GameRoomService {
         List<AssetChange> list = new ArrayList<>();
 
         for (IssueStockDto issueStockDto : assetChanges) {
+            log.info("Dd: " + issueStockDto.getAssetType());
             list.add(AssetChange.builder()
                     .issueStockId(issueStockDto.getIssueStockId())
                     .issueId(issueStockDto.getIssueId())

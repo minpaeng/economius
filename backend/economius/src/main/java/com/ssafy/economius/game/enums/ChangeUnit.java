@@ -1,7 +1,6 @@
 package com.ssafy.economius.game.enums;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ssafy.economius.game.dto.ChangeUnitDto;
 import lombok.Getter;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
@@ -21,12 +20,5 @@ public enum ChangeUnit {
         this.code = code;
         this.value = value;
         this.message = message;
-    }
-
-    public ChangeUnitDto getDto() {
-        return ChangeUnitDto.builder()
-                .value(this.value)
-                .message(this.message)
-                .build();
     }
 }
