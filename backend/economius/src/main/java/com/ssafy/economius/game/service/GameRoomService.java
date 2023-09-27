@@ -160,10 +160,9 @@ public class GameRoomService {
 
     private List<Issue> makeIssues() {
         List<Issue> issues = new ArrayList<>();
-        List<Integer> list = pickIssues();
+        List<IssueDto> issueDtos = pickIssues();
 
-        for (int idx : list) {
-            IssueDto issue = InitialData.ISSUES.get(idx);
+        for (IssueDto issue : issueDtos) {
             Issue tmpIssue = Issue.builder()
                     .issueId(issue.getIssueId())
                     .name(issue.getName())
@@ -183,7 +182,6 @@ public class GameRoomService {
         List<AssetChange> list = new ArrayList<>();
 
         for (IssueStockDto issueStockDto : assetChanges) {
-            log.info("Dd: " + issueStockDto.getAssetType());
             list.add(AssetChange.builder()
                     .issueStockId(issueStockDto.getIssueStockId())
                     .issueId(issueStockDto.getIssueId())
@@ -223,11 +221,20 @@ public class GameRoomService {
     }
 
 
-    private List<Integer> pickIssues() {
+    private List<IssueDto> pickIssues() {
+        List<Integer> list = new ArrayList<>(InitialData.ISSUES.keySet());
         int size = RateEnum.ISSUE_COUNT.getValue();
         int lowerBound = 0;
         int upperBound = InitialData.ISSUES.size() - 1;
-        return RandomUtil.getUniqueRandomNumbers(size, lowerBound, upperBound);
+        List<Integer> numbers = RandomUtil.getUniqueRandomNumbers(size, lowerBound, upperBound);
+
+        return makePickIssues(numbers, list);
+    }
+
+    private List<IssueDto> makePickIssues(List<Integer> numbers, List<Integer> list) {
+        List<IssueDto> issues = new ArrayList<>();
+        numbers.forEach(number -> issues.add(InitialData.ISSUES.get(list.get(number))));
+        return issues;
     }
 
     private Map<Integer, Stock> makeStocks() {
