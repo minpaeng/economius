@@ -30,6 +30,4 @@ public class CornerController {
         template.convertAndSend("/sub/" + roomId + "/" + oracleRequest.getPlayer(), oracleResponse,
             headers);
     }
-
-
 }
