@@ -3,7 +3,7 @@ import video1 from '/video/video_start.mp4'; // 1080p
 import video3 from '/video/video_repeat.mp4'; // sound
 import StartAccess from './Components/Modals/StartAccess';
 import * as S from '../src/Components/Modals/GlobalModal.stye';
-import { RoomIdState, SetShowJoinState, UseridState } from './recoil/animation/atom';
+import { RoomIdState, RoomJoinUsersNicknameState, SetShowJoinState, SetShowWaitRoomState, UseridState } from './recoil/animation/atom';
 import { useRecoilState } from 'recoil';
 import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
@@ -33,7 +33,9 @@ export default function Room() {
 
     const [isModalClosed, setIsModalClosed] = useState(false); // 모달이 닫힌 상태를 관리
     const [renderContent, setRenderContent] = useState(false); // 모달이 닫힌 후 n초 뒤에 렌더링할 상태를 관리
-    const [showWaitRoom, setShowWaitRoom] = useState(false);
+    const [showWaitRoom, setShowWaitRoom] = useRecoilState(SetShowWaitRoomState);
+    const [roomJoinUsersNicknameState, setRoomJoinUsersNicknameState] = useRecoilState(RoomJoinUsersNicknameState);
+
     const [showJoin, setShowJoin] = useRecoilState(SetShowJoinState);
 
     // const [showJoin, setShowJoin] = useState(false);
@@ -151,6 +153,8 @@ export default function Room() {
             console.log(response.data.roomId); // { roomId: 2 }와 같은 응답 출력
             setRoomid(response.data.roomId);
 
+            setRoomJoinUsersNicknameState([nickname, 'wait..', 'wait..', 'wait..']);
+
             setShowWaitRoom(true);
         } catch (error) {
             console.error('Axios error: ' + error.message); // 네트워크 오류 처리
@@ -191,7 +195,7 @@ export default function Room() {
                         </S.RoundButtonRoom>
                     </S.ButtonOuter>
                 )}
-                {showWaitRoom && <WaitRoom setShowWaitRoom={setShowWaitRoom} />}
+                {showWaitRoom && <WaitRoom />}
                 {showJoin && <Join />}
             </div>
 
