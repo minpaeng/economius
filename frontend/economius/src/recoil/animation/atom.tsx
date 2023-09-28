@@ -9,7 +9,35 @@ export const RoomIdState = atom<number>({
     effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
-// 현재 플레이어
+// wait room 모달 오픈 여부
+export const SetShowWaitRoomState = atom<boolean>({
+    key: 'SetShowWaitRoomState',
+    default: false, // 1이 호출
+    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+});
+
+// 방 참가 신청 여부
+export const SetShowJoinState = atom<boolean>({
+    key: 'SetShowJoinState',
+    default: false, // 1이 호출
+    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+});
+
+// 방 참가 신청 여부
+export const RoomJoinState = atom<number>({
+    key: 'RoomJoinState',
+    default: 0, // 1이 호출
+    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+});
+
+// 방 참가 인원 닉네임 보기
+export const RoomJoinUsersNicknameState = atom<string[]>({
+    key: 'RoomJoinUsersNicknameState',
+    default: ['wait..', 'wait..', 'wait..', 'wait..'],
+    // effects_UNSTABLE: [persistAtom],
+});
+
+// 유저 아이디
 export const UseridState = atom({
     key: 'UseridState',
     default: 'a', // 기본값
@@ -27,14 +55,14 @@ export const NowPlayerState = atom<number>({
 export const NowPlayerPositionState = atom<number>({
     key: 'NowPlayerPositionState',
     default: 0, // 기본값
-    effects_UNSTABLE: [persistAtom],
+    // effects_UNSTABLE: [persistAtom],
 });
 
 // 이동 카드 번호
 export const MovementCardsState = atom<number[]>({
     key: 'MovementCardState',
     default: [1, 1, 1],
-    effects_UNSTABLE: [persistAtom],
+    // effects_UNSTABLE: [persistAtom],
 });
 
 // 캐릭터 이동 여부

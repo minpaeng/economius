@@ -90,7 +90,14 @@ function Insurance() {
                     </S.InsuranceTop>
                     <S.InsuranceMid>
                         {order.map(index => {
-                            return <InsuranceCard index={index} CardInfo={insuranceInfo[`insurance${index}`]} ItemInfo={Items[index - 1]}></InsuranceCard>;
+                            return (
+                                <InsuranceCard
+                                    key={index}
+                                    index={index}
+                                    CardInfo={insuranceInfo[`insurance${index}`]}
+                                    ItemInfo={Items[index - 1]}
+                                ></InsuranceCard>
+                            );
                         })}
                     </S.InsuranceMid>
                     <S.InsuranceConfirmButton onClick={() => setTradeInsuranceConfirm(true)}>확인</S.InsuranceConfirmButton>
