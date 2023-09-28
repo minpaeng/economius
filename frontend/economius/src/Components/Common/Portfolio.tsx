@@ -6,8 +6,19 @@ import PropertyChart from "./PortfolioProperty/PropertyChart";
 import PortfolioSaving from "./PortfolioProperty/PortfolioSaving/PortfolioSaving";
 import PortfolioRealEstate from "./PortfolioProperty/PortfolioRealEstate/PortfolioRealEstate";
 import PortfolioInsurance from "./PortfolioProperty/PortfolioInsurance/PortfolioInsurance";
+import { useRecoilValue } from "recoil";
+import { PortfolioState } from "../../recoil/game/atom";
+import { CallBackState } from "../../recoil/animation/atom";
+import { useEffect } from "react";
 
 function Portforlio({ setSideBarType }) {
+  const portfolios = useRecoilValue(PortfolioState);
+  const finishTurn = useRecoilValue(CallBackState);
+
+  useEffect(() => {
+    console.log(portfolios);
+  }, [finishTurn]);
+
   return (
     <S.PortfolioMain>
       <div
