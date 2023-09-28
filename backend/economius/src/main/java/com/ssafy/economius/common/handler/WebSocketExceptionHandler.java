@@ -30,7 +30,7 @@ public class WebSocketExceptionHandler {
     @MessageExceptionHandler(CustomWebsocketRoomException.class)
     public void handleRoomJoinException(CustomWebsocketRoomException e) {
         template.convertAndSend(
-                "/sub/" + e.getPlayer(),
+                "/sub/player/" + e.getPlayer(),
                 WebsocketErrorResponse.builder()
                         .code(e.getCode())
                         .message(e.getMessage())
