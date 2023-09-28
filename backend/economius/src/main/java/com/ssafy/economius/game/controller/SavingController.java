@@ -1,9 +1,7 @@
 package com.ssafy.economius.game.controller;
 
-import com.ssafy.economius.common.exception.CustomWebsocketException;
 import com.ssafy.economius.game.dto.request.SavingRequest;
 import com.ssafy.economius.game.dto.response.SavingVisitResponse;
-import com.ssafy.economius.game.dto.response.SavingResponse;
 import com.ssafy.economius.game.service.SavingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

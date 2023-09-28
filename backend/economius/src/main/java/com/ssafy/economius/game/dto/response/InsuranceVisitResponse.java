@@ -1,7 +1,6 @@
 package com.ssafy.economius.game.dto.response;
 
 import com.ssafy.economius.game.dto.InsuranceDto;
-import com.ssafy.economius.game.dto.InsurancesDto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;

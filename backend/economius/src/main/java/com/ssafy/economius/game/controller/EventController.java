@@ -1,6 +1,5 @@
 package com.ssafy.economius.game.controller;
 
-import com.ssafy.economius.game.dto.request.EventCardRequest;
 import com.ssafy.economius.game.dto.response.EventCardResponse;
 import com.ssafy.economius.game.service.EventService;
 import lombok.RequiredArgsConstructor;
