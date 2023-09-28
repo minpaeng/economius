@@ -19,3 +19,8 @@ export const PredictionState = atom({
     key: 'PredictionState',
     default: null,
 })
+
+export const GameRoomIdState = atom({
+    key: 'GameRoomIdState',
+    default: 0,
+})
