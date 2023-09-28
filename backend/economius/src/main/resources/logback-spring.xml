@@ -31,12 +31,6 @@
                 <callerData />
             </providers>
         </encoder>
-        <!-- INFO 레벨 로그 제외하는 필터 -->
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>INFO</level>
-            <onMatch>DENY</onMatch>
-            <onMismatch>NEUTRAL</onMismatch>
-        </filter>
     </appender>
 
     <!-- CONSOLE 로거 생성 -->
@@ -47,7 +41,7 @@
     <!-- prd 프로필에서만 LOGSTASH appender 활성화 -->
     <springProfile name="prd">
         <!-- LOGSTASH 로거 생성 -->
-        <logger name="com.ssafy" level="ERROR" additivity="false">
+        <logger name="com.ssafy" level="INFO" additivity="false">
             <appender-ref ref="LOGSTASH" />
         </logger>
 
