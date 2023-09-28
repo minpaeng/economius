@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <property name="LOGS_ABSOLUTE_PATH" value="./logs" />
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <!-- CONSOLE appender 정의 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- LOGSTASH appender 정의 -->
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <!-- 로그 스태시 주소 -->
+        <destination>j9b109.p.ssafy.io:5000</destination>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <providers>
+                <mdc />
+                <pattern>
+                    <pattern>{"server":"SampleServer"}</pattern>
+                </pattern>
+                <timestamp />
+                <context />
+                <threadName />
+                <loggerName />
+                <logLevel />
+                <message />
+                <logstashMarkers />
+                <stackTrace />
+                <callerData />
+            </providers>
+        </encoder>
+        <!-- INFO 레벨 로그 제외하는 필터 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>DENY</onMatch>
+            <onMismatch>NEUTRAL</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- CONSOLE 로거 생성 -->
+    <logger name="com.ssafy" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <!-- prd 프로필에서만 LOGSTASH appender 활성화 -->
+    <springProfile name="prd">
+        <!-- LOGSTASH 로거 생성 -->
+        <logger name="com.ssafy" level="ERROR" additivity="false">
+            <appender-ref ref="LOGSTASH" />
+        </logger>
+
+        <logger name="com.ssafy">
+            <appender-ref ref="LOGSTASH" />
+        </logger>
+        <root>
+            <appender-ref ref="LOGSTASH" />
+        </root>
+    </springProfile>
+
+    <logger name="com.ssafy" level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+</configuration>
