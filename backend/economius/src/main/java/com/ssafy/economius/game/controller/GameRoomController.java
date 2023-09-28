@@ -30,7 +30,6 @@ public class GameRoomController {
 
     @PostMapping("/create")
     public ResponseEntity<CreateRoomResponse> createRoom(@RequestBody CreateRoomRequest createRoomRequest) {
-        log.error("test error");
         return new ResponseEntity<>(
                 gameRoomService.createRoom(createRoomRequest.getPlayer(), createRoomRequest.getNickname()),
                 HttpStatus.OK);
