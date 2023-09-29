@@ -28,6 +28,12 @@ public class CornerService {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
         Issue nextIssue = game.getNextIssue();
+        if (nextIssue == null){
+            return OracleResponse.builder()
+                .issueId(-1)
+                .build();
+        }
+
         OracleResponse oracleResponse = makeOracleResponse(nextIssue);
         List<AssetChange> assetChanges = game.getIssues()
                 .get(game.getIssueIdx() + 1)
@@ -65,8 +71,6 @@ public class CornerService {
     }
 
     private OracleResponse makeOracleResponse(Issue nextIssue) {
-        if (nextIssue == null) return null;
-
         return OracleResponse.builder()
             .url(nextIssue.getUrl())
             .description(nextIssue.getDescription())
