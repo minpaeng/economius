@@ -3,21 +3,8 @@ import SlideToggle from "react-slide-toggle";
 import PortfolioSavingItem from "./PortfolioSavingItem";
 import { useState } from "react";
 
-function PortfolioSaving() {
-  const dummy = [
-    {
-      title: "신한은행",
-      rate: 12,
-      currentCycle: 2,
-      cycleCnt: 3,
-      cycleMoney: 300000,
-      value: 600000,
-      expectedProfit: 1000000,
-    },
-  ];
-
-  const 총자산가치 = 600000;
-
+function PortfolioSaving({ totalPrice, amount, savingList }) {
+  console.log(totalPrice);
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const toggleCollapse = () => {
@@ -38,28 +25,28 @@ function PortfolioSaving() {
                 <div style={{ fontSize: "20px" }}>적금</div>
               </S.LayoutTopLeft>
               <S.LayoutTopRight>
-                {dummy.length ? (
-                  <div> 총 자산가치 : {총자산가치.toLocaleString()} (원)</div>
+                {totalPrice ? (
+                  <div> 총 자산가치 : {totalPrice.toLocaleString()} (원)</div>
                 ) : (
                   "보유 중인 적금이 없습니다."
                 )}
               </S.LayoutTopRight>
             </S.LayoutTop>
             <div ref={setCollapsibleElement} style={{ paddingBottom: "5px" }}>
-              {dummy.map((item) => {
+              {savingList.map((item) => {
                 return (
                   <PortfolioSavingItem
-                    title={item.title}
+                    title={item.name}
                     rate={item.rate}
-                    cycleCnt={item.cycleCnt}
-                    currentCycle={item.currentCycle}
-                    cycleMoney={item.cycleMoney}
-                    expectedProfit={item.expectedProfit}
+                    cycleCnt={item.finishCount}
+                    currentCycle={item.currentCount}
+                    cycleMoney={item.monthlyDeposit}
+                    currentPrice={item.currentPrice}
                   />
                 );
               })}
             </div>
-            {dummy.length ? (
+            {savingList.length ? (
               <S.ToggleBtn
                 onClick={() => {
                   toggle();

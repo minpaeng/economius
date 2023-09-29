@@ -55,7 +55,7 @@ function PortfolioGold({ totalPrice, amount, earningPrice, earningRate }) {
           <S.LayoutTop>
             <S.LayoutTopLeft>
               <img src="Gold/goldbar.png" alt="img" />
-              <div style={{ fontSize: "28px" }}>금</div>
+              <div style={{ fontSize: "20px" }}>금</div>
             </S.LayoutTopLeft>
             <S.LayoutTopRight>보유 중인 금이 없습니다.</S.LayoutTopRight>
           </S.LayoutTop>

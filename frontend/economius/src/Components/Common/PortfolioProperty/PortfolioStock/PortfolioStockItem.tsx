@@ -65,7 +65,7 @@ function PortforlioStockItem({
         <S.LayoutBottomitem>
           <S.LayoutBottomitemLeft>예상 배당금</S.LayoutBottomitemLeft>
           <S.LayoutBottomitemRight>
-            {expectedProfit.toLocaleString()}
+            {(expectedProfit * (cnt / 100)).toLocaleString()}
           </S.LayoutBottomitemRight>
         </S.LayoutBottomitem>
       </S.LayoutBottom>

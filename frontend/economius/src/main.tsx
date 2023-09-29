@@ -5,9 +5,9 @@ import "./index.css";
 import Root from "./Root.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <RecoilRoot>
-      <Root />
-    </RecoilRoot>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <RecoilRoot>
+    <Root />
+  </RecoilRoot>
+  // </React.StrictMode>
 );

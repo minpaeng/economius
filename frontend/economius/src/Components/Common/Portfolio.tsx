@@ -11,11 +11,12 @@ import {
   PortfolioState,
   ClickUserPortfolioState,
 } from "../../recoil/game/atom";
-import { CallBackState } from "../../recoil/animation/atom";
-import { useEffect } from "react";
+// import { CallBackState } from "../../recoil/animation/atom";
+// import { useEffect } from "react";
 
 function Portforlio({ setSideBarType }) {
   // const finishTurn = useRecoilValue(CallBackState);
+
   const userId = useRecoilValue(ClickUserPortfolioState);
   const portfolios = useRecoilValue(PortfolioState) || {
     "1": {
@@ -35,6 +36,15 @@ function Portforlio({ setSideBarType }) {
           "3": {
             bankId: 3,
             name: "onebank",
+            monthlyDeposit: 300000,
+            currentPrice: 300000,
+            currentCount: 1,
+            finishCount: 3,
+            rate: 3,
+          },
+          "2": {
+            bankId: 2,
+            name: "궁민",
             monthlyDeposit: 300000,
             currentPrice: 300000,
             currentCount: 1,
@@ -67,6 +77,7 @@ function Portforlio({ setSideBarType }) {
       },
       stocks: {
         totalPrice: 64000,
+        // TODO: 이거 왜 0 이지?
         earningRate: 0,
         earningPrice: 66560,
         amount: 2,
@@ -231,20 +242,22 @@ function Portforlio({ setSideBarType }) {
 
   // useEffect(() => {}, [finishTurn]);
 
-  useEffect(() => {
-    console.log(portfolios[userId]);
-    console.log(userId);
-  }, [userId]);
+  function objectToArray(obj) {
+    if (!obj) {
+      return [];
+    }
+    return Object.values(obj);
+  }
 
-  console.log(userId);
-  console.log(portfolios);
-  console.log(portfolios[userId]);
-  console.log(portfolios[userId].money);
-  console.log(portfolios[userId].savings);
-  console.log(portfolios[userId].gold);
-  console.log(portfolios[userId].buildings);
-  console.log(portfolios[userId].stocks);
-  console.log(portfolios[userId].insurances);
+  const savingList = objectToArray(portfolios[userId].savings.savings);
+  const buildingList = objectToArray(portfolios[userId].buildings.building);
+  const stockList = objectToArray(portfolios[userId].stocks.stocks);
+  const insuranceList = objectToArray(portfolios[userId].insurances.insurance);
+
+  // useEffect(() => {
+  //   console.log(portfolios[userId]);
+  //   console.log(userId);
+  // }, [userId]);
 
   return (
     <S.PortfolioMain>
@@ -275,18 +288,36 @@ function Portforlio({ setSideBarType }) {
       {/* 금 */}
       <PortfolioGold
         totalPrice={portfolios[userId].gold.totalPrice}
-        amount={portfolios[userId].gold.totalPrice}
+        amount={portfolios[userId].gold.amount}
         earningPrice={portfolios[userId].gold.earningPrice}
         earningRate={portfolios[userId].gold.earningRete}
       />
       {/* 적금 */}
-      <PortfolioSaving />
+      <PortfolioSaving
+        totalPrice={portfolios[userId].savings.totalPrice}
+        amount={portfolios[userId].savings.amount}
+        savingList={savingList}
+      />
       {/* 부동산 */}
-      <PortfolioRealEstate />
+      <PortfolioRealEstate
+        totalPrice={portfolios[userId].buildings.totalPrice}
+        earningRate={portfolios[userId].buildings.earningRate}
+        earningPrice={portfolios[userId].buildings.earningPrice}
+        buildingList={buildingList}
+      />
       {/* 주식 토글 */}
-      <PortfolioStock setSideBarType={setSideBarType} />
+      <PortfolioStock
+        setSideBarType={setSideBarType}
+        userId={userId}
+        earningRate={portfolios[userId].stocks.earningRate}
+        earningPrice={portfolios[userId].stocks.earningPrice}
+        stockList={stockList}
+      />
       {/* 보험 토글 */}
-      <PortfolioInsurance />
+      <PortfolioInsurance
+        totalPrice={portfolios[userId].insurances.totalPrice}
+        insuranceList={insuranceList}
+      />
     </S.PortfolioMain>
   );
 }
