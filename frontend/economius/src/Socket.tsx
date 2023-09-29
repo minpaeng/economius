@@ -290,6 +290,10 @@ function PlayerSocket() {
     }
 
     useEffect(() => {
+        setRoomId(1);
+    }, []);
+
+    useEffect(() => {
         console.log('roomId: ' + roomId);
 
         // stompClient.current가 null인지 확인
@@ -299,6 +303,7 @@ function PlayerSocket() {
 
         // stompClient가 connected 상태인지 확인
         if (!stompClient.current.connected) {
+            stompClient.current = Stomp.over(() => new sockjs('https://j9b109.p.ssafy.io/ws'));
             stompClient.current.connect(
                 {},
                 function () {
@@ -315,6 +320,7 @@ function PlayerSocket() {
             stompClient.current.unsubscribe();
             stompClient.current.subscribe(`/sub/${roomId}`, broadCastCallBackFunction);
             stompClient.current.subscribe(`/sub/${roomId}/${playername}`, uniCastCallBackFunction);
+            console.log(`기존 방 구독 취소 후 ${roomId}번 방 구독 완료`);
         }
     }, [roomId, playername, stompClient]);
 
