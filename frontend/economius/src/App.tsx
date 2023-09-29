@@ -46,25 +46,35 @@ function App() {
       className="canvas-outer"
       style={{ width: "100%", height: "calc(100vw * 9 / 16)" }}
     >
-      {/* <Canvas style={{ width: '100%', height: '100%' }}>
-                <OrthographicCamera makeDefault zoom={65} position={[4, 4.1, 4]} />
-                <OrbitControls />
-                <ambientLight intensity={1} />
-                <directionalLight ref={light} color={0xffffff} intensity={3} position={[0, 5, 0]} />
-                <pointLight ref={light} color={0xffffff} intensity={1} position={[0, 5, 0]} />
+      <Canvas style={{ width: "100%", height: "100%" }}>
+        <OrthographicCamera makeDefault zoom={65} position={[4, 4.1, 4]} />
+        <OrbitControls />
+        <ambientLight intensity={1} />
+        <directionalLight
+          ref={light}
+          color={0xffffff}
+          intensity={3}
+          position={[0, 5, 0]}
+        />
+        <pointLight
+          ref={light}
+          color={0xffffff}
+          intensity={1}
+          position={[0, 5, 0]}
+        />
 
-                <Map />
-                <Characters />
-            </Canvas> */}
+        <Map />
+        <Characters />
+      </Canvas>
 
-      {/* <Controller /> */}
+      <Controller />
 
       <NewsBar />
       <PlayerPlaceAll />
       <SideBar />
 
       <Modals />
-      {/* <Socket /> */}
+      <Socket />
     </div>
   );
 }

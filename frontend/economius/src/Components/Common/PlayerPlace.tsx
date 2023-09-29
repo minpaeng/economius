@@ -6,6 +6,10 @@ import PlayerRanking from "./PlayerRanking";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { ClickUserPortfolioState } from "../../recoil/game/atom";
+import {
+  isPortfolioState,
+  SideBarTypeState,
+} from "../../recoil/animation/atom";
 
 const PlayerLayout = styled.div`
   display: flex;
@@ -28,6 +32,10 @@ function PlayerPlace({
   Nick,
 }) {
   const [clickUserId, setClickUserId] = useRecoilState(ClickUserPortfolioState);
+
+  const [isPortfolio, setIsPortfolio] = useRecoilState(isPortfolioState);
+
+  const [sideBarType, setSideBarType] = useRecoilState(SideBarTypeState);
 
   // modal style
   const modalStyle: any = {
@@ -63,13 +71,25 @@ function PlayerPlace({
     <Modal isOpen={true} style={modalStyle}>
       {!(idx % 2) ? (
         // TODO: 이것도 일단 idx로 해둠 ==> 나중에 각각의 userID를 받아서 바꿔줄 것
-        <PlayerLayout onClick={() => setClickUserId(idx)}>
+        <PlayerLayout
+          onClick={() => {
+            setClickUserId(idx);
+            setSideBarType("portfolio");
+            setIsPortfolio(true);
+          }}
+        >
           <PlayerRanking Ranking={Ranking} />
           <PlayerProperty AllProperty={AllProperty} money={money} Nick={Nick} />
           <PlayerChracter character={character} />
         </PlayerLayout>
       ) : (
-        <PlayerLayout onClick={() => setClickUserId(idx)}>
+        <PlayerLayout
+          onClick={() => {
+            setClickUserId(idx);
+            setSideBarType("portfolio");
+            setIsPortfolio(true);
+          }}
+        >
           <PlayerChracter character={character} />
           <PlayerProperty AllProperty={AllProperty} money={money} Nick={Nick} />
           <PlayerRanking Ranking={Ranking} />

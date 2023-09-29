@@ -4,18 +4,17 @@ import { useState } from "react";
 import Portfolio from "./Portfolio";
 import EconomicIndicator from "./EconomicIndicator";
 import StockCheck from "./StockCheck";
+import { useRecoilValue } from "recoil";
 import { useRecoilState } from "recoil";
 import {
   StockClickIdState,
   SideBarTypeState,
   isPortfolioState,
 } from "/src/recoil/animation/atom";
-// import { motion, AnimatePresence } from "framer-motion";
+import { ClickUserPortfolioState } from "/src/recoil/game/atom";
 
 function SideBar() {
-  // 뉴스
-
-  // const News = ["속보1", "속보2", "속보3", "속보4", "속보5"];
+  const clickUserColor = useRecoilValue(ClickUserPortfolioState);
 
   const [sideBarType, setSideBarType] = useRecoilState(SideBarTypeState);
 
@@ -42,6 +41,24 @@ function SideBar() {
     );
   }
 
+  // 사이드바 컬러
+  const defaultColor = "#b8d4ffdb";
+
+  let sideBarColor;
+
+  if (clickUserColor === 1) {
+    sideBarColor = "rgba(255, 216, 133, 0.9)";
+  } else if (clickUserColor === 2) {
+    sideBarColor = "rgba(131, 213, 233, 0.9)";
+  } else if (clickUserColor === 3) {
+    sideBarColor = "rgba(255, 166, 132, 0.90)";
+  } else if (clickUserColor === 4) {
+    sideBarColor = "rgba(255, 156, 159, 0.90)";
+  }
+
+  console.log(typeof clickUserColor);
+  console.log(sideBarColor);
+
   // modal style
   const modalStyle: any = {
     overlay: {
@@ -57,7 +74,7 @@ function SideBar() {
     content: {
       display: "flex",
       flexDirextion: "column",
-      backgroundColor: "#b8d4ffdb",
+      backgroundColor: isPortfolio ? sideBarColor : defaultColor,
       overflow: "auto",
       zIndex: 1,
       top: 0,
