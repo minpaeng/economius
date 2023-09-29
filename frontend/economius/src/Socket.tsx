@@ -296,13 +296,8 @@ function PlayerSocket() {
     useEffect(() => {
         console.log('roomId: ' + roomId);
 
-        // stompClient.current가 null인지 확인
-        if (!stompClient.current) {
-            stompClient.current = Stomp.over(() => new sockjs('https://j9b109.p.ssafy.io/ws'));
-        }
-
-        // stompClient가 connected 상태인지 확인
-        if (!stompClient.current.connected) {
+        // stompClient.current가 null인지 확인, stompClient가 connected 상태인지 확인
+        if (!stompClient.current || !stompClient.current.connected) {
             stompClient.current = Stomp.over(() => new sockjs('https://j9b109.p.ssafy.io/ws'));
             stompClient.current.connect(
                 {},
