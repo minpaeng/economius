@@ -21,6 +21,7 @@ import * as THREE from 'three';
 import { useSetRecoilState } from 'recoil';
 import { PortfolioState, StockState } from '/src/recoil/game/atom.tsx';
 import axios from 'axios';
+import Cards from './Cards';
 
 function App() {
     const light = useRef();
@@ -57,6 +58,7 @@ function App() {
 
             <Modals />
             <Socket />
+            <Cards />
         </div>
     );
 }

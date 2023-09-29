@@ -8,7 +8,8 @@ import {
     MonthlyModalOpenState,
     NowPlayerState,
     NowPlayerPositionState,
-    MovementCardsState,
+    MovementCardState,
+    MovementCardOpenState,
     CallBackState,
     UseridState,
     RoomJoinState,
@@ -66,7 +67,8 @@ function PlayerSocket() {
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const [nowPlayer, setNowPlayerState] = useRecoilState(NowPlayerState);
     const [nowPlayerPosition, setNowPlayerPosition] = useRecoilState(NowPlayerPositionState);
-    const [movementCards, setMovementCards] = useRecoilState(MovementCardsState);
+    const [movementCard, setMovementCard] = useRecoilState(MovementCardState);
+    const [movementCardOpen, setMovementCardOpen] = useRecoilState(MovementCardOpenState);
     const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
     // 자산별 모달 정보
     const [monthlyInfo, setMonthlyInfo] = useRecoilState(MonthlyInfoState);
@@ -82,11 +84,11 @@ function PlayerSocket() {
     const [tradeInsurance, setTradeInsurance] = useRecoilState(TradeInsuranceState);
     const [tradeInsuranceConfirm, setTradeInsuranceConfirm] = useRecoilState(TradeInsuranceConfirmState); // 보험 확인 버튼
     const [insuranceCnt, setInsuranceCnt] = useState(0); // 보험 응답 카운트
-
     // 매수량, 매도량
     const [buyAmount, setbuyAmount] = useRecoilState(BuyAmountState);
     const [sellAmount, setSellAmount] = useRecoilState(SellAmountState);
 
+    // 모달 정보 setter 함수
     const setStockDetail = useSetRecoilState(StockDetailState);
     const setGoldDetail = useSetRecoilState(GoldDetailState);
     const setPortfolio = useSetRecoilState(PortfolioState);
@@ -132,7 +134,7 @@ function PlayerSocket() {
                             console.log('정상');
                         }
                     });
-                    // 개인 메시지 구독 => sub/{roomId}/{playerId}
+                    // 개인 메시지 구독(유니캐스트 response 수신) => sub/{roomId}/{playerId}
                     stompClient.current.subscribe(`/sub/${roomId}/1`, function (recievedMessage: any) {
                         const message = JSON.parse(recievedMessage.body) || null; // 객체
                         const type = recievedMessage.headers.type || null; // 문자열
@@ -196,24 +198,10 @@ function PlayerSocket() {
                         else if (message.code == 1006) {
                             alert('이미 있는 접속한 방에 다시 접속하였습니다.');
                         }
-                        // else if (type == 'bank') {
-                        //     setBankInfo({
-                        //         player: message.player,
-                        //         money: message.money,
-                        //         have: message.have,
-                        //         bankId: message.savingDto.bankId,
-                        //         name: message.savingDto.name,
-                        //         monthlyDeposit: message.savingDto.monthlyDeposit,
-                        //         currentPrice: message.savingDto.currentPrice,
-                        //         currentCount: message.savingDto.currentCount,
-                        //         finishCount: message.savingDto.finishCount,
-                        //         rate: message.savingDto.rate,
-                        //     });
-                        // }
                     });
 
-                    // 방 메시지 구독 => sub/{roomId}
-                    stompClient.current.subscribe(`/sub/5`, function (recievedMessage: any) {
+                    // 전체 메시지 구독(브로드캐스트 response 수신) => sub/{roomId}
+                    stompClient.current.subscribe(`/sub/${roomId}`, function (recievedMessage: any) {
                         const message = JSON.parse(recievedMessage.body);
                         const type = recievedMessage.headers.type || null;
                         console.log('전체메시지 type: ', type);
@@ -221,6 +209,14 @@ function PlayerSocket() {
                         if (type === 'finishTurn') {
                             setStocks(message.stocks);
                             setPortfolio(message.portfolios);
+                            setMovementCardOpen(true);
+                            stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: nowPlayer + 1 }));
+                        }
+                        if (type == 'viewMovementCard') {
+                            setMovementCard({
+                                player: nowPlayer + 1,
+                                cards: [1, 3, 5],
+                            });
                         }
                         if (type == 'visitBuilding') {
                             setRealEstateInfo({
