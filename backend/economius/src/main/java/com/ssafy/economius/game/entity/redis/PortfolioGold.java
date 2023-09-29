@@ -22,8 +22,6 @@ public class PortfolioGold {
 
     // 금 구매, 금 판매, 금 가격 재설정시 호출
     public void updatePortfolioGold(int goldPrice) {
-        log.info("updateGold" + goldPrice);
-
         earningPrice = goldPrice * amount;
         earningRete = (int) ((double) (earningPrice - totalPrice) / totalPrice * 100);
     }

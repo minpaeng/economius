@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,6 +13,7 @@ import lombok.*;
 @Setter
 @Builder
 @ToString
+@Slf4j
 public class Stock {
 
     private Integer stockId;
