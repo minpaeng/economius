@@ -296,7 +296,18 @@ function PlayerSocket() {
     useEffect(() => {
         console.log('roomId: ' + roomId);
 
-        // stompClient.current가 null인지 확인, stompClient가 connected 상태인지 확인
+        connect();
+        // 구독 정보가 바뀌었다면 재구독
+        if (stompClient.current.connected) {
+            stompClient.current.unsubscribe();
+            stompClient.current.subscribe(`/sub/${roomId}`, broadCastCallBackFunction);
+            stompClient.current.subscribe(`/sub/${roomId}/${playername}`, uniCastCallBackFunction);
+            console.log(`기존 방 구독 취소 후 ${roomId}번 방 구독 완료`);
+        }
+    }, [roomId, playername, stompClient]);
+
+    function connect() {
+        // stompClient가 close 상태라면 재생성 후 connect
         if (!stompClient.current || !stompClient.current.connected) {
             stompClient.current = Stomp.over(() => new sockjs('https://j9b109.p.ssafy.io/ws'));
             stompClient.current.connect(
@@ -311,13 +322,8 @@ function PlayerSocket() {
                     console.log(roomId + '번 방 구독 실패');
                 }
             );
-        } else {
-            stompClient.current.unsubscribe();
-            stompClient.current.subscribe(`/sub/${roomId}`, broadCastCallBackFunction);
-            stompClient.current.subscribe(`/sub/${roomId}/${playername}`, uniCastCallBackFunction);
-            console.log(`기존 방 구독 취소 후 ${roomId}번 방 구독 완료`);
         }
-    }, [roomId, playername, stompClient]);
+    }
 
     useEffect(() => {
         console.log('hello');
@@ -328,7 +334,7 @@ function PlayerSocket() {
     // 자산별 방문
     useEffect(() => {
         if (!isModalOpen) return;
-
+        connect();
         // 부동산 방문
         if ([4, 14, 22].includes(nowPlayerPosition)) {
             console.log(nowPlayer + 1, buildingIds[nowPlayerPosition]);
@@ -405,6 +411,7 @@ function PlayerSocket() {
     // 월말정산
     useEffect(() => {
         if (!monthlyModalOpen) return;
+        connect();
         // 출발점 통과
         if (stompClient.current) {
             stompClient.current.send(`/pub/${roomId}/calculate`, {}, JSON.stringify({player: nowPlayer + 1}));
@@ -414,6 +421,7 @@ function PlayerSocket() {
     // 부동산 거래
     useEffect(() => {
         if (tradeRealEstate[0]) {
+            connect();
             if (stompClient.current) {
                 stompClient.current.send(
                     `/pub/${roomId}/buyBuilding`,
@@ -426,6 +434,7 @@ function PlayerSocket() {
                 setTradeRealEstate([false, false]);
             }
         } else if (tradeRealEstate[1]) {
+            connect();
             if (stompClient.current) {
                 stompClient.current.send(
                     `/pub/${roomId}/sellBuilding`,
@@ -443,6 +452,7 @@ function PlayerSocket() {
     // 주식 거래
     useEffect(() => {
         if (tradeStock[0]) {
+            connect();
             if (stompClient.current) {
                 stompClient.current.send(
                     `/pub/${roomId}/buyStock`,
@@ -457,6 +467,7 @@ function PlayerSocket() {
                 setCallBack(true);
             }
         } else if (tradeStock[1]) {
+            connect();
             if (stompClient.current) {
                 stompClient.current.send(
                     `/pub/${roomId}/sellStock`,
@@ -476,6 +487,7 @@ function PlayerSocket() {
     // 금 거래
     useEffect(() => {
         if (tradeGold[0]) {
+            connect();
             if (stompClient.current) {
                 stompClient.current.send(`/pub/${roomId}/buyGolds`, {}, JSON.stringify({
                     player: nowPlayer + 1,
@@ -484,6 +496,7 @@ function PlayerSocket() {
                 setTradeGold([false, false]);
             }
         } else if (tradeGold[1]) {
+            connect();
             if (stompClient.current) {
                 stompClient.current.send(`/pub/${roomId}/sellGolds`, {}, JSON.stringify({
                     player: nowPlayer + 1,
@@ -497,6 +510,7 @@ function PlayerSocket() {
     // 은행 거래
     useEffect(() => {
         if (tradeBank[0]) {
+            connect();
             if (stompClient.current) {
                 stompClient.current.send(
                     `/pub/${roomId}/joinSavings`,
@@ -509,6 +523,7 @@ function PlayerSocket() {
                 setTradeBank([false, false]);
             }
         } else if (tradeBank[1]) {
+            connect();
             if (stompClient.current) {
                 stompClient.current.send(
                     `/pub/${roomId}/stopSavings`,
@@ -526,9 +541,9 @@ function PlayerSocket() {
     // 보험 거래
     useEffect(() => {
         if (!tradeInsuranceConfirm) return;
-
         // if 가입 else 해지
         if (tradeInsurance[0]) {
+            connect();
             if (stompClient.current) {
                 stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({
                     player: nowPlayer + 1,
@@ -536,6 +551,7 @@ function PlayerSocket() {
                 }));
             }
         } else {
+            connect();
             if (stompClient.current) {
                 stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({
                     player: nowPlayer + 1,
@@ -544,6 +560,7 @@ function PlayerSocket() {
             }
         }
         if (tradeInsurance[1]) {
+            connect();
             if (stompClient.current) {
                 stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({
                     player: nowPlayer + 1,
@@ -551,6 +568,7 @@ function PlayerSocket() {
                 }));
             }
         } else {
+            connect();
             if (stompClient.current) {
                 stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({
                     player: nowPlayer + 1,
@@ -559,6 +577,7 @@ function PlayerSocket() {
             }
         }
         if (tradeInsurance[2]) {
+            connect();
             if (stompClient.current) {
                 stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({
                     player: nowPlayer + 1,
@@ -566,6 +585,7 @@ function PlayerSocket() {
                 }));
             }
         } else {
+            connect();
             if (stompClient.current) {
                 stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({
                     player: nowPlayer + 1,
@@ -574,6 +594,7 @@ function PlayerSocket() {
             }
         }
         if (tradeInsurance[3]) {
+            connect();
             if (stompClient.current) {
                 stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({
                     player: nowPlayer + 1,
@@ -581,6 +602,7 @@ function PlayerSocket() {
                 }));
             }
         } else {
+            connect();
             if (stompClient.current) {
                 stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({
                     player: nowPlayer + 1,
@@ -594,6 +616,7 @@ function PlayerSocket() {
     //예언소
     useEffect(() => {
         if (getPrediction) {
+            connect();
             if (stompClient.current) {
                 stompClient.current.send(`/pub/${roomId}/oracle`, {}, JSON.stringify({player: nowPlayer + 1}));
             }
@@ -602,6 +625,7 @@ function PlayerSocket() {
     //턴 종료
     useEffect(() => {
         if (!callBack) return;
+        connect();
         if (stompClient.current) {
             stompClient.current.send(`/pub/${roomId}/finishTurn`, {}, {});
             setCallBack(false);
@@ -612,6 +636,7 @@ function PlayerSocket() {
     // 방 입장 시
     useEffect(() => {
         if (roomJoin == 0) return;
+        connect();
         if (stompClient.current) {
             // 두 번째 : 헤더 / 세 번째 : 보낼 데이터
             stompClient.current.send(`/pub/${roomId}/join`, {}, JSON.stringify({
