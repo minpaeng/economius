@@ -2,138 +2,21 @@ import * as S from "../../PortfolioProperty/PortfolioProperty.style";
 import SlideToggle from "react-slide-toggle";
 import { useState } from "react";
 import StockChangeItem from "./StockChangeItem";
+import { useRecoilValue } from "recoil";
+import { StockState } from "../../../../recoil/game/atom";
 
 function StockChange({ setSideBarType }) {
-  const dummy = [
-    {
-      id: 1,
-      imgPath: "koreaElectro",
-      title: "대한전력",
-      type: "",
-      value: 100,
-      valueChange: -3,
-    },
-    {
-      id: 2,
-      imgPath: "Aramco",
-      title: "아람쿠",
-      type: "",
-      value: 100,
-      valueChange: 3,
-    },
-    {
-      id: 3,
-      imgPath: "Posco",
-      title: "포스쿠",
-      type: "",
-      value: 100,
-      valueChange: 3,
-    },
-    {
-      id: 4,
-      imgPath: "LGchemi",
-      title: "IG화학",
-      type: "",
-      value: 100,
-      valueChange: 7,
-    },
-    {
-      id: 5,
-      imgPath: "pfizer",
-      title: "화이지",
-      type: "",
-      value: 100,
-      valueChange: -4,
-    },
-    {
-      id: 6,
-      imgPath: "celltrion",
-      title: "셀트리안",
-      type: "",
-      value: 100,
-      valueChange: 5,
-    },
-    {
-      id: 7,
-      imgPath: "Nike",
-      title: "나이카",
-      type: "",
-      value: 100,
-      valueChange: 3,
-    },
-    {
-      id: 8,
-      imgPath: "CocaCola",
-      title: "코카펩시",
-      type: "",
-      value: 100,
-      valueChange: 1,
-    },
-    {
-      id: 9,
-      imgPath: "airbnb",
-      title: "AIR관광",
-      type: "",
-      value: 100,
-      valueChange: -2,
-    },
-    {
-      id: 10,
-      imgPath: "CJE&M",
-      title: "CZ엔터",
-      type: "",
-      value: 100,
-      valueChange: 3,
-    },
-    {
-      id: 11,
-      imgPath: "KT",
-      title: "K텔레콤",
-      type: "",
-      value: 100,
-      valueChange: 3,
-    },
-    {
-      id: 12,
-      imgPath: "MS",
-      title: "M소프트",
-      type: "",
-      value: 100,
-      valueChange: 3,
-    },
-    {
-      id: 13,
-      imgPath: "CJdistribution",
-      title: "대한운송",
-      type: "",
-      value: 100,
-      valueChange: 3,
-    },
-    {
-      id: 14,
-      imgPath: "hyundaiConstruct",
-      title: "대현건설",
-      type: "",
-      value: 100,
-      valueChange: 3,
-    },
-    {
-      id: 15,
-      imgPath: "Lexus",
-      title: "넥서스",
-      type: "",
-      value: 100,
-      valueChange: 3,
-    },
-    {
-      id: 16,
-      imgPath: "samsung",
-      title: "삼성전자",
-      type: "",
-      value: 100,
-      valueChange: 8,
-    },
-  ];
+  const stockData = useRecoilValue(StockState);
+
+  function objectToArray(obj) {
+    if (!obj) {
+      return [];
+    }
+    return Object.values(obj);
+  }
+
+  const stockList = objectToArray(stockData);
+  console.log(stockList);
 
   const [isCollapsed, setIsCollapsed] = useState(true);
 
@@ -157,21 +40,21 @@ function StockChange({ setSideBarType }) {
               <S.LayoutTopRight></S.LayoutTopRight>
             </S.LayoutTop>
             <div ref={setCollapsibleElement} style={{ paddingBottom: "5px" }}>
-              {dummy.map((item) => {
+              {stockList.map((item) => {
                 return (
                   <StockChangeItem
-                    id={item.id}
-                    imgPath={item.imgPath}
-                    title={item.title}
-                    type={item.type}
-                    value={item.value}
-                    valueChange={item.valueChange}
+                    id={item.stockId}
+                    imgPath={item.stockId}
+                    title={item.name}
+                    type={item.companySubCategory}
+                    value={item.price}
+                    valueChange={item.rate}
                     setSideBarType={setSideBarType}
                   />
                 );
               })}
             </div>
-            {dummy.length ? (
+            {stockList.length ? (
               <S.ToggleBtn
                 style={{ padding: 0 }}
                 onClick={() => {
