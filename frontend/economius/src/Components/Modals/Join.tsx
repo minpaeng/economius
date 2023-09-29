@@ -11,7 +11,7 @@ export default function Join() {
     const [inputValue, setInputValue] = useState(''); // input 값을 상태로 관리
 
     const [showJoin, setShowJoin] = useRecoilState(SetShowJoinState);
-    const [showWaitRoom, setShowWaitRoom] = useRecoilState(SetShowWaitRoomState);
+    // const [showWaitRoom, setShowWaitRoom] = useRecoilState(SetShowWaitRoomState);
 
     const [roomJoin, setRoomJoin] = useRecoilState(RoomJoinState);
     const [roomId, setRoomId] = useRecoilState(RoomIdState);
@@ -32,7 +32,7 @@ export default function Join() {
         closeModal();
         // 룸 정보 데이터 받아오기
         // 룸 모달 열기
-        setShowWaitRoom(true);
+        // setShowWaitRoom(true);
         console.log('룸 모달 출력');
     };
 
