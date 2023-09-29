@@ -1,4 +1,6 @@
 import {atom} from "recoil";
+import sockjs from 'sockjs-client/dist/sockjs';
+import {Stomp} from '@stomp/stompjs';
 
 export const PlayerIdState = atom({
     key: 'PlayerIdState',
@@ -18,9 +20,4 @@ export const StockState = atom({
 export const PredictionState = atom({
     key: 'PredictionState',
     default: null,
-})
-
-export const GameRoomIdState = atom({
-    key: 'GameRoomIdState',
-    default: 0,
 })

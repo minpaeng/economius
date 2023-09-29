@@ -27,7 +27,7 @@ import {
     TradeRealEstateState,
     TradeStockState,
 } from './recoil/trading/atom';
-import {GameRoomIdState, PortfolioState, PredictionState, StockState} from '/src/recoil/game/atom.tsx';
+import {PortfolioState, PredictionState, StockState} from '/src/recoil/game/atom.tsx';
 import {
     BankInfoState,
     ChanceCardInfoState,
@@ -115,8 +115,6 @@ function PlayerSocket() {
 
     const stompClient = useRef(null);
 
-    const [gameRoomId, setGameRoomId] = useRecoilState(GameRoomIdState);
-
     // let unicastSubscribe;
     // let broadCastSubscribe;
 
@@ -175,13 +173,6 @@ function PlayerSocket() {
             } else {
                 setInsuranceCnt(prev => prev + 1);
             }
-            // 없는 방인 경우
-        } else if (message.code == 1000) {
-            alert('해당 번호는 없는 방입니다.');
-        }
-        // 이미 들어간 방인 경우
-        else if (message.code == 1006) {
-            alert('이미 있는 접속한 방에 다시 접속하였습니다.');
         }
         // else if (type == 'bank') {
         //     setBankInfo({
@@ -197,6 +188,20 @@ function PlayerSocket() {
         //         rate: message.savingDto.rate,
         //     });
         // }
+    }
+
+    function personalCallBackFunction(recievedMessage: any) {
+        const message = JSON.parse(recievedMessage.body);
+        console.log('전체메시지', message);
+        if (message.code == '') {
+            console.log('정상');
+        } else if (message.code == 1000) {
+            alert('해당 번호는 없는 방입니다.');
+        }
+        // 이미 들어간 방인 경우
+        else if (message.code == 1006) {
+            alert('이미 있는 접속한 방에 다시 접속.');
+        }
     }
 
     function broadCastCallBackFunction(recievedMessage: any) {
@@ -306,13 +311,7 @@ function PlayerSocket() {
                 function () {
                     // 방 참가 => sub/{player}
                     // 방 입장 중 잘못된 방식으로 입장하는 경우
-                    stompClient.current.subscribe(`/sub/player/${playername}`, function (recievedMessage: any) {
-                        const message = JSON.parse(recievedMessage.body);
-                        console.log('전체메시지', message);
-                        if (message.code == '') {
-                            console.log('정상');
-                        }
-                    });
+                    stompClient.current.subscribe(`/sub/player/${playername}`, personalCallBackFunction);
 
                     // uniCastCallBackFunction();
                     // broadCastCallBackFunction();
@@ -325,12 +324,32 @@ function PlayerSocket() {
 
     // subscribe useEffect
     useEffect(() => {
+        console.log('roomId: ' + roomId);
         // 기존의 구독 취소
         // stompClient.current.unsubscribe();
-        stompClient.current.subscribe(`/sub/${gameRoomId}`, broadCastCallBackFunction);
-        stompClient.current.subscribe(`/sub/${gameRoomId}/${playername}`, uniCastCallBackFunction);
+        if (!stompClient.current.connected) {
+            stompClient.current = Stomp.over(() => new sockjs('https://j9b109.p.ssafy.io/ws'));
+            stompClient.current.connect(
+                {
 
-    }, [gameRoomId]);
+                },
+                function () {
+                    stompClient.current.subscribe(`/sub/player/${playername}`, personalCallBackFunction)
+                    stompClient.current.subscribe(`/sub/${roomId}`, broadCastCallBackFunction);
+                    stompClient.current.subscribe(`/sub/${roomId}/${playername}`, uniCastCallBackFunction);
+                    console.log(roomId + '번 방 구독 완료');
+                },
+                function () {
+                    console.log(roomId + '번 방 구독 실패');
+                }
+            )
+        }
+        else {
+            stompClient.current.unsubscribe();
+            stompClient.current.subscribe(`/sub/${roomId}`, broadCastCallBackFunction);
+            stompClient.current.subscribe(`/sub/${roomId}/${playername}`, uniCastCallBackFunction);
+        }
+    }, [roomId]);
 
     useEffect(() => {
         console.log('hello');
@@ -348,7 +367,7 @@ function PlayerSocket() {
             // isOpen 상태가 true일 때 메시지를 보내는 코드를 추가
             if (stompClient.current) {
                 stompClient.current.send(
-                    `/pub${roomId}1/visitBuilding`,
+                    `/pub/${roomId}/visitBuilding`,
                     {},
                     JSON.stringify({
                         player: nowPlayer + 1,
