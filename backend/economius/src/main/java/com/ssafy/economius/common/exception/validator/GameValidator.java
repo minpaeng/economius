@@ -97,6 +97,9 @@ public class GameValidator {
             log.error("이미 참여중인 플레이어: {roomId: " + roomId + ", player: " + player + "}");
             throw CustomWebsocketRoomException.builder()
                     .player(player)
+                    .players(game.getPlayers())
+                    .nicknames(game.getNicknames())
+                    .hostPlayer(game.getPlayers().get(0))
                     .code(GameRoomMessage.ALREADY_JOIN_PLAYER.getCode())
                     .message(GameRoomMessage.ALREADY_JOIN_PLAYER.getMessage())
                     .build();

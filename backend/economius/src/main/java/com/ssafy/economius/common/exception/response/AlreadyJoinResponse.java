@@ -10,8 +10,11 @@ import java.util.Map;
 @Getter
 @AllArgsConstructor
 @Builder
-public class WebsocketErrorResponse {
+public class AlreadyJoinResponse {
 
     private int code;
     private String message;
+    private List<Long> players;
+    private Map<Long, String> nicknames;
+    private Long hostPlayer;
 }
