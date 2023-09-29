@@ -51,16 +51,38 @@ function BigEvent({issue}) {
         },
     };
 
+    function getGoldAndInterestRatesChanges() {
+        return <S.BigEventRightChange1>{issue.interestRateChange.assetType} {issue.interestRateChange.changePercentage}%
+            /  {issue.goldChange.assetType} {issue.goldChange.changePercentage} %</S.BigEventRightChange1>;
+    }
+
+    function getStockChanges(index) {
+        let description = "";
+
+        for (let i = index * 3; i < index * 3 + 3; i++){
+            description += `${issue.stockChanges[i].stockType} ${issue.stockChanges[i].changePercentage} %  / `
+        }
+
+        description = description.slice(0, -2);
+        return <S.BigEventRightChange1>{description}</S.BigEventRightChange1>
+    }
+
     return (
         <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
             <S.BigEvent>
-                <S.BigEventLeft />
+                <S.BigEventLeft/>
                 <S.BigEventRight style={{color: wordColor}}>
                     <S.BigEventRightTitle>{issue.name}</S.BigEventRightTitle>
                     <S.BigEventRightChange1>{issue.year}</S.BigEventRightChange1>
                     <S.BigEventRightDesc>{issue.description}</S.BigEventRightDesc>
-                    <S.BigEventRightChange1>금리 변동</S.BigEventRightChange1>
-                    <S.BigEventRightChange2>주식 변동</S.BigEventRightChange2>
+                    <br/>
+                    {getGoldAndInterestRatesChanges()}
+                    <br/>
+                    {getStockChanges(0)}
+                    {getStockChanges(1)}
+                    {getStockChanges(2)}
+                    {getStockChanges(3)}
+                    {getStockChanges(4)}
                 </S.BigEventRight>
             </S.BigEvent>
         </Modal>
