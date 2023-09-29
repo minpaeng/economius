@@ -12,6 +12,7 @@ import {
     RoomIdState,
     RoomJoinState,
     RoomJoinUsersNicknameState,
+    SetShowWaitRoomState,
     UseridState,
 } from './recoil/animation/atom';
 import {
@@ -112,6 +113,7 @@ function PlayerSocket() {
     const [roomJoinUsersNickname, setRoomJoinUsersNickname] = useRecoilState(RoomJoinUsersNicknameState);
     const nickname = localStorage.getItem('nickname');
     const playername = localStorage.getItem('player');
+    const [showWaitRoom, setShowWaitRoom] = useRecoilState(SetShowWaitRoomState);
 
     const stompClient = useRef(null);
 
@@ -196,11 +198,15 @@ function PlayerSocket() {
         if (message.code == '') {
             console.log('정상');
         } else if (message.code == 1000) {
+            setRoomJoin(0);
+            setShowWaitRoom(false);
             alert('해당 번호는 없는 방입니다.');
         }
         // 이미 들어간 방인 경우
         else if (message.code == 1006) {
-            alert('이미 있는 접속한 방에 다시 접속.');
+            setUserNicknames(message);
+            setShowWaitRoom(true);
+            // alert('이미 있는 접속한 방에 다시 접속.');
         }
     }
 
@@ -268,25 +274,29 @@ function PlayerSocket() {
         else if (type == 'join') {
             console.log('JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJjjjjjjjjjjjjjJJJoin');
 
-            const player1 = message.players[0];
-            const player2 = message.players[1];
-            const player3 = message.players[2];
-            const player4 = message.players[3];
-            console.log('player1');
-
-            let nick1 = message.nicknames[player1];
-            let nick2 = message.nicknames[player2];
-            let nick3 = message.nicknames[player3];
-            let nick4 = message.nicknames[player4];
-
-            if (nick1 == undefined) nick1 = 'wait..';
-            if (nick2 == undefined) nick2 = 'wait..';
-            if (nick3 == undefined) nick3 = 'wait..';
-            if (nick4 == undefined) nick4 = 'wait..';
-
-            setRoomJoinUsersNickname([nick1, nick2, nick3, nick4]);
+            setUserNicknames(message);
             console.log(roomJoinUsersNickname);
         }
+    }
+
+    function setUserNicknames(message) {
+        const player1 = message.players[0];
+        const player2 = message.players[1];
+        const player3 = message.players[2];
+        const player4 = message.players[3];
+        console.log('player1');
+
+        let nick1 = message.nicknames[player1];
+        let nick2 = message.nicknames[player2];
+        let nick3 = message.nicknames[player3];
+        let nick4 = message.nicknames[player4];
+
+        if (nick1 == undefined) nick1 = 'wait..';
+        if (nick2 == undefined) nick2 = 'wait..';
+        if (nick3 == undefined) nick3 = 'wait..';
+        if (nick4 == undefined) nick4 = 'wait..';
+
+        setRoomJoinUsersNickname([nick1, nick2, nick3, nick4]);
     }
 
     useEffect(() => {
@@ -294,34 +304,44 @@ function PlayerSocket() {
     }, []);
 
     useEffect(() => {
-        console.log('roomId: ' + roomId);
+        console.log(`roomId ${roomId}로 연결`);
 
-        connect();
-        // 구독 정보가 바뀌었다면 재구독
-        if (stompClient.current.connected) {
-            stompClient.current.unsubscribe();
-            stompClient.current.subscribe(`/sub/${roomId}`, broadCastCallBackFunction);
-            stompClient.current.subscribe(`/sub/${roomId}/${playername}`, uniCastCallBackFunction);
-            console.log(`기존 방 구독 취소 후 ${roomId}번 방 구독 완료`);
-        }
-    }, [roomId, playername, stompClient]);
-
-    function connect() {
-        // stompClient가 close 상태라면 재생성 후 connect
-        if (!stompClient.current || !stompClient.current.connected) {
-            stompClient.current = Stomp.over(() => new sockjs('https://j9b109.p.ssafy.io/ws'));
-            stompClient.current.connect(
-                {},
-                function () {
-                    stompClient.current.subscribe(`/sub/player/${playername}`, personalCallBackFunction);
+        connect().then(
+            function () {
+                // 구독 정보가 바뀌었다면 재구독
+                if (roomId != 0 && stompClient.current.connected) {
+                    stompClient.current.unsubscribe();
                     stompClient.current.subscribe(`/sub/${roomId}`, broadCastCallBackFunction);
                     stompClient.current.subscribe(`/sub/${roomId}/${playername}`, uniCastCallBackFunction);
-                    console.log(roomId + '번 방 구독 완료');
-                },
-                function () {
-                    console.log(roomId + '번 방 구독 실패');
+                    console.log(`기존 방 구독 취소 후 ${roomId}번 방 구독 완료`);
                 }
-            );
+            }
+        );
+
+    }, [showWaitRoom, playername, stompClient]);
+
+    async function connect() {
+        // stompClient가 close 상태라면 재생성 후 connect
+        if (!stompClient.current || !stompClient.current.connected) {
+            console.log('재연결중');
+            stompClient.current = Stomp.over(() => new sockjs('https://j9b109.p.ssafy.io/ws'));
+            await new Promise<void>((resolve, reject) => {
+                stompClient.current.connect(
+                    {},
+                    function () {
+                        stompClient.current.subscribe(`/sub/player/${playername}`, personalCallBackFunction);
+                        stompClient.current.subscribe(`/sub/${roomId}`, broadCastCallBackFunction);
+                        stompClient.current.subscribe(`/sub/${roomId}/${playername}`, uniCastCallBackFunction);
+                        console.log(roomId + '번 방 구독 완료');
+                        resolve(); // 연결 성공 시 resolve 호출
+                    },
+                    function () {
+                        console.log(roomId + '번 방 구독 실패');
+                        reject(); // 연결 실패 시 reject 호출
+                    }
+                );
+            });
+            console.log('재연결 완료');
         }
     }
 
@@ -334,207 +354,227 @@ function PlayerSocket() {
     // 자산별 방문
     useEffect(() => {
         if (!isModalOpen) return;
-        connect();
         // 부동산 방문
         if ([4, 14, 22].includes(nowPlayerPosition)) {
             console.log(nowPlayer + 1, buildingIds[nowPlayerPosition]);
             // isOpen 상태가 true일 때 메시지를 보내는 코드를 추가
-            if (stompClient.current) {
-                stompClient.current.send(
-                    `/pub/${roomId}/visitBuilding`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        buildingId: buildingIds[nowPlayerPosition],
-                    })
-                );
-                // 0번째 player를 서버에 1로 보내줘야 해서
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(
+                        `/pub/${roomId}/visitBuilding`,
+                        {},
+                        JSON.stringify({
+                            player: nowPlayer + 1,
+                            buildingId: buildingIds[nowPlayerPosition],
+                        })
+                    );
+                    // 0번째 player를 서버에 1로 보내줘야 해서
+                }
+            );
         }
         //주식 방문
         else if (nowPlayerPosition & 1) {
-            if (stompClient.current) {
-                stompClient.current.send(
-                    `/pub/${roomId}/buyItem`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        stockId: stockIds[nowPlayerPosition],
-                    })
-                ); // 상품구매
-                stompClient.current.send(
-                    `/pub/${roomId}/stockDetail`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        stockId: stockIds[nowPlayerPosition],
-                    })
-                );
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(
+                        `/pub/${roomId}/buyItem`,
+                        {},
+                        JSON.stringify({
+                            player: nowPlayer + 1,
+                            stockId: stockIds[nowPlayerPosition],
+                        })
+                    ); // 상품구매
+                    stompClient.current.send(
+                        `/pub/${roomId}/stockDetail`,
+                        {},
+                        JSON.stringify({
+                            player: nowPlayer + 1,
+                            stockId: stockIds[nowPlayerPosition],
+                        })
+                    );
+                }
+            );
         }
         // 금거래소 방문
         else if (nowPlayerPosition === 30) {
-            if (stompClient.current) {
-                stompClient.current.send(`/pub/${roomId}/selectGolds`, {}, JSON.stringify({player: nowPlayer + 1}));
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(`/pub/${roomId}/selectGolds`, {}, JSON.stringify({player: nowPlayer + 1}));
+                }
+            );
         }
         // 은행 방문
         else if ([2, 10, 18].includes(nowPlayerPosition)) {
-            if (stompClient.current) {
-                stompClient.current.send(
-                    `/pub/${roomId}/bank`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        bankId: bankIds[nowPlayerPosition],
-                    })
-                );
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(
+                        `/pub/${roomId}/bank`,
+                        {},
+                        JSON.stringify({
+                            player: nowPlayer + 1,
+                            bankId: bankIds[nowPlayerPosition],
+                        })
+                    );
+                }
+            );
         }
         // 보험 방문
         else if ([6, 26].includes(nowPlayerPosition)) {
-            if (stompClient.current) {
-                stompClient.current.send(`/pub/${roomId}/insurance`, {}, JSON.stringify({
-                    player: nowPlayer + 1,
-                    insuranceId: ''
-                }));
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(`/pub/${roomId}/insurance`, {}, JSON.stringify({
+                        player: nowPlayer + 1,
+                        insuranceId: ''
+                    }));
+                }
+            );
         }
         // 찬스 카드 방문
         else if ([12, 20, 28].includes(nowPlayerPosition)) {
-            if (stompClient.current) {
-                stompClient.current.send(`/pub/${roomId}/eventCard`, {}, JSON.stringify({player: nowPlayer + 1}));
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(`/pub/${roomId}/eventCard`, {}, JSON.stringify({player: nowPlayer + 1}));
+                }
+            );
         }
     }, [isModalOpen]);
 
     // 월말정산
     useEffect(() => {
         if (!monthlyModalOpen) return;
-        connect();
-        // 출발점 통과
-        if (stompClient.current) {
-            stompClient.current.send(`/pub/${roomId}/calculate`, {}, JSON.stringify({player: nowPlayer + 1}));
-        }
+        connect().then(
+            // 출발점 통과
+            function () {
+                stompClient.current.send(`/pub/${roomId}/calculate`, {}, JSON.stringify({player: nowPlayer + 1}));
+            }
+        );
     }, [monthlyModalOpen]);
 
     // 부동산 거래
     useEffect(() => {
         if (tradeRealEstate[0]) {
-            connect();
-            if (stompClient.current) {
-                stompClient.current.send(
-                    `/pub/${roomId}/buyBuilding`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        buildingId: buildingIds[nowPlayerPosition],
-                    })
-                );
-                setTradeRealEstate([false, false]);
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(
+                        `/pub/${roomId}/buyBuilding`,
+                        {},
+                        JSON.stringify({
+                            player: nowPlayer + 1,
+                            buildingId: buildingIds[nowPlayerPosition],
+                        })
+                    );
+                    setTradeRealEstate([false, false]);
+                }
+            );
         } else if (tradeRealEstate[1]) {
-            connect();
-            if (stompClient.current) {
-                stompClient.current.send(
-                    `/pub/${roomId}/sellBuilding`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        buildingId: buildingIds[nowPlayerPosition],
-                    })
-                );
-                setTradeRealEstate([false, false]);
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(
+                        `/pub/${roomId}/sellBuilding`,
+                        {},
+                        JSON.stringify({
+                            player: nowPlayer + 1,
+                            buildingId: buildingIds[nowPlayerPosition],
+                        })
+                    );
+                    setTradeRealEstate([false, false]);
+                }
+            );
         }
     }, [tradeRealEstate]);
 
     // 주식 거래
     useEffect(() => {
         if (tradeStock[0]) {
-            connect();
-            if (stompClient.current) {
-                stompClient.current.send(
-                    `/pub/${roomId}/buyStock`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        stockId: stockIds[nowPlayerPosition],
-                        stockAmount: buyAmount,
-                    })
-                );
-                setTradeStock([false, false]);
-                setCallBack(true);
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(
+                        `/pub/${roomId}/buyStock`,
+                        {},
+                        JSON.stringify({
+                            player: nowPlayer + 1,
+                            stockId: stockIds[nowPlayerPosition],
+                            stockAmount: buyAmount,
+                        })
+                    );
+                    setTradeStock([false, false]);
+                    setCallBack(true);
+                }
+            );
         } else if (tradeStock[1]) {
-            connect();
-            if (stompClient.current) {
-                stompClient.current.send(
-                    `/pub/${roomId}/sellStock`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        stockId: stockIds[nowPlayerPosition],
-                        stockAmount: sellAmount,
-                    })
-                );
-                setTradeStock([false, false]);
-                setCallBack(true);
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(
+                        `/pub/${roomId}/sellStock`,
+                        {},
+                        JSON.stringify({
+                            player: nowPlayer + 1,
+                            stockId: stockIds[nowPlayerPosition],
+                            stockAmount: sellAmount,
+                        })
+                    );
+                    setTradeStock([false, false]);
+                    setCallBack(true);
+                }
+            );
         }
     }, [tradeStock]);
 
     // 금 거래
     useEffect(() => {
         if (tradeGold[0]) {
-            connect();
-            if (stompClient.current) {
-                stompClient.current.send(`/pub/${roomId}/buyGolds`, {}, JSON.stringify({
-                    player: nowPlayer + 1,
-                    goldAmount: buyAmount
-                }));
-                setTradeGold([false, false]);
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(`/pub/${roomId}/buyGolds`, {}, JSON.stringify({
+                        player: nowPlayer + 1,
+                        goldAmount: buyAmount
+                    }));
+                    setTradeGold([false, false]);
+                }
+            );
         } else if (tradeGold[1]) {
-            connect();
-            if (stompClient.current) {
-                stompClient.current.send(`/pub/${roomId}/sellGolds`, {}, JSON.stringify({
-                    player: nowPlayer + 1,
-                    goldAmount: sellAmount
-                }));
-                setTradeGold([false, false]);
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(`/pub/${roomId}/sellGolds`, {}, JSON.stringify({
+                        player: nowPlayer + 1,
+                        goldAmount: sellAmount
+                    }));
+                    setTradeGold([false, false]);
+                }
+            );
         }
     }, [tradeGold]);
 
     // 은행 거래
     useEffect(() => {
         if (tradeBank[0]) {
-            connect();
-            if (stompClient.current) {
-                stompClient.current.send(
-                    `/pub/${roomId}/joinSavings`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        bankId: bankIds[nowPlayerPosition],
-                    })
-                );
-                setTradeBank([false, false]);
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(
+                        `/pub/${roomId}/joinSavings`,
+                        {},
+                        JSON.stringify({
+                            player: nowPlayer + 1,
+                            bankId: bankIds[nowPlayerPosition],
+                        })
+                    );
+                    setTradeBank([false, false]);
+                }
+            );
         } else if (tradeBank[1]) {
-            connect();
-            if (stompClient.current) {
-                stompClient.current.send(
-                    `/pub/${roomId}/stopSavings`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        bankId: bankIds[nowPlayerPosition],
-                    })
-                );
-                setTradeBank([false, false]);
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(
+                        `/pub/${roomId}/stopSavings`,
+                        {},
+                        JSON.stringify({
+                            player: nowPlayer + 1,
+                            bankId: bankIds[nowPlayerPosition],
+                        })
+                    );
+                    setTradeBank([false, false]);
+                }
+            );
         }
     }, [tradeBank]);
 
@@ -543,72 +583,80 @@ function PlayerSocket() {
         if (!tradeInsuranceConfirm) return;
         // if 가입 else 해지
         if (tradeInsurance[0]) {
-            connect();
-            if (stompClient.current) {
-                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({
-                    player: nowPlayer + 1,
-                    insuranceId: 1
-                }));
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({
+                        player: nowPlayer + 1,
+                        insuranceId: 1
+                    }));
+                }
+            );
         } else {
-            connect();
-            if (stompClient.current) {
-                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({
-                    player: nowPlayer + 1,
-                    insuranceId: 1
-                }));
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({
+                        player: nowPlayer + 1,
+                        insuranceId: 1
+                    }));
+                }
+            );
         }
         if (tradeInsurance[1]) {
-            connect();
-            if (stompClient.current) {
-                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({
-                    player: nowPlayer + 1,
-                    insuranceId: 2
-                }));
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({
+                        player: nowPlayer + 1,
+                        insuranceId: 2
+                    }));
+                }
+            );
         } else {
-            connect();
-            if (stompClient.current) {
-                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({
-                    player: nowPlayer + 1,
-                    insuranceId: 2
-                }));
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({
+                        player: nowPlayer + 1,
+                        insuranceId: 2
+                    }));
+                }
+            );
         }
         if (tradeInsurance[2]) {
-            connect();
-            if (stompClient.current) {
-                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({
-                    player: nowPlayer + 1,
-                    insuranceId: 3
-                }));
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({
+                        player: nowPlayer + 1,
+                        insuranceId: 3
+                    }));
+                }
+            );
         } else {
-            connect();
-            if (stompClient.current) {
-                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({
-                    player: nowPlayer + 1,
-                    insuranceId: 3
-                }));
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({
+                        player: nowPlayer + 1,
+                        insuranceId: 3
+                    }));
+                }
+            );
         }
         if (tradeInsurance[3]) {
-            connect();
-            if (stompClient.current) {
-                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({
-                    player: nowPlayer + 1,
-                    insuranceId: 4
-                }));
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({
+                        player: nowPlayer + 1,
+                        insuranceId: 4
+                    }));
+                }
+            );
         } else {
-            connect();
-            if (stompClient.current) {
-                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({
-                    player: nowPlayer + 1,
-                    insuranceId: 4
-                }));
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({
+                        player: nowPlayer + 1,
+                        insuranceId: 4
+                    }));
+                }
+            );
         }
         setTradeInsuranceConfirm(false);
     }, [tradeInsuranceConfirm]);
@@ -616,37 +664,40 @@ function PlayerSocket() {
     //예언소
     useEffect(() => {
         if (getPrediction) {
-            connect();
-            if (stompClient.current) {
-                stompClient.current.send(`/pub/${roomId}/oracle`, {}, JSON.stringify({player: nowPlayer + 1}));
-            }
+            connect().then(
+                function () {
+                    stompClient.current.send(`/pub/${roomId}/oracle`, {}, JSON.stringify({player: nowPlayer + 1}));
+                }
+            );
         }
     }, [getPrediction]);
     //턴 종료
     useEffect(() => {
         if (!callBack) return;
-        connect();
-        if (stompClient.current) {
-            stompClient.current.send(`/pub/${roomId}/finishTurn`, {}, {});
-            setCallBack(false);
-            setIsModalOpen(false);
-        }
+        connect().then(
+            function () {
+                stompClient.current.send(`/pub/${roomId}/finishTurn`, {}, {});
+                setCallBack(false);
+                setIsModalOpen(false);
+            }
+        );
     }, [callBack]);
 
     // 방 입장 시
     useEffect(() => {
         if (roomJoin == 0) return;
-        connect();
-        if (stompClient.current) {
-            // 두 번째 : 헤더 / 세 번째 : 보낼 데이터
-            stompClient.current.send(`/pub/${roomId}/join`, {}, JSON.stringify({
-                player: playername,
-                nickname: nickname
-            }));
+        connect().then(
+            function () {
+                // 두 번째 : 헤더 / 세 번째 : 보낼 데이터
+                stompClient.current.send(`/pub/${roomId}/join`, {}, JSON.stringify({
+                    player: playername,
+                    nickname: nickname
+                }));
 
-            // 요청 완료했으면 다시 fefault로 변경
-            setRoomJoin(0);
-        }
+                // 요청 완료했으면 다시 fefault로 변경
+                setRoomJoin(0);
+            }
+        );
     }, [roomJoin]);
 
     return <></>;
