@@ -164,7 +164,7 @@ export default function Index() {
                     </S.ButtonOuter>
                 )}
                 {showWaitRoom && <WaitRoom />}
-                {showJoin && <Join setShowJoin={setShowJoin} />}
+                {showJoin && <Join />}
             </div>
         </>
     );
