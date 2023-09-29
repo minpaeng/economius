@@ -196,6 +196,7 @@ function PlayerSocket() {
         const message = JSON.parse(recievedMessage.body);
         console.log('전체메시지', message);
         if (message.code == '') {
+            setShowWaitRoom(true);
             console.log('정상');
         } else if (message.code == 1000) {
             setRoomJoin(0);
