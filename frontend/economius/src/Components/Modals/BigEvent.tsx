@@ -2,18 +2,22 @@ import Modal from 'react-modal';
 import * as S from './BigEvent.style';
 import * as SS from './GlobalModal.stye';
 
-import {useRecoilState} from 'recoil';
-import {IsModalOpenState} from '/src/recoil/animation/atom';
+import {useRecoilState, useSetRecoilState} from 'recoil';
+import {CallBackState, IsModalOpenState} from '/src/recoil/animation/atom';
 
 import {useEffect, useState} from 'react';
 
-function BigEvent({issue}) {
+function BigEvent({issue, predictionFlag}) {
     // 원래는 초기값 false로 두고 해당 턴이 되면 true로 바꿔줘야할듯
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const [wordColor, setWordColor] = useState("white");
+    const setCallBack = useSetRecoilState(CallBackState);
 
     const closeModal = () => {
         setIsModalOpen(false);
+        if(predictionFlag){
+            setCallBack(true);
+        }
     };
 
     useEffect(() => {
