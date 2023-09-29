@@ -3,7 +3,13 @@ import SlideToggle from "react-slide-toggle";
 import PortforlioStockItem from "./PortfolioStockItem";
 import { useState } from "react";
 
-function PortfolioStock({ setSideBarType }) {
+function PortfolioStock({
+  setSideBarType,
+  userId,
+  earningRate,
+  earningPrice,
+  stockList,
+}) {
   const dummy = [
     {
       id: 10,
@@ -29,9 +35,6 @@ function PortfolioStock({ setSideBarType }) {
     },
   ];
 
-  const 총자산가치 = 310000;
-  const 자산변동 = 4;
-
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const toggleCollapse = () => {
@@ -40,12 +43,14 @@ function PortfolioStock({ setSideBarType }) {
 
   let percentStyleSpan;
 
-  if (자산변동 > 0) {
-    percentStyleSpan = <span style={{ color: "red" }}> (+{자산변동}%)</span>;
-  } else if (자산변동 < 0) {
-    percentStyleSpan = <span style={{ color: "blue" }}> ({자산변동}%)</span>;
+  if (earningRate > 0) {
+    percentStyleSpan = <span style={{ color: "red" }}> (+{earningRate}%)</span>;
+  } else if (earningRate < 0) {
+    percentStyleSpan = <span style={{ color: "blue" }}> ({earningRate}%)</span>;
   } else {
-    percentStyleSpan = <span style={{ color: "black" }}> ({자산변동}%)</span>;
+    percentStyleSpan = (
+      <span style={{ color: "black" }}> ({earningRate}%)</span>
+    );
   }
 
   return (
@@ -62,10 +67,10 @@ function PortfolioStock({ setSideBarType }) {
                 <div style={{ fontSize: "18px" }}>주식</div>
               </S.LayoutTopLeft>
               <S.LayoutTopRight>
-                {dummy.length ? (
+                {stockList.length ? (
                   <div>
                     {" "}
-                    총 자산가치 : {총자산가치.toLocaleString()} (원)
+                    총 자산가치 : {earningPrice.toLocaleString()} (원)
                     {percentStyleSpan}
                   </div>
                 ) : (
@@ -74,24 +79,25 @@ function PortfolioStock({ setSideBarType }) {
               </S.LayoutTopRight>
             </S.LayoutTop>
             <div ref={setCollapsibleElement} style={{ paddingBottom: "5px" }}>
-              {dummy.map((item) => {
+              {stockList.map((item, idx) => {
                 return (
                   <PortforlioStockItem
-                    id={item.id}
-                    imgPath={item.imgPath}
-                    title={item.title}
-                    type={item.type}
-                    cnt={item.cnt}
-                    value={item.value}
-                    valueChange={item.valueChange}
-                    incDecAmount={item.incDecAmount}
-                    expectedProfit={item.expectedProfit}
+                    key={idx}
+                    id={item.stock.stockId}
+                    imgPath={item.stock.stockId}
+                    title={item.stock.name}
+                    type={item.stock.companySubCategory}
+                    cnt={item.stock.owners[userId]}
+                    value={item.earningPrice}
+                    valueChange={item.earningRate}
+                    incDecAmount={item.earningPrice - item.totalCost}
+                    expectedProfit={item.stock.price}
                     setSideBarType={setSideBarType}
                   />
                 );
               })}
             </div>
-            {dummy.length ? (
+            {stockList.length ? (
               <S.ToggleBtn
                 onClick={() => {
                   toggle();

@@ -1,7 +1,7 @@
 import * as S from "../PortfolioProperty.style";
 
-function PortfolioMoney() {
-  const Money = 1000000;
+function PortfolioMoney({ money }) {
+  console.log(money);
   return (
     <S.ToggleLayout>
       <S.LayoutTop>
@@ -10,8 +10,8 @@ function PortfolioMoney() {
           <div style={{ fontSize: "20px" }}>현금</div>
         </S.LayoutTopLeft>
         <S.LayoutTopRight>
-          {Money ? (
-            <div> 총 자산가치 : {Money.toLocaleString()} (원)</div>
+          {money ? (
+            <div> 총 자산가치 : {money.toLocaleString()} (원)</div>
           ) : (
             "보유 중인 현금이 없습니다."
           )}

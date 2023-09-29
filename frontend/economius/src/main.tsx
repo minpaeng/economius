@@ -6,11 +6,8 @@ import Root from "./Root.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   // <React.StrictMode>
-  //   <RecoilRoot>
-  //     <Root />
-  //   </RecoilRoot>
+  <RecoilRoot>
+    <Root />
+  </RecoilRoot>
   // </React.StrictMode>
-    <RecoilRoot>
-        <Root />
-    </RecoilRoot>
 );

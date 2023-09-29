@@ -1,9 +1,9 @@
 import Modal from 'react-modal';
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import predictionimg from '/Prediction/prediction.png';
 import * as S from './GlobalModal.stye';
-import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
-import { NowPlayerPositionState, IsModalOpenState } from '/src/recoil/animation/atom';
+import {useRecoilState, useSetRecoilState} from 'recoil';
+import {CallBackState, IsModalOpenState} from '/src/recoil/animation/atom';
 import {GetPredictionState} from "/src/recoil/trading/atom.tsx";
 import {PredictionState} from "/src/recoil/game/atom.tsx";
 import BigEvent from "/src/Components/Modals/BigEvent.tsx";
@@ -12,8 +12,7 @@ function Prediction() {
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const setGetPrediction = useSetRecoilState(GetPredictionState);
     const [prediction, setPrediction] = useRecoilState(PredictionState);
-
-    // const [event, setEvent] = useState();
+    const setCallBack = useSetRecoilState(CallBackState);
 
     useEffect(() => {
         if (prediction !== null) {
@@ -25,6 +24,7 @@ function Prediction() {
         setIsModalOpen(false);
         setGetPrediction(false);
         setPrediction(null);
+        setCallBack(true);
     };
 
     // modal style
@@ -71,8 +71,8 @@ function Prediction() {
             </S.Main>
         </Modal>
     ) : (
-        <BigEvent issue={prediction}></BigEvent>
-    );
+        <BigEvent issue={prediction} predictionFlag={true}></BigEvent>
+    )
 }
 
 export default Prediction;

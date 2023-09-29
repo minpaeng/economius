@@ -3,21 +3,12 @@ import SlideToggle from "react-slide-toggle";
 import PortfolioRealEstateItem from "./PortfolioRealEstateItem";
 import { useState } from "react";
 
-function PortfolioRealEstate() {
-  const dummy = [
-    {
-      imgPath: "hotel",
-      title: "호텔",
-      value: 21000000,
-      valueChange: 5,
-      incDecAmount: 36000,
-      expectedProfit: 300000,
-    },
-  ];
-
-  const 총자산가치 = 310000;
-  const 자산변동 = 4;
-
+function PortfolioRealEstate({
+  totalPrice,
+  earningRate,
+  earningPrice,
+  buildingList,
+}) {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const toggleCollapse = () => {
@@ -26,12 +17,14 @@ function PortfolioRealEstate() {
 
   let percentStyleSpan;
 
-  if (자산변동 > 0) {
-    percentStyleSpan = <span style={{ color: "red" }}> (+{자산변동}%)</span>;
-  } else if (자산변동 < 0) {
-    percentStyleSpan = <span style={{ color: "blue" }}> ({자산변동}%)</span>;
+  if (earningRate > 0) {
+    percentStyleSpan = <span style={{ color: "red" }}> (+{earningRate}%)</span>;
+  } else if (earningRate < 0) {
+    percentStyleSpan = <span style={{ color: "blue" }}> ({earningRate}%)</span>;
   } else {
-    percentStyleSpan = <span style={{ color: "black" }}> ({자산변동}%)</span>;
+    percentStyleSpan = (
+      <span style={{ color: "black" }}> ({earningRate}%)</span>
+    );
   }
 
   return (
@@ -48,10 +41,10 @@ function PortfolioRealEstate() {
                 <div style={{ fontSize: "18px" }}>부동산</div>
               </S.LayoutTopLeft>
               <S.LayoutTopRight>
-                {dummy.length ? (
+                {totalPrice ? (
                   <div>
                     {" "}
-                    총 자산가치 : {총자산가치.toLocaleString()} (원)
+                    총 자산가치 : {totalPrice.toLocaleString()} (원)
                     {percentStyleSpan}
                   </div>
                 ) : (
@@ -60,20 +53,20 @@ function PortfolioRealEstate() {
               </S.LayoutTopRight>
             </S.LayoutTop>
             <div ref={setCollapsibleElement} style={{ paddingBottom: "5px" }}>
-              {dummy.map((item) => {
+              {buildingList.map((item) => {
                 return (
                   <PortfolioRealEstateItem
-                    imgPath={item.imgPath}
-                    title={item.title}
-                    value={item.value}
-                    valueChange={item.valueChange}
-                    incDecAmount={item.incDecAmount}
-                    expectedProfit={item.expectedProfit}
+                    imgPath={item.building.name}
+                    title={item.building.name}
+                    price={item.building.price}
+                    earningRate={earningRate}
+                    earningPrice={earningPrice}
+                    buildingFee={item.building.buildingFee}
                   />
                 );
               })}
             </div>
-            {dummy.length ? (
+            {buildingList.length ? (
               <S.ToggleBtn
                 onClick={() => {
                   toggle();

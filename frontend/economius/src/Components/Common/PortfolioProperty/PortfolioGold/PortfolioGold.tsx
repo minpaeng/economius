@@ -1,33 +1,21 @@
 import * as S from "../PortfolioProperty.style";
 
-function PortfolioGold() {
-  const dummy = {
-    cnt: 4,
-    value: 210000,
-    valueChange: 5,
-    incDecAmount: 36000,
-    expectedProfit: 12000,
-  };
-
+function PortfolioGold({ totalPrice, amount, earningPrice, earningRate }) {
   let percentStyleSpan;
 
-  if (dummy.valueChange > 0) {
-    percentStyleSpan = (
-      <span style={{ color: "red" }}> (+{dummy.valueChange}%)</span>
-    );
-  } else if (dummy.valueChange < 0) {
-    percentStyleSpan = (
-      <span style={{ color: "blue" }}> ({dummy.valueChange}%)</span>
-    );
+  if (earningRate > 0) {
+    percentStyleSpan = <span style={{ color: "red" }}> (+{earningRate}%)</span>;
+  } else if (earningRate < 0) {
+    percentStyleSpan = <span style={{ color: "blue" }}> ({earningRate}%)</span>;
   } else {
     percentStyleSpan = (
-      <span style={{ color: "black" }}> ({dummy.valueChange}%)</span>
+      <span style={{ color: "black" }}> ({earningRate}%)</span>
     );
   }
 
   return (
     <>
-      {dummy.cnt ? (
+      {amount ? (
         <S.PropertyLayout
           style={{ padding: "8px 12px 5px 12px", margin: "8px 0px" }}
         >
@@ -41,7 +29,7 @@ function PortfolioGold() {
 
               <div style={{ fontSize: "20px" }}>금</div>
             </S.LayoutTopLeft>
-            <S.LayoutTopRight>수량: {dummy.cnt}개</S.LayoutTopRight>
+            <S.LayoutTopRight>수량: {amount}개</S.LayoutTopRight>
           </S.LayoutTop>
 
           <S.DivideLine />
@@ -50,14 +38,14 @@ function PortfolioGold() {
             <S.LayoutBottomitem>
               <S.LayoutBottomitemLeft>총 자산가치</S.LayoutBottomitemLeft>
               <S.LayoutBottomitemRight>
-                {dummy.value.toLocaleString()}
+                {totalPrice.toLocaleString()}
                 {percentStyleSpan}
               </S.LayoutBottomitemRight>
             </S.LayoutBottomitem>
             <S.LayoutBottomitem>
               <S.LayoutBottomitemLeft>증감액</S.LayoutBottomitemLeft>
               <S.LayoutBottomitemRight>
-                {dummy.incDecAmount.toLocaleString()}
+                {earningPrice.toLocaleString()}
               </S.LayoutBottomitemRight>
             </S.LayoutBottomitem>
           </S.LayoutBottom>
@@ -67,7 +55,7 @@ function PortfolioGold() {
           <S.LayoutTop>
             <S.LayoutTopLeft>
               <img src="Gold/goldbar.png" alt="img" />
-              <div style={{ fontSize: "28px" }}>금</div>
+              <div style={{ fontSize: "20px" }}>금</div>
             </S.LayoutTopLeft>
             <S.LayoutTopRight>보유 중인 금이 없습니다.</S.LayoutTopRight>
           </S.LayoutTop>

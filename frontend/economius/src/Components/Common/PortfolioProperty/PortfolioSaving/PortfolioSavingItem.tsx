@@ -6,7 +6,7 @@ function PortfolioSavingItem({
   cycleCnt,
   currentCycle,
   cycleMoney,
-  expectedProfit,
+  currentPrice,
 }) {
   return (
     <S.PropertyLayoutItem>
@@ -30,17 +30,17 @@ function PortfolioSavingItem({
           </S.LayoutBottomitemRight>
         </S.LayoutBottomitem>
         <S.LayoutBottomitem>
+          <S.LayoutBottomitemLeft>현재 납입액</S.LayoutBottomitemLeft>
+          <S.LayoutBottomitemRight>
+            {currentPrice.toLocaleString()}
+          </S.LayoutBottomitemRight>
+        </S.LayoutBottomitem>
+        <S.LayoutBottomitem>
           <S.LayoutBottomitemLeft>
             납입 바퀴 / 총 납입 바퀴
           </S.LayoutBottomitemLeft>
           <S.LayoutBottomitemRight>
             {currentCycle}/{cycleCnt}
-          </S.LayoutBottomitemRight>
-        </S.LayoutBottomitem>
-        <S.LayoutBottomitem>
-          <S.LayoutBottomitemLeft>만기 반환액</S.LayoutBottomitemLeft>
-          <S.LayoutBottomitemRight>
-            {expectedProfit.toLocaleString()}
           </S.LayoutBottomitemRight>
         </S.LayoutBottomitem>
       </S.LayoutBottom>
