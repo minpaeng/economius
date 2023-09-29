@@ -290,51 +290,19 @@ function PlayerSocket() {
     }
 
     useEffect(() => {
-        // 소켓 연결
-        stompClient.current = Stomp.over(() => new sockjs('https://j9b109.p.ssafy.io/ws'));
-
-        // 동적으로 섭스크라이브 구현해야한다.
-        // 1. 방을 들어갔을때 혹은 방을 생성햇을때 방정보를 가지고 잇는 recoil 을 변경한다.
-        // 2. useEffect socket depth로 방정보 recoil을 가지고 있고
-        // 3. 이게 변경이 된거를 확인했으니까 subcribe 를 진행
-        // 4. 기존의 방은 구독 해제
-
-        const connectHandler = () => {
-            // stompClient가 null인 경우 연결하지 않음
-            if (!stompClient.current) {
-                return;
-            }
-            stompClient.current.connect(
-                {
-                    // Authorization: "access token"
-                },
-                function () {
-                    // 방 참가 => sub/{player}
-                    // 방 입장 중 잘못된 방식으로 입장하는 경우
-                    stompClient.current.subscribe(`/sub/player/${playername}`, personalCallBackFunction);
-
-                    // uniCastCallBackFunction();
-                    // broadCastCallBackFunction();
-                }
-            );
-        };
-
-        connectHandler();
-    }, []);
-
-    // subscribe useEffect
-    useEffect(() => {
         console.log('roomId: ' + roomId);
-        // 기존의 구독 취소
-        // stompClient.current.unsubscribe();
-        if (!stompClient.current.connected) {
-            stompClient.current = Stomp.over(() => new sockjs('https://j9b109.p.ssafy.io/ws'));
-            stompClient.current.connect(
-                {
 
-                },
+        // stompClient.current가 null인지 확인
+        if (!stompClient.current) {
+            stompClient.current = Stomp.over(() => new sockjs('https://j9b109.p.ssafy.io/ws'));
+        }
+
+        // stompClient가 connected 상태인지 확인
+        if (!stompClient.current.connected) {
+            stompClient.current.connect(
+                {},
                 function () {
-                    stompClient.current.subscribe(`/sub/player/${playername}`, personalCallBackFunction)
+                    stompClient.current.subscribe(`/sub/player/${playername}`, personalCallBackFunction);
                     stompClient.current.subscribe(`/sub/${roomId}`, broadCastCallBackFunction);
                     stompClient.current.subscribe(`/sub/${roomId}/${playername}`, uniCastCallBackFunction);
                     console.log(roomId + '번 방 구독 완료');
@@ -342,14 +310,13 @@ function PlayerSocket() {
                 function () {
                     console.log(roomId + '번 방 구독 실패');
                 }
-            )
-        }
-        else {
+            );
+        } else {
             stompClient.current.unsubscribe();
             stompClient.current.subscribe(`/sub/${roomId}`, broadCastCallBackFunction);
             stompClient.current.subscribe(`/sub/${roomId}/${playername}`, uniCastCallBackFunction);
         }
-    }, [roomId]);
+    }, [roomId, playername, stompClient]);
 
     useEffect(() => {
         console.log('hello');
