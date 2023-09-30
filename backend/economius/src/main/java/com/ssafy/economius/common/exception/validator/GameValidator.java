@@ -72,7 +72,7 @@ public class GameValidator {
     }
 
     public void checkCanJoin(Game game, int roomId, Long player) {
-        checkRoomLimit(game, roomId);
+        checkRoomLimit(game, roomId, player);
         checkPlayer(game, roomId, player);
     }
 
@@ -81,11 +81,11 @@ public class GameValidator {
         underStartLimit(players.size(), roomId);
     }
 
-    private void checkRoomLimit(Game game, int roomId) {
+    private void checkRoomLimit(Game game, int roomId, Long player) {
         if (game.getPlayers().size() >= 4) {
-            log.error(roomId + "번 방 인원 제한 초과");
-            throw CustomWebsocketException.builder()
-                    .roomId(roomId)
+            log.error(roomId + "번 방 인원 제한 초과, 요청자: " + player);
+            throw CustomWebsocketRoomException.builder()
+                    .player(player)
                     .code(GameRoomMessage.ROOM_LIMIT.getCode())
                     .message(GameRoomMessage.ROOM_LIMIT.getMessage())
                     .build();
