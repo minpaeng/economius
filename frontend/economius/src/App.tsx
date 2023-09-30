@@ -23,9 +23,10 @@ import SideBar from "./Components/Common/SideBar";
 
 import Socket from "./Socket";
 import * as THREE from "three";
-import { useSetRecoilState } from "recoil";
-import { PortfolioState, StockState } from "/src/recoil/game/atom.tsx";
+import {useRecoilState, useSetRecoilState} from "recoil";
+import {PlayerIdState, PortfolioState, StockState} from "/src/recoil/game/atom.tsx";
 import axios from "axios";
+import {RoomIdState} from "/src/recoil/animation/atom.tsx";
 
 function App() {
   const light = useRef();
@@ -33,8 +34,12 @@ function App() {
 
   const setPortfolioState = useSetRecoilState(PortfolioState);
   const setStockState = useSetRecoilState(StockState);
+  const [roomId, setRoomId] = useRecoilState(RoomIdState);
+  const [, setPlayerId] = useRecoilState(PlayerIdState);
 
   useEffect(() => {
+    setRoomId(1);
+    setPlayerId(1);
     axios.get("https://j9b109.p.ssafy.io/api/room/1/start").then((data) => {
       setPortfolioState(data.data.portfolios);
       setStockState(data.data.stocks);

@@ -13,6 +13,7 @@ import Join from './Components/Modals/Join';
 import StartLoginCheck from './Components/Modals/StartLoginCheck';
 
 import Socket from './Socket';
+import {PlayerIdState} from "/src/recoil/game/atom.tsx";
 
 export default function Room() {
     // 최상단 컴포넌트에서 모달을 쓸 것이라고 명시 작업이 필요
@@ -37,6 +38,7 @@ export default function Room() {
     const [roomJoinUsersNicknameState, setRoomJoinUsersNicknameState] = useRecoilState(RoomJoinUsersNicknameState);
 
     const [showJoin, setShowJoin] = useRecoilState(SetShowJoinState);
+    const [, setPlayerId] = useRecoilState(PlayerIdState);
 
     // const [showJoin, setShowJoin] = useState(false);
 
@@ -142,6 +144,7 @@ export default function Room() {
             // localStorage에서 player 값을 가져옵니다.
             const player = localStorage.getItem('player');
             const nickname = localStorage.getItem('nickname');
+            setPlayerId(Number(player));
             if (!player) throw new Error('Player not found in local storage');
 
             const response = await axios.post('https://j9b109.p.ssafy.io/api/room/create', {
@@ -163,6 +166,7 @@ export default function Room() {
 
     // 방 코드로 입장하기
     const roomJoinHandler = () => {
+        setPlayerId(Number(localStorage.getItem('player')));
         setShowJoin(true);
     };
 
