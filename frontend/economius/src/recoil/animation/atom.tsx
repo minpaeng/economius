@@ -9,6 +9,20 @@ export const RoomIdState = atom<number>({
     effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
+// 현재 방장 번호
+export const RoomHostState = atom<number>({
+    key: 'RoomHostState',
+    default: 0, // 기본값
+    effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+});
+
+// 현재 방장 번호
+export const RoomCountState = atom<number>({
+    key: 'RoomCountState',
+    default: 0, // 기본값
+    effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+});
+
 // wait room 모달 오픈 여부
 export const SetShowWaitRoomState = atom<boolean>({
     key: 'SetShowWaitRoomState',

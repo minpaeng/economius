@@ -20,3 +20,24 @@ video {
     justify-content: center;
     align-items: flex-end;
 }
+
+/* .overlay-outer {
+    position: relative;
+} */
+
+.overlay-inner {
+    position: absolute;
+    bottom: -0px; /* 오버레이를 텍스트 아래에 위치시킵니다. */
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* 오버레이 배경색과 투명도 조절 */
+    color: white; /* 오버레이 텍스트 색상 설정 */
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px; /* 오버레이 모서리 둥글게 만듭니다. */
+    display: none; /* 초기에 숨김 */
+}
+
+.overlay-outer:hover .overlay-inner {
+    display: block;
+}

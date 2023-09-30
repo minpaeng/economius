@@ -3,7 +3,15 @@ import video1 from '/video/video_start.mp4'; // 1080p
 import video3 from '/video/video_repeat.mp4'; // sound
 import StartAccess from './Components/Modals/StartAccess';
 import * as S from '../src/Components/Modals/GlobalModal.stye';
-import { RoomIdState, RoomJoinUsersNicknameState, SetShowJoinState, SetShowWaitRoomState, UseridState } from './recoil/animation/atom';
+import {
+    RoomCountState,
+    RoomHostState,
+    RoomIdState,
+    RoomJoinUsersNicknameState,
+    SetShowJoinState,
+    SetShowWaitRoomState,
+    UseridState,
+} from './recoil/animation/atom';
 import { useRecoilState } from 'recoil';
 import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
@@ -13,7 +21,7 @@ import Join from './Components/Modals/Join';
 import StartLoginCheck from './Components/Modals/StartLoginCheck';
 
 import Socket from './Socket';
-import {PlayerIdState} from "/src/recoil/game/atom.tsx";
+import { PlayerIdState } from '/src/recoil/game/atom.tsx';
 
 export default function Room() {
     // 최상단 컴포넌트에서 모달을 쓸 것이라고 명시 작업이 필요
@@ -39,6 +47,8 @@ export default function Room() {
 
     const [showJoin, setShowJoin] = useRecoilState(SetShowJoinState);
     const [, setPlayerId] = useRecoilState(PlayerIdState);
+    const [roomHost, setRoomHost] = useRecoilState(RoomHostState);
+    const [roomCount, setRoomCount] = useRecoilState(RoomCountState);
 
     // const [showJoin, setShowJoin] = useState(false);
 
@@ -159,6 +169,8 @@ export default function Room() {
             setRoomJoinUsersNicknameState([nickname, 'wait..', 'wait..', 'wait..']);
 
             setShowWaitRoom(true);
+            setRoomHost(Number(localStorage.getItem('player')));
+            setRoomCount(1);
         } catch (error) {
             console.error('Axios error: ' + error.message); // 네트워크 오류 처리
         }
