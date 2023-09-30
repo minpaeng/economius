@@ -53,19 +53,19 @@ export default function WaitRoom() {
             <Modal isOpen={isModalOpen} style={S.modalStyle}>
                 <S.UserBoxOuter>
                     <S.UserBox>
-                        <img src='/navImg/hola.png' alt='user-img'></img>
+                        <img src='/roomImg/wait.png' alt='user-img'></img>
                         <p>{roomJoinUsersNickname[0]}</p>
                     </S.UserBox>
                     <S.UserBox>
-                        <img src='/navImg/hola.png' alt='user-img'></img>
+                        <img src='/roomImg/wait.png' alt='user-img'></img>
                         <p>{roomJoinUsersNickname[1]}</p>
                     </S.UserBox>
                     <S.UserBox>
-                        <img src='/navImg/hola.png' alt='user-img'></img>
+                        <img src='/roomImg/wait.png' alt='user-img'></img>
                         <p>{roomJoinUsersNickname[2]}</p>
                     </S.UserBox>
                     <S.UserBox>
-                        <img src='/navImg/hola.png' alt='user-img'></img>
+                        <img src='/roomImg/wait.png' alt='user-img'></img>
                         <p>{roomJoinUsersNickname[3]}</p>
                     </S.UserBox>
                     <S.InfoBar>
