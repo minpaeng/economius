@@ -40,15 +40,15 @@ function StockChange({ setSideBarType }) {
               <S.LayoutTopRight></S.LayoutTopRight>
             </S.LayoutTop>
             <div ref={setCollapsibleElement} style={{ paddingBottom: "5px" }}>
-              {stockList.map((item) => {
+              {stockList.map(({companySubCategory, name, price, rate, stockId}) => {
                 return (
                   <StockChangeItem
-                    id={item.stockId}
-                    imgPath={item.stockId}
-                    title={item.name}
-                    type={item.companySubCategory}
-                    value={item.price}
-                    valueChange={item.rate}
+                    id={stockId}
+                    imgPath={stockId}
+                    title={name}
+                    type={companySubCategory}
+                    value={price}
+                    valueChange={rate}
                     setSideBarType={setSideBarType}
                   />
                 );
