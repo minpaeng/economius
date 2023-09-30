@@ -3,17 +3,13 @@ package com.ssafy.economius.game.entity.redis;
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
-@Builder
 public class PortfolioBuildings {
 
     private int totalPrice;
@@ -51,6 +47,7 @@ public class PortfolioBuildings {
     }
 
     public void updateBuildingInfo(int buildingId, Building building) {
+        if (this.building.get(buildingId) == null) return;
         this.building.get(buildingId).setBuilding(building);
     }
 

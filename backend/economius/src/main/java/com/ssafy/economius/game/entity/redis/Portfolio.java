@@ -46,6 +46,7 @@ public class Portfolio {
     public void buyBuilding(Long player, int buildingId, Building building) {
         building.setOwnerId(player);
         this.money -= building.getBuildingFee();
+        if (this.buildings == null) this.buildings = new PortfolioBuildings();
         this.buildings.buyBuilding(buildingId, building);
     }
 
