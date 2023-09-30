@@ -62,14 +62,14 @@ export const UseridState = atom({
 export const NowPlayerState = atom<number>({
     key: 'NowPlayerState',
     default: 0, // 기본값
-    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+    effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
 // 현재 플레이어 최종 위치
 export const NowPlayerPositionState = atom<number>({
     key: 'NowPlayerPositionState',
     default: 0, // 기본값
-    // effects_UNSTABLE: [persistAtom],
+    effects_UNSTABLE: [persistAtom],
 });
 
 // 이동 카드 번호
