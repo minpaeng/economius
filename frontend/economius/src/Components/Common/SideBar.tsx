@@ -56,9 +56,6 @@ function SideBar() {
     sideBarColor = "rgba(255, 156, 159, 0.90)";
   }
 
-  console.log(typeof clickUserColor);
-  console.log(sideBarColor);
-
   // modal style
   const modalStyle: any = {
     overlay: {

@@ -16,7 +16,6 @@ function StockChange({ setSideBarType }) {
   }
 
   const stockList = objectToArray(stockData);
-  console.log(stockList);
 
   const [isCollapsed, setIsCollapsed] = useState(true);
 
@@ -40,19 +39,22 @@ function StockChange({ setSideBarType }) {
               <S.LayoutTopRight></S.LayoutTopRight>
             </S.LayoutTop>
             <div ref={setCollapsibleElement} style={{ paddingBottom: "5px" }}>
-              {stockList.map(({companySubCategory, name, price, rate, stockId}) => {
-                return (
-                  <StockChangeItem
-                    id={stockId}
-                    imgPath={stockId}
-                    title={name}
-                    type={companySubCategory}
-                    value={price}
-                    valueChange={rate}
-                    setSideBarType={setSideBarType}
-                  />
-                );
-              })}
+              {stockList.map(
+                ({ companySubCategory, name, price, rate, stockId }) => {
+                  return (
+                    <StockChangeItem
+                      key={stockId}
+                      id={stockId}
+                      imgPath={stockId}
+                      title={name}
+                      type={companySubCategory}
+                      value={price}
+                      valueChange={rate}
+                      setSideBarType={setSideBarType}
+                    />
+                  );
+                }
+              )}
             </div>
             {stockList.length ? (
               <S.ToggleBtn

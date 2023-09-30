@@ -4,7 +4,6 @@ import PortfolioSavingItem from "./PortfolioSavingItem";
 import { useState } from "react";
 
 function PortfolioSaving({ totalPrice, amount, savingList }) {
-  console.log(totalPrice);
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const toggleCollapse = () => {
@@ -33,9 +32,10 @@ function PortfolioSaving({ totalPrice, amount, savingList }) {
               </S.LayoutTopRight>
             </S.LayoutTop>
             <div ref={setCollapsibleElement} style={{ paddingBottom: "5px" }}>
-              {savingList.map((item) => {
+              {savingList.map((item, idx) => {
                 return (
                   <PortfolioSavingItem
+                    key={idx}
                     title={item.name}
                     rate={item.rate}
                     cycleCnt={item.finishCount}

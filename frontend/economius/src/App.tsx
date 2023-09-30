@@ -23,10 +23,16 @@ import SideBar from "./Components/Common/SideBar";
 
 import Socket from "./Socket";
 import * as THREE from "three";
-import {useRecoilState, useSetRecoilState} from "recoil";
-import {PlayerIdState, PortfolioState, StockState} from "/src/recoil/game/atom.tsx";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import {
+  PlayerIdState,
+  PortfolioState,
+  StockState,
+  GoldState,
+  interestRateState,
+} from "/src/recoil/game/atom";
 import axios from "axios";
-import {RoomIdState} from "/src/recoil/animation/atom.tsx";
+import { RoomIdState } from "/src/recoil/animation/atom.tsx";
 
 function App() {
   const light = useRef();
@@ -36,6 +42,8 @@ function App() {
   const setStockState = useSetRecoilState(StockState);
   const [roomId, setRoomId] = useRecoilState(RoomIdState);
   const [, setPlayerId] = useRecoilState(PlayerIdState);
+  const setGoldState = useSetRecoilState(GoldState);
+  const setInterestRateState = useSetRecoilState(interestRateState);
 
   useEffect(() => {
     setRoomId(1);
@@ -43,6 +51,8 @@ function App() {
     axios.get("https://j9b109.p.ssafy.io/api/room/1/start").then((data) => {
       setPortfolioState(data.data.portfolios);
       setStockState(data.data.stocks);
+      setGoldState(data.data.gold);
+      setInterestRateState(data.data.interestRate);
     });
   }, []);
 

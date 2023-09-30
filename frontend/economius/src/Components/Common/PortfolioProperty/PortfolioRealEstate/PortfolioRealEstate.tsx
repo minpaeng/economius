@@ -53,9 +53,10 @@ function PortfolioRealEstate({
               </S.LayoutTopRight>
             </S.LayoutTop>
             <div ref={setCollapsibleElement} style={{ paddingBottom: "5px" }}>
-              {buildingList.map((item) => {
+              {buildingList.map((item, idx) => {
                 return (
                   <PortfolioRealEstateItem
+                    key={idx}
                     imgPath={item.building.name}
                     title={item.building.name}
                     price={item.building.price}

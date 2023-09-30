@@ -1,7 +1,6 @@
 import * as S from "../PortfolioProperty.style";
 
 function PortfolioMoney({ money }) {
-  console.log(money);
   return (
     <S.ToggleLayout>
       <S.LayoutTop>

@@ -32,9 +32,10 @@ function PortfolioInsurance({ totalPrice, insuranceList }) {
               </S.LayoutTopRight>
             </S.LayoutTop>
             <div ref={setCollapsibleElement} style={{ paddingBottom: "5px" }}>
-              {insuranceList.map((item) => {
+              {insuranceList.map((item, idx) => {
                 return (
                   <PortfolioInsuranceItem
+                    key={idx}
                     title={item.productName}
                     guaranteeRate={item.guaranteeRate}
                     monthlyDeposit={item.monthlyDeposit}

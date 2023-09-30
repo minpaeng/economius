@@ -27,3 +27,13 @@ export const ClickUserPortfolioState = atom({
   // TODO: 일단 디폴트 1로 해놨는데 로컬스토리지에서 본인 id 가져와서 넣어줘야 함
   default: 1,
 });
+
+export const GoldState = atom({
+  key: "GoldState",
+  default: null,
+});
+
+export const interestRateState = atom({
+  key: "interestRateState",
+  default: null,
+});

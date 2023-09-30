@@ -3,7 +3,7 @@ import SlideToggle from "react-slide-toggle";
 import ChartSectionItem from "./ChartSectionItem";
 import { useState } from "react";
 
-function ChartSection({ data }) {
+function ChartSection({ title, imgPath, data }) {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const toggleCollapse = () => {
@@ -12,36 +12,33 @@ function ChartSection({ data }) {
 
   let percentStyleSpan;
 
-  if (data?.changeValue > 0) {
-    percentStyleSpan = (
-      <span style={{ color: "red" }}> (+{data?.changeValue}%)</span>
-    );
-  } else if (data?.changeValue < 0) {
-    percentStyleSpan = (
-      <span style={{ color: "blue" }}> ({data?.changeValue}%)</span>
-    );
+  if (data?.rate > 0) {
+    percentStyleSpan = <span style={{ color: "red" }}> (+{data?.rate}%)</span>;
+  } else if (data?.rate < 0) {
+    percentStyleSpan = <span style={{ color: "blue" }}> ({data?.rate}%)</span>;
   } else {
-    percentStyleSpan = (
-      <span style={{ color: "black" }}> ({data?.changeValue}%)</span>
-    );
+    percentStyleSpan = <span style={{ color: "black" }}> ({data?.rate}%)</span>;
   }
 
   let layoutTopRight;
+  let chartHistory;
 
-  if (data.title === "금리") {
+  if (title === "금리") {
     layoutTopRight = (
       <S.LayoutTopRight>
         현재금리 : {data.currentValue}
         {percentStyleSpan}
       </S.LayoutTopRight>
     );
-  } else if (data.title === "금") {
+    chartHistory = <ChartSectionItem data={dataChange(data.rateHistory)} />;
+  } else if (title === "금") {
     layoutTopRight = (
       <S.LayoutTopRight>
-        가격 : {data.currentValue}
+        가격 : {data.price.toLocaleString()} (원)
         {percentStyleSpan}
       </S.LayoutTopRight>
     );
+    chartHistory = <ChartSectionItem data={dataChange(data.priceHistory)} />;
   } else {
     layoutTopRight = (
       <S.LayoutTopRight>
@@ -49,6 +46,15 @@ function ChartSection({ data }) {
         {percentStyleSpan}
       </S.LayoutTopRight>
     );
+  }
+
+  function dataChange(arr) {
+    const returnData = [];
+    for (let i = 0; i < arr.length; i++) {
+      returnData.push({ turn: i + 1, price: arr[i] });
+    }
+
+    return returnData;
   }
 
   return (
@@ -61,13 +67,14 @@ function ChartSection({ data }) {
           <S.ToggleLayout>
             <S.LayoutTop>
               <S.LayoutTopLeft>
-                <img src={`EconomicIndicator/${data.imgPath}.png`} alt="img" />
-                <div style={{ fontSize: "18px" }}>{data.title}</div>
+                <img src={`EconomicIndicator/${imgPath}.png`} alt="img" />
+                <div style={{ fontSize: "18px" }}>{title}</div>
               </S.LayoutTopLeft>
               {layoutTopRight}
             </S.LayoutTop>
             <div ref={setCollapsibleElement}>
-              <ChartSectionItem data={data.AllData} />
+              {/* <ChartSectionItem data={dataChange(data.priceHistory)} /> */}
+              {chartHistory}
             </div>
 
             <S.ToggleBtn
