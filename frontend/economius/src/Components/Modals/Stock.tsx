@@ -46,26 +46,6 @@ function Stock() {
   // 턴 종료 플래그
   const setCallBack = useSetRecoilState(CallBackState);
 
-  const imageUrl = [
-    null,
-    "koreaElectro.png",
-    "Aramco.png",
-    "Posco.png",
-    "LGchemi.png",
-    "pfizer.png",
-    "celltrion.png",
-    "Nike.png",
-    "CocaCola.png",
-    "airbnb.png",
-    "CJE&M.png",
-    "KT.png",
-    "MS.png",
-    "CJdistribution.png",
-    "hyundaiConstruct.png",
-    "Lexus.png",
-    "samsung.png",
-  ];
-
   //  매수,매도 탭 구분 플래그
   const [buyClick, isBuyClick] = useState(true);
   const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
@@ -114,7 +94,7 @@ function Stock() {
     <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
       <S.StockMain>
         <S.StockTop>
-          <S.StockTopImg src={`Stock/${imageUrl[stockDetail.stockId]}`} />
+          <S.StockTopImg src={`Stock/${stockDetail.stockId}.png`} />
           <S.StockTopTitle>
             <S.StockTopTitleEnterprise>
               {stockDetail.name}
