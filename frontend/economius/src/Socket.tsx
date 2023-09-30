@@ -320,7 +320,7 @@ function PlayerSocket() {
             }
         );
 
-    }, [showWaitRoom, playername, stompClient, roomId]);
+    }, [showWaitRoom, playername, stompClient]);
 
     async function connect() {
         // stompClient가 close 상태라면 재생성 후 connect
@@ -335,6 +335,7 @@ function PlayerSocket() {
                         stompClient.current.subscribe(`/sub/${roomId}`, broadCastCallBackFunction);
                         stompClient.current.subscribe(`/sub/${roomId}/${playername}`, uniCastCallBackFunction);
                         console.log(roomId + '번 방 구독 완료');
+                        console.log('재연결 완료');
                         resolve(); // 연결 성공 시 resolve 호출
                     },
                     function () {
@@ -342,8 +343,8 @@ function PlayerSocket() {
                         reject(); // 연결 실패 시 reject 호출
                     }
                 );
+                console.log('재연결 완료');
             });
-            console.log('재연결 완료');
         }
     }
 
