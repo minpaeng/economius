@@ -28,7 +28,7 @@ import {
     TradeRealEstateState,
     TradeStockState,
 } from './recoil/trading/atom';
-import {PortfolioState, PredictionState, StockState} from '/src/recoil/game/atom.tsx';
+import {PlayerIdState, PortfolioState, PredictionState, StockState} from '/src/recoil/game/atom.tsx';
 import {
     BankInfoState,
     ChanceCardInfoState,
@@ -112,7 +112,7 @@ function PlayerSocket() {
     const [roomJoin, setRoomJoin] = useRecoilState(RoomJoinState);
     const [roomJoinUsersNickname, setRoomJoinUsersNickname] = useRecoilState(RoomJoinUsersNicknameState);
     const nickname = localStorage.getItem('nickname');
-    const playername = localStorage.getItem('player');
+    const [playername, ] = useRecoilState(PlayerIdState);
     const [showWaitRoom, setShowWaitRoom] = useRecoilState(SetShowWaitRoomState);
 
     const stompClient = useRef(null);
@@ -312,6 +312,7 @@ function PlayerSocket() {
                 // 구독 정보가 바뀌었다면 재구독
                 if (roomId != 0 && stompClient.current.connected) {
                     stompClient.current.unsubscribe();
+                    stompClient.current.subscribe(`/sub/player/${playername}`, personalCallBackFunction);
                     stompClient.current.subscribe(`/sub/${roomId}`, broadCastCallBackFunction);
                     stompClient.current.subscribe(`/sub/${roomId}/${playername}`, uniCastCallBackFunction);
                     console.log(`기존 방 구독 취소 후 ${roomId}번 방 구독 완료`);
@@ -319,14 +320,14 @@ function PlayerSocket() {
             }
         );
 
-    }, [showWaitRoom, playername, stompClient]);
+    }, [showWaitRoom, playername, stompClient, roomId]);
 
     async function connect() {
         // stompClient가 close 상태라면 재생성 후 connect
         if (!stompClient.current || !stompClient.current.connected) {
             console.log('재연결중');
             stompClient.current = Stomp.over(() => new sockjs('https://j9b109.p.ssafy.io/ws'));
-            await new Promise<void>((resolve, reject) => {
+            return await new Promise<void>((resolve, reject) => {
                 stompClient.current.connect(
                     {},
                     function () {
