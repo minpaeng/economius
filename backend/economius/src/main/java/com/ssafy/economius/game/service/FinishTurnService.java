@@ -40,6 +40,7 @@ public class FinishTurnService {
         stockRearrange(game, round);
         // 새로운 라운드일경우
         if (gameTurn % 4 == 0) {
+            log.info("새로운 라운드 시작: " + round);
             goldRearrange(game);
             buildingRearrange(game);
             interestRateRearrange(game);
@@ -75,6 +76,7 @@ public class FinishTurnService {
     private void applyIssueEffect(Game game, int round) {
         if (round % 4 == 0 || game.getIssueIdx() >= ISSUE_COUNT.getValue()) return;
         List<AssetChange> assetChanges = game.getIssues().get(game.getIssueIdx()).getCurrentAssetChanges();
+        log.info("발생한 이슈: " + game.getIssues().get(game.getIssueIdx()).getName());
         for (AssetChange assetChange : assetChanges) {
             applyChanges(game, assetChange, round);
         }
@@ -83,8 +85,8 @@ public class FinishTurnService {
     private void applyChanges(Game game, AssetChange assetChange, int round) {
         String type = assetChange.getAssetType();
         int changeRate = assetChange.getChangeRate().getValue();
-        log.info("발생한 이슈: " + game.getIssues().get(game.getIssueIdx()).getName());
-        log.info("경제 이슈 발생으로 인한 변동률: " + changeRate + "%");
+        log.info("경제 이슈 발생으로 인한 변동률: " + changeRate + "%, 변동 자산: "
+                + type + ", 자산 아이디: " + assetChange.getAssetId());
 
         if (type.equals(VolatileEnum.GOLD.getValue())) {
             game.getGold().updateGoldPrice(changeRate);
