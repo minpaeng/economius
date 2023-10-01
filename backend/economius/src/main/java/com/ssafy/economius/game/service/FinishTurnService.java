@@ -75,7 +75,6 @@ public class FinishTurnService {
     private void applyIssueEffect(Game game, int round) {
         if (round % 4 == 0 || game.getIssueIdx() >= ISSUE_COUNT.getValue()) return;
         List<AssetChange> assetChanges = game.getIssues().get(game.getIssueIdx()).getCurrentAssetChanges();
-
         for (AssetChange assetChange : assetChanges) {
             applyChanges(game, assetChange, round);
         }
@@ -84,6 +83,7 @@ public class FinishTurnService {
     private void applyChanges(Game game, AssetChange assetChange, int round) {
         String type = assetChange.getAssetType();
         int changeRate = assetChange.getChangeRate().getValue();
+        log.info("발생한 이슈: " + game.getIssues().get(game.getIssueIdx()).getName());
         log.info("경제 이슈 발생으로 인한 변동률: " + changeRate + "%");
 
         if (type.equals(VolatileEnum.GOLD.getValue())) {
