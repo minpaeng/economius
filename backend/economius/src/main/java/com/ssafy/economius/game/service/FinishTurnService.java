@@ -98,9 +98,11 @@ public class FinishTurnService {
     }
 
     private void applyBuildingChanges(Game game, int changeRate) {
+        log.info("이슈 발생 전 부동산 가격: " + game.getBuildings());
         for (int buildingId : game.getBuildings().keySet()) {
             updateBuildingPrice(changeRate, game, buildingId);
         }
+        log.info("이슈 발생 후 부동산 가격: " + game.getBuildings());
     }
 
     private void applyStockChanges(Game game, int assetId, int changeRate, int round) {

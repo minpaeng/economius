@@ -8,7 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -24,7 +26,7 @@ public class Building {
     private List<Integer> rateHistory;
 
     public void updateBuildingPrice(int newRate) {
-        price += price * newRate / 100;
+        price += price / 100 * newRate;
         rate = newRate;
         priceHistory.add(price);
         rateHistory.add(newRate);
