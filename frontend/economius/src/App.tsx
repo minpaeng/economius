@@ -30,6 +30,7 @@ import {
   StockState,
   GoldState,
   interestRateState,
+  buildingState,
 } from "/src/recoil/game/atom";
 import axios from "axios";
 import { RoomIdState } from "/src/recoil/animation/atom.tsx";
@@ -44,6 +45,7 @@ function App() {
   const [, setPlayerId] = useRecoilState(PlayerIdState);
   const setGoldState = useSetRecoilState(GoldState);
   const setInterestRateState = useSetRecoilState(interestRateState);
+  const setBuildingState = useSetRecoilState(buildingState);
 
   useEffect(() => {
     setRoomId(1);
@@ -53,6 +55,7 @@ function App() {
       setStockState(data.data.stocks);
       setGoldState(data.data.gold);
       setInterestRateState(data.data.interestRate);
+      setBuildingState(data.data.buildings);
     });
   }, []);
 

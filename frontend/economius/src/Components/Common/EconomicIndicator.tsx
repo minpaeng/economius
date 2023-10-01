@@ -5,7 +5,11 @@ import StockChange from "./EconomicIndicator/IndicatorSection/StockChange";
 import BeforeBigEventNews from "./EconomicIndicator/News/BeforeBigEventNews";
 import AfterBigEventNews from "./EconomicIndicator/News/AfterBigEventNews";
 import { useRecoilValue } from "recoil";
-import { GoldState, interestRateState } from "../../recoil/game/atom";
+import {
+  GoldState,
+  interestRateState,
+  buildingState,
+} from "../../recoil/game/atom";
 
 function EconomicIndicator({ setSideBarType }) {
   const [beforeBigEvent, setBeforeBigEvent] = useState(false);
@@ -270,32 +274,6 @@ function EconomicIndicator({ setSideBarType }) {
     }
   }
 
-  // console.log(NewsList);
-
-  // const interestRateData = {
-  //   imgPath: "interestRate",
-  //   title: "금리",
-  //   currentValue: 5,
-  //   changeValue: 2,
-  //   AllData: [
-  //     { turn: 1, price: 100 },
-  //     { turn: 2, price: 150 },
-  //     { turn: 3, price: 120 },
-  //     { turn: 4, price: 130 },
-  //     { turn: 5, price: 210 },
-  //     { turn: 6, price: 180 },
-  //     { turn: 7, price: 185 },
-  //     { turn: 8, price: 180 },
-  //     { turn: 9, price: 177 },
-  //     { turn: 10, price: 190 },
-  //     { turn: 11, price: 150 },
-  //     { turn: 12, price: 115 },
-  //     { turn: 13, price: 155 },
-  //     { turn: 14, price: 109 },
-  //     { turn: 15, price: 120 },
-  //   ],
-  // };
-
   const interestRateData = useRecoilValue(interestRateState);
   const interestRate = "interestRate";
   console.log(interestRateData);
@@ -305,29 +283,18 @@ function EconomicIndicator({ setSideBarType }) {
   const goldImgPath = "goldbar";
   const goldTitle = "금";
 
-  const RealEstateData = {
-    imgPath: "RealEstate",
-    title: "부동산",
-    currentValue: 5,
-    changeValue: 2,
-    AllData: [
-      { turn: 1, price: 100 },
-      { turn: 2, price: 150 },
-      { turn: 3, price: 120 },
-      { turn: 4, price: 130 },
-      { turn: 5, price: 210 },
-      { turn: 6, price: 180 },
-      { turn: 7, price: 185 },
-      { turn: 8, price: 180 },
-      { turn: 9, price: 177 },
-      { turn: 10, price: 190 },
-      { turn: 11, price: 150 },
-      { turn: 12, price: 115 },
-      { turn: 13, price: 155 },
-      { turn: 14, price: 109 },
-      { turn: 15, price: 120 },
-    ],
-  };
+  const realEstateData = useRecoilValue(buildingState);
+  console.log(realEstateData);
+  const reaEstateImgPath = "RealEstate";
+  const realEstateTitle = "부동산";
+
+  function makebuildingData(obj) {
+    const returnArr = [];
+    for (let i = 1; i < 4; i++) {
+      returnArr.push(obj[i].priceHistory);
+    }
+    return returnArr;
+  }
 
   return (
     <S.EconomicIndicatorMain>
@@ -381,7 +348,11 @@ function EconomicIndicator({ setSideBarType }) {
 
       {/* 부동산 차트 */}
 
-      {/* <ChartSection imgPath={} data={RealEstateData} /> */}
+      <ChartSection
+        title={realEstateTitle}
+        imgPath={reaEstateImgPath}
+        data={makebuildingData(realEstateData)}
+      />
 
       {/* 주식 리스트 */}
       <StockChange setSideBarType={setSideBarType} />

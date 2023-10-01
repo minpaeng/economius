@@ -3,6 +3,8 @@ import SlideToggle from "react-slide-toggle";
 import ChartSectionItem from "./ChartSectionItem";
 import { useState } from "react";
 
+import RealEstateChart from "./RealEstateChart";
+
 function ChartSection({ title, imgPath, data }) {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
@@ -46,6 +48,7 @@ function ChartSection({ title, imgPath, data }) {
         {percentStyleSpan}
       </S.LayoutTopRight>
     );
+    chartHistory = <RealEstateChart data={data} />;
   }
 
   function dataChange(arr) {

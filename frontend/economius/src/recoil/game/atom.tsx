@@ -37,3 +37,8 @@ export const interestRateState = atom({
   key: "interestRateState",
   default: null,
 });
+
+export const buildingState = atom({
+  key: "buildingState",
+  default: null,
+});
