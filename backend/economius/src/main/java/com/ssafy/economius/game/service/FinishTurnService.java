@@ -84,6 +84,7 @@ public class FinishTurnService {
     private void applyChanges(Game game, AssetChange assetChange, int round) {
         String type = assetChange.getAssetType();
         int changeRate = assetChange.getChangeRate().getValue();
+        log.info("경제 이슈 발생으로 인한 변동률: " + changeRate + "%");
 
         if (type.equals(VolatileEnum.GOLD.getValue())) {
             game.getGold().updateGoldPrice(changeRate);
@@ -97,9 +98,11 @@ public class FinishTurnService {
     }
 
     private void applyBuildingChanges(Game game, int changeRate) {
+        log.info("이슈 발생 전 부동산 가격: " + game.getBuildings());
         for (int buildingId : game.getBuildings().keySet()) {
             updateBuildingPrice(changeRate, game, buildingId);
         }
+        log.info("이슈 발생 후 부동산 가격: " + game.getBuildings());
     }
 
     private void applyStockChanges(Game game, int assetId, int changeRate, int round) {
