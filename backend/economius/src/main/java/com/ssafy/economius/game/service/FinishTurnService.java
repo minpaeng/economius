@@ -33,7 +33,8 @@ public class FinishTurnService {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
         int gameTurn = game.updateGameTurn();
-        int round = gameTurn / 4;
+        int round = gameTurn / 4; // 1턴이 끝나면 -> gameTurn 1, round 0
+        log.info("===" + gameTurn + "턴 종료, " + round + "라운드 시작 준비중===");
 
         // todo 각종 이벤트 로직 구현
         // 주식가격 재 산정
@@ -55,6 +56,7 @@ public class FinishTurnService {
     }
 
     private void changePrevIssue(Game game, int round) {
+        // 0, 4, 8, 12, 16,
         if (round % 4 != 0) return;
         int idx = game.getIssueIdx() + 1;
         if (idx >= ISSUE_COUNT.getValue()) {
