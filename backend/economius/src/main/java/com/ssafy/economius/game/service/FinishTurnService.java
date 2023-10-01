@@ -56,6 +56,10 @@ public class FinishTurnService {
     private void changePrevIssue(Game game, int round) {
         if (round % 4 != 0) return;
         int idx = game.getIssueIdx() + 1;
+        if (idx >= ISSUE_COUNT.getValue()) {
+            game.setCurrentPrevIssues(null);
+            return;
+        }
         game.setIssueIdx(idx);
         game.setCurrentPrevIssues(
                 InitialData.getPrevIssue(game.getIssues().get(idx).getIssueId()));
@@ -63,13 +67,13 @@ public class FinishTurnService {
     }
 
     private void checkIssueRound(Game game, int round) {
-        if (round % 4 != 1) return;
+        if (round % 4 != 1 || game.getIssueIdx() >= ISSUE_COUNT.getValue()) return;
         game.setCurrentPrevIssues(null);
         game.setCurrentIssue(game.getIssues().get(game.getIssueIdx()));
     }
 
     private void applyIssueEffect(Game game, int round) {
-        if (round % 4 == 0) return;
+        if (round % 4 == 0 || game.getIssueIdx() >= ISSUE_COUNT.getValue()) return;
         List<AssetChange> assetChanges = game.getIssues().get(game.getIssueIdx()).getCurrentAssetChanges();
 
         for (AssetChange assetChange : assetChanges) {
