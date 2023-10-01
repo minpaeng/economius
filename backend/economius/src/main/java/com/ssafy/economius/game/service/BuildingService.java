@@ -36,7 +36,7 @@ public class BuildingService {
         int buildingId = buyBuildingRequest.getBuildingId();
         Building building = game.getBuildings().get(buildingId);
 
-        BuyBuildingResponse response = buyBuilding(roomId, player, portfolio, buildingId, building);
+        BuyBuildingResponse response = makeBuyBuildingResponse(roomId, player, portfolio, buildingId, building);
         gameRepository.save(game);
         return response;
     }
@@ -49,26 +49,26 @@ public class BuildingService {
         int buildingId = sellBuildingRequest.getBuildingId();
         Building building = game.getBuildings().get(buildingId);
 
-        SellBuildingResponse response = sellBuilding(roomId, player, portfolio, buildingId, building);
+        SellBuildingResponse response = makeSellBuildingResponse(roomId, player, portfolio, buildingId, building);
         gameRepository.save(game);
         return response;
     }
 
-    private BuyBuildingResponse buyBuilding(int roomId, Long player, Portfolio portfolio,
+    private BuyBuildingResponse makeBuyBuildingResponse(int roomId, Long player, Portfolio portfolio,
                                             int buildingId, Building building) {
         buildingValidator.checkBuildingBuyingStatus(player, roomId, building);
-        gameValidator.canBuy(roomId, portfolio.getMoney(), building.getBuildingFee());
+        gameValidator.canBuy(roomId, portfolio.getMoney(), building.getPrice());
         portfolio.buyBuilding(player, buildingId, building);
 
         return BuyBuildingResponse.builder()
                 .player(portfolio.getPlayer())
                 .buildingId(buildingId)
-                .changeAmount(building.getBuildingFee())
+                .changeAmount(building.getPrice())
                 .moneyResult(portfolio.getMoney())
                 .build();
     }
 
-    private SellBuildingResponse sellBuilding(int roomId, Long player, Portfolio portfolio,
+    private SellBuildingResponse makeSellBuildingResponse(int roomId, Long player, Portfolio portfolio,
                                               int buildingId, Building building) {
         buildingValidator.checkBuildingSellingStatus(player, roomId, building);
         portfolio.sellBuilding(buildingId, building);
@@ -76,7 +76,7 @@ public class BuildingService {
         return SellBuildingResponse.builder()
                 .player(portfolio.getPlayer())
                 .buildingId(buildingId)
-                .changeAmount(building.getBuildingFee())
+                .changeAmount(building.getPrice())
                 .moneyResult(portfolio.getMoney())
                 .build();
     }
@@ -90,6 +90,7 @@ public class BuildingService {
         Long ownerId = building.getOwnerId();
 
         int changeAmount = payBuildingFee(playerId, ownerId, roomId, buildingId, game);
+        gameRepository.save(game);
         return makeVisitBuildingResponse(playerId, ownerId, buildingId, changeAmount, game);
     }
 
@@ -108,9 +109,7 @@ public class BuildingService {
 
     private int payBuildingFee(Long player, Long owner, int roomId, int buildingId, Game game) {
         checkBankruptcy(player, owner, roomId, buildingId, game);
-        int changeAmount = game.payBuildingFee(player, owner, buildingId);
-        gameRepository.save(game);
-        return changeAmount;
+        return game.payBuildingFee(player, owner, buildingId);
     }
 
     private void checkBankruptcy(Long player, Long owner, int roomId, int buildingId, Game game) {

@@ -45,14 +45,14 @@ public class Portfolio {
 
     public void buyBuilding(Long player, int buildingId, Building building) {
         building.setOwnerId(player);
-        this.money -= building.getBuildingFee();
+        this.money -= building.getPrice();
         if (this.buildings == null) this.buildings = new PortfolioBuildings();
         this.buildings.buyBuilding(buildingId, building);
     }
 
     public void sellBuilding(int buildingId, Building building) {
         building.setOwnerId(null);
-        this.money += building.getBuildingFee();
+        this.money += building.getPrice();
         this.buildings.sellBuilding(buildingId, building);
     }
 
