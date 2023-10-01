@@ -84,6 +84,7 @@ public class FinishTurnService {
     private void applyChanges(Game game, AssetChange assetChange, int round) {
         String type = assetChange.getAssetType();
         int changeRate = assetChange.getChangeRate().getValue();
+        log.info("경제 이슈 발생으로 인한 변동률: " + changeRate + "%");
 
         if (type.equals(VolatileEnum.GOLD.getValue())) {
             game.getGold().updateGoldPrice(changeRate);

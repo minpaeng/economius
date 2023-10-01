@@ -138,11 +138,11 @@ public class Game {
         if (owner == null || owner.equals(player)) return 0;
         int playerMoney = this.portfolios.get(player).getMoney();
         int ownerMoney = this.portfolios.get(owner).getMoney();
-        int buildingPrice = this.buildings.get(buildingId).getPrice();
+        int buildingFee = this.buildings.get(buildingId).getBuildingFee();
 
-        this.portfolios.get(player).setMoney(playerMoney - buildingPrice);
-        this.portfolios.get(owner).setMoney(ownerMoney + buildingPrice);
-        return buildingPrice;
+        this.portfolios.get(player).setMoney(playerMoney - buildingFee);
+        this.portfolios.get(owner).setMoney(ownerMoney + buildingFee);
+        return buildingFee;
     }
 
     public void proceedBankruptcy(Long player) {
