@@ -1,12 +1,12 @@
 import Modal from 'react-modal';
-import {useEffect} from 'react';
+import { useEffect } from 'react';
 import predictionimg from '/Prediction/prediction.png';
 import * as S from './GlobalModal.stye';
-import {useRecoilState, useSetRecoilState} from 'recoil';
-import {CallBackState, IsModalOpenState} from '/src/recoil/animation/atom';
-import {GetPredictionState} from "/src/recoil/trading/atom.tsx";
-import {PredictionState} from "/src/recoil/game/atom.tsx";
-import BigEvent from "/src/Components/Modals/BigEvent.tsx";
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { CallBackState, IsModalOpenState } from '/src/recoil/animation/atom';
+import { GetPredictionState } from '/src/recoil/trading/atom.tsx';
+import { PredictionState } from '/src/recoil/game/atom.tsx';
+import BigEvent from '/src/Components/Modals/BigEvent.tsx';
 
 function Prediction() {
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
@@ -45,6 +45,7 @@ function Prediction() {
             overflow: 'auto',
             zIndex: 10,
             margin: 'auto',
+            left: '25%',
             width: '500px',
             height: '350px',
             border: '5px solid white',
@@ -61,7 +62,7 @@ function Prediction() {
                 </S.Top>
 
                 <S.Mid>
-                    <S.MidImg src={predictionimg} alt='predictionimg'/>
+                    <S.MidImg src={predictionimg} alt='predictionimg' />
                     <S.MidDesc>다음에 일어날 경제 이슈를 예언해줍니다.</S.MidDesc>
                 </S.Mid>
 
@@ -72,7 +73,7 @@ function Prediction() {
         </Modal>
     ) : (
         <BigEvent issue={prediction} predictionFlag={true}></BigEvent>
-    )
+    );
 }
 
 export default Prediction;

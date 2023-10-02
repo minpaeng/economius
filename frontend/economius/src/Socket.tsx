@@ -7,7 +7,8 @@ import {
     GameButtonState,
     IsModalOpenState,
     MonthlyModalOpenState,
-    MovementCardsState,
+    MovementCardOpenState,
+    MovementCardState,
     NowPlayerPositionState,
     NowPlayerState,
     RoomCountState,
@@ -72,7 +73,8 @@ function PlayerSocket() {
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const [nowPlayer, setNowPlayerState] = useRecoilState(NowPlayerState);
     const [nowPlayerPosition, setNowPlayerPosition] = useRecoilState(NowPlayerPositionState);
-    const [movementCards, setMovementCards] = useRecoilState(MovementCardsState);
+    const [movementCard, setMovementCard] = useRecoilState(MovementCardState);
+    const [movementCardOpen, setMovementCardOpen] = useRecoilState(MovementCardOpenState);
     const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
     // 자산별 모달 정보
     const [monthlyInfo, setMonthlyInfo] = useRecoilState(MonthlyInfoState);
@@ -88,11 +90,11 @@ function PlayerSocket() {
     const [tradeInsurance, setTradeInsurance] = useRecoilState(TradeInsuranceState);
     const [tradeInsuranceConfirm, setTradeInsuranceConfirm] = useRecoilState(TradeInsuranceConfirmState); // 보험 확인 버튼
     const [insuranceCnt, setInsuranceCnt] = useState(0); // 보험 응답 카운트
-
     // 매수량, 매도량
     const [buyAmount, setbuyAmount] = useRecoilState(BuyAmountState);
     const [sellAmount, setSellAmount] = useRecoilState(SellAmountState);
 
+    // 모달 정보 setter 함수
     const setStockDetail = useSetRecoilState(StockDetailState);
     const setGoldDetail = useSetRecoilState(GoldDetailState);
     const setPortfolio = useSetRecoilState(PortfolioState);
@@ -183,20 +185,6 @@ function PlayerSocket() {
                 setInsuranceCnt(prev => prev + 1);
             }
         }
-        // else if (type == 'bank') {
-        //     setBankInfo({
-        //         player: message.player,
-        //         money: message.money,
-        //         have: message.have,
-        //         bankId: message.savingDto.bankId,
-        //         name: message.savingDto.name,
-        //         monthlyDeposit: message.savingDto.monthlyDeposit,
-        //         currentPrice: message.savingDto.currentPrice,
-        //         currentCount: message.savingDto.currentCount,
-        //         finishCount: message.savingDto.finishCount,
-        //         rate: message.savingDto.rate,
-        //     });
-        // }
     }
 
     function personalCallBackFunction(recievedMessage: any) {
@@ -602,96 +590,58 @@ function PlayerSocket() {
         // if 가입 else 해지
         if (tradeInsurance[0]) {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/joinInsurance`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        insuranceId: 1,
-                    })
-                );
+                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 3 }));
             });
         } else {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/finishInsurance`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        insuranceId: 1,
-                    })
-                );
+                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 3 }));
             });
         }
         if (tradeInsurance[1]) {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/joinInsurance`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        insuranceId: 2,
-                    })
-                );
+                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 4 }));
             });
         } else {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/finishInsurance`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        insuranceId: 2,
-                    })
-                );
+                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 4 }));
             });
         }
         if (tradeInsurance[2]) {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/joinInsurance`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        insuranceId: 3,
-                    })
-                );
+                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 1 }));
             });
         } else {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/finishInsurance`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        insuranceId: 3,
-                    })
-                );
+                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 1 }));
             });
         }
         if (tradeInsurance[3]) {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/joinInsurance`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        insuranceId: 4,
-                    })
-                );
+                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
             });
         } else {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/finishInsurance`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        insuranceId: 4,
-                    })
-                );
+                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
             });
         }
+        // if (tradeInsurance[2]) {
+        //     if (stompClient.current) {
+        //         stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 1 }));
+        //     }
+        // } else {
+        //     if (stompClient.current) {
+        //         stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 1 }));
+        //     }
+        // }
+        // if (tradeInsurance[3]) {
+        //     if (stompClient.current) {
+        //         stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
+        //     }
+        // } else {
+        //     if (stompClient.current) {
+        //         stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
+        //     }
+        // }
         setTradeInsuranceConfirm(false);
     }, [tradeInsuranceConfirm]);
 
