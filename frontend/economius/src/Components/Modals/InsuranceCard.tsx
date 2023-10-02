@@ -7,7 +7,7 @@ import { useEffect } from 'react'; // 추가: useEffect를 import 해주세요.
 
 const insureanceIds = {
     3: 0,
-    4: 1,
+    4 :1,
     1: 2,
     2: 3,
 };

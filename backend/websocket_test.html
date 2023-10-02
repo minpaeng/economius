@@ -21,19 +21,24 @@
     </style>
     <meta charset="UTF-8">
     <title>Stomp WebSocket Example</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.comm/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script>
-        let stompClient = null; 
+        let stompClient = null;
         let playUser = 1; //플레이 테스트 할 유저 (호스트 1번으로 해둠)
+        let roomId = ""; // Initialize roomId variable
 
         function connect() {
-            const socket = new SockJS('http://localhost:8080/ws'); // 여기서 서버의 엔드포인트를 지정합니다.
+            const socket = new SockJS('https://j9b109.p.ssafy.io/ws'); // 여기서 서버의 엔드포인트를 지정합니다.
             stompClient = Stomp.over(socket);
 
             stompClient.connect({}, function () {
                     //subscribe(subscribe url,해당 url로 메시지를 받을때마다 실행할 함수)
-                    sub = stompClient.subscribe('/sub/6', function (messageOutput) {
+                    sub = stompClient.subscribe(`/sub/${roomId}`, function (messageOutput) {
+                        //e.body에 전송된 data가 들어있다
+                        showMessageOutput(JSON.parse(messageOutput.body));
+                    });
+                    stompClient.subscribe(`/sub/${roomId}/${playUser}`, function (messageOutput) {
                         //e.body에 전송된 data가 들어있다
                         showMessageOutput(JSON.parse(messageOutput.body));
                     });
@@ -45,6 +50,7 @@
             );
         }
 
+
         function disconnect() {
             if (stompClient !== null) {
                 stompClient.disconnect();
@@ -52,34 +58,40 @@
             console.log("Disconnected");
         }
 
+        function setRoomId() {
+            roomId = document.getElementById('roomid').value; // Get roomId from user input
+            connect(); // Connect to the WebSocket with the new roomId
+        }
+
         function sendJoin2() {
-            stompClient.send("/pub/6/join", {}, JSON.stringify({
-                "player": 2
+            stompClient.send(`/pub/${roomId}/join`, {}, JSON.stringify({
+                "player": 2,
+                "nickname" : 2
             }));
         }
         function sendJoin3() {
-            stompClient.send("/pub/6/join", {}, JSON.stringify({
-                "player": 3
+            stompClient.send(`/pub/${roomId}/join`, {}, JSON.stringify({
+                "player": 3,
+                "nickname" : 3
             }));
         }
         function sendJoin4() {
-            stompClient.send("/pub/6/join", {}, JSON.stringify({
-                "player": 4
+            stompClient.send(`/pub/${roomId}/join`, {}, JSON.stringify({
+                "player": 4,
+                "nickname" : 4
             }));
         }
 
-
         function sendStart() {
-            stompClient.send("/pub/6/start", {}, JSON.stringify({
+            stompClient.send(`/pub/${roomId}/start`, {}, JSON.stringify({
                 "hostPlayer": 1
             }));
         }
 
         function sendMessage() {
-            stompClient.send("/pub/6/bank", {}, JSON.stringify({
-                "player": 1,
-                "bankId" : 1
-            }));
+            const destination = `/pub/${roomId}/` + document.getElementById('destination').value; // Get destination from user input
+            const messageContent = document.getElementById('messageContent').value; // Get message content from user input
+            stompClient.send(destination, {}, messageContent);
         }
 
         function showMessageOutput(messageOutput) {
@@ -90,11 +102,11 @@
     </script>
 </head>
 <body>
-<h1>WebSocket Test</h1> 
- 
+<h1>WebSocket Test</h1>
+
 <div class="button-container">
-    <button onclick="connect();">Connect</button>
-    <button onclick="disconnect();">Disconnect</button>
+    <button onclick="setRoomId();">Set Room ID</button>
+    <input type="text" id="roomid" placeholder="Enter Room ID">
 </div>
 
 <div class="button-container">
@@ -108,7 +120,9 @@
 </div>
 
 <div class="button-container">
-    <button onclick="sendMessage();">커스텀 테스트</button>
+    <input type="text" id="destination" placeholder="Enter Destination URL">
+    <input type="text" id="messageContent" placeholder="Enter Message Content">
+    <button onclick="sendMessage();">Send Custom Message</button>
 </div>
 
 <textarea id="messages" cols="50" rows="10"></textarea>
