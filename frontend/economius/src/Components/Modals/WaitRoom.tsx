@@ -1,7 +1,15 @@
 import Modal from 'react-modal';
 import * as S from './WaitRoom.style';
 import { useRecoilState } from 'recoil';
-import { RoomCountState, RoomHostState, RoomIdState, RoomJoinState, RoomJoinUsersNicknameState, SetShowWaitRoomState } from '/src/recoil/animation/atom';
+import {
+    RoomCountState,
+    RoomExitState,
+    RoomHostState,
+    RoomIdState,
+    RoomJoinState,
+    RoomJoinUsersNicknameState,
+    SetShowWaitRoomState,
+} from '/src/recoil/animation/atom';
 import { useEffect, useState } from 'react';
 
 export default function WaitRoom() {
@@ -13,6 +21,7 @@ export default function WaitRoom() {
     const [roomHost, setRoomHost] = useRecoilState(RoomHostState);
     const [roomJoin, setRoomJoin] = useRecoilState(RoomJoinState);
     const [roomCount, setRoomCount] = useRecoilState(RoomCountState);
+    const [roomExit, setRoomExit] = useRecoilState(RoomExitState);
 
     useEffect(() => {
         console.log('hi');
@@ -24,6 +33,8 @@ export default function WaitRoom() {
     };
 
     const exitHandler = () => {
+        setRoomExit(true);
+
         // 접속한 방이 없다고 초기화
         setRoomid(0);
         setRoomJoinUsersNickname(['', '', '', '']);

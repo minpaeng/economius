@@ -10,6 +10,7 @@ import {
     NowPlayerPositionState,
     NowPlayerState,
     RoomCountState,
+    RoomExitState,
     RoomHostState,
     RoomIdState,
     RoomJoinState,
@@ -112,6 +113,8 @@ function PlayerSocket() {
 
     const [roomHost, setRoomHost] = useRecoilState(RoomHostState);
     const [roomCount, setRoomCount] = useRecoilState(RoomCountState);
+
+    const [roomExit, setRoomExit] = useRecoilState(RoomExitState);
 
     const stompClient = useRef(null);
 
@@ -281,6 +284,11 @@ function PlayerSocket() {
         // 새로운 방을 입장하는 경우
         else if (type == 'join') {
             console.log('JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJjjjjjjjjjjjjjJJJoin');
+
+            setUserNicknames(message);
+            console.log(roomJoinUsersNickname);
+        } else if (type == 'exit') {
+            console.log('EEEEEEEEExit');
 
             setUserNicknames(message);
             console.log(roomJoinUsersNickname);
@@ -688,6 +696,12 @@ function PlayerSocket() {
 
     // 방 입장 시
     useEffect(() => {
+        console.log('playerID');
+        console.log(roomId);
+
+        console.log('playerID');
+        console.log(localStorage.getItem('player'));
+
         if (roomJoin == 0) return;
         connect().then(function () {
             // 두 번째 : 헤더 / 세 번째 : 보낼 데이터
@@ -700,10 +714,32 @@ function PlayerSocket() {
                 })
             );
 
+            console.log('Join PUB!!!!!!!!!!!!!!!!!!!!!!!!1');
+
             // 요청 완료했으면 다시 fefault로 변경
             setRoomJoin(0);
         });
     }, [roomJoin]);
+
+    // 대기방 나가기 요청을 받는 경우
+    useEffect(() => {
+        if (roomExit === false) return;
+        console.log('내가 나온다고?????????????????????/');
+
+        connect().then(function () {
+            // 두 번째 : 헤더 / 세 번째 : 보낼 데이터
+            stompClient.current.send(
+                `/pub/${roomId}/exit`,
+                {},
+                JSON.stringify({
+                    player: playername,
+                    nickname: nickname,
+                })
+            );
+        });
+
+        setRoomExit(false);
+    }, [roomExit]);
 
     return <></>;
 }
