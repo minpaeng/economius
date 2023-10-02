@@ -276,7 +276,6 @@ function EconomicIndicator({ setSideBarType }) {
 
   const interestRateData = useRecoilValue(interestRateState);
   const interestRate = "interestRate";
-  console.log(interestRateData);
   const interestRateTitle = "금리";
 
   const goldData = useRecoilValue(GoldState);
@@ -284,7 +283,6 @@ function EconomicIndicator({ setSideBarType }) {
   const goldTitle = "금";
 
   const realEstateData = useRecoilValue(buildingState);
-  console.log(realEstateData);
   const reaEstateImgPath = "RealEstate";
   const realEstateTitle = "부동산";
 

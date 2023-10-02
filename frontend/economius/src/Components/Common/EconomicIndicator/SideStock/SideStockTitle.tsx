@@ -1,7 +1,6 @@
 import * as S from "./SideStock.style";
 
 function SideStockTitle({ name, imgpath }) {
-  console.log(imgpath);
   return (
     <S.SideStockTitle>
       <div style={{ flex: 3 }}>

@@ -1,7 +1,6 @@
 import ReactApexChart from "react-apexcharts";
 
 function RealEstateChart({ data }) {
-  console.log(data);
   return (
     <div>
       <ReactApexChart
