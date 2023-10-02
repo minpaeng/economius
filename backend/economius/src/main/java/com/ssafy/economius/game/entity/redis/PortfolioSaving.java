@@ -26,5 +26,13 @@ public class PortfolioSaving {
         return this.finishCount == this.currentCount;
     }
 
+    public void increaseCurrentPrice() {
+        this.currentPrice += this.monthlyDeposit;
+    }
+
+    public void increaseCurrentCount() {
+        this.currentCount += 1;
+    }
+
 
 }

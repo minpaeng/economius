@@ -119,12 +119,8 @@ public class SavingService {
                     .build();
 
             // 현재 은행 정보에 기반하여 가입
-            portfolio.setMoney(portfolio.getMoney()-nowSaving.getCurrentPrice());
-            portfolioSavings.setTotalPrice(portfolioSavings.getTotalPrice()+ nowSaving.getCurrentPrice());
-            portfolioSavings.setAmount(portfolioSavings.getAmount()+1);
-
-            if (portfolioSavings.getSavings() == null) portfolioSavings.setSavings(new HashMap<>());
-            portfolioSavings.getSavings().put(savingRequest.getBankId(), nowSaving);
+            int money = portfolioSavings.join(nowSaving);
+            portfolio.setMoney(portfolio.getMoney()-money);
 
             // redis 저장
             gameRepository.save(game);
@@ -146,16 +142,15 @@ public class SavingService {
 
         // 가입 되어있는지 확인
         if(checkHaveSaving(game, savingRequest.getPlayer(), savingRequest.getBankId())) {
-            // 현재 은행 정보에 기반하여 해지
-            portfolio.setMoney(portfolio.getMoney() + nowSaving.getCurrentPrice());
-            portfolioSavings.setTotalPrice(portfolioSavings.getTotalPrice() - nowSaving.getCurrentPrice());
-            portfolioSavings.setAmount(portfolioSavings.getAmount()-1);
+            // 적금 중도 해지
+            int money = portfolioSavings.earlyFinish(nowSaving);
 
-            //적금 중도 해지
-            portfolioSavings.getSavings().remove(savingRequest.getBankId());
+            // 해지금 현금화
+            portfolio.setMoney(money);
+
             gameRepository.save(game);
             log.info("============ 은행 적금 해지 : {} ============", game.getPortfolios().get(savingRequest.getPlayer()).getSavings().toString());
         }
-
     }
+
 }

@@ -16,4 +16,5 @@ public class PortfolioInsurance {
     private String productName;
     private Integer guaranteeRate;
     private Integer monthlyDeposit;
+
 }
