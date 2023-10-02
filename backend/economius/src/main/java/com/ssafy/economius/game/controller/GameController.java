@@ -8,6 +8,7 @@ import com.ssafy.economius.game.dto.response.CalculateResponse;
 import com.ssafy.economius.game.dto.response.FinishTurnResponse;
 import com.ssafy.economius.game.dto.response.GameJoinResponse;
 import com.ssafy.economius.game.dto.response.GameRoomExitResponse;
+import com.ssafy.economius.game.dto.response.GameStartResponse;
 import com.ssafy.economius.game.service.GameService;
 import com.ssafy.economius.game.service.FinishTurnService;
 
@@ -46,7 +47,7 @@ public class GameController {
 
     @MessageMapping(value = "/{roomId}/start")
     public void start(@DestinationVariable int roomId, GameStartRequest gameStartRequest) {
-        FinishTurnResponse gameStartResponse = gameService.start(roomId,
+        GameStartResponse gameStartResponse = gameService.start(roomId,
                 gameStartRequest.getHostPlayer());
 
         Map<String, Object> headers = Map.of("success", true, "type", "start");
