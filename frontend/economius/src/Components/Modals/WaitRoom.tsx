@@ -2,11 +2,13 @@ import Modal from 'react-modal';
 import * as S from './WaitRoom.style';
 import { useRecoilState } from 'recoil';
 import {
+    GameButtonState,
     RoomCountState,
     RoomExitState,
     RoomHostState,
     RoomIdState,
     RoomJoinState,
+    RoomJoinUsersIdState,
     RoomJoinUsersNicknameState,
     SetShowWaitRoomState,
 } from '/src/recoil/animation/atom';
@@ -22,11 +24,17 @@ export default function WaitRoom() {
     const [roomJoin, setRoomJoin] = useRecoilState(RoomJoinState);
     const [roomCount, setRoomCount] = useRecoilState(RoomCountState);
     const [roomExit, setRoomExit] = useRecoilState(RoomExitState);
+    const [gameButton, setGameButton] = useRecoilState(GameButtonState);
+
+    const [roomJoinUsersId, setRoomJoinUsersId] = useRecoilState(RoomJoinUsersIdState);
 
     useEffect(() => {
-        console.log('hi');
+        console.log('아이디ㅣㅣㅣㅣㅣㅣ디ㅣ디디디!');
+
+        console.log(roomJoinUsersId);
+
         // setRoomJoin(1);
-    }, []);
+    }, [roomJoinUsersId]);
 
     const closeModal = () => {
         setIsModalOpen(false);
@@ -35,15 +43,17 @@ export default function WaitRoom() {
     const exitHandler = () => {
         setRoomExit(true);
 
-        // 접속한 방이 없다고 초기화
-        setRoomid(0);
-        setRoomJoinUsersNickname(['', '', '', '']);
-
         // 모달 끄기
         setShowWaitRoom(false);
-        setRoomHost(0);
-        setRoomJoin(0);
-        setRoomCount(0);
+        setTimeout(() => {
+            // 접속한 방이 없다고 초기화
+            setRoomid(0);
+            setRoomJoinUsersNickname(['', '', '', '']);
+
+            setRoomHost(0);
+            setRoomJoin(0);
+            setRoomCount(0);
+        }, 500);
     };
 
     // 룸 번호 복사
@@ -57,6 +67,14 @@ export default function WaitRoom() {
         document.body.removeChild(tempElement);
         alert('방 번호가 복사되었습니다.');
         console.log('wow');
+    };
+
+    const startHandler = () => {
+        console.log('시작 버튼 눌렸다아아아아아아아');
+
+        setGameButton(true);
+
+        // const [gameButton, setGameButton] = useRecoilState(GameButtonState);
     };
 
     return (
@@ -80,8 +98,8 @@ export default function WaitRoom() {
                         <p>{roomJoinUsersNickname[3]}</p>
                     </S.UserBox>
                     <S.InfoBar>
-                        <div className='no'>
-                            <span onClick={roomNumHandler}>Room No : {roomid} </span>
+                        <div onClick={roomNumHandler} className='no'>
+                            <span>Room No : {roomid} </span>
                             <img src='/navImg/copy.png' alt='' style={{ width: '20px', paddingLeft: '5px' }} />
                         </div>
 
@@ -89,7 +107,9 @@ export default function WaitRoom() {
                             {roomHost === Number(localStorage.getItem('player')) ? (
                                 roomCount >= 4 ? (
                                     <span>
-                                        <div style={{ cursor: 'pointer' }}>Start</div>
+                                        <div style={{ cursor: 'pointer' }} onClick={startHandler}>
+                                            Start
+                                        </div>
                                     </span>
                                 ) : (
                                     <span className='overlay-outer'>

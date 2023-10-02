@@ -4,6 +4,7 @@ import { Stomp } from '@stomp/stompjs';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
     CallBackState,
+    GameButtonState,
     IsModalOpenState,
     MonthlyModalOpenState,
     MovementCardsState,
@@ -14,8 +15,10 @@ import {
     RoomHostState,
     RoomIdState,
     RoomJoinState,
+    RoomJoinUsersIdState,
     RoomJoinUsersNicknameState,
     SetShowWaitRoomState,
+    StartReturnState,
     UseridState,
 } from './recoil/animation/atom';
 import {
@@ -115,6 +118,9 @@ function PlayerSocket() {
     const [roomCount, setRoomCount] = useRecoilState(RoomCountState);
 
     const [roomExit, setRoomExit] = useRecoilState(RoomExitState);
+    const [gameButton, setGameButton] = useRecoilState(GameButtonState);
+    const [startReturn, setStartReturn] = useRecoilState(StartReturnState);
+    const [roomJoinUsersId, setRoomJoinUsersId] = useRecoilState(RoomJoinUsersIdState);
 
     const stompClient = useRef(null);
 
@@ -195,14 +201,21 @@ function PlayerSocket() {
 
     function personalCallBackFunction(recievedMessage: any) {
         const message = JSON.parse(recievedMessage.body);
+        const header = JSON.parse(recievedMessage.headers.success);
+        console.log('민정이가 부른 헤더');
+        console.log(header);
+
         console.log('전체메시지', message);
 
-        if (message.code == '') {
-            console.log('정상');
-            setShowWaitRoom(true);
-            setRoomHost(message.hostPlayer);
-            setRoomCount(message.players.length);
-        } else if (message.code == 1000) {
+        // if (message.code == '') {
+        //     console.log('정상~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+        //     setUserNicknames(message);
+        //     setShowWaitRoom(true);
+        //     setRoomHost(message.hostPlayer);
+        //     setRoomCount(message.players.length);
+        // } else
+
+        if (message.code == 1000) {
             setRoomJoin(0);
             setShowWaitRoom(false);
             setRoomHost(0);
@@ -222,6 +235,8 @@ function PlayerSocket() {
     }
 
     function broadCastCallBackFunction(recievedMessage: any) {
+        console.log('여기 뜬다요?');
+
         const message = JSON.parse(recievedMessage.body);
         const type = recievedMessage.headers.type || null;
         console.log('전체메시지 type: ', type);
@@ -230,6 +245,7 @@ function PlayerSocket() {
             setStocks(message.stocks);
             setPortfolio(message.portfolios);
         }
+
         if (type == 'visitBuilding') {
             setRealEstateInfo({
                 buildingId: message.buildingId,
@@ -283,15 +299,17 @@ function PlayerSocket() {
         }
         // 새로운 방을 입장하는 경우
         else if (type == 'join') {
-            console.log('JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJjjjjjjjjjjjjjJJJoin');
-
             setUserNicknames(message);
-            console.log(roomJoinUsersNickname);
+            setShowWaitRoom(true);
+            setRoomHost(message.hostPlayer);
+            setRoomCount(message.players.length);
         } else if (type == 'exit') {
-            console.log('EEEEEEEEExit');
-
             setUserNicknames(message);
             console.log(roomJoinUsersNickname);
+        }
+        // 게임 시작 pub에 대한 결과를 반환 받으면
+        else if (type == 'start') {
+            setStartReturn(true);
         }
     }
 
@@ -313,6 +331,7 @@ function PlayerSocket() {
         if (nick4 == undefined) nick4 = 'wait..';
 
         setRoomJoinUsersNickname([nick1, nick2, nick3, nick4]);
+        setRoomJoinUsersId([player1, player2, player3, player4]);
     }
 
     useEffect(() => {
@@ -332,7 +351,7 @@ function PlayerSocket() {
                 console.log(`기존 방 구독 취소 후 ${roomId}번 방 구독 완료`);
             }
         });
-    }, [showWaitRoom, playername, stompClient]);
+    }, [roomId, playername]);
 
     async function connect() {
         // stompClient가 close 상태라면 재생성 후 connect
@@ -696,12 +715,6 @@ function PlayerSocket() {
 
     // 방 입장 시
     useEffect(() => {
-        console.log('playerID');
-        console.log(roomId);
-
-        console.log('playerID');
-        console.log(localStorage.getItem('player'));
-
         if (roomJoin == 0) return;
         connect().then(function () {
             // 두 번째 : 헤더 / 세 번째 : 보낼 데이터
@@ -724,8 +737,6 @@ function PlayerSocket() {
     // 대기방 나가기 요청을 받는 경우
     useEffect(() => {
         if (roomExit === false) return;
-        console.log('내가 나온다고?????????????????????/');
-
         connect().then(function () {
             // 두 번째 : 헤더 / 세 번째 : 보낼 데이터
             stompClient.current.send(
@@ -740,6 +751,25 @@ function PlayerSocket() {
 
         setRoomExit(false);
     }, [roomExit]);
+
+    // const [gameButton, setGameButton] = useRecoilState(GameButtonState);
+
+    // 시작 버튼 눌렀을 때 실행
+    useEffect(() => {
+        if (gameButton === false) return;
+        connect().then(function () {
+            // 두 번째 : 헤더 / 세 번째 : 보낼 데이터
+            stompClient.current.send(
+                `/pub/${roomId}/start`,
+                {},
+                JSON.stringify({
+                    hostPlayer: playername,
+                })
+            );
+        });
+
+        setGameButton(false);
+    }, [gameButton]);
 
     return <></>;
 }

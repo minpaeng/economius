@@ -2,18 +2,32 @@ import { atom } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
 const { persistAtom } = recoilPersist();
 
+// 시작 결과 반환
+export const StartReturnState = atom<boolean>({
+    key: 'StartReturnState',
+    default: false, // 기본값
+    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+});
+
+// 게임 시작 버튼 클릭 여부
+export const GameButtonState = atom<boolean>({
+    key: 'GameButtonState',
+    default: false, // 기본값
+    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+});
+
 //  나가기 버튼 클릭 여부
 export const RoomExitState = atom<boolean>({
     key: 'RoomExitState',
     default: false, // 기본값
-    effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
 // 현재 방 번호
 export const RoomIdState = atom<number>({
     key: 'RoomIdState',
     default: 1, // 기본값
-    effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
 // 현재 방장 번호
@@ -23,7 +37,7 @@ export const RoomHostState = atom<number>({
     effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
-// 현재 방장 번호
+// 현재 인원 수
 export const RoomCountState = atom<number>({
     key: 'RoomCountState',
     default: 0, // 기본값
@@ -49,13 +63,6 @@ export const RoomJoinState = atom<number>({
     key: 'RoomJoinState',
     default: 0, // 1이 호출
     // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
-});
-
-// 방 참가 인원 닉네임 보기
-export const RoomJoinUsersNicknameState = atom<string[]>({
-    key: 'RoomJoinUsersNicknameState',
-    default: ['wait..', 'wait..', 'wait..', 'wait..'],
-    // effects_UNSTABLE: [persistAtom],
 });
 
 // 유저 아이디
@@ -145,4 +152,18 @@ export const SideBarTypeState = atom<string>({
 export const isPortfolioState = atom<boolean>({
     key: 'isPortfolioState',
     default: true,
+});
+
+// 방 참가 인원 닉네임 보기
+export const RoomJoinUsersNicknameState = atom<string[]>({
+    key: 'RoomJoinUsersNicknameState',
+    default: ['wait..', 'wait..', 'wait..', 'wait..'],
+    // effects_UNSTABLE: [persistAtom],
+});
+
+// 방 참가 인원 아이디 보기
+export const RoomJoinUsersIdState = atom<number[]>({
+    key: 'RoomJoinUsersIdState',
+    default: [0, 0, 0, 0],
+    // effects_UNSTABLE: [persistAtom],
 });

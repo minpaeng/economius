@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import video1 from '/video/video_start.mp4'; // 1080p
 import video3 from '/video/video_repeat.mp4'; // sound
 import StartAccess from './Components/Modals/StartAccess';
 import * as S from '../src/Components/Modals/GlobalModal.stye';
@@ -10,6 +9,7 @@ import {
     RoomJoinUsersNicknameState,
     SetShowJoinState,
     SetShowWaitRoomState,
+    StartReturnState,
     UseridState,
 } from './recoil/animation/atom';
 import { useRecoilState } from 'recoil';
@@ -34,7 +34,7 @@ export default function Room() {
     const videoRef = useRef(null);
     const [isOpen, setIsOpen] = useState(true); // 모달이 열려 있는지 확인
     const [isMuted, setIsMuted] = useState(true); // 비디오 음소거 상태
-    const [currentVideo, setCurrentVideo] = useState(video1);
+    const [currentVideo, setCurrentVideo] = useState(video3);
 
     const REST_API_KEY = import.meta.env.VITE_APP_REST_API_KEY;
     const REDIRECT_URI = import.meta.env.VITE_APP_REDIRECT_URI;
@@ -49,6 +49,7 @@ export default function Room() {
     const [, setPlayerId] = useRecoilState(PlayerIdState);
     const [roomHost, setRoomHost] = useRecoilState(RoomHostState);
     const [roomCount, setRoomCount] = useRecoilState(RoomCountState);
+    const [startReturn, setStartReturn] = useRecoilState(StartReturnState);
 
     // const [showJoin, setShowJoin] = useState(false);
 
@@ -94,6 +95,9 @@ export default function Room() {
                 videoElement.play();
                 videoElement.muted = !isMuted; // 비디오 음소거 상태를 반전시킴
                 setIsMuted(!isMuted);
+                console.log('DDDDDDDDDDDDDDDDDDDDDDDDDD');
+
+                console.log(isMuted);
 
                 // setTimeout(() => {
                 //     setIsMuted(!isMuted);
@@ -118,7 +122,7 @@ export default function Room() {
                 videoElement.removeEventListener('loadeddata', handleLoadedData);
             };
         }
-    }, [currentVideo]);
+    }, [isOpen]);
 
     // 모달이 닫힌 상태후 n초 뒤 렌더링할 내용을 활성화
     useEffect(() => {
@@ -134,9 +138,17 @@ export default function Room() {
         }
     }, [isModalClosed]);
 
+    useEffect(() => {
+        if (startReturn == true) {
+            navigate('/app');
+        }
+    }, [startReturn]);
+
     // 소리 허용 버튼을 클릭했을 때 실행
     const videoControl = () => {
         // 기존 적용된 비디오 실행
+        console.log('비디오 컨트롤!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1');
+
         const videoElement = videoRef.current;
         videoElement.play();
         // 상태 업데이트
