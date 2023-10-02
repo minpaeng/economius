@@ -192,13 +192,15 @@ public class GameService {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
         List<Long> players = game.getPlayers();
 
-        // 각자의 포트폴리오 생성
-        uploadInitialPortfolioOnRedis(game);
+        if (game.getGameTurn() == 0) {
+            // 각자의 포트폴리오 생성
+            uploadInitialPortfolioOnRedis(game);
 
-        game.initializePlayerSequence();
-        game.initializeLocations();
-        game.getStocks().values().forEach(stock -> stock.initializeOwners(players));
-        gameRepository.save(game);
+            game.initializePlayerSequence();
+            game.initializeLocations();
+            game.getStocks().values().forEach(stock -> stock.initializeOwners(players));
+            gameRepository.save(game);
+        }
 
         return modelMapper.map(game, FinishTurnResponse.class);
     }
