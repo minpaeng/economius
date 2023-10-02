@@ -38,6 +38,7 @@ public class Game {
     private List<Long> bankruptcyPlayers;
     // 게임 시작하면 0번 index가 1위 다음 2위...
     private List<Long> players;
+    private Map<Long, Integer> characters;
     private Map<Long, String> nicknames;
     private List<Long> playerSequence;
     private Long currentPlayerToRoll;
