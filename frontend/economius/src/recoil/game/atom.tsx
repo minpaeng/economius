@@ -54,7 +54,7 @@ export const PlayerToRollState = atom({
   default: null,
 })
 
-export const GameTurnState = atom({
-  key: "gameTurnState",
+export const GameRoundState = atom({
+  key: "gameRoundState",
   default: 0,
 })
