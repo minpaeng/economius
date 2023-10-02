@@ -201,6 +201,7 @@ public class GameService {
             // 각자의 포트폴리오 생성
             uploadInitialPortfolioOnRedis(game);
 
+            game.initializeCharacter(RandomUtil.getUniqueRandomNumbers(4, 1, 10));
             game.initializePlayerSequence();
             game.initializeLocations();
             game.getStocks().values().forEach(stock -> stock.initializeOwners(players));
