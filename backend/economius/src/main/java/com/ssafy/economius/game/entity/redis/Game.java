@@ -66,8 +66,8 @@ public class Game {
 
     public void initializeCharacter(List<Integer> randoms) {
         int index = 0;
+        characters = new HashMap<>();
         for (Long player : players) {
-            characters = new HashMap<>();
             characters.put(player, randoms.get(index++));
         }
     }
