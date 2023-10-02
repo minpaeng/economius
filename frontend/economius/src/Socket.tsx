@@ -502,24 +502,6 @@ function PlayerSocket() {
         // if 가입 else 해지
         if (tradeInsurance[0]) {
             if (stompClient.current) {
-                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 1 }));
-            }
-        } else {
-            if (stompClient.current) {
-                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 1 }));
-            }
-        }
-        if (tradeInsurance[1]) {
-            if (stompClient.current) {
-                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
-            }
-        } else {
-            if (stompClient.current) {
-                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
-            }
-        }
-        if (tradeInsurance[2]) {
-            if (stompClient.current) {
                 stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 3 }));
             }
         } else {
@@ -527,13 +509,31 @@ function PlayerSocket() {
                 stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 3 }));
             }
         }
-        if (tradeInsurance[3]) {
+        if (tradeInsurance[1]) {
             if (stompClient.current) {
                 stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 4 }));
             }
         } else {
             if (stompClient.current) {
                 stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 4 }));
+            }
+        }
+        if (tradeInsurance[2]) {
+            if (stompClient.current) {
+                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 1 }));
+            }
+        } else {
+            if (stompClient.current) {
+                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 1 }));
+            }
+        }
+        if (tradeInsurance[3]) {
+            if (stompClient.current) {
+                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
+            }
+        } else {
+            if (stompClient.current) {
+                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
             }
         }
         setTradeInsuranceConfirm(false);

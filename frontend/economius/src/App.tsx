@@ -21,7 +21,8 @@ import * as THREE from 'three';
 import { useSetRecoilState } from 'recoil';
 import { PortfolioState, StockState } from '/src/recoil/game/atom.tsx';
 import axios from 'axios';
-import Cards from './Cards';
+import MovementCard from '/src//Components/Modals/MovementCard';
+import Deck from '/src/Components/Effect/CoinEffect';
 
 function App() {
     const light = useRef();
@@ -50,15 +51,16 @@ function App() {
                 <Characters />
             </Canvas>
 
-            <Controller />
+            {/* <Controller /> */}
 
             <NewsBar />
             <PlayerPlaceAll />
-            <SideBar />
+            {/* <SideBar /> */}
 
-            <Modals />
-            <Socket />
-            <Cards />
+            {/* <Modals /> */}
+            {/* <Socket /> */}
+            {/* <MovementCard /> */}
+            <Deck />
         </div>
     );
 }
