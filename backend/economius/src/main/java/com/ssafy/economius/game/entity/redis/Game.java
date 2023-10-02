@@ -163,9 +163,9 @@ public class Game {
 
     public int updateGameTurn() {
         gameTurn++;
-//        if (gameTurn == maxGameTurn) {
-//            return -1;
-//        }
+        if (gameTurn == maxGameTurn) {
+            return -1;
+        }
         return gameTurn;
     }
 }
