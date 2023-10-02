@@ -4,27 +4,36 @@ import * as S from "./BigEvent.style";
 // import { useRecoilState, useSetRecoilState } from "recoil";
 import { useRecoilValue } from "recoil";
 import { BigEventInfoState } from "../../recoil/modalInfo/atom";
-import { CallBackState, IsModalOpenState } from "/src/recoil/animation/atom";
+// import { CallBackState, IsModalOpenState } from "/src/recoil/animation/atom";
 
 import { useEffect, useState } from "react";
 // import { BigEventInfoState } from "../../recoil/modalInfo/atom";
 
 function BigEventRound() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const issue = useRecoilValue(BigEventInfoState);
+  const [wordColor, setWordColor] = useState("white");
 
   function closeModal() {
     setIsModalOpen(false);
-    // issue = useRecoilValue(BigEventInfoState)
   }
 
   useEffect(() => {
-    if (BigEventInfoState) {
-      setIsModalOpen(true);
-    }
     console.log(issue);
-  }, [BigEventInfoState]);
+    if (issue === null) {
+      return;
+    }
+
+    if (issue?.type === "BOOM") {
+      setWordColor("black");
+    } else {
+      setWordColor("white");
+    }
+
+    setIsModalOpen(true);
+
+    console.log(issue);
+  }, [issue]);
 
   // modal style
   const modalStyle: any = {
@@ -49,7 +58,7 @@ function BigEventRound() {
       bottom: "80px",
       border: `5px solid white`,
       borderRadius: "20px",
-      backgroundImage: `url("${issue.url}")`,
+      backgroundImage: `url("${issue?.url}")`,
       backgroundSize: "cover",
       backgroundRepeat: "no-repeat",
     },
@@ -59,10 +68,10 @@ function BigEventRound() {
     <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
       <S.BigEvent>
         <S.BigEventLeft />
-        <S.BigEventRight>
-          <S.BigEventRightTitle>{issue.name}</S.BigEventRightTitle>
-          <S.BigEventRightChange1>{issue.year}</S.BigEventRightChange1>
-          <S.BigEventRightDesc>{issue.description}</S.BigEventRightDesc>
+        <S.BigEventRight style={{}}>
+          <S.BigEventRightTitle>{issue?.name}</S.BigEventRightTitle>
+          <S.BigEventRightChange1>{issue?.year}</S.BigEventRightChange1>
+          <S.BigEventRightDesc>{issue?.description}</S.BigEventRightDesc>
           {/* <br />
           {getGoldAndInterestRatesChanges()}
           <br />

@@ -160,9 +160,6 @@ function Portforlio({ setSideBarType }) {
       },
     },
   };
-  // let portfolio;
-
-  // useEffect(() => {}, [finishTurn]);
 
   function objectToArray(obj) {
     if (!obj) {
@@ -175,11 +172,6 @@ function Portforlio({ setSideBarType }) {
   const buildingList = objectToArray(portfolios[userId].buildings.building);
   const stockList = objectToArray(portfolios[userId].stocks.stocks);
   const insuranceList = objectToArray(portfolios[userId].insurances.insurance);
-
-  // useEffect(() => {
-  //   console.log(portfolios[userId]);
-  //   console.log(userId);
-  // }, [userId]);
 
   return (
     <S.PortfolioMain>
@@ -224,7 +216,7 @@ function Portforlio({ setSideBarType }) {
       <PortfolioRealEstate
         totalPrice={portfolios[userId].buildings.totalPrice}
         earningRate={portfolios[userId].buildings.earningRate}
-        earningPrice={portfolios[userId].buildings.earningPrice}
+        // earningPrice={portfolios[userId].buildings.earningPrice}
         buildingList={buildingList}
       />
       {/* 주식 토글 */}

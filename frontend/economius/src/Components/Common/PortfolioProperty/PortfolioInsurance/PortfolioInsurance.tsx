@@ -25,7 +25,7 @@ function PortfolioInsurance({ totalPrice, amount, insuranceList }) {
               </S.LayoutTopLeft>
               <S.LayoutTopRight>
                 {insuranceList.length ? (
-                  <div> 가입 상품 수 : {amount.toLocaleString()} (개)</div>
+                  <div> 가입 상품 수 : {amount} (개)</div>
                 ) : (
                   "가입 중인 보험이 없습니다."
                 )}

@@ -6,7 +6,7 @@ import { useState } from "react";
 function PortfolioRealEstate({
   totalPrice,
   earningRate,
-  earningPrice,
+
   buildingList,
 }) {
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -60,8 +60,8 @@ function PortfolioRealEstate({
                     imgPath={item.building.name}
                     title={item.building.name}
                     price={item.building.price}
-                    earningRate={earningRate}
-                    earningPrice={earningPrice}
+                    earningRate={item.earningRate}
+                    earningPrice={item.earningPrice}
                     buildingFee={item.building.buildingFee}
                   />
                 );
