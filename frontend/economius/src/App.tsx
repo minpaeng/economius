@@ -23,6 +23,7 @@ import { PlayerIdState, PortfolioState, StockState, GoldState, interestRateState
 import axios from 'axios';
 import { RoomIdState } from '/src/recoil/animation/atom.tsx';
 import CoinEffect from '/src/Components/Effect/CoinEffect';
+import Round from "/src/Components/Modals/Round.tsx";
 
 function App() {
     const light = useRef();
@@ -71,6 +72,8 @@ function App() {
             <Modals />
             <Socket />
             <CoinEffect />
+            <Round/>
+
         </div>
     );
 }

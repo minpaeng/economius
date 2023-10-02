@@ -35,7 +35,14 @@ import {
     TradeRealEstateState,
     TradeStockState,
 } from './recoil/trading/atom';
-import { PlayerIdState, PortfolioState, PredictionState, StockState } from '/src/recoil/game/atom.tsx';
+import {
+    GameRoundState,
+    PlayerIdState,
+    PlayerToRollState,
+    PortfolioState,
+    PredictionState,
+    StockState
+} from '/src/recoil/game/atom.tsx';
 import { BankInfoState, ChanceCardInfoState, InsuranceInfoState, MonthlyInfoState, RealEstateInfoState, StockInfoState } from './recoil/modalInfo/atom';
 
 const buildingIds = {
@@ -101,6 +108,8 @@ function PlayerSocket() {
     const setStocks = useSetRecoilState(StockState);
     const setPrediction = useSetRecoilState(PredictionState);
     const getPrediction = useRecoilValue(GetPredictionState);
+    const setPlayerToRoll = useSetRecoilState(PlayerToRollState);
+    const setGameRound = useSetRecoilState(GameRoundState);
 
     const [callBack, setCallBack] = useRecoilState(CallBackState);
 
@@ -232,6 +241,8 @@ function PlayerSocket() {
         if (type === 'finishTurn') {
             setStocks(message.stocks);
             setPortfolio(message.portfolios);
+            setPlayerToRoll(message.currentPlayerToRoll);
+            setGameRound(Math.floor(message.gameTurn / 4));
         }
 
         if (type == 'visitBuilding') {
