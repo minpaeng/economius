@@ -95,7 +95,7 @@ public class FinishTurnService {
         if (type.equals(VolatileEnum.GOLD.getValue())) {
             game.getGold().updateGoldPrice(changeRate);
         } else if (type.equals(VolatileEnum.INTEREST_RATE.getValue())) {
-            game.getInterestRate().updateBuildingPrice(changeRate);
+            game.getInterestRate().updateInterestRate(changeRate);
         } else if (type.equals(VolatileEnum.BUIDING.getValue())) {
             applyBuildingChanges(game, changeRate);
         } else if (type.equals(VolatileEnum.STOCK.getValue())) {
@@ -119,7 +119,7 @@ public class FinishTurnService {
     private void interestRateRearrange(Game game) {
         int newPrice = RandomUtil.getRanges(INTEREST_RATE_LOWER_BOUND.getValue(),
                 INTEREST_RATE_UPPER_BOUND.getValue());
-        game.getInterestRate().updateBuildingPrice(newPrice);
+        game.getInterestRate().updateInterestRate(newPrice);
     }
 
     private void buildingRearrange(Game game) {

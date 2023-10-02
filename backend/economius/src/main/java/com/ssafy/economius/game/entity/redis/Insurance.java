@@ -15,7 +15,6 @@ public class Insurance {
     private String productCode; //HX HS
     private String productName; // 상해보험 상해보험특
 
-
     private int guaranteeRate;  //
     private int monthlyDeposit;
 
