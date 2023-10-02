@@ -69,6 +69,7 @@ public class StockService {
         validateStockToBuy(roomId, stockAmount, stock, portfolio);
 
         // 모두 통과했다..
+        portfolio.spendMoney(stock.getPrice() * stockAmount);
         stock.dealStock(player, stockAmount);
         portfolio.getStocks().updatePortfolioStockByDeal(stock, stockAmount);
 
@@ -86,6 +87,7 @@ public class StockService {
 
         validateStockToBuy(roomId, stockAmount, stock, portfolio);
 
+        portfolio.spendMoney(-stock.getPrice() * stockAmount);
         stock.dealStock(player, stockAmount);
         portfolio.getStocks().updatePortfolioStockByDeal(stock, stockAmount);
 
