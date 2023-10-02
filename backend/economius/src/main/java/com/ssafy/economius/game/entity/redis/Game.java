@@ -1,7 +1,16 @@
 package com.ssafy.economius.game.entity.redis;
 
 
+import static com.ssafy.economius.game.enums.RateEnum.MAX_BOARD_SIZE;
+
 import com.ssafy.economius.game.dto.mysql.PrevIssueDto;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Random;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,16 +20,6 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-
-import static com.ssafy.economius.game.enums.RateEnum.MAX_BOARD_SIZE;
 
 @RedisHash
 @Getter
@@ -50,9 +49,9 @@ public class Game {
 
     // 경제 asset
     private Gold gold;
-    private Map<Integer, Building> buildings; 
+    private Map<Integer, Building> buildings;
     private Map<Integer, Insurance> insurances;
-    private Map<Integer, Stock> stocks; 
+    private Map<Integer, Stock> stocks;
     private Map<Integer, Saving> savings;
     private InterestRate interestRate;
 
@@ -65,14 +64,14 @@ public class Game {
     // 찬스 이벤트 -
     private Event event;
 
-    public Issue getNextIssue(){
-        if (this.issueIdx < issues.size() - 1) {
-            return issues.get(issueIdx + 1);
+    public Issue getNextIssue() {
+        if (issueIdx < 0) {
+            return null;
         }
-        return null;
+        return issues.get(issueIdx);
     }
 
-    public void initializeLocations(){
+    public void initializeLocations() {
         log.info("사용자 위치 초기화");
         locations = new HashMap<>();
         players.forEach(player -> locations.put(player, 0));
@@ -126,8 +125,8 @@ public class Game {
     public void updatePrize() {
         List<Entry<Long, Portfolio>> entries = new LinkedList<>(portfolios.entrySet());
         entries.sort((o1, o2) -> Integer.compare(
-                o2.getValue().getTotalMoney(),
-                o1.getValue().getTotalMoney()));
+            o2.getValue().getTotalMoney(),
+            o1.getValue().getTotalMoney()));
 
         int prize = 0;
         for (Entry<Long, Portfolio> entry : entries) {
@@ -136,7 +135,9 @@ public class Game {
     }
 
     public int payBuildingFee(Long player, Long owner, int buildingId) {
-        if (owner == null || owner.equals(player)) return 0;
+        if (owner == null || owner.equals(player)) {
+            return 0;
+        }
         int playerMoney = this.portfolios.get(player).getMoney();
         int ownerMoney = this.portfolios.get(owner).getMoney();
         int buildingFee = this.buildings.get(buildingId).getBuildingFee();

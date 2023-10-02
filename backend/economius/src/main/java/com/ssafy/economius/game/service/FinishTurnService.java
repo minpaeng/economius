@@ -62,6 +62,7 @@ public class FinishTurnService {
         int idx = game.getIssueIdx();
         if (idx >= ISSUE_COUNT.getValue()) {
             game.setCurrentPrevIssues(null);
+            game.setIssueIdx(-1);
             return;
         }
 
@@ -69,7 +70,6 @@ public class FinishTurnService {
     }
 
     private void setPrevIssue(Game game, int idx) {
-        game.setIssueIdx(idx);
         game.setCurrentPrevIssues(
                 InitialData.getPrevIssue(game.getIssues().get(idx).getIssueId()));
         game.setCurrentIssue(null);
