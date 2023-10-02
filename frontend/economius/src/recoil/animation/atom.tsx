@@ -2,18 +2,25 @@ import { atom } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
 const { persistAtom } = recoilPersist();
 
+// 게임 시작 버튼 클릭 여부
+export const GameButtonState = atom<boolean>({
+    key: 'GameButtonState',
+    default: false, // 기본값
+    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+});
+
 //  나가기 버튼 클릭 여부
 export const RoomExitState = atom<boolean>({
     key: 'RoomExitState',
     default: false, // 기본값
-    effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
 // 현재 방 번호
 export const RoomIdState = atom<number>({
     key: 'RoomIdState',
     default: 1, // 기본값
-    effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
 // 현재 방장 번호

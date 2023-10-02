@@ -4,6 +4,7 @@ import { Stomp } from '@stomp/stompjs';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
     CallBackState,
+    GameButtonState,
     IsModalOpenState,
     MonthlyModalOpenState,
     MovementCardsState,
@@ -115,6 +116,7 @@ function PlayerSocket() {
     const [roomCount, setRoomCount] = useRecoilState(RoomCountState);
 
     const [roomExit, setRoomExit] = useRecoilState(RoomExitState);
+    const [gameButton, setGameButton] = useRecoilState(GameButtonState);
 
     const stompClient = useRef(null);
 
@@ -739,6 +741,25 @@ function PlayerSocket() {
 
         setRoomExit(false);
     }, [roomExit]);
+
+    // const [gameButton, setGameButton] = useRecoilState(GameButtonState);
+
+    // 시작 버튼 눌렀을 때 실행
+    useEffect(() => {
+        if (gameButton === false) return;
+        connect().then(function () {
+            // 두 번째 : 헤더 / 세 번째 : 보낼 데이터
+            stompClient.current.send(
+                `/pub/${roomId}/start`,
+                {},
+                JSON.stringify({
+                    hostPlayer: playername,
+                })
+            );
+        });
+
+        setGameButton(false);
+    }, [gameButton]);
 
     return <></>;
 }

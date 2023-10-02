@@ -2,6 +2,7 @@ import Modal from 'react-modal';
 import * as S from './WaitRoom.style';
 import { useRecoilState } from 'recoil';
 import {
+    GameButtonState,
     RoomCountState,
     RoomExitState,
     RoomHostState,
@@ -22,6 +23,7 @@ export default function WaitRoom() {
     const [roomJoin, setRoomJoin] = useRecoilState(RoomJoinState);
     const [roomCount, setRoomCount] = useRecoilState(RoomCountState);
     const [roomExit, setRoomExit] = useRecoilState(RoomExitState);
+    const [gameButton, setGameButton] = useRecoilState(GameButtonState);
 
     useEffect(() => {
         console.log('hi');
@@ -61,6 +63,14 @@ export default function WaitRoom() {
         console.log('wow');
     };
 
+    const startHandler = () => {
+        console.log('시작 버튼 눌렸다아아아아아아아');
+
+        setGameButton(true);
+
+        // const [gameButton, setGameButton] = useRecoilState(GameButtonState);
+    };
+
     return (
         <>
             <Modal isOpen={isModalOpen} style={S.modalStyle}>
@@ -91,7 +101,9 @@ export default function WaitRoom() {
                             {roomHost === Number(localStorage.getItem('player')) ? (
                                 roomCount >= 4 ? (
                                     <span>
-                                        <div style={{ cursor: 'pointer' }}>Start</div>
+                                        <div style={{ cursor: 'pointer' }} onClick={startHandler}>
+                                            Start
+                                        </div>
                                     </span>
                                 ) : (
                                     <span className='overlay-outer'>
