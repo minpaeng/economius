@@ -27,12 +27,12 @@ public class PortfolioInsurances {
         return sum;
     }
 
-    public void deleteInsurance(PortfolioInsurance portfolioInsurance) {
+    public synchronized void deleteInsurance(PortfolioInsurance portfolioInsurance) {
         this.amount -= 1;
         this.insurance.remove(portfolioInsurance.getInsuranceId());
     }
 
-    public int join(PortfolioInsurance portfolioInsurance) {
+    public synchronized int join(PortfolioInsurance portfolioInsurance) {
         int monthlyPrice = portfolioInsurance.getMonthlyDeposit();
         this.amount += 1;
 
