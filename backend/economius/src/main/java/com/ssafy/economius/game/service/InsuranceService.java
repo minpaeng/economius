@@ -95,7 +95,7 @@ public class InsuranceService {
                     .build();
 
             portfolio.setMoney(portfolio.getMoney() - nowInsuranceInfo.getMonthlyDeposit());
-            portfolioInsurance.setTotalPrice(portfolioInsurance.getTotalPrice()+ nowInsuranceInfo.getMonthlyDeposit());
+            portfolioInsurance.setTotalPrice(portfolioInsurance.getTotalPrice() + nowInsuranceInfo.getMonthlyDeposit());
             portfolioInsurance.setAmount(portfolioInsurance.getAmount() + 1);
 
             if(portfolioInsurances.getInsurance() == null) portfolioInsurances.setInsurance(new HashMap<>());
@@ -103,7 +103,8 @@ public class InsuranceService {
 
             // redis 저장
             gameRepository.save(game);
-            log.info("============ 보험 가입 : {} ============", game.getPortfolios().get(insuranceRequest.getPlayer()).getInsurances().toString());
+            log.info("============ 보험 가입 : {} ============", nowInsurance.toString());
+            log.info("============ 보험 가입 후 보험 포트폴리오 : {} ============", game.getPortfolios().get(insuranceRequest.getPlayer()).getInsurances().toString());
         }
 
 
@@ -128,8 +129,8 @@ public class InsuranceService {
             // 보험 해지
             portfolioInsurance.getInsurance().remove(insuranceRequest.getInsuranceId());
             gameRepository.save(game);
-            
-            log.info("============ 보험 해지 : {} ============", game.getPortfolios().get(insuranceRequest.getPlayer()).getInsurances().toString());
+            log.info("============ 보험 해지 : {} ============", portfolioInsurance.getInsurance().get(insuranceRequest.getInsuranceId()).toString());
+            log.info("============ 보험 해지 후 보험 포트폴리오: {} ============", game.getPortfolios().get(insuranceRequest.getPlayer()).getInsurances().toString());
         }
     }
 }
