@@ -6,13 +6,7 @@ import com.ssafy.economius.game.dto.response.CalculateResponse;
 import com.ssafy.economius.game.dto.response.FinishTurnResponse;
 import com.ssafy.economius.game.dto.response.GameJoinResponse;
 import com.ssafy.economius.game.dto.response.GameRoomExitResponse;
-import com.ssafy.economius.game.entity.redis.Game;
-import com.ssafy.economius.game.entity.redis.Portfolio;
-import com.ssafy.economius.game.entity.redis.PortfolioBuildings;
-import com.ssafy.economius.game.entity.redis.PortfolioGold;
-import com.ssafy.economius.game.entity.redis.PortfolioInsurances;
-import com.ssafy.economius.game.entity.redis.PortfolioSavings;
-import com.ssafy.economius.game.entity.redis.PortfolioStocks;
+import com.ssafy.economius.game.entity.redis.*;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -115,7 +109,7 @@ public class GameService {
 
     private PortfolioInsurances portfolioInsurances() {
         return PortfolioInsurances.builder()
-            .totalPrice(INITIAL_ZERO_VALUE.getValue())
+            //.totalPrice(INITIAL_ZERO_VALUE.getValue())
             .amount(INITIAL_ZERO_VALUE.getValue())
             .build();
     }
@@ -135,11 +129,12 @@ public class GameService {
 
         Portfolio portfolio = game.getPortfolios().get(player);
         PortfolioSavings savings = portfolio.getSavings();
+        PortfolioInsurances insurances = portfolio.getInsurances();
         savings.updateSavings();
 
         int finishSaving = savings.calculateFinishSaving();
         int savingPrice = savings.calculateSavingPrice();
-        int insurancePrice = portfolio.getInsurances().getTotalPrice();
+        int insurancePrice = insurances.calculateInsurancePrice();
         int money = portfolio.getMoney();
         int income = (finishSaving - savingPrice - insurancePrice + SALARY.getValue());
         int tax = (int) (income * (double) game.getTax().get(prize) / 100);
