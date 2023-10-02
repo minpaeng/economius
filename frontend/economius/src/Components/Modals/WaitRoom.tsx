@@ -92,8 +92,8 @@ export default function WaitRoom() {
                         <p>{roomJoinUsersNickname[3]}</p>
                     </S.UserBox>
                     <S.InfoBar>
-                        <div className='no'>
-                            <span onClick={roomNumHandler}>Room No : {roomid} </span>
+                        <div onClick={roomNumHandler} className='no'>
+                            <span>Room No : {roomid} </span>
                             <img src='/navImg/copy.png' alt='' style={{ width: '20px', paddingLeft: '5px' }} />
                         </div>
 

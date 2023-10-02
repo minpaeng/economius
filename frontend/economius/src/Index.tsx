@@ -159,7 +159,7 @@ export default function Index() {
                 {renderContent && (
                     <S.ButtonOuter>
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
-                            <img onClick={loginHandler} src='/button/kakao.png' alt='kakao-login-btn' />
+                            <img style={{ cursor: 'pointer' }} onClick={loginHandler} src='/button/kakao.png' alt='kakao-login-btn' />
                         </div>
                     </S.ButtonOuter>
                 )}
