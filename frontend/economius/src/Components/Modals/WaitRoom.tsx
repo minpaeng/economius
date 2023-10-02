@@ -8,6 +8,7 @@ import {
     RoomHostState,
     RoomIdState,
     RoomJoinState,
+    RoomJoinUsersIdState,
     RoomJoinUsersNicknameState,
     SetShowWaitRoomState,
 } from '/src/recoil/animation/atom';
@@ -25,10 +26,15 @@ export default function WaitRoom() {
     const [roomExit, setRoomExit] = useRecoilState(RoomExitState);
     const [gameButton, setGameButton] = useRecoilState(GameButtonState);
 
+    const [roomJoinUsersId, setRoomJoinUsersId] = useRecoilState(RoomJoinUsersIdState);
+
     useEffect(() => {
-        console.log('hi');
+        console.log('아이디ㅣㅣㅣㅣㅣㅣ디ㅣ디디디!');
+
+        console.log(roomJoinUsersId);
+
         // setRoomJoin(1);
-    }, []);
+    }, [roomJoinUsersId]);
 
     const closeModal = () => {
         setIsModalOpen(false);

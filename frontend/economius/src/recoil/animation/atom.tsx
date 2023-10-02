@@ -37,7 +37,7 @@ export const RoomHostState = atom<number>({
     effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
-// 현재 방장 번호
+// 현재 인원 수
 export const RoomCountState = atom<number>({
     key: 'RoomCountState',
     default: 0, // 기본값
@@ -63,13 +63,6 @@ export const RoomJoinState = atom<number>({
     key: 'RoomJoinState',
     default: 0, // 1이 호출
     // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
-});
-
-// 방 참가 인원 닉네임 보기
-export const RoomJoinUsersNicknameState = atom<string[]>({
-    key: 'RoomJoinUsersNicknameState',
-    default: ['wait..', 'wait..', 'wait..', 'wait..'],
-    // effects_UNSTABLE: [persistAtom],
 });
 
 // 유저 아이디
@@ -159,4 +152,18 @@ export const SideBarTypeState = atom<string>({
 export const isPortfolioState = atom<boolean>({
     key: 'isPortfolioState',
     default: true,
+});
+
+// 방 참가 인원 닉네임 보기
+export const RoomJoinUsersNicknameState = atom<string[]>({
+    key: 'RoomJoinUsersNicknameState',
+    default: ['wait..', 'wait..', 'wait..', 'wait..'],
+    // effects_UNSTABLE: [persistAtom],
+});
+
+// 방 참가 인원 아이디 보기
+export const RoomJoinUsersIdState = atom<number[]>({
+    key: 'RoomJoinUsersIdState',
+    default: [0, 0, 0, 0],
+    // effects_UNSTABLE: [persistAtom],
 });

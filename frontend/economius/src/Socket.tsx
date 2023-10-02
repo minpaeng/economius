@@ -15,6 +15,7 @@ import {
     RoomHostState,
     RoomIdState,
     RoomJoinState,
+    RoomJoinUsersIdState,
     RoomJoinUsersNicknameState,
     SetShowWaitRoomState,
     StartReturnState,
@@ -119,6 +120,7 @@ function PlayerSocket() {
     const [roomExit, setRoomExit] = useRecoilState(RoomExitState);
     const [gameButton, setGameButton] = useRecoilState(GameButtonState);
     const [startReturn, setStartReturn] = useRecoilState(StartReturnState);
+    const [roomJoinUsersId, setRoomJoinUsersId] = useRecoilState(RoomJoinUsersIdState);
 
     const stompClient = useRef(null);
 
@@ -329,6 +331,7 @@ function PlayerSocket() {
         if (nick4 == undefined) nick4 = 'wait..';
 
         setRoomJoinUsersNickname([nick1, nick2, nick3, nick4]);
+        setRoomJoinUsersId([player1, player2, player3, player4]);
     }
 
     useEffect(() => {
