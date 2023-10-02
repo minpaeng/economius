@@ -60,7 +60,7 @@ public class FinishTurnService {
     private void changePrevIssue(Game game, int round) {
         if (round % 4 != 0) return;
         int idx = game.getIssueIdx();
-        if (idx > ISSUE_COUNT.getValue()) {
+        if (idx >= ISSUE_COUNT.getValue()) {
             game.setCurrentPrevIssues(null);
             return;
         }
@@ -76,7 +76,7 @@ public class FinishTurnService {
     }
 
     private void checkIssueRound(Game game, int round) {
-        if (round % 4 != 1 || game.getIssueIdx() > ISSUE_COUNT.getValue()) return;
+        if (round % 4 != 1 || game.getIssueIdx() >= ISSUE_COUNT.getValue()) return;
         game.setCurrentPrevIssues(null);
         game.setCurrentIssue(game.getIssues().get(game.getIssueIdx()));
         game.setIssueIdx(game.getIssueIdx() + 1);
