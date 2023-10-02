@@ -53,7 +53,7 @@ public class InsuranceService {
     public InsuranceVisitResponse visitInsurance(int roomId, InsuranceRequest insuranceRequest) {
         //게임 방 조회
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
-        log.info(game.getInsurances().toString());
+        //log.info(game.getInsurances().toString());
         Map<Integer, Insurance> insurances = game.getInsurances();
 
         //멤버의 보험 상품 별 가입 유무
@@ -138,17 +138,18 @@ public class InsuranceService {
         Portfolio portfolio = game.getPortfolios().get(insuranceRequest.getPlayer());
         // 멤버 포트폴리오 - 보험
         PortfolioInsurances portfolioInsurance = portfolio.getInsurances();
-        //보험 상품 정보
-        Insurance nowInsuranceInfo = game.getInsurances().get(insuranceRequest.getInsuranceId());
 
         if(checkHaveInsurance(game, insuranceRequest.getPlayer(), insuranceRequest.getInsuranceId())) {
+            //보험 상품 정보
+            Insurance nowInsuranceInfo = game.getInsurances().get(insuranceRequest.getInsuranceId());
+
             // 현재 보험 정보에 기반하여 해지
             portfolioInsurance.setAmount(portfolioInsurance.getAmount() - 1);
 
             // 보험 해지
             portfolioInsurance.getInsurance().remove(insuranceRequest.getInsuranceId());
             gameRepository.save(game);
-            log.info("============ 보험 해지 : {} ============", portfolioInsurance.getInsurance().get(insuranceRequest.getInsuranceId()).toString());
+            log.info("============ 보험 해지 : {} ============", nowInsuranceInfo.toString());
             log.info("============ 보험 해지 후 보험 포트폴리오: {} ============", game.getPortfolios().get(insuranceRequest.getPlayer()).getInsurances().toString());
         }
     }
