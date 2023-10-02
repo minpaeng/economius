@@ -36,11 +36,11 @@ public class FinishTurnService {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
         int gameTurn = game.updateGameTurn();
-        if(gameTurn == -1) {
-            // 게임 종료 로직
-            throw new IllegalStateException("Game has ended, gameTurn: -1"); 
-        }
-        int round = gameTurn / 4; // 1턴이 끝나면 -> gameTurn 1, round 0
+//        if(gameTurn == -1) {
+//            // 게임 종료 로직
+//            throw new IllegalStateException("Game has ended, gameTurn: -1");
+//        }
+        int round = gameTurn / 4;
         log.info("===" + gameTurn + "턴 종료, " + round + "라운드 시작 준비중===");
 
         // todo 각종 이벤트 로직 구현
