@@ -68,14 +68,14 @@ public class InsuranceService {
             else {
                 have.put(key, false);
             }
-            Insurance insurance = insurances.get(key);
-            InsuranceDto dto = InsuranceDto.builder()
-                    .insuranceCode(insurance.getProductCode())
-                    .getInsuranceName(insurance.getProductName())
-                    .perPrice(insurance.getMonthlyDeposit())
-                    .insuranceBenefit(insurance.getGuaranteeRate())
-                    .build();
-            insuranceDto.put(key, dto);
+//            Insurance insurance = insurances.get(key);
+//            InsuranceDto dto = InsuranceDto.builder()
+//                    .insuranceCode(insurance.getProductCode())
+//                    .getInsuranceName(insurance.getProductName())
+//                    .perPrice(insurance.getMonthlyDeposit())
+//                    .insuranceBenefit(insurance.getGuaranteeRate())
+//                    .build();
+//            insuranceDto.put(key, dto);
         }
 
         InsuranceVisitResponse response = InsuranceVisitResponse.builder()
@@ -83,7 +83,8 @@ public class InsuranceService {
                 .have(have)
                 .insuranceDto(insuranceDto)
                 .build();
-        log.info("============ 보험 방문 : {} ============", response.toString());
+        //log.info("============ 보험 방문 : {} ============", response.toString());
+        log.info("============ 보험 방문 : 플레이어의 포트폴리오 : {} ============", game.getPortfolios().get(insuranceRequest.getPlayer()).getInsurances().toString());
         return response;
     }
 
