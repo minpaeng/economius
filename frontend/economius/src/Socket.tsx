@@ -195,14 +195,21 @@ function PlayerSocket() {
 
     function personalCallBackFunction(recievedMessage: any) {
         const message = JSON.parse(recievedMessage.body);
+        const header = JSON.parse(recievedMessage.headers.success);
+        console.log('민정이가 부른 헤더');
+        console.log(header);
+
         console.log('전체메시지', message);
 
-        if (message.code == '') {
-            console.log('정상');
-            setShowWaitRoom(true);
-            setRoomHost(message.hostPlayer);
-            setRoomCount(message.players.length);
-        } else if (message.code == 1000) {
+        // if (message.code == '') {
+        //     console.log('정상~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+        //     setUserNicknames(message);
+        //     setShowWaitRoom(true);
+        //     setRoomHost(message.hostPlayer);
+        //     setRoomCount(message.players.length);
+        // } else
+
+        if (message.code == 1000) {
             setRoomJoin(0);
             setShowWaitRoom(false);
             setRoomHost(0);
@@ -222,6 +229,8 @@ function PlayerSocket() {
     }
 
     function broadCastCallBackFunction(recievedMessage: any) {
+        console.log('여기 뜬다요?');
+
         const message = JSON.parse(recievedMessage.body);
         const type = recievedMessage.headers.type || null;
         console.log('전체메시지 type: ', type);
@@ -283,13 +292,11 @@ function PlayerSocket() {
         }
         // 새로운 방을 입장하는 경우
         else if (type == 'join') {
-            console.log('JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJjjjjjjjjjjjjjJJJoin');
-
             setUserNicknames(message);
-            console.log(roomJoinUsersNickname);
+            setShowWaitRoom(true);
+            setRoomHost(message.hostPlayer);
+            setRoomCount(message.players.length);
         } else if (type == 'exit') {
-            console.log('EEEEEEEEExit');
-
             setUserNicknames(message);
             console.log(roomJoinUsersNickname);
         }
@@ -332,7 +339,7 @@ function PlayerSocket() {
                 console.log(`기존 방 구독 취소 후 ${roomId}번 방 구독 완료`);
             }
         });
-    }, [showWaitRoom, playername, stompClient]);
+    }, [roomId, playername]);
 
     async function connect() {
         // stompClient가 close 상태라면 재생성 후 connect
@@ -696,12 +703,6 @@ function PlayerSocket() {
 
     // 방 입장 시
     useEffect(() => {
-        console.log('playerID');
-        console.log(roomId);
-
-        console.log('playerID');
-        console.log(localStorage.getItem('player'));
-
         if (roomJoin == 0) return;
         connect().then(function () {
             // 두 번째 : 헤더 / 세 번째 : 보낼 데이터
@@ -724,11 +725,6 @@ function PlayerSocket() {
     // 대기방 나가기 요청을 받는 경우
     useEffect(() => {
         if (roomExit === false) return;
-        console.log('나의 방 번호는');
-        console.log(roomId);
-
-        console.log('내가 나온다고?????????????????????/');
-
         connect().then(function () {
             // 두 번째 : 헤더 / 세 번째 : 보낼 데이터
             stompClient.current.send(

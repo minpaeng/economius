@@ -35,13 +35,13 @@ export default function WaitRoom() {
     const exitHandler = () => {
         setRoomExit(true);
 
+        // 모달 끄기
+        setShowWaitRoom(false);
         setTimeout(() => {
             // 접속한 방이 없다고 초기화
             setRoomid(0);
             setRoomJoinUsersNickname(['', '', '', '']);
 
-            // 모달 끄기
-            setShowWaitRoom(false);
             setRoomHost(0);
             setRoomJoin(0);
             setRoomCount(0);

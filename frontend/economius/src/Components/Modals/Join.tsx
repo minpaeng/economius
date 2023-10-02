@@ -23,8 +23,8 @@ export default function Join() {
 
     const JoinButtonClickHandler = () => {
         // 여기에 연결학세요!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        console.log('CLICK');
-
+        console.log('CLICK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111');
+        console.log(inputValue);
         setRoomId(Number(inputValue)); // 방 번호를 변경
         setRoomJoin(1); // 방 입장하겠음
 
