@@ -5,7 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -20,4 +22,10 @@ public class PortfolioBuilding {
     private int buyPrice;
     private int priceChange;
     private Building building;
+
+    public void setEarnings() {
+        int gap = building.getPrice() - this.earningPrice;
+        this.earningRate = (int) ((gap / (double) building.getPrice()) * 100);
+        this.earningPrice = gap;
+    }
 }

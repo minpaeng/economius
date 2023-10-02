@@ -63,6 +63,7 @@ public class PortfolioBuildings {
             return;
         }
         this.building.get(buildingId).setBuilding(building);
+        this.building.get(buildingId).setEarnings();
         updateTotalBuildingPrice();
         setEarnings();
     }
