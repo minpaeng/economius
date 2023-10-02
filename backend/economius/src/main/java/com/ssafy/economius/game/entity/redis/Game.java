@@ -64,6 +64,13 @@ public class Game {
     // 찬스 이벤트 -
     private Event event;
 
+    public void initializeCharacter(List<Integer> randoms) {
+        int index = 0;
+        for (Long player : players) {
+            characters.put(player, randoms.get(index++));
+        }
+    }
+
     public Issue getNextIssue() {
         if (issueIdx < 0) {
             return null;

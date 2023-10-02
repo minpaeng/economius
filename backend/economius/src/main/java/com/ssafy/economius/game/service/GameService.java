@@ -1,12 +1,15 @@
 package com.ssafy.economius.game.service;
 
+import static com.ssafy.economius.game.enums.RateEnum.INITIAL_MONEY;
+import static com.ssafy.economius.game.enums.RateEnum.INITIAL_ZERO_VALUE;
+import static com.ssafy.economius.game.enums.RateEnum.SALARY;
+
 import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.dto.ReceiptDto;
 import com.ssafy.economius.game.dto.response.CalculateResponse;
 import com.ssafy.economius.game.dto.response.FinishTurnResponse;
 import com.ssafy.economius.game.dto.response.GameJoinResponse;
 import com.ssafy.economius.game.dto.response.GameRoomExitResponse;
-import com.ssafy.economius.game.entity.redis.*;
 import com.ssafy.economius.game.dto.response.GameStartResponse;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Portfolio;
@@ -16,16 +19,14 @@ import com.ssafy.economius.game.entity.redis.PortfolioInsurances;
 import com.ssafy.economius.game.entity.redis.PortfolioSavings;
 import com.ssafy.economius.game.entity.redis.PortfolioStocks;
 import com.ssafy.economius.game.repository.redis.GameRepository;
+import com.ssafy.economius.game.util.RandomUtil;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.ssafy.economius.game.enums.RateEnum.*;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +38,8 @@ public class GameService {
     private final ModelMapper modelMapper;
 
     public GameJoinResponse join(int roomId, Long player, String nickname) {
-        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId, player);
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId,
+            player);
 
         gameValidator.checkCanJoin(game, roomId, player);
 
@@ -55,7 +57,7 @@ public class GameService {
 
         // 각자의 포트폴리오 생성
         uploadInitialPortfolioOnRedis(game);
-
+        game.initializeCharacter(RandomUtil.getUniqueRandomNumbers(4, 1, 10));
         game.initializePlayerSequence();
         game.initializeLocations();
         game.getStocks().values().forEach(stock -> stock.initializeOwners(players));
@@ -175,20 +177,20 @@ public class GameService {
 
     private GameJoinResponse makeGameJoinResponse(int roomId, Game game) {
         return GameJoinResponse.builder()
-                .roomId(roomId)
-                .players(game.getPlayers())
-                .nicknames(game.getNicknames())
-                .hostPlayer(game.getPlayers().get(0))
-                .build();
+            .roomId(roomId)
+            .players(game.getPlayers())
+            .nicknames(game.getNicknames())
+            .hostPlayer(game.getPlayers().get(0))
+            .build();
     }
 
     private GameRoomExitResponse makeGameExitResponse(int roomId, Game game) {
         return GameRoomExitResponse.builder()
-                .roomId(roomId)
-                .players(game.getPlayers())
-                .nicknames(game.getNicknames())
-                .hostPlayer(game.getPlayers().get(0))
-                .build();
+            .roomId(roomId)
+            .players(game.getPlayers())
+            .nicknames(game.getNicknames())
+            .hostPlayer(game.getPlayers().get(0))
+            .build();
     }
 
     public FinishTurnResponse start(int roomId) {
