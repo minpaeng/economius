@@ -20,7 +20,7 @@ function Round() {
 
     return (
         <Modal isOpen={isModalOpen} onRequestClose={closeModal} style={modalStyle}>
-            <Img src={"/public/2D_Chracter/Bear/Bear Pose - 02.png"}/>
+            <Img src={"/2D_Chracter/Bear/Bear Pose - 02.png"}/>
             <TextOverlay>
                 <div style={{fontSize: "40px", paddingTop:"35px"}}>Round : {gameRound}</div>
             </TextOverlay>
