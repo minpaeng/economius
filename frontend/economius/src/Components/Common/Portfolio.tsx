@@ -238,6 +238,7 @@ function Portforlio({ setSideBarType }) {
       {/* 보험 토글 */}
       <PortfolioInsurance
         totalPrice={portfolios[userId].insurances.totalPrice}
+        amount={portfolios[userId].insurances.amount}
         insuranceList={insuranceList}
       />
     </S.PortfolioMain>

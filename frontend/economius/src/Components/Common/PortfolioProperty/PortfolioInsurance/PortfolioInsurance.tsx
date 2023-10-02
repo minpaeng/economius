@@ -3,7 +3,7 @@ import SlideToggle from "react-slide-toggle";
 import PortfolioInsuranceItem from "./PortfolioInsuranceItem";
 import { useState } from "react";
 
-function PortfolioInsurance({ totalPrice, insuranceList }) {
+function PortfolioInsurance({ totalPrice, amount, insuranceList }) {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const toggleCollapse = () => {
@@ -25,7 +25,7 @@ function PortfolioInsurance({ totalPrice, insuranceList }) {
               </S.LayoutTopLeft>
               <S.LayoutTopRight>
                 {insuranceList.length ? (
-                  <div> 총 납입금액 : {totalPrice.toLocaleString()} (원)</div>
+                  <div> 가입 상품 수 : {amount.toLocaleString()} (개)</div>
                 ) : (
                   "가입 중인 보험이 없습니다."
                 )}
