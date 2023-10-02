@@ -696,6 +696,12 @@ function PlayerSocket() {
 
     // 방 입장 시
     useEffect(() => {
+        console.log('playerID');
+        console.log(roomId);
+
+        console.log('playerID');
+        console.log(localStorage.getItem('player'));
+
         if (roomJoin == 0) return;
         connect().then(function () {
             // 두 번째 : 헤더 / 세 번째 : 보낼 데이터
@@ -708,6 +714,8 @@ function PlayerSocket() {
                 })
             );
 
+            console.log('Join PUB!!!!!!!!!!!!!!!!!!!!!!!!1');
+
             // 요청 완료했으면 다시 fefault로 변경
             setRoomJoin(0);
         });
@@ -715,7 +723,9 @@ function PlayerSocket() {
 
     // 대기방 나가기 요청을 받는 경우
     useEffect(() => {
-        if (showWaitRoom === false) return;
+        if (roomExit === false) return;
+        console.log('내가 나온다고?????????????????????/');
+
         connect().then(function () {
             // 두 번째 : 헤더 / 세 번째 : 보낼 데이터
             stompClient.current.send(
@@ -727,7 +737,9 @@ function PlayerSocket() {
                 })
             );
         });
-    }, [showWaitRoom]);
+
+        setRoomExit(false);
+    }, [roomExit]);
 
     return <></>;
 }
