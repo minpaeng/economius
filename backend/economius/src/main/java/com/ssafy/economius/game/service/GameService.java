@@ -6,6 +6,7 @@ import com.ssafy.economius.game.dto.response.CalculateResponse;
 import com.ssafy.economius.game.dto.response.FinishTurnResponse;
 import com.ssafy.economius.game.dto.response.GameJoinResponse;
 import com.ssafy.economius.game.dto.response.GameRoomExitResponse;
+import com.ssafy.economius.game.dto.response.GameStartResponse;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Portfolio;
 import com.ssafy.economius.game.entity.redis.PortfolioBuildings;
@@ -46,7 +47,7 @@ public class GameService {
         return makeGameJoinResponse(roomId, game);
     }
 
-    public FinishTurnResponse start(int roomId, Long hostPlayer) {
+    public GameStartResponse start(int roomId, Long hostPlayer) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
         List<Long> players = game.getPlayers();
         gameValidator.canStartGame(players, hostPlayer, roomId);
@@ -59,7 +60,7 @@ public class GameService {
         game.getStocks().values().forEach(stock -> stock.initializeOwners(players));
         gameRepository.save(game);
 
-        return modelMapper.map(game, FinishTurnResponse.class);
+        return new GameStartResponse(roomId);
     }
 
     public GameRoomExitResponse exit(int roomId, Long player) {
