@@ -42,3 +42,8 @@ export const buildingState = atom({
   key: "buildingState",
   default: null,
 });
+
+export const currentPrevIssueState = atom({
+  key: "currentPrevIssueState",
+  default: null,
+});
