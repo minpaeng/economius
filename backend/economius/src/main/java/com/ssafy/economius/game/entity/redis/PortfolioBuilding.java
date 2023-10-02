@@ -15,6 +15,9 @@ public class PortfolioBuilding {
 
     private int buildingId;
     private String buildingName;
+    private int earningRate;
+    private int earningPrice;
     private int buyPrice;
+    private int priceChange;
     private Building building;
 }
