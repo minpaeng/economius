@@ -6,6 +6,7 @@ import com.ssafy.economius.game.entity.redis.AssetChange;
 import com.ssafy.economius.game.entity.redis.Building;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Gold;
+import com.ssafy.economius.game.entity.redis.Portfolio;
 import com.ssafy.economius.game.entity.redis.Stock;
 import com.ssafy.economius.game.enums.InitialData;
 import com.ssafy.economius.game.enums.VolatileEnum;
@@ -51,6 +52,7 @@ public class FinishTurnService {
             applyIssueEffect(game, round);
         }
 
+        game.getPortfolios().values().forEach(Portfolio::updateTotalMoney);
         gameRepository.save(game);
         return modelMapper.map(game, FinishTurnResponse.class);
     }

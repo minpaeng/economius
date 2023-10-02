@@ -71,6 +71,7 @@ public class StockService {
         // 모두 통과했다..
         stock.dealStock(player, stockAmount);
         portfolio.getStocks().updatePortfolioStockByDeal(stock, stockAmount);
+        portfolio.spendMoney(stock.getPrice() * stockAmount);
 
         gameRepository.save(game);
 
@@ -88,6 +89,7 @@ public class StockService {
 
         stock.dealStock(player, stockAmount);
         portfolio.getStocks().updatePortfolioStockByDeal(stock, stockAmount);
+        portfolio.spendMoney(-stock.getPrice() * stockAmount);
 
         gameRepository.save(game);
 
