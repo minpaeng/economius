@@ -50,6 +50,7 @@ import {
   MonthlyInfoState,
   RealEstateInfoState,
   StockInfoState,
+  BigEventInfoState,
 } from "./recoil/modalInfo/atom";
 
 const buildingIds = {
@@ -134,6 +135,9 @@ function PlayerSocket() {
   //이벤트 카드
   const [chanceCardInfo, setChanceCardInfo] =
     useRecoilState(ChanceCardInfoState);
+
+  // 대이벤트 정보
+  const [bigEventInfo, setBigEventInfo] = useRecoilState(BigEventInfoState);
 
   // 방 연결을 위한 recoil
   const [userId, setUserId] = useRecoilState(UseridState);
@@ -265,6 +269,21 @@ function PlayerSocket() {
       setPortfolio(message.portfolios);
       setPlayerToRoll(message.currentPlayerToRoll);
       setGameRound(Math.floor(message.gameTurn / 4));
+    }
+
+    if (type === "issue") {
+      setBigEventInfo({
+        buildingChange: message.buildingChange,
+        country: message.country,
+        description: message.description,
+        goldChange: message.goldChange,
+        interestRateChange: message.interestRateChange,
+        name: message.name,
+        stockChanges: message.stockChanges,
+        type: message.type,
+        url: message.url,
+        year: message.year,
+      });
     }
 
     if (type == "visitBuilding") {
