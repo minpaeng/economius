@@ -143,7 +143,7 @@ public class GameRoomService {
     private InterestRate makeInterestRate() {
         return InterestRate.builder()
                 .rate(INITIAL_INTEREST_RATE.getValue())
-                .rateHistory(new ArrayList<>(List.of(INITIAL_INTEREST_RATE.getValue())))
+                .rateHistory(new ArrayList<>(List.of((double)INITIAL_INTEREST_RATE.getValue())))
                 .build();
     }
 
