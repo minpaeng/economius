@@ -13,7 +13,9 @@ function Round() {
     };
 
     useEffect(() => {
-        setIsModalOpen(true);
+        if (gameRound !== 0){
+            setIsModalOpen(true);
+        }
     }, [gameRound]);
 
     return (
