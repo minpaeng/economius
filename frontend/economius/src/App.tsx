@@ -56,6 +56,7 @@ function App() {
       setGoldState(data.data.gold);
       setInterestRateState(data.data.interestRate);
       setBuildingState(data.data.buildings);
+      console.log(data.data);
     });
   }, []);
 
