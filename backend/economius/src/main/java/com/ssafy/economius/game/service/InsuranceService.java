@@ -88,7 +88,7 @@ public class InsuranceService {
         return response;
     }
 
-    public void joinInsurance(int roomId, InsuranceRequest insuranceRequest) {
+    public synchronized void joinInsurance(int roomId, InsuranceRequest insuranceRequest) {
         //게임 방 조회
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
@@ -127,7 +127,7 @@ public class InsuranceService {
 
     }
 
-    public void stopInsurance(int roomId, InsuranceRequest insuranceRequest) {
+    public synchronized void stopInsurance(int roomId, InsuranceRequest insuranceRequest) {
         //게임 방 조회
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
