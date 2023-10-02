@@ -17,6 +17,7 @@ import {
     RoomJoinState,
     RoomJoinUsersNicknameState,
     SetShowWaitRoomState,
+    StartReturnState,
     UseridState,
 } from './recoil/animation/atom';
 import {
@@ -117,6 +118,7 @@ function PlayerSocket() {
 
     const [roomExit, setRoomExit] = useRecoilState(RoomExitState);
     const [gameButton, setGameButton] = useRecoilState(GameButtonState);
+    const [startReturn, setStartReturn] = useRecoilState(StartReturnState);
 
     const stompClient = useRef(null);
 
@@ -241,6 +243,7 @@ function PlayerSocket() {
             setStocks(message.stocks);
             setPortfolio(message.portfolios);
         }
+
         if (type == 'visitBuilding') {
             setRealEstateInfo({
                 buildingId: message.buildingId,
@@ -301,6 +304,10 @@ function PlayerSocket() {
         } else if (type == 'exit') {
             setUserNicknames(message);
             console.log(roomJoinUsersNickname);
+        }
+        // 게임 시작 pub에 대한 결과를 반환 받으면
+        else if (type == 'start') {
+            setStartReturn(true);
         }
     }
 

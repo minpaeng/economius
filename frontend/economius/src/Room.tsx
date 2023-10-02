@@ -9,6 +9,7 @@ import {
     RoomJoinUsersNicknameState,
     SetShowJoinState,
     SetShowWaitRoomState,
+    StartReturnState,
     UseridState,
 } from './recoil/animation/atom';
 import { useRecoilState } from 'recoil';
@@ -48,6 +49,7 @@ export default function Room() {
     const [, setPlayerId] = useRecoilState(PlayerIdState);
     const [roomHost, setRoomHost] = useRecoilState(RoomHostState);
     const [roomCount, setRoomCount] = useRecoilState(RoomCountState);
+    const [startReturn, setStartReturn] = useRecoilState(StartReturnState);
 
     // const [showJoin, setShowJoin] = useState(false);
 
@@ -135,6 +137,12 @@ export default function Room() {
             };
         }
     }, [isModalClosed]);
+
+    useEffect(() => {
+        if (startReturn == true) {
+            navigate('/app');
+        }
+    }, [startReturn]);
 
     // 소리 허용 버튼을 클릭했을 때 실행
     const videoControl = () => {

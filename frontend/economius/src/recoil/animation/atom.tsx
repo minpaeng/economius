@@ -2,6 +2,13 @@ import { atom } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
 const { persistAtom } = recoilPersist();
 
+// 시작 결과 반환
+export const StartReturnState = atom<boolean>({
+    key: 'StartReturnState',
+    default: false, // 기본값
+    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+});
+
 // 게임 시작 버튼 클릭 여부
 export const GameButtonState = atom<boolean>({
     key: 'GameButtonState',
