@@ -40,7 +40,6 @@ export default function WaitRoom() {
         setRoomJoinUsersNickname(['', '', '', '']);
 
         // 모달 끄기
-        setRoomExit(false);
         setShowWaitRoom(false);
         setRoomHost(0);
         setRoomJoin(0);
