@@ -3,6 +3,7 @@ import { TradeInsuranceState } from '/src/recoil/trading/atom';
 import { InsuranceInfoState } from '/src/recoil/modalInfo/atom';
 import * as S from './InsuranceCard.style';
 import InsuranceCardItem from './InsuranceCardItem';
+import { useEffect } from 'react'; // 추가: useEffect를 import 해주세요.
 
 const insureanceIds = {
     3: 0,
@@ -14,8 +15,15 @@ const insureanceIds = {
 function InsuranceCard({ CardInfo, ItemInfo, index }) {
     const [tradeInsurance, setTradeInsurance] = useRecoilState(TradeInsuranceState);
     const [insuranceInfo, setInsuranceInfo] = useRecoilState(InsuranceInfoState);
+    // useEffect를 추가하여 tradeInsurance 값이 변경될 때마다 로깅
+    useEffect(() => {
+        console.log('Updated tradeInsurance: ', tradeInsurance);
+    }, [tradeInsurance]);
+
     // 가입/해지 값에 따라 버튼을 토글하는 함수
     const handleButtonClick = () => {
+        console.log("Toggled Index: ", index); // 클릭된 인덱스 로깅
+        console.log("Corresponding insureanceId: ", insureanceIds[index]); // 해당하는 insureanceIds 로깅
         setTradeInsurance(prev => {
             const newState = [...prev];
             newState[insureanceIds[index]] = !newState[insureanceIds[index]];
