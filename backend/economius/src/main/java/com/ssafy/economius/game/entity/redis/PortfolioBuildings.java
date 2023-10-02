@@ -22,13 +22,13 @@ public class PortfolioBuildings {
     private int earningRate;
     private int earningPrice;
     private int amount;
-
     private Map<Integer, PortfolioBuilding> building;
 
     public void buyBuilding(int buildingId, Building building) {
         this.totalPrice += building.getPrice();
         addBuilding(buildingId, building);
-        this.amount = this.building.size();
+        if (this.building == null) this.amount = 0;
+        else this.amount = this.building.size();
         setEarnings();
     }
 
@@ -63,6 +63,7 @@ public class PortfolioBuildings {
             return;
         }
         this.building.get(buildingId).setBuilding(building);
+        updateTotalBuildingPrice();
     }
 
     private void setEarnings() {
@@ -87,5 +88,13 @@ public class PortfolioBuildings {
             this.earningRate = newEarningRate * -1;
             this.earningPrice = gap * -1;
         }
+    }
+
+    private void updateTotalBuildingPrice() {
+        int totalBuildingPrice = 0;
+        for (PortfolioBuilding p : this.building.values()) {
+            totalBuildingPrice += p.getBuilding().getPrice();
+        }
+        this.totalPrice = totalBuildingPrice;
     }
 }
