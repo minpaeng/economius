@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class CornerService {
+public class OracleService {
 
     private final GameRepository gameRepository;
     private final GameValidator gameValidator;
