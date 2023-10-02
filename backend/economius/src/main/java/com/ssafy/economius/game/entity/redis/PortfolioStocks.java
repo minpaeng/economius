@@ -79,6 +79,6 @@ public class PortfolioStocks {
             .mapToInt(PortfolioStock::evaluateStock)
             .sum();
 
-        earningRate = (int) ((double) (earningPrice - totalPrice) / totalPrice) * 100;
+        earningRate = (int) (((double) (earningPrice - totalPrice) / totalPrice) * 100.0);
     }
 }
