@@ -724,6 +724,9 @@ function PlayerSocket() {
     // 대기방 나가기 요청을 받는 경우
     useEffect(() => {
         if (roomExit === false) return;
+        console.log('나의 방 번호는');
+        console.log(roomId);
+
         console.log('내가 나온다고?????????????????????/');
 
         connect().then(function () {

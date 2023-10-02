@@ -35,15 +35,17 @@ export default function WaitRoom() {
     const exitHandler = () => {
         setRoomExit(true);
 
-        // 접속한 방이 없다고 초기화
-        setRoomid(0);
-        setRoomJoinUsersNickname(['', '', '', '']);
+        setTimeout(() => {
+            // 접속한 방이 없다고 초기화
+            setRoomid(0);
+            setRoomJoinUsersNickname(['', '', '', '']);
 
-        // 모달 끄기
-        setShowWaitRoom(false);
-        setRoomHost(0);
-        setRoomJoin(0);
-        setRoomCount(0);
+            // 모달 끄기
+            setShowWaitRoom(false);
+            setRoomHost(0);
+            setRoomJoin(0);
+            setRoomCount(0);
+        }, 500);
     };
 
     // 룸 번호 복사
