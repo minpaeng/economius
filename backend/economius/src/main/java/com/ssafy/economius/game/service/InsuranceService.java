@@ -68,14 +68,14 @@ public class InsuranceService {
             else {
                 have.put(key, false);
             }
-//            Insurance insurance = insurances.get(key);
-//            InsuranceDto dto = InsuranceDto.builder()
-//                    .insuranceCode(insurance.getProductCode())
-//                    .getInsuranceName(insurance.getProductName())
-//                    .perPrice(insurance.getMonthlyDeposit())
-//                    .insuranceBenefit(insurance.getGuaranteeRate())
-//                    .build();
-//            insuranceDto.put(key, dto);
+            Insurance insurance = insurances.get(key);
+            InsuranceDto dto = InsuranceDto.builder()
+                    .insuranceCode(insurance.getProductCode())
+                    .getInsuranceName(insurance.getProductName())
+                    .perPrice(insurance.getMonthlyDeposit())
+                    .insuranceBenefit(insurance.getGuaranteeRate())
+                    .build();
+            insuranceDto.put(key, dto);
         }
 
         InsuranceVisitResponse response = InsuranceVisitResponse.builder()
