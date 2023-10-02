@@ -44,6 +44,9 @@ public class FinishTurnService {
         log.info("===" + gameTurn + "턴 종료, " + round + "라운드 시작 준비중===");
 
         // todo 각종 이벤트 로직 구현
+        // 플레이어 순위 재산정
+        game.sortPlayersByTotalMoney();
+
         // 주식가격 재 산정
         stockRearrange(game, round);
         // 새로운 라운드일경우

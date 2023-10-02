@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.stream.Collectors;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -116,6 +118,24 @@ public class Game {
 
     public void initializePortfolio(Map<Long, Portfolio> portfolios) {
         this.portfolios = portfolios;
+    }
+
+
+    public void sortPlayersByTotalMoney() {
+        if(players != null && portfolios != null) {
+            players = players.stream()
+                    .sorted((player1, player2) -> {
+                        Portfolio portfolio1 = portfolios.get(player1);
+                        Portfolio portfolio2 = portfolios.get(player2);
+                        // null check
+                        long totalMoney1 = portfolio1 != null ? portfolio1.getTotalMoney() : 0;
+                        long totalMoney2 = portfolio2 != null ? portfolio2.getTotalMoney() : 0;
+
+                        // 내림차순 정렬
+                        return Long.compare(totalMoney2, totalMoney1);
+                    })
+                    .collect(Collectors.toList());
+        }
     }
 
     public int getPrizeByPlayer(Long player) {
