@@ -115,12 +115,8 @@ public class InsuranceService {
                     .monthlyDeposit(nowInsuranceInfo.getMonthlyDeposit())
                     .build();
 
-            portfolio.setMoney(portfolio.getMoney() - nowInsuranceInfo.getMonthlyDeposit());
-            portfolioInsurance.setTotalPrice(portfolioInsurance.getTotalPrice() + nowInsuranceInfo.getMonthlyDeposit());
-            portfolioInsurance.setAmount(portfolioInsurance.getAmount() + 1);
-
-            if(portfolioInsurances.getInsurance() == null) portfolioInsurances.setInsurance(new HashMap<>());
-            portfolioInsurances.getInsurance().put(insuranceRequest.getInsuranceId(), nowInsurance);
+            int money = portfolioInsurance.join(nowInsurance);
+            portfolio.setMoney(portfolio.getMoney()-money);
 
             // redis 저장
             gameRepository.save(game);
@@ -138,19 +134,16 @@ public class InsuranceService {
         // 멤버 포트폴리오
         Portfolio portfolio = game.getPortfolios().get(insuranceRequest.getPlayer());
         // 멤버 포트폴리오 - 보험
-        PortfolioInsurances portfolioInsurance = portfolio.getInsurances();
+        PortfolioInsurances portfolioInsurances = portfolio.getInsurances();
 
         if(checkHaveInsurance(game, insuranceRequest.getPlayer(), insuranceRequest.getInsuranceId())) {
-            //보험 상품 정보
-            Insurance nowInsuranceInfo = game.getInsurances().get(insuranceRequest.getInsuranceId());
-
-            // 현재 보험 정보에 기반하여 해지
-            portfolioInsurance.setAmount(portfolioInsurance.getAmount() - 1);
+            PortfolioInsurance portfolioInsurance = portfolioInsurances.getInsurance().get(insuranceRequest.getInsuranceId());
 
             // 보험 해지
-            portfolioInsurance.getInsurance().remove(insuranceRequest.getInsuranceId());
+            portfolioInsurances.deleteInsurance(portfolioInsurance);
             gameRepository.save(game);
-            log.info("============ 보험 해지 : {} ============", nowInsuranceInfo.toString());
+
+            log.info("============ 보험 해지 : {} ============", portfolioInsurance.toString());
             log.info("============ 보험 해지 후 보험 포트폴리오: {} ============", game.getPortfolios().get(insuranceRequest.getPlayer()).getInsurances().toString());
         }
     }
