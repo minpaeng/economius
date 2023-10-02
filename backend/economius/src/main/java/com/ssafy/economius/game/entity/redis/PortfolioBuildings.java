@@ -81,7 +81,7 @@ public class PortfolioBuildings {
     private void calculateEarnings(int totalBoughtPrice, int totalCurrentPrice) {
         int gap = totalCurrentPrice - totalBoughtPrice;
         int newEarningRate = 0;
-        if (totalBoughtPrice != 0) newEarningRate = (gap / totalBoughtPrice) * 100;
+        if (totalBoughtPrice != 0) newEarningRate = (int)((gap / (float)totalBoughtPrice) * 100);
         log.info("부동산 earning price 계산중 -> totalBoughtPrice: " + totalBoughtPrice
                 + ", totalCurrentPrice: " + totalCurrentPrice
                 + ", gap: " + gap
