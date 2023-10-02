@@ -63,7 +63,9 @@ public class PortfolioBuildings {
             return;
         }
         this.building.get(buildingId).setBuilding(building);
+        this.building.get(buildingId).setEarnings();
         updateTotalBuildingPrice();
+        setEarnings();
     }
 
     private void setEarnings() {
@@ -78,16 +80,15 @@ public class PortfolioBuildings {
     }
 
     private void calculateEarnings(int totalBoughtPrice, int totalCurrentPrice) {
-        int gap = Math.abs(totalCurrentPrice - totalBoughtPrice);
+        int gap = totalCurrentPrice - totalBoughtPrice;
         int newEarningRate = 0;
-        if (totalBoughtPrice != 0) newEarningRate = (gap / totalBoughtPrice) * 100;
+        if (totalBoughtPrice != 0) newEarningRate = (int)((gap / (float)totalBoughtPrice) * 100);
+        log.info("부동산 earning price 계산중 -> totalBoughtPrice: " + totalBoughtPrice
+                + ", totalCurrentPrice: " + totalCurrentPrice
+                + ", gap: " + gap
+        + ", newEarningRate: " + newEarningRate);
         this.earningRate = newEarningRate;
         this.earningPrice = gap;
-
-        if (totalBoughtPrice > totalCurrentPrice) {
-            this.earningRate = newEarningRate * -1;
-            this.earningPrice = gap * -1;
-        }
     }
 
     private void updateTotalBuildingPrice() {
