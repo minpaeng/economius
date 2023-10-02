@@ -40,7 +40,7 @@ public class BuildingController {
     @MessageMapping(value = "/{roomId}/sellBuilding")
     public void sellBuilding(@DestinationVariable int roomId,
                               @Payload SellBuildingRequest sellBuildingRequest) {
-
+        log.info(sellBuildingRequest.toString());
         SellBuildingResponse responseDto = buildingService.sellBuilding(roomId, sellBuildingRequest);
 
         Map<String, Object> headers = Map.of("success", true, "type", "sellBuilding");
@@ -61,7 +61,7 @@ public class BuildingController {
     @MessageMapping(value = "/{roomId}/selectBuilding")
     public void selectBuilding(@DestinationVariable int roomId,
                                @Payload SelectBuildingRequest selectBuildingRequest) {
-
+        log.info(selectBuildingRequest.toString());
         SelectBuildingResponse responseDto = buildingService.selectBuilding(roomId, selectBuildingRequest);
 
         Long player = selectBuildingRequest.getPlayer();

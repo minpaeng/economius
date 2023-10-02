@@ -8,7 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -24,14 +26,18 @@ public class PortfolioBuildings {
     private Map<Integer, PortfolioBuilding> building;
 
     public void buyBuilding(int buildingId, Building building) {
-        this.totalPrice += building.getBuildingFee();
+        this.totalPrice += building.getPrice();
         addBuilding(buildingId, building);
         this.amount = this.building.size();
         setEarnings();
     }
 
     public void sellBuilding(int buildingId, Building building) {
-        this.totalPrice += building.getBuildingFee();
+        if (this.building == null || this.building.get(buildingId) == null) {
+            log.error("판매 요청이 들어왔으나 소유한 빌딩이 없음: 빌딩 아이디 " + buildingId);
+            return;
+        }
+        this.totalPrice -= building.getPrice();
         this.building.remove(buildingId);
         this.amount = this.building.size();
         setEarnings();
@@ -48,6 +54,15 @@ public class PortfolioBuildings {
                 .build();
 
         this.building.put(buildingId, portfolioBuilding);
+    }
+
+    public void updateBuildingInfo(int buildingId, Building building) {
+        if (this.building == null || this.building.get(buildingId) == null) {
+            log.error("소유한 빌딩에 대한 가격 재조정 요청이 들어왔지만 소유하고 있는 빌딩이 없음: 빌딩 아이디 " + buildingId);
+            building.setOwnerId(null);
+            return;
+        }
+        this.building.get(buildingId).setBuilding(building);
     }
 
     private void setEarnings() {

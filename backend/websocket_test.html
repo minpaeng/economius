@@ -28,14 +28,14 @@
         let playUser = 1; //플레이 테스트 할 유저 (호스트 1번으로 해둠)
 
         function connect() {
-            const socket = new SockJS('http://localhost:8080/ws'); // 여기서 서버의 엔드포인트를 지정합니다.
+            const socket = new SockJS('http://j9b109.p.ssafy.io:8080/ws'); // 여기서 서버의 엔드포인트를 지정합니다.
             stompClient = Stomp.over(socket);
 
             stompClient.connect({}, function () {
                     //subscribe(subscribe url,해당 url로 메시지를 받을때마다 실행할 함수)
                     sub = stompClient.subscribe('/sub/1', function (messageOutput) {
                         //e.body에 전송된 data가 들어있다
-                        showMessageOutput(JSON.parse(messageOutput.body));
+                        //showMessageOutput(JSON.parse(messageOutput.body));
                     });
                 },
                 function(e){
@@ -54,24 +54,50 @@
 
         function sendJoin2() {
             stompClient.send("/pub/1/join", {}, JSON.stringify({
-                "player": 2
+                "player": 2,
+                "nickname" : "1"
             }));
         }
         function sendJoin3() {
             stompClient.send("/pub/1/join", {}, JSON.stringify({
-                "player": 3
+                "player": 3,
+                "nickname" : "1"
             }));
         }
         function sendJoin4() {
             stompClient.send("/pub/1/join", {}, JSON.stringify({
-                "player": 4
+                "player": 4,
+                "nickname" : "1"
             }));
         }
 
+ 
 
         function sendStart() {
             stompClient.send("/pub/1/start", {}, JSON.stringify({
                 "hostPlayer": 1
+            }));
+        }
+
+        function sendBankVisit() {
+            stompClient.send("/pub/1/bank", {}, JSON.stringify({
+                "player": 1 ,
+                "bankId" : 1
+            }));
+        }
+
+        function sendBankJoin() {
+            stompClient.send("/pub/1/joinSavings", {}, JSON.stringify({
+                "player": 1 ,
+                "bankId" : 1
+            }));
+        }
+
+
+        function sendBankStop() {
+            stompClient.send("/pub/1/stopSavings", {}, JSON.stringify({
+                "player": 1 ,
+                "bankId" : 1
             }));
         }
 
@@ -98,9 +124,7 @@
         }
 
         function sendEventCard() {
-            stompClient.send("/pub/1/eventCard", {}, JSON.stringify({
-                "player": 1 
-            }));
+            stompClient.send("/pub/1/eventCard", {});
         }
  
  
@@ -117,7 +141,7 @@
 <div class="button-container">
     <button onclick="sendJoin2();">게임방 참가 (2번 플레이어)</button>
     <button onclick="sendJoin3();">게임방 참가 (3번 플레이어)</button>
-    <button onclick="sendJoin4();">게임방 참가 (4번 플레이어)</button>
+    <button onclick="sendJoin4();">게임방 참가 (4번 플레이어)</button> 
 </div>
 
 <div class="button-container">
@@ -125,9 +149,15 @@
 </div>
 
 <div class="button-container">
-    <button onclick="sendInsuranceVisit();">보험사 방문 발생 테스트</button>
-    <button onclick="sendInsuranceJoin();">보험사 방문 발생 테스트</button>
-    <button onclick="sendInsuranceStop();">보험사 방문 발생 테스트</button>
+    <button onclick="sendBankVisit();">은행 방문 테스트</button>
+    <button onclick="sendBankJoin();">은행 가입 테스트</button>
+    <button onclick="sendBankStop();">은행 해지 테스트</button>
+</div>
+
+<div class="button-container">
+    <button onclick="sendInsuranceVisit();">보험사 방문 테스트</button>
+    <button onclick="sendInsuranceJoin();">보험사 가입 테스트</button>
+    <button onclick="sendInsuranceStop();">보험사 해지 테스트</button>
 </div>
 
 <div class="button-container">

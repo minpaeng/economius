@@ -1,11 +1,12 @@
 package com.ssafy.economius.game.controller;
 
-import com.ssafy.economius.game.dto.request.GameJoinRequest;
-import com.ssafy.economius.game.dto.request.RollDiceRequest;
-import com.ssafy.economius.game.dto.response.DiceRollResponse;
-import com.ssafy.economius.game.dto.response.GameJoinResponse;
+import com.ssafy.economius.game.dto.message.DiceTurnMessage;
+import com.ssafy.economius.game.dto.request.MovePlayerRequest;
+import com.ssafy.economius.game.dto.request.ViewMovementCardRequest;
+import com.ssafy.economius.game.dto.response.MovePlayerResponse;
+import com.ssafy.economius.game.dto.response.ViewMovementCardResponse;
 import com.ssafy.economius.game.service.DiceService;
-import com.ssafy.economius.game.service.GameService;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -21,16 +22,40 @@ public class DiceController {
     private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
     private final DiceService diceService;
 
-    @MessageMapping(value = "/{roomId}/rollDice")
-    public void rollDice(@DestinationVariable int roomId, RollDiceRequest rollDiceRequest) {
-        log.info(rollDiceRequest.toString());
-        DiceRollResponse diceRollResponse = diceService.rollDice(roomId,
-            rollDiceRequest.getPlayer());
+    @MessageMapping(value = "/{roomId}/diceSequence")
+    public void getDiceSequence(@DestinationVariable int roomId) {
+        log.info(roomId + ": diceSequence 호출");
 
-        //todo 해더설정
-        template.convertAndSend("/sub/" + roomId, diceRollResponse);
+        DiceTurnMessage diceSequence = diceService.getDiceSequence(roomId);
+
+        log.info(roomId + ": diceSequence 결과 -> " + diceSequence.toString());
+        Map<String, Object> headers = Map.of("success", true, "type", "diceSequence");
+        template.convertAndSend("/sub/" + roomId, diceSequence, headers);
     }
 
+    @MessageMapping(value = "/{roomId}/viewMovementCard")
+    public void viewMovementCard(@DestinationVariable int roomId,
+        ViewMovementCardRequest viewMovementCardRequest) {
+        log.info(roomId + ": viewMovementCard 호출 -> " + viewMovementCardRequest.toString());
 
+        ViewMovementCardResponse viewMovementCardResponse = diceService.makeMovementCard(
+            viewMovementCardRequest.getPlayer());
+
+        log.info(roomId + ": viewMovementCard 결과 -> " + viewMovementCardResponse.toString());
+        Map<String, Object> headers = Map.of("success", true, "type", "viewMovementCard");
+        template.convertAndSend("/sub/" + roomId, viewMovementCardResponse, headers);
+    }
+
+    @MessageMapping(value = "/{roomId}/movePlayer")
+    public void movePlayer(@DestinationVariable int roomId, MovePlayerRequest movePlayerRequest) {
+        log.info(roomId + ": movePlayer 호출 -> " + movePlayerRequest.toString());
+
+        MovePlayerResponse movePlayerResponse = diceService.movePlayer(roomId,
+            movePlayerRequest.getPlayer(), movePlayerRequest.getMovementCount());
+
+        log.info(roomId + ": movePlayer 결과 -> " + movePlayerResponse.toString());
+        Map<String, Object> headers = Map.of("success", true, "type", "movePlayer");
+        template.convertAndSend("/sub/" + roomId, movePlayerResponse, headers);
+    }
 
 }

@@ -1,9 +1,7 @@
 package com.ssafy.economius.game.controller;
 
-import com.ssafy.economius.common.exception.CustomWebsocketException;
 import com.ssafy.economius.game.dto.request.SavingRequest;
 import com.ssafy.economius.game.dto.response.SavingVisitResponse;
-import com.ssafy.economius.game.dto.response.SavingResponse;
 import com.ssafy.economius.game.service.SavingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,14 +22,16 @@ public class SavingController {
 
     @MessageMapping(value = "/{roomId}/bank")
     public void visitBank(@DestinationVariable int roomId, SavingRequest savingRequest) {
-        Map<String, Object> headers = Map.of("success", true);
+        log.info(savingRequest.toString());
+        Map<String, Object> headers = Map.of("success", true, "type", "bank");
         SavingVisitResponse savingVisitResponse = savingService.visitBank(roomId, savingRequest);
         template.convertAndSend("/sub/" + roomId, savingVisitResponse, headers);
     }
 
     @MessageMapping(value = "/{roomId}/joinSavings")
     public void joinSavings(@DestinationVariable int roomId, SavingRequest savingRequest) {
-        Map<String, Object> headers = Map.of("success", true);
+        log.info(savingRequest.toString());
+        Map<String, Object> headers = Map.of("success", true, "type", "bank");
         savingService.joinSavings(roomId, savingRequest);
         template.convertAndSend("/sub/" + roomId, headers);
     }
@@ -39,7 +39,8 @@ public class SavingController {
 
     @MessageMapping(value = "/{roomId}/stopSavings")
     public void stopSavings(@DestinationVariable int roomId, SavingRequest savingRequest) {
-        Map<String, Object> headers = Map.of("success", true);
+        log.info(savingRequest.toString());
+        Map<String, Object> headers = Map.of("success", true, "type", "bank");
         savingService.stopSavings(roomId, savingRequest);
         template.convertAndSend("/sub/" + roomId, headers);
     }

@@ -25,10 +25,31 @@ public class InsuranceService {
         Portfolio portfolio = game.getPortfolios().get(player);
         // 멤버 포트폴리오 - 보험
         PortfolioInsurances portfolioInsurances = portfolio.getInsurances();
-        //log.info(portfolio.toString());
-        //log.info(portfolioInsurances.toString());
+ 
         return (portfolioInsurances.getInsurance()!=null && portfolioInsurances.getInsurance().get(insuranceId) != null);
     }
+
+    public int applyInsurance(Game game, Long player, int applyInsuranceId, int price) {
+        // 멤버 포트폴리오 - 보험
+        int applyRate = 0;
+        if(applyInsuranceId == 1) {
+            if(checkHaveInsurance(game, player, 1)) applyRate += game.getInsurances().get(1).getGuaranteeRate();
+            if(checkHaveInsurance(game, player, 2)) applyRate += game.getInsurances().get(2).getGuaranteeRate();
+        }
+        else if(applyInsuranceId == 2) {
+            if(checkHaveInsurance(game, player, 2)) applyRate += game.getInsurances().get(2).getGuaranteeRate();
+        }
+        else if(applyInsuranceId == 3) {
+            if(checkHaveInsurance(game, player, 3)) applyRate += game.getInsurances().get(3).getGuaranteeRate();
+            if(checkHaveInsurance(game, player, 4)) applyRate += game.getInsurances().get(4).getGuaranteeRate();
+        }
+        else if(applyInsuranceId == 4) {
+            if(checkHaveInsurance(game, player, 4)) applyRate += game.getInsurances().get(4).getGuaranteeRate();
+        }
+
+        return price - (int) (price * (applyRate / 100.0));
+    }
+
     public InsuranceVisitResponse visitInsurance(int roomId, InsuranceRequest insuranceRequest) {
         //게임 방 조회
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
@@ -62,7 +83,7 @@ public class InsuranceService {
                 .have(have)
                 .insuranceDto(insuranceDto)
                 .build();
-        //log.info(response.toString());
+        log.info("============ 보험 방문 : {} ============", response.toString());
         return response;
     }
 
@@ -76,7 +97,6 @@ public class InsuranceService {
         PortfolioInsurances portfolioInsurance = portfolio.getInsurances();
         //보험 상품 정보
         Insurance nowInsuranceInfo = game.getInsurances().get(insuranceRequest.getInsuranceId());
-        //log.info(nowInsuranceInfo.toString());
 
         // 지불 가능한지 먼저 확인
         gameValidator.canBuy(roomId, portfolio.getMoney(), nowInsuranceInfo.getMonthlyDeposit());
@@ -120,7 +140,6 @@ public class InsuranceService {
         PortfolioInsurances portfolioInsurance = portfolio.getInsurances();
         //보험 상품 정보
         Insurance nowInsuranceInfo = game.getInsurances().get(insuranceRequest.getInsuranceId());
-        //log.info(nowInsuranceInfo.toString());
 
         if(checkHaveInsurance(game, insuranceRequest.getPlayer(), insuranceRequest.getInsuranceId())) {
             // 현재 보험 정보에 기반하여 해지
