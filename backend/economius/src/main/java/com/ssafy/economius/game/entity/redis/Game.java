@@ -183,9 +183,10 @@ public class Game {
 
     public int updateGameTurn() {
         gameTurn++;
-        if (gameTurn == maxGameTurn) {
-            return -1;
-        }
+        // 추후 주석 풀어야 함
+//        if (gameTurn == maxGameTurn) {
+//            return -1;
+//        }
         return gameTurn;
     }
 }
