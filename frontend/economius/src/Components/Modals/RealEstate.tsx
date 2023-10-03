@@ -43,9 +43,9 @@ function RealEstate() {
                         <S.MidDesc>
                             {realEstateInfo.owner && realEstateInfo.owner.player !== nowPlayer
                                 ? description[realEstateInfo.buildingId]
-                                : `가격 : ${realEstateInfo.buildingPrice}`}
+                                : `매입 가격 : ${realEstateInfo.buildingPrice.toLocaleString()} (원)`} 
                         </S.MidDesc>
-                        <S.MidDesc>{`${fee[realEstateInfo.buildingId]} : ${realEstateInfo.buildingPrice / 10}`}</S.MidDesc>
+                        <S.MidDesc>{`${fee[realEstateInfo.buildingId]}으로 ${(realEstateInfo.buildingPrice / 10).toLocaleString().split('.')[0]} (원) 을 받을 수 있어요.`}</S.MidDesc>
                     </S.Mid>
 
                     <S.Divide />
