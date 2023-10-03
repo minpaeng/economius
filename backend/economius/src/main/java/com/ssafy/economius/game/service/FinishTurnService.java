@@ -1,7 +1,7 @@
 package com.ssafy.economius.game.service;
 
 import com.ssafy.economius.common.exception.validator.GameValidator;
-import com.ssafy.economius.game.controller.OracleController;
+import com.ssafy.economius.game.controller.IssueController;
 import com.ssafy.economius.game.dto.response.FinishTurnResponse;
 import com.ssafy.economius.game.entity.redis.AssetChange;
 import com.ssafy.economius.game.entity.redis.Building;
@@ -30,7 +30,7 @@ public class FinishTurnService {
     private final GameRepository gameRepository;
     private final GameValidator gameValidator;
     private final ModelMapper modelMapper;
-    private final OracleController oracleController;
+    private final IssueController issueController;
 
     public FinishTurnResponse finish(int roomId) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
@@ -87,7 +87,7 @@ public class FinishTurnService {
     private void checkIssueRound(Game game, int round, int roomId) {
         if (round % 4 == 2 || game.getIssueIdx() >= ISSUE_COUNT.getValue()) return;
         // 여기서 OracleResponse를 리턴하여야 한다.
-        oracleController.issue(roomId);
+        issueController.issue(roomId);
         game.setCurrentPrevIssues(null);
         game.setCurrentIssue(game.getIssues().get(game.getIssueIdx()));
         game.setIssueIdx(game.getIssueIdx() + 1);
