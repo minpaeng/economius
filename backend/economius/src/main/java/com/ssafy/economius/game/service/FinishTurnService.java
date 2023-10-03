@@ -82,7 +82,7 @@ public class FinishTurnService {
     }
 
     private void checkIssueRound(Game game, int round, int roomId) {
-        if (round % 4 == 2 || game.getIssueIdx() >= ISSUE_COUNT.getValue()) return;
+        if (round % 4 != 1 || game.getIssueIdx() >= ISSUE_COUNT.getValue()) return;
         // 여기서 OracleResponse를 리턴하여야 한다.
         issueController.issue(roomId);
         game.setCurrentPrevIssues(null);
