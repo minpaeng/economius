@@ -37,7 +37,15 @@ import {
     TradeRealEstateState,
     TradeStockState,
 } from './recoil/trading/atom';
-import { GameRoundState, PlayerIdState, PlayerToRollState, PortfolioState, PredictionState, StockState } from '/src/recoil/game/atom.tsx';
+import {
+    GameRoundState,
+    PlayerIdState,
+    PlayerRankingState,
+    PlayerToRollState,
+    PortfolioState,
+    PredictionState,
+    StockState
+} from '/src/recoil/game/atom.tsx';
 import {
     BankInfoState,
     ChanceCardInfoState,
@@ -115,6 +123,7 @@ function PlayerSocket() {
     const getPrediction = useRecoilValue(GetPredictionState);
     const [playerToRoll, setPlayerToRoll] = useRecoilState(PlayerToRollState);
     const setGameRound = useSetRecoilState(GameRoundState);
+    const setPlayerRanking = useSetRecoilState(PlayerRankingState);
 
     const [callBack, setCallBack] = useRecoilState(CallBackState);
 
@@ -260,6 +269,7 @@ function PlayerSocket() {
         } else if (type === 'viewMovementCard') {
             setMovementCard(message.cards);
             setMovementCardOpen(true);
+            setPlayerRanking(message.players);
         }
         // else if (type === 'movePlayer' && message.player === playername) {
         //     setNowPlayerPosition(message.location);
