@@ -277,7 +277,6 @@ function PlayerSocket() {
                 year: message.year,
             });
         }
-
         if (type == 'visitBuilding') {
             setRealEstateInfo({
                 buildingId: message.buildingId,
@@ -328,7 +327,10 @@ function PlayerSocket() {
                 insurance4: message.insuranceDto[4],
             });
             setTradeInsurance([message.have[3], message.have[4], message.have[1], message.have[2]]);
+        } else if (type == 'buyItem') {
+            stompClient.current.send(`/pub/${roomId}/stockDetail`, {}, JSON.stringify({ player: nowPlayer + 1, stockId: stockIds[nowPlayerPosition] }));
         }
+
         // 새로운 방을 입장하는 경우
         else if (type == 'join') {
             setUserNicknames(message);
@@ -443,24 +445,9 @@ function PlayerSocket() {
             });
         }
         //주식 방문
-        else if (nowPlayerPosition & 1) {
+        else if (nowPlayerPosition % 2 === 1) {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/buyItem`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        stockId: stockIds[nowPlayerPosition],
-                    })
-                ); // 상품구매
-                stompClient.current.send(
-                    `/pub/${roomId}/stockDetail`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        stockId: stockIds[nowPlayerPosition],
-                    })
-                );
+                stompClient.current.send(`/pub/${roomId}/buyItem`, {}, JSON.stringify({ player: nowPlayer + 1, stockId: stockIds[nowPlayerPosition] }));
             });
         }
         // 금거래소 방문
