@@ -24,8 +24,8 @@ public class PortfolioBuilding {
     private Building building;
 
     public void setEarnings() {
-        int gap = building.getPrice() - this.earningPrice;
-        this.earningRate = (int) ((gap / (double) building.getPrice()) * 100);
+        int gap = building.getPrice() - this.buyPrice;
+        this.earningRate = (int) ((gap / (double) this.buyPrice) * 100);
         this.earningPrice = gap;
     }
 }
