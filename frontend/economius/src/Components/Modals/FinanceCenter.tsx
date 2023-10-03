@@ -3,43 +3,34 @@ import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { IsModalOpenState } from '/src/recoil/animation/atom';
 import financecenterimg from '/FinanceCenter/financecenter.png';
-import hotelimg from '/RealState/hotel.png';
-import restaurantimg from '/RealState/restaurant.png';
-import shopimg from '/RealState/shop.png';
-import bankimg from '/Bank/BankTitle.png';
-import stockimg from '/Portfolio/Stock.png';
-import goldimg from '/Gold/goldbar.png';
+
 import * as S from './FinanceCenter.style';
 
-const pictures = [stockimg, bankimg, restaurantimg, shopimg, hotelimg, goldimg];
-
 const buildings = [
-    ['대한전력', 0],
-    ['궁민은행', 1],
-    ['아람쿠', 0],
-    ['레스토랑', 2],
-    ['포스쿠', 0],
-    ['삼성화재', 0],
-    ['IG화학', 0],
-    ['코인', 0],
-    ['화이지', 0],
-    ['신혼은행', 1],
-    ['셀트리안', 0],
-    ['나이카', 0],
-    ['상점', 3],
-    ['코카펩시', 0],
-    ['AIR관광', 0],
-    ['은행', 1],
-    ['CZ엔터', 0],
-    ['K텔레콤', 0],
-    ['호텔', 4],
-    ['M소프트', 0],
-    ['대한운송', 0],
-    ['삼성화재', 0],
-    ['대현건설', 0],
-    ['넥서스', 0],
-    ['금 거래소', 5],
-    ['삼성전자', 0],
+    ['대한전력', 1],
+    ['궁민은행', 2],
+    ['아람쿠', 3],
+    ['레스토랑', 4],
+    ['포스쿠', 5],
+    ['삼성화재', 6],
+    ['IG화학', 7],
+    ['화이지', 9],
+    ['신혼은행', 10],
+    ['셀트리안', 11],
+    ['나이카', 13],
+    ['상점', 14],
+    ['코카펩시', 15],
+    ['AIR관광', 17],
+    ['은행', 18],
+    ['CZ엔터', 19],
+    ['K텔레콤', 21],
+    ['호텔', 22],
+    ['M소프트', 23],
+    ['대한운송', 25],
+    ['대현건설', 27],
+    ['넥서스', 29],
+    ['금 거래소', 30],
+    ['삼성전자', 31],
 ];
 
 function FinanceCenter() {
@@ -62,9 +53,9 @@ function FinanceCenter() {
                     <S.MidScroll>
                         <hr style={{ width: '200px', marginBottom: '5px' }} />
                         {buildings.map((val, idx) => (
-                            <S.MidItem key={idx}>
-                                <input type='radio' value={idx} checked={selectedOption === idx} onChange={() => setSelectedOption(idx)} />
-                                <S.MidImg src={pictures[val[1]]} alt='financecenterimg'></S.MidImg>
+                            <S.MidItem key={idx} onClickCapture={() => setSelectedOption(idx)}>
+                                <input type='radio' value={idx} checked={selectedOption === idx} style={{ marginRight: '5px' }} />
+                                <S.MidImg src={`/FinanceCenter/${val[1]}.png`} alt='financecenteritem'></S.MidImg>
                                 <S.MidDesc>{val[0]}</S.MidDesc>
                             </S.MidItem>
                         ))}

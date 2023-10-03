@@ -52,7 +52,7 @@ export const MidTitle = styled.div`
 export const Mid = styled.div`
     flex: 5.5;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
     width: 300px;
     margin: 0 auto;
@@ -63,14 +63,12 @@ export const Mid = styled.div`
 `;
 
 export const MidScroll = styled.div`
-    margin-top: 15px;
     width: 98%;
-    height: 92%;
+    height: 95%;
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow: auto;
-    border: solid red 1px;
     &::-webkit-scrollbar {
         width: 5px; /* 스크롤바의 너비를 조절할 수 있습니다. */
         display: initial; /* 스크롤바 표시 */
@@ -94,15 +92,18 @@ export const MidScroll = styled.div`
 `;
 
 export const MidItem = styled.div`
-    margin-top: 20px;
+    padding: 12px 0;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    &:hover {
+        background-color: #d9d9d9;
+    }
 `;
 
 export const MidImg = styled.img`
-    height: 30px;
+    height: 25px;
     margin-left: 30px;
 `;
 
@@ -114,8 +115,8 @@ export const MidDesc = styled.div`
 `;
 
 export const Divide = styled.div`
-    flex: 0.15;
-    background-color: transparent;
+    flex: 0.1;
+    background-color: white;
 `;
 
 export const Button = styled.button`
