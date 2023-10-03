@@ -7,15 +7,26 @@ import {useEffect, useState} from "react";
 function Round() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const gameRound = useRecoilValue(GameRoundState);
+    const [timerId, setTimerId] = useState(null);
 
     const closeModal = () => {
         setIsModalOpen(false);
+        if (timerId) clearTimeout(timerId);
     };
 
     useEffect(() => {
         if (gameRound !== 0){
             setIsModalOpen(true);
+            const timer = setTimeout(() => {
+                closeModal();
+            }, 2500); 
+            setTimerId(timer);
         }
+        return () => {
+            if (timerId) {
+                clearTimeout(timerId);
+            }
+        };
     }, [gameRound]);
 
     return (
