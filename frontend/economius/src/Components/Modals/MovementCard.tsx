@@ -62,7 +62,7 @@ function Card({ idx, value, flip, top, left, selected, CardClick }) {
     );
 }
 
-function CardsSet() {
+function MovementCard() {
     const [isMoving, setIsMoving] = useRecoilState(IsMovingState); // 캐릭터 이동 여부
     const [moveDist, setMoveDist] = useRecoilState(MoveDistState); // 캐릭터 이동 거리
     const [movementCard, setMovementCard] = useRecoilState(MovementCardState);
@@ -115,4 +115,4 @@ function CardsSet() {
     );
 }
 
-export default CardsSet;
+export default MovementCard;

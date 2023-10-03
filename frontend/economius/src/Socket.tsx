@@ -530,26 +530,12 @@ function PlayerSocket() {
     useEffect(() => {
         if (tradeGold[0]) {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/buyGolds`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        goldAmount: buyAmount,
-                    })
-                );
+                stompClient.current.send(`/pub/${roomId}/buyGolds`, {}, JSON.stringify({ player: nowPlayer + 1, goldAmount: buyAmount }));
                 setTradeGold([false, false]);
             });
         } else if (tradeGold[1]) {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/sellGolds`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        goldAmount: sellAmount,
-                    })
-                );
+                stompClient.current.send(`/pub/${roomId}/sellGolds`, {}, JSON.stringify({ player: nowPlayer + 1, goldAmount: sellAmount }));
                 setTradeGold([false, false]);
             });
         }
@@ -559,26 +545,12 @@ function PlayerSocket() {
     useEffect(() => {
         if (tradeBank[0]) {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/joinSavings`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        bankId: bankIds[nowPlayerPosition],
-                    })
-                );
+                stompClient.current.send(`/pub/${roomId}/joinSavings`, {}, JSON.stringify({ player: nowPlayer + 1, bankId: bankIds[nowPlayerPosition] }));
                 setTradeBank([false, false]);
             });
         } else if (tradeBank[1]) {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/stopSavings`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        bankId: bankIds[nowPlayerPosition],
-                    })
-                );
+                stompClient.current.send(`/pub/${roomId}/stopSavings`, {}, JSON.stringify({ player: nowPlayer + 1, bankId: bankIds[nowPlayerPosition] }));
                 setTradeBank([false, false]);
             });
         }
@@ -624,24 +596,6 @@ function PlayerSocket() {
                 stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
             });
         }
-        // if (tradeInsurance[2]) {
-        //     if (stompClient.current) {
-        //         stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 1 }));
-        //     }
-        // } else {
-        //     if (stompClient.current) {
-        //         stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 1 }));
-        //     }
-        // }
-        // if (tradeInsurance[3]) {
-        //     if (stompClient.current) {
-        //         stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
-        //     }
-        // } else {
-        //     if (stompClient.current) {
-        //         stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
-        //     }
-        // }
         setTradeInsuranceConfirm(false);
     }, [tradeInsuranceConfirm]);
 

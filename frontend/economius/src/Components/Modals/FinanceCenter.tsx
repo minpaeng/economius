@@ -3,56 +3,43 @@ import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { IsModalOpenState } from '/src/recoil/animation/atom';
 import financecenterimg from '/FinanceCenter/financecenter.png';
-import * as S from './GlobalModal.stye';
+import checksign from '/BeforeBankrupt/checksign.png';
+import dollarcoin from '/BeforeBankrupt/dollarcoin.png';
+import * as S from './FinanceCenter.style';
+
+const A = ['대한전력', '은행', '아람쿠', '부동산', '포스쿠', '보험사', 'IG화학', '코인', '코인', '코인', '코인', '코인', '코인', '코인'];
 
 function FinanceCenter() {
+    const [selectedOption, setSelectedOption] = useState(-1);
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const closeModal = () => {
         setIsModalOpen(false);
     };
 
-    // modal style
-    const modalStyle: any = {
-        overlay: {
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.6)',
-            zIndex: 10,
-        },
-        content: {
-            display: 'flex',
-            flexDirextion: 'column',
-            backgroundColor: 'rgba(255,255,255,0.95)',
-            overflow: 'auto',
-            zIndex: 10,
-            margin: 'auto',
-            left: '25%',
-            width: '500px',
-            height: '350px',
-            border: '5px solid white',
-            borderRadius: '20px',
-            padding: '0px',
-        },
-    };
-
     return (
-        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
+        <Modal isOpen={isModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
             <S.Main>
                 <S.Top>
+                    <img src={financecenterimg} alt='img' style={{ width: '50px', marginRight: '10px' }} />
+
                     <S.TopTitle>종합거래소</S.TopTitle>
                 </S.Top>
-
+                <S.MidTitle>주식, 부동산, 적금, 보험, 금, 코인 등 금융 거래를 한 곳에서 할 수 있습니다.</S.MidTitle>
                 <S.Mid>
-                    <S.MidImg src={financecenterimg} alt='financecenterimg' />
-                    <S.MidDesc>주식, 부동산, 적금, 보험, 금, 코인 등 금융 거래를 한 곳에서 할 수 있습니다.</S.MidDesc>
+                    <S.MidScroll>
+                        <hr style={{ width: '200px', marginBottom: '5px' }} />
+                        {A.map((val, idx) => (
+                            <S.MidItem key={idx}>
+                                <input type='radio' value={idx} checked={selectedOption === idx} onChange={() => setSelectedOption(idx)} />
+                                <S.MidImg src={financecenterimg} alt='financecenterimg'></S.MidImg>
+                                <S.MidDesc>{val}</S.MidDesc>
+                            </S.MidItem>
+                        ))}
+                    </S.MidScroll>
                 </S.Mid>
-
-                <S.RoundButton>
-                    <span>입장하기</span>
-                </S.RoundButton>
+                {'\u00A0'}
+                <S.Divide />
+                <S.Button style={{ backgroundColor: selectedOption !== -1 ? '#ffaa55' : '#D9D9D9' }}>선택하기(빈껍데기)</S.Button>
             </S.Main>
         </Modal>
     );
