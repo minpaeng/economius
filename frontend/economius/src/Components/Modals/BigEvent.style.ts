@@ -19,40 +19,40 @@ export const BigEventRight = styled.div`
 `;
 
 export const BigEventRightTitle = styled.div`
-  font-size: 48px;
+  font-size: 28px;
 `;
 
 export const BigEventRightDesc = styled.div`
-  font-size: 28px;
+  font-size: 18px;
 `;
 
 export const BigEventRightChange1 = styled.div`
-  font-size: 28px;
+  font-size: 15px;
 `;
 
 export const BigEventRightChange2 = styled.div``;
 
 export const BigEventRightRate_Gold_Estate = styled.div`
-  font-size: 28px;
+  font-size: 18px;
   display: flex;
   justify-content: space-between;
-  width: 65%;
+  width: 100%;
 `;
 export const BigEventRightUp = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  font-size: 24px;
+  font-size: 18px;
 `;
 export const BigEventRightStable = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  font-size: 24px;
+  font-size: 18px;
 `;
 export const BigEventRightDown = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  font-size: 24px;
+  font-size: 18px;
 `;

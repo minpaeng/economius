@@ -45,7 +45,7 @@ function Prediction() {
             overflow: 'auto',
             zIndex: 10,
             margin: 'auto',
-            left: '25%',
+            right: '25%',
             width: '500px',
             height: '350px',
             border: '5px solid white',

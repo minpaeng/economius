@@ -47,16 +47,15 @@ const modalComponent = {
     30: GoldModal,
     31: Stock,
 };
-let SelectedModal;
 
 function Modals() {
     const [nowPlayerPosition, setNowPlayerPosition] = useRecoilState(NowPlayerPositionState);
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
     const [isMoving, setIsMoving] = useRecoilState(IsMovingState);
-    SelectedModal = modalComponent[nowPlayerPosition];
+    let SelectedModal = modalComponent[nowPlayerPosition];
 
-    return <>{!isMoving ? <>{monthlyModalOpen ? <MonthlyCalculate /> : isModalOpen ? SelectedModal && <SelectedModal /> : null}</> : null}</>;
+    return <>{!isMoving ? monthlyModalOpen ? <MonthlyCalculate /> : isModalOpen ? SelectedModal && <SelectedModal /> : null : null}</>;
 }
 
 export default Modals;
