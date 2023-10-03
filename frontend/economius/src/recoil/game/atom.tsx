@@ -58,3 +58,9 @@ export const GameRoundState = atom({
   key: "gameRoundState",
   default: 0,
 })
+
+// 유저의 순위
+export const PlayerRankingState = atom({
+  key: "playerRankingState",
+  default: [1,2,3,4],
+})
