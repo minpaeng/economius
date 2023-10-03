@@ -67,10 +67,6 @@ function MovementCard() {
     const [moveDist, setMoveDist] = useRecoilState(MoveDistState); // 캐릭터 이동 거리
     const [movementCard, setMovementCard] = useRecoilState(MovementCardState);
     const [movementCardOpen, setMovementCardOpen] = useRecoilState(MovementCardOpenState);
-    const closeModal = () => {
-        setMovementCardOpen(false);
-        setMovementCard(null);
-    };
     // 선택된 이동카드 인덱스
     const [selected, setSelected] = useState(-1);
 
@@ -78,23 +74,33 @@ function MovementCard() {
     const [flip2, setFlip2] = useState(false);
     const [flip3, setFlip3] = useState(false);
 
-    useEffect(() => {
-        const flipAll = () => {
-            setTimeout(() => setFlip1(true), 400);
-            setTimeout(() => setFlip2(true), 700);
-            setTimeout(() => setFlip3(true), 1000);
-        };
-        flipAll();
-    }, []);
+    const flipAll = () => {
+        setTimeout(() => setFlip1(true), 400);
+        setTimeout(() => setFlip2(true), 700);
+        setTimeout(() => setFlip3(true), 1000);
+    };
 
-    const MoveButtonClick = () => {
+    const closeModal = () => {
+        setMovementCardOpen(false);
+        setMovementCard(null);
+        setSelected(-1);
+        setFlip1(false);
+        setFlip2(false);
+        setFlip3(false);
+    };
+
+    useEffect(() => {
+        if (!movementCardOpen) return;
+        flipAll();
+    }, [movementCardOpen]);
+
+    const MoveButtonClick = (selectednum: number) => {
         setTimeout(() => {
             closeModal();
             setIsMoving(true);
-            setMoveDist(selected === -1 ? movementCard[1] : movementCard[selected]);
-            setMovementCard(null);
+            setMoveDist(selectednum === -1 ? movementCard[1] : movementCard[selectednum]);
         }, 500);
-        if (selected === -1) {
+        if (selectednum === -1) {
             setSelected(1);
         }
     };
@@ -108,7 +114,7 @@ function MovementCard() {
                     <Card idx={0} value={movementCard[0]} top={'10%'} left={'8%'} flip={flip1} selected={selected} CardClick={() => setSelected(0)} />
                     <Card idx={1} value={movementCard[1]} top={'10%'} left={'38%'} flip={flip2} selected={selected} CardClick={() => setSelected(1)} />
                     <Card idx={2} value={movementCard[2]} top={'10%'} left={'68%'} flip={flip3} selected={selected} CardClick={() => setSelected(2)} />
-                    <S.Button onClick={MoveButtonClick}>이동카드 선택</S.Button>
+                    <S.Button onClick={() => MoveButtonClick(selected)}>이동카드 선택</S.Button>
                     {/* <S.Caution>(시간 초과 시 자동으로 선택됩니다)</S.Caution> */}
                 </>
             )}

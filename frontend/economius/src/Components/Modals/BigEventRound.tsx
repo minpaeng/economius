@@ -131,7 +131,9 @@ function BigEventRound() {
           <S.BigEventRightChange1>{`${issue?.year} / ${issue?.country}`}</S.BigEventRightChange1>
           <S.BigEventRightDesc>{issue?.description}</S.BigEventRightDesc>
           <div>
-            <div style={{ fontSize: "28px" }}>주요 지표</div>
+            <hr />
+            <br />
+            <div style={{ fontSize: "20px" }}>[ 주요 지표 ]</div>
             <br />
             <S.BigEventRightRate_Gold_Estate>
               {Rate_Gold_Estate.map((item, idx) => {
@@ -146,7 +148,7 @@ function BigEventRound() {
             </S.BigEventRightRate_Gold_Estate>
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: "28px" }}>상승({Up?.length})</div>
+            <div style={{ fontSize: "20px" }}>[ 상승 ({Up?.length}) ]</div>
             <br />
             <S.BigEventRightUp>
               {Up.map((item, idx) => {
@@ -160,7 +162,7 @@ function BigEventRound() {
               })}
             </S.BigEventRightUp>
             <br />
-            <div style={{ fontSize: "28px" }}>안정({Stable?.length})</div>
+            <div style={{ fontSize: "20px" }}>[ 안정 ({Stable?.length}) ]</div>
             <br />
             <S.BigEventRightStable>
               {Stable.map((item, idx) => {
@@ -174,7 +176,7 @@ function BigEventRound() {
               })}
             </S.BigEventRightStable>
             <br />
-            <div style={{ fontSize: "28px" }}>하락({Down?.length})</div>
+            <div style={{ fontSize: "20px" }}>[ 하락 ({Down?.length}) ]</div>
             <br />
             <S.BigEventRightDown>
               {Down.map((item, idx) => {
