@@ -55,13 +55,6 @@ function StockGraph({ data }) {
               },
             },
           },
-          tooltip: { // <-- 추가된 부분 시작
-            y: {
-              formatter: function (value) {
-                return value.toLocaleString();  // 숫자를 콤마로 구분된 문자열로 포맷팅
-              },
-            },
-          }, // <-- 추가된 부분 끝
         }}
       ></ApexCharts>
     </div>
