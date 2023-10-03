@@ -37,7 +37,15 @@ import {
     TradeRealEstateState,
     TradeStockState,
 } from './recoil/trading/atom';
-import { GameRoundState, PlayerIdState, PlayerToRollState, PortfolioState, PredictionState, StockState } from '/src/recoil/game/atom.tsx';
+import {
+    GameRoundState,
+    PlayerIdState,
+    PlayerRankingState,
+    PlayerToRollState,
+    PortfolioState,
+    PredictionState,
+    StockState
+} from '/src/recoil/game/atom.tsx';
 import {
     BankInfoState,
     ChanceCardInfoState,
@@ -115,6 +123,7 @@ function PlayerSocket() {
     const getPrediction = useRecoilValue(GetPredictionState);
     const [playerToRoll, setPlayerToRoll] = useRecoilState(PlayerToRollState);
     const setGameRound = useSetRecoilState(GameRoundState);
+    const setPlayerRanking = useSetRecoilState(PlayerRankingState);
 
     const [callBack, setCallBack] = useRecoilState(CallBackState);
 
@@ -251,17 +260,20 @@ function PlayerSocket() {
             setPortfolio(message.portfolios);
             setPlayerToRoll(message.currentPlayerToRoll);
             setGameRound(Math.floor(message.gameTurn / 4));
-            if (message.currentPlayerToRoll === playername) {
-                connect().then(function () {
-                    stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playername }));
-                });
-            }
-        } else if (type === 'viewMovementCard' && message.player === playername) {
+            // if (message.currentPlayerToRoll === playername) {
+            connect().then(function () {
+                stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playername }));
+            });
+            // }
+            // } else if (type === 'viewMovementCard' && message.player === playername) {
+        } else if (type === 'viewMovementCard') {
             setMovementCard(message.cards);
             setMovementCardOpen(true);
-        } else if (type === 'movePlayer' && message.player === playername) {
-            setNowPlayerPosition(message.location);
+            setPlayerRanking(message.players);
         }
+        // else if (type === 'movePlayer' && message.player === playername) {
+        //     setNowPlayerPosition(message.location);
+        // }
 
         if (type === 'issue') {
             setBigEventInfo({
@@ -329,8 +341,6 @@ function PlayerSocket() {
                 insurance4: message.insuranceDto[4],
             });
             setTradeInsurance([message.have[3], message.have[4], message.have[1], message.have[2]]);
-        } else if (type == 'buyItem') {
-            stompClient.current.send(`/pub/${roomId}/stockDetail`, {}, JSON.stringify({ player: nowPlayer + 1, stockId: stockIds[nowPlayerPosition] }));
         }
 
         // 새로운 방을 입장하는 경우
@@ -347,11 +357,11 @@ function PlayerSocket() {
         else if (type == 'start') {
             setStartReturn(true);
             // 시작 시 차례인 플레이어 이동 카드 조회
-            if (playername === playerToRoll) {
-                connect().then(function () {
-                    stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerToRoll }));
-                });
-            }
+            // if (playername === playerToRoll) {
+            connect().then(function () {
+                stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerToRoll }));
+            });
+            // }
         }
     }
 
@@ -450,6 +460,7 @@ function PlayerSocket() {
         else if (nowPlayerPosition % 2 === 1) {
             connect().then(function () {
                 stompClient.current.send(`/pub/${roomId}/buyItem`, {}, JSON.stringify({ player: nowPlayer + 1, stockId: stockIds[nowPlayerPosition] }));
+                stompClient.current.send(`/pub/${roomId}/stockDetail`, {}, JSON.stringify({ player: nowPlayer + 1, stockId: stockIds[nowPlayerPosition] }));
             });
         }
         // 금거래소 방문

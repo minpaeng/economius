@@ -47,7 +47,6 @@ function Stock() {
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const closeModal = () => {
         setStockDetail(null);
-        setIsModalOpen(false);
         setCallBack(true);
     };
     // 주식 매수, 매도 여부
@@ -101,7 +100,7 @@ function Stock() {
                         <S.StockMidLeft>
                             <StockGraph data={makeStockGraphData(stockDetail.priceHistory)} />
                             <S.StockMidLeftPrice>
-                                현재가 : {stockDetail.price}
+                                현재가 : {stockDetail.price.toLocaleString()}
                                 {stockDetail.rate >= 0 ? (
                                     <span style={{ color: '#DF7D46' }}> (+{stockDetail.rate}%)</span>
                                 ) : (
