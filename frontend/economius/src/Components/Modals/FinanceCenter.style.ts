@@ -70,6 +70,7 @@ export const MidScroll = styled.div`
     flex-direction: column;
     align-items: center;
     overflow: auto;
+    border: solid red 1px;
     &::-webkit-scrollbar {
         width: 5px; /* 스크롤바의 너비를 조절할 수 있습니다. */
         display: initial; /* 스크롤바 표시 */
@@ -94,7 +95,9 @@ export const MidScroll = styled.div`
 
 export const MidItem = styled.div`
     margin-top: 20px;
+    width: 100%;
     display: flex;
+    justify-content: center;
     align-items: center;
 `;
 

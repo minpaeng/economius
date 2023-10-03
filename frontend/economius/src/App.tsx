@@ -26,8 +26,9 @@ import CoinEffect from '/src/Components/Effect/CoinEffect';
 import Round from '/src/Components/Modals/Round.tsx';
 import MovementCard from './Components/Modals/MovementCard';
 
-import BigEventRound from "./Components/Modals/BigEventRound";
-import GameEnd from "/src/Components/Modals/GameEnd.tsx";
+import BigEventRound from './Components/Modals/BigEventRound';
+import GameEnd from '/src/Components/Modals/GameEnd.tsx';
+import FinanceCenter from './Components/Modals/FinanceCenter';
 
 function App() {
     const light = useRef();
@@ -45,22 +46,22 @@ function App() {
     // 일단 하드코딩
     setPlayerId(1);
 
-    useEffect(() => {
-        axios.get('https://j9b109.p.ssafy.io/api/room/1/start').then(data => {
-            setPortfolioState(data.data.portfolios);
-            setStockState(data.data.stocks);
-            setGoldState(data.data.gold);
-            setInterestRateState(data.data.interestRate);
-            setBuildingState(data.data.buildings);
-            setPlayerToRoll(data.data.currentPlayerToRoll);
-            setRoomId(data.data.roomId);
-            console.log(data.data);
-        });
-    }, []);
+    // useEffect(() => {
+    //     axios.get('https://j9b109.p.ssafy.io/api/room/1/start').then(data => {
+    //         setPortfolioState(data.data.portfolios);
+    //         setStockState(data.data.stocks);
+    //         setGoldState(data.data.gold);
+    //         setInterestRateState(data.data.interestRate);
+    //         setBuildingState(data.data.buildings);
+    //         setPlayerToRoll(data.data.currentPlayerToRoll);
+    //         setRoomId(data.data.roomId);
+    //         console.log(data.data);
+    //     });
+    // }, []);
 
     return (
         <div className='canvas-outer' style={{ width: '100%', height: 'calc(100vw * 9 / 16)' }}>
-            <Canvas style={{ width: '100%', height: '100%' }}>
+            {/* <Canvas style={{ width: '100%', height: '100%' }}>
                 <OrthographicCamera makeDefault zoom={65} position={[4, 4.1, 4]} />
                 <OrbitControls />
                 <ambientLight intensity={1} />
@@ -83,7 +84,8 @@ function App() {
             <CoinEffect />
             <Round />
             <MovementCard />
-            <GameEnd />
+            <GameEnd /> */}
+            <FinanceCenter />
         </div>
     );
 }
