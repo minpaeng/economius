@@ -67,8 +67,8 @@ export default function Index() {
             const handleLoadedData = () => {
                 // 비디오를 재생하고 루프로 설정합니다.
                 videoElement.play();
-                videoElement.muted = !isMuted; // 비디오 음소거 상태를 반전시킴
-                setIsMuted(!isMuted);
+                // setIsMuted(!isMuted);
+                videoElement.muted = isMuted; // 비디오 음소거 상태를 반전시킴
 
                 // setTimeout(() => {
                 //     setIsMuted(!isMuted);
@@ -114,6 +114,8 @@ export default function Index() {
         // 기존 적용된 비디오 실행
         const videoElement = videoRef.current;
         videoElement.play();
+        setIsMuted(!isMuted);
+
         // 상태 업데이트
         closeModal();
 
