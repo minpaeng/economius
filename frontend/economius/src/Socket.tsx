@@ -331,8 +331,6 @@ function PlayerSocket() {
                 insurance4: message.insuranceDto[4],
             });
             setTradeInsurance([message.have[3], message.have[4], message.have[1], message.have[2]]);
-        } else if (type == 'buyItem') {
-            stompClient.current.send(`/pub/${roomId}/stockDetail`, {}, JSON.stringify({ player: nowPlayer + 1, stockId: stockIds[nowPlayerPosition] }));
         }
 
         // 새로운 방을 입장하는 경우
@@ -452,6 +450,7 @@ function PlayerSocket() {
         else if (nowPlayerPosition % 2 === 1) {
             connect().then(function () {
                 stompClient.current.send(`/pub/${roomId}/buyItem`, {}, JSON.stringify({ player: nowPlayer + 1, stockId: stockIds[nowPlayerPosition] }));
+                stompClient.current.send(`/pub/${roomId}/stockDetail`, {}, JSON.stringify({ player: nowPlayer + 1, stockId: stockIds[nowPlayerPosition] }));
             });
         }
         // 금거래소 방문
