@@ -67,10 +67,6 @@ function MovementCard() {
     const [moveDist, setMoveDist] = useRecoilState(MoveDistState); // 캐릭터 이동 거리
     const [movementCard, setMovementCard] = useRecoilState(MovementCardState);
     const [movementCardOpen, setMovementCardOpen] = useRecoilState(MovementCardOpenState);
-    const closeModal = () => {
-        setMovementCardOpen(false);
-        setMovementCard(null);
-    };
     // 선택된 이동카드 인덱스
     const [selected, setSelected] = useState(-1);
 
@@ -78,21 +74,31 @@ function MovementCard() {
     const [flip2, setFlip2] = useState(false);
     const [flip3, setFlip3] = useState(false);
 
+    const flipAll = () => {
+        setTimeout(() => setFlip1(true), 400);
+        setTimeout(() => setFlip2(true), 700);
+        setTimeout(() => setFlip3(true), 1000);
+    };
+
+    const closeModal = () => {
+        setMovementCardOpen(false);
+        setMovementCard(null);
+        setSelected(-1);
+        setFlip1(false);
+        setFlip2(false);
+        setFlip3(false);
+    };
+
     useEffect(() => {
-        const flipAll = () => {
-            setTimeout(() => setFlip1(true), 400);
-            setTimeout(() => setFlip2(true), 700);
-            setTimeout(() => setFlip3(true), 1000);
-        };
+        if (!movementCardOpen) return;
         flipAll();
-    }, []);
+    }, [movementCardOpen]);
 
     const MoveButtonClick = () => {
         setTimeout(() => {
             closeModal();
             setIsMoving(true);
             setMoveDist(selected === -1 ? movementCard[1] : movementCard[selected]);
-            setMovementCard(null);
         }, 500);
         if (selected === -1) {
             setSelected(1);
