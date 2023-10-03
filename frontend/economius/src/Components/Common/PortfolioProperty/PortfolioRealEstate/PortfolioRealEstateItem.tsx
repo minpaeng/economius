@@ -8,10 +8,6 @@ function PortfolioRealEstateItem({
   earningPrice,
   buildingFee,
 }) {
-  console.log(buildingFee);
-  console.log(earningRate);
-  console.log(earningPrice);
-
   let percentStyleSpan;
 
   if (earningRate > 0) {
