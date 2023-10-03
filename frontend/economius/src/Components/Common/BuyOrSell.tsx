@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useRecoilState } from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import { BuyAmountState, SellAmountState } from '/src/recoil/trading/atom';
 import * as S from './BuyOrSell.style';
+import {StockState} from "/src/recoil/game/atom.tsx";
 
-function BuyOrSell({ isBuy, StockOrGold, price, money, amount }) {
+function BuyOrSell({ isBuy, stockId, StockOrGold, price, money, amount }) {
     const [buyAmount, setBuyAmount] = useRecoilState(BuyAmountState);
     const [sellAmount, setSellAmount] = useRecoilState(SellAmountState);
+    const stocks = useRecoilValue(StockState);
+    const owners = [stocks[stockId].owners];
 
     // TODO: 실제 현재 가격으로 변경하기
     const canUseMoney = money;
@@ -27,6 +30,12 @@ function BuyOrSell({ isBuy, StockOrGold, price, money, amount }) {
             setSellAmount(sellAmount - 1);
         }
     };
+
+    const getRemainAmount = () => {
+        const total = owners.reduce((res, amount) => res + amount, 0);
+        const remainAmount = 100 - total;
+        return remainAmount < 0 ? 0 : remainAmount;
+    }
 
     useEffect(() => {
         // 처음 열 때 1로 초기화
@@ -74,7 +83,7 @@ function BuyOrSell({ isBuy, StockOrGold, price, money, amount }) {
                             )}
                         </S.StockCntInput>
                         {isBuy ? (
-                            (buyAmount + 1) * currentPrice > canUseMoney ? (
+                            (buyAmount + 1) * currentPrice > canUseMoney || buyAmount > getRemainAmount() ? (
                                 <S.disableIncBtn disabled>+</S.disableIncBtn>
                             ) : (
                                 <S.IncBtn onClick={handleIncrement}>+</S.IncBtn>
