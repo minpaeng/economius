@@ -95,9 +95,19 @@ function InstallmentSaving() {
                     </S.BankMid>
                     <S.BankDivide />
                     {bankInfo.have ? (
-                        <S.BankJoinBottom onClick={() => setTradeBank([false, true])}>적금 해지하기</S.BankJoinBottom>
+                        <S.BankJoinBottom onClick={() => {
+                            setTradeBank([false, true]);
+                            //closeModal();  
+                        }}>
+                            적금 해지하기
+                        </S.BankJoinBottom>
                     ) : (
-                        <S.BankJoinBottom onClick={() => setTradeBank([true, false])}>적금 가입하기</S.BankJoinBottom>
+                        <S.BankJoinBottom onClick={() => {
+                            setTradeBank([true, false]);
+                            //closeModal();  
+                        }}>
+                            적금 가입하기
+                        </S.BankJoinBottom>
                     )}
                 </S.BankMain>
             ) : (
