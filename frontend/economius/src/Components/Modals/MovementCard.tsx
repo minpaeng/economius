@@ -94,13 +94,13 @@ function MovementCard() {
         flipAll();
     }, [movementCardOpen]);
 
-    const MoveButtonClick = () => {
+    const MoveButtonClick = (selectednum: number) => {
         setTimeout(() => {
             closeModal();
             setIsMoving(true);
-            setMoveDist(selected === -1 ? movementCard[1] : movementCard[selected]);
+            setMoveDist(selectednum === -1 ? movementCard[1] : movementCard[selectednum]);
         }, 500);
-        if (selected === -1) {
+        if (selectednum === -1) {
             setSelected(1);
         }
     };
@@ -114,7 +114,7 @@ function MovementCard() {
                     <Card idx={0} value={movementCard[0]} top={'10%'} left={'8%'} flip={flip1} selected={selected} CardClick={() => setSelected(0)} />
                     <Card idx={1} value={movementCard[1]} top={'10%'} left={'38%'} flip={flip2} selected={selected} CardClick={() => setSelected(1)} />
                     <Card idx={2} value={movementCard[2]} top={'10%'} left={'68%'} flip={flip3} selected={selected} CardClick={() => setSelected(2)} />
-                    <S.Button onClick={MoveButtonClick}>이동카드 선택</S.Button>
+                    <S.Button onClick={() => MoveButtonClick(selected)}>이동카드 선택</S.Button>
                     {/* <S.Caution>(시간 초과 시 자동으로 선택됩니다)</S.Caution> */}
                 </>
             )}
