@@ -59,8 +59,8 @@ function InstallmentSaving() {
                         <S.BankMidDesc>
                             <S.BankMidPriceDesc>
                                 <p>
-                                    월 납입액 : {bankInfo.monthlyDeposit}
-                                    {bankInfo.have ? ` (잔여: ${bankInfo.monthlyDeposit * bankInfo.finishCount - bankInfo.currentPrice})` : null}
+                                    월 납부액 : {bankInfo.monthlyDeposit.toLocaleString()}
+                                    {bankInfo.have ? ` (잔여 : ${(bankInfo.monthlyDeposit * bankInfo.finishCount - bankInfo.currentPrice).toLocaleString()})` : null}
                                 </p>
                                 <img
                                     src='Bank/dollar-coin 15.png'
@@ -76,7 +76,7 @@ function InstallmentSaving() {
                             <S.BankMidCycle>
                                 <p>
                                     기간 : {bankInfo.finishCount}
-                                    {bankInfo.have ? ` (잔여: ${bankInfo.finishCount - bankInfo.currentCount})` : `(${bankInfo.finishCount}달)`}
+                                    {bankInfo.have ? ` (잔여 : ${bankInfo.finishCount - bankInfo.currentCount} 바퀴)` : ` (${bankInfo.finishCount}바퀴)`}
                                 </p>
                                 <img
                                     src='Bank/BankCycle.png'

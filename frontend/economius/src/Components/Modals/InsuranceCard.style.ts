@@ -27,6 +27,10 @@ export const CardMainTop = styled.div`
     align-items: center;
 `;
 
+export const InsuranceName = styled.div`
+    font-size: 20px; // 원하는 폰트 사이즈로 설정
+`;
+
 export const CardMainTopPrice = styled.div`
     display: flex;
 `;

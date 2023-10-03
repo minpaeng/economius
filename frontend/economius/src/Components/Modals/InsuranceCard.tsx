@@ -35,9 +35,9 @@ function InsuranceCard({ CardInfo, ItemInfo, index }) {
         <S.CardLayout>
             <S.CardMain>
                 <S.CardMainTop>
-                    <div>{CardInfo.getInsuranceName}</div>
+                    <S.InsuranceName>{CardInfo.getInsuranceName}</S.InsuranceName>
                     <S.CardMainTopPrice>
-                        <p>월 보험료 : {CardInfo.perPrice}</p>
+                        <p>월 보험료 : {CardInfo.perPrice.toLocaleString()}</p>
                         <img
                             src='Bank/dollar-coin 15.png'
                             alt='img'
@@ -48,7 +48,7 @@ function InsuranceCard({ CardInfo, ItemInfo, index }) {
                             }}
                         />
                     </S.CardMainTopPrice>
-                    <div>보장 정도 : {CardInfo.insuranceBenefit}%</div>
+                    <div>보장률 : {CardInfo.insuranceBenefit}%</div>
                 </S.CardMainTop>
                 <div style={{ textAlign: 'center' }}>
                     <hr style={{ width: '80%', margin: '0 10%' }} />
