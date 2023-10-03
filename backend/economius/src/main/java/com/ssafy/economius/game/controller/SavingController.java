@@ -33,7 +33,7 @@ public class SavingController {
         log.info(savingRequest.toString());
         Map<String, Object> headers = Map.of("success", true, "type", "joinSavings");
         savingService.joinSavings(roomId, savingRequest);
-        template.convertAndSend("/sub/" + roomId, headers);
+        template.convertAndSend("/sub/" + roomId, savingRequest.getPlayer(), headers);
     }
 
 
@@ -42,7 +42,7 @@ public class SavingController {
         log.info(savingRequest.toString());
         Map<String, Object> headers = Map.of("success", true, "type", "stopSavings");
         savingService.stopSavings(roomId, savingRequest);
-        template.convertAndSend("/sub/" + roomId, headers);
+        template.convertAndSend("/sub/" + roomId, savingRequest.getPlayer(), headers);
     }
 
 }

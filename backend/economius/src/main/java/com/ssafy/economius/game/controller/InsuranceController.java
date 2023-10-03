@@ -31,14 +31,14 @@ public class InsuranceController {
     public void joinInsurance(@DestinationVariable int roomId, InsuranceRequest insuranceRequest) {
         Map<String, Object> headers = Map.of("success", true,"type", "joinInsurance");
         insuranceService.joinInsurance(roomId, insuranceRequest);
-        template.convertAndSend("/sub/" + roomId, headers);
+        template.convertAndSend("/sub/" + roomId, insuranceRequest.getPlayer(), headers);
     }
 
     @MessageMapping(value = "/{roomId}/finishInsurance")
     public void finishInsurance(@DestinationVariable int roomId, InsuranceRequest insuranceRequest) {
         Map<String, Object> headers = Map.of("success", true,"type", "finishInsurance");
         insuranceService.stopInsurance(roomId, insuranceRequest);
-        template.convertAndSend("/sub/" + roomId, headers);
+        template.convertAndSend("/sub/" + roomId, insuranceRequest.getPlayer(), headers);
     }
 
 }
