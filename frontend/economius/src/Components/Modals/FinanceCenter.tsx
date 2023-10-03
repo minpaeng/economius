@@ -7,7 +7,34 @@ import checksign from '/BeforeBankrupt/checksign.png';
 import dollarcoin from '/BeforeBankrupt/dollarcoin.png';
 import * as S from './FinanceCenter.style';
 
-const A = ['대한전력', '은행', '아람쿠', '부동산', '포스쿠', '보험사', 'IG화학', '코인', '코인', '코인', '코인', '코인', '코인', '코인'];
+const A = [
+    ['대한전력'],
+    ['은행'],
+    ['아람쿠'],
+    ['부동산'],
+    ['포스쿠'],
+    ['보험사'],
+    ['IG화학'],
+    ['코인'],
+    ['화이지'],
+    ['은행'],
+    ['셀트리안'],
+    ['나이카'],
+    ['부동산'],
+    ['[코카펩시'],
+    ['AIR관광'],
+    ['은행'],
+    ['CZ엔터'],
+    ['K텔레콤'],
+    ['부동산'],
+    ['M소프트'],
+    ['대한운송'],
+    ['보험사'],
+    ['대현건설'],
+    ['넥서스'],
+    ['금거래소'],
+    ['삼성전자'],
+];
 
 function FinanceCenter() {
     const [selectedOption, setSelectedOption] = useState(-1);

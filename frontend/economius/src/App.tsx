@@ -41,6 +41,9 @@ function App() {
     const setBuildingState = useSetRecoilState(buildingState);
     const setPlayerToRoll = useSetRecoilState(PlayerToRollState);
 
+    // 일단 하드코딩
+    setPlayerId(1);
+
     useEffect(() => {
         axios.get('https://j9b109.p.ssafy.io/api/room/1/start').then(data => {
             setPortfolioState(data.data.portfolios);
@@ -49,7 +52,6 @@ function App() {
             setInterestRateState(data.data.interestRate);
             setBuildingState(data.data.buildings);
             setPlayerToRoll(data.data.currentPlayerToRoll);
-            setPlayerId(data.data.player);
             setRoomId(data.data.roomId);
             console.log(data.data);
         });

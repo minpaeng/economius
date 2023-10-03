@@ -2,7 +2,7 @@ import { atom } from 'recoil';
 
 export const PlayerIdState = atom<number>({
     key: 'PlayerIdState',
-    default: 0,
+    default: 1,
 });
 
 export const PortfolioState = atom({
