@@ -43,3 +43,10 @@ export const ChanceCardInfoState = atom({
   key: "ChanceCardInfoState",
   default: null,
 });
+
+// 대이벤트 모달 정보
+
+export const BigEventInfoState = atom({
+  key: "BigEventInfoState",
+  default: null,
+});

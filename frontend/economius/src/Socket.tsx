@@ -35,8 +35,16 @@ import {
     TradeRealEstateState,
     TradeStockState,
 } from './recoil/trading/atom';
-import { PlayerIdState, PortfolioState, PredictionState, StockState } from '/src/recoil/game/atom.tsx';
-import { BankInfoState, ChanceCardInfoState, InsuranceInfoState, MonthlyInfoState, RealEstateInfoState, StockInfoState } from './recoil/modalInfo/atom';
+import { GameRoundState, PlayerIdState, PlayerToRollState, PortfolioState, PredictionState, StockState } from '/src/recoil/game/atom.tsx';
+import {
+    BankInfoState,
+    ChanceCardInfoState,
+    InsuranceInfoState,
+    MonthlyInfoState,
+    RealEstateInfoState,
+    StockInfoState,
+    BigEventInfoState,
+} from './recoil/modalInfo/atom';
 
 const buildingIds = {
     4: 1,
@@ -101,11 +109,16 @@ function PlayerSocket() {
     const setStocks = useSetRecoilState(StockState);
     const setPrediction = useSetRecoilState(PredictionState);
     const getPrediction = useRecoilValue(GetPredictionState);
+    const setPlayerToRoll = useSetRecoilState(PlayerToRollState);
+    const setGameRound = useSetRecoilState(GameRoundState);
 
     const [callBack, setCallBack] = useRecoilState(CallBackState);
 
     //이벤트 카드
     const [chanceCardInfo, setChanceCardInfo] = useRecoilState(ChanceCardInfoState);
+
+    // 대이벤트 정보
+    const [bigEventInfo, setBigEventInfo] = useRecoilState(BigEventInfoState);
 
     // 방 연결을 위한 recoil
     const [userId, setUserId] = useRecoilState(UseridState);
@@ -232,6 +245,23 @@ function PlayerSocket() {
         if (type === 'finishTurn') {
             setStocks(message.stocks);
             setPortfolio(message.portfolios);
+            setPlayerToRoll(message.currentPlayerToRoll);
+            setGameRound(Math.floor(message.gameTurn / 4));
+        }
+
+        if (type === 'issue') {
+            setBigEventInfo({
+                buildingChange: message.buildingChange,
+                country: message.country,
+                description: message.description,
+                goldChange: message.goldChange,
+                interestRateChange: message.interestRateChange,
+                name: message.name,
+                stockChanges: message.stockChanges,
+                type: message.type,
+                url: message.url,
+                year: message.year,
+            });
         }
 
         if (type == 'visitBuilding') {
@@ -530,12 +560,26 @@ function PlayerSocket() {
     useEffect(() => {
         if (tradeGold[0]) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/buyGolds`, {}, JSON.stringify({ player: nowPlayer + 1, goldAmount: buyAmount }));
+                stompClient.current.send(
+                    `/pub/${roomId}/buyGolds`,
+                    {},
+                    JSON.stringify({
+                        player: nowPlayer + 1,
+                        goldAmount: buyAmount,
+                    })
+                );
                 setTradeGold([false, false]);
             });
         } else if (tradeGold[1]) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/sellGolds`, {}, JSON.stringify({ player: nowPlayer + 1, goldAmount: sellAmount }));
+                stompClient.current.send(
+                    `/pub/${roomId}/sellGolds`,
+                    {},
+                    JSON.stringify({
+                        player: nowPlayer + 1,
+                        goldAmount: sellAmount,
+                    })
+                );
                 setTradeGold([false, false]);
             });
         }
@@ -545,12 +589,26 @@ function PlayerSocket() {
     useEffect(() => {
         if (tradeBank[0]) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/joinSavings`, {}, JSON.stringify({ player: nowPlayer + 1, bankId: bankIds[nowPlayerPosition] }));
+                stompClient.current.send(
+                    `/pub/${roomId}/joinSavings`,
+                    {},
+                    JSON.stringify({
+                        player: nowPlayer + 1,
+                        bankId: bankIds[nowPlayerPosition],
+                    })
+                );
                 setTradeBank([false, false]);
             });
         } else if (tradeBank[1]) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/stopSavings`, {}, JSON.stringify({ player: nowPlayer + 1, bankId: bankIds[nowPlayerPosition] }));
+                stompClient.current.send(
+                    `/pub/${roomId}/stopSavings`,
+                    {},
+                    JSON.stringify({
+                        player: nowPlayer + 1,
+                        bankId: bankIds[nowPlayerPosition],
+                    })
+                );
                 setTradeBank([false, false]);
             });
         }
