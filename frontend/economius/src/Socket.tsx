@@ -557,7 +557,6 @@ function PlayerSocket() {
                     })
                 );
                 setTradeStock([false, false]);
-                setCallBack(true);
             });
         } else if (tradeStock[1]) {
             connect().then(function () {
@@ -571,7 +570,6 @@ function PlayerSocket() {
                     })
                 );
                 setTradeStock([false, false]);
-                setCallBack(true);
             });
         }
     }, [tradeStock]);
