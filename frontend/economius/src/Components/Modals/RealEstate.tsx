@@ -46,9 +46,9 @@ function RealEstate() {
                                 : `가격 : ${realEstateInfo.buildingPrice.toLocaleString()} (원)`} 
                         </S.MidDesc> 
                         <S.MidDesc>
-                            {realEstateInfo.owner && realEstateInfo.owner.player !== nowPlayer
+                            {!realEstateInfo.owner || (realEstateInfo.owner && realEstateInfo.owner.player !== nowPlayer)
                             ? `방문객에게 ${fee[realEstateInfo.buildingId]}으로 ${(realEstateInfo.buildingPrice / 10).toLocaleString().split('.')[0]} (원)을 받을 수 있습니다.`
-                            : `건물주에게 ${fee[realEstateInfo.buildingId]}으로 ${(realEstateInfo.buildingPrice / 10).toLocaleString().split('.')[0]} (원)을 지불했습니다.`}
+                            : `건물주에게 ${fee[realEstateInfo.buildingId]}으로 ${(realEstateInfo.buildingPrice / 10).toLocaleString().split('.')[0]} (원)을 지불합니다.`}
                         </S.MidDesc>
                     </S.Mid>
 
