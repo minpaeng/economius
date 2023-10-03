@@ -33,10 +33,12 @@ public class PortfolioInsurances {
     }
 
     public synchronized int join(PortfolioInsurance portfolioInsurance) {
+        if(this.insurance == null) {
+            this.amount = 0;
+            insurance = new HashMap<>();
+        }
         int monthlyPrice = portfolioInsurance.getMonthlyDeposit();
         this.amount += 1;
-
-        if(this.insurance == null) insurance = new HashMap<>();
         this.insurance.put(portfolioInsurance.getInsuranceId(), portfolioInsurance);
         return monthlyPrice;
     }
