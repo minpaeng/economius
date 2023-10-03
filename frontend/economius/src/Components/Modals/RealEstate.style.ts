@@ -18,7 +18,7 @@ export const modalStyle: any = {
         overflow: 'auto',
         zIndex: 10,
         margin: 'auto',
-        left: '25%',
+        right: '25%',
         width: '600px',
         height: '450px',
         border: '5px solid white',
