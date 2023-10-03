@@ -251,17 +251,19 @@ function PlayerSocket() {
             setPortfolio(message.portfolios);
             setPlayerToRoll(message.currentPlayerToRoll);
             setGameRound(Math.floor(message.gameTurn / 4));
-            if (message.currentPlayerToRoll === playername) {
-                connect().then(function () {
-                    stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playername }));
-                });
-            }
-        } else if (type === 'viewMovementCard' && message.player === playername) {
+            // if (message.currentPlayerToRoll === playername) {
+            connect().then(function () {
+                stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playername }));
+            });
+            // }
+            // } else if (type === 'viewMovementCard' && message.player === playername) {
+        } else if (type === 'viewMovementCard') {
             setMovementCard(message.cards);
             setMovementCardOpen(true);
-        } else if (type === 'movePlayer' && message.player === playername) {
-            setNowPlayerPosition(message.location);
         }
+        // else if (type === 'movePlayer' && message.player === playername) {
+        //     setNowPlayerPosition(message.location);
+        // }
 
         if (type === 'issue') {
             setBigEventInfo({
@@ -347,11 +349,11 @@ function PlayerSocket() {
         else if (type == 'start') {
             setStartReturn(true);
             // 시작 시 차례인 플레이어 이동 카드 조회
-            if (playername === playerToRoll) {
-                connect().then(function () {
-                    stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerToRoll }));
-                });
-            }
+            // if (playername === playerToRoll) {
+            connect().then(function () {
+                stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerToRoll }));
+            });
+            // }
         }
     }
 

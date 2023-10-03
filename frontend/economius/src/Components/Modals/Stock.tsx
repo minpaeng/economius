@@ -47,7 +47,6 @@ function Stock() {
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const closeModal = () => {
         setStockDetail(null);
-        setIsModalOpen(false);
         setCallBack(true);
     };
     // 주식 매수, 매도 여부
