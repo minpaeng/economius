@@ -21,6 +21,8 @@ import {
     SetShowWaitRoomState,
     StartReturnState,
     UseridState,
+    IsMovingState,
+    MoveDistState,
 } from './recoil/animation/atom';
 import {
     BuyAmountState,
@@ -84,6 +86,8 @@ function PlayerSocket() {
     const [movementCard, setMovementCard] = useRecoilState(MovementCardState);
     const [movementCardOpen, setMovementCardOpen] = useRecoilState(MovementCardOpenState);
     const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
+    const [isMoving, setIsMoving] = useRecoilState(IsMovingState);
+    let moveDist = useRecoilValue(MoveDistState);
     // 자산별 모달 정보
     const [monthlyInfo, setMonthlyInfo] = useRecoilState(MonthlyInfoState);
     const [stockInfo, setStockInfo] = useRecoilState(StockInfoState);
@@ -109,7 +113,7 @@ function PlayerSocket() {
     const setStocks = useSetRecoilState(StockState);
     const setPrediction = useSetRecoilState(PredictionState);
     const getPrediction = useRecoilValue(GetPredictionState);
-    const setPlayerToRoll = useSetRecoilState(PlayerToRollState);
+    const [playerToRoll, setPlayerToRoll] = useRecoilState(PlayerToRollState);
     const setGameRound = useSetRecoilState(GameRoundState);
 
     const [callBack, setCallBack] = useRecoilState(CallBackState);
@@ -247,6 +251,16 @@ function PlayerSocket() {
             setPortfolio(message.portfolios);
             setPlayerToRoll(message.currentPlayerToRoll);
             setGameRound(Math.floor(message.gameTurn / 4));
+            if (message.currentPlayerToRoll === playername) {
+                connect().then(function () {
+                    stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playername }));
+                });
+            }
+        } else if (type === 'viewMovementCard' && message.player === playername) {
+            setMovementCard(message.cards);
+            setMovementCardOpen(true);
+        } else if (type === 'movePlayer' && message.player === playername) {
+            setNowPlayerPosition(message.location);
         }
 
         if (type === 'issue') {
@@ -328,6 +342,12 @@ function PlayerSocket() {
         // 게임 시작 pub에 대한 결과를 반환 받으면
         else if (type == 'start') {
             setStartReturn(true);
+            // 시작 시 차례인 플레이어 이동 카드 조회
+            if (playername === playerToRoll) {
+                connect().then(function () {
+                    stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerToRoll }));
+                });
+            }
         }
     }
 
@@ -665,6 +685,15 @@ function PlayerSocket() {
             });
         }
     }, [getPrediction]);
+
+    // 이동 중, 서버에 이동 정보 보내기
+    useEffect(() => {
+        if (!isMoving) return;
+        connect().then(function () {
+            stompClient.current.send(`/pub/${roomId}/movePlayer`, {}, JSON.stringify({ player: nowPlayer + 1, movementCount: moveDist }));
+        });
+    }, [isMoving]);
+
     //턴 종료
     useEffect(() => {
         if (!callBack) return;
