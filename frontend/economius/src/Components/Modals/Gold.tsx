@@ -1,13 +1,13 @@
 import Modal from 'react-modal';
-import {useState} from 'react';
-import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
-import {CallBackState, IsModalOpenState} from '/src/recoil/animation/atom';
-import {GoldDetailState, TradeGoldState} from '/src/recoil/trading/atom';
+import { useState } from 'react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { CallBackState, IsModalOpenState } from '/src/recoil/animation/atom';
+import { GoldDetailState, TradeGoldState } from '/src/recoil/trading/atom';
 import * as S from './Stock.style';
 
 import BuyOrSell from '../Common/BuyOrSell';
 import GoldGraph from '../Common/GoldGraph';
-import {PlayerIdState, PortfolioState} from "/src/recoil/game/atom.tsx";
+import { PlayerIdState, PortfolioState } from '/src/recoil/game/atom.tsx';
 
 function makeGoldGraphData(goldPriceHistoryData) {
     const graphData = [];
@@ -43,7 +43,7 @@ function Gold() {
     // 금 매수, 매도 여부
     const [tradeGold, setTradeGold] = useRecoilState(TradeGoldState);
     const [goldDetail, setGoldDetail] = useRecoilState(GoldDetailState);
-    const player = useRecoilValue(PlayerIdState)
+    const player = useRecoilValue(PlayerIdState);
     const portfolios = useRecoilValue(PortfolioState);
 
     //   const [isGoldOpen, setIsGoldOpen] = useState(false);
@@ -74,75 +74,83 @@ function Gold() {
         },
     };
 
-    return goldDetail === null ? (
-        <span>loading...</span>
-    ) : (
+    return (
         <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
-            <S.StockMain>
-                <S.StockTop>
-                    <S.StockTopImg src='Gold/goldbar.png' style={{ width: '50px' }} />
-                    <S.StockTopTitle>
-                        <S.StockTopTitleEnterprise>금거래소</S.StockTopTitleEnterprise>
-                    </S.StockTopTitle>
-                </S.StockTop>
-                <S.StockMid>
-                    <S.StockMidLeft>
-                        <GoldGraph data={makeGoldGraphData(goldDetail.priceHistory)} />
-                        <S.StockMidLeftPrice>
-                            현재가 : {goldDetail.price}
-                            {goldDetail.rate >= 0 ? (
-                                <span style={{ color: '#DF7D46' }}> (+{goldDetail.rate}%)</span>
-                            ) : (
-                                <span style={{ color: '#DF7D46' }}> ({goldDetail.rate}%)</span>
-                            )}
-                        </S.StockMidLeftPrice>
-                    </S.StockMidLeft>
-                    <S.StockMidRight>
-                        {/* 매도,매수 */}
-                        <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                width: '100%',
-                                height: '100%',
-                            }}
-                        >
-                            <S.Main>
-                                <S.BtnSection>
-                                    <S.BuyOrSellBtn
-                                        onClick={() => {
-                                            isBuyClick(true);
-                                        }}
-                                        style={{
-                                            backgroundColor: buyClick ? '#F7BC0F' : 'rgba(247, 188, 15, 0.5)',
-                                        }}
-                                    >
-                                        매수
-                                    </S.BuyOrSellBtn>
-                                    <S.BuyOrSellBtn
-                                        onClick={() => {
-                                            isBuyClick(false);
-                                        }}
-                                        style={{
-                                            backgroundColor: !buyClick ? '#F7BC0F' : 'rgba(247, 188, 15, 0.5)',
-                                        }}
-                                    >
-                                        매도
-                                    </S.BuyOrSellBtn>
-                                </S.BtnSection>
-                                <BuyOrSell isBuy={buyClick} StockOrGold='gold' price={goldDetail.price} amount={portfolios[player].gold.amount} money={portfolios[player].money}/>
-                            </S.Main>
-                        </div>
-                    </S.StockMidRight>
-                </S.StockMid>
-                <S.StockDivide />
-                {buyClick ? (
-                    <S.StockBuyBottom onClick={() => setTradeGold([true, false])}>매수하기</S.StockBuyBottom>
-                ) : (
-                    <S.StockSellBottom onClick={() => setTradeGold([false, true])}>매도하기</S.StockSellBottom>
-                )}
-            </S.StockMain>
+            {goldDetail === null ? (
+                `loading...`
+            ) : (
+                <S.StockMain>
+                    <S.StockTop>
+                        <S.StockTopImg src='Gold/goldbar.png' style={{ width: '50px' }} />
+                        <S.StockTopTitle>
+                            <S.StockTopTitleEnterprise>금거래소</S.StockTopTitleEnterprise>
+                        </S.StockTopTitle>
+                    </S.StockTop>
+                    <S.StockMid>
+                        <S.StockMidLeft>
+                            <GoldGraph data={makeGoldGraphData(goldDetail.priceHistory)} />
+                            <S.StockMidLeftPrice>
+                                현재가 : {goldDetail.price}
+                                {goldDetail.rate >= 0 ? (
+                                    <span style={{ color: '#DF7D46' }}> (+{goldDetail.rate}%)</span>
+                                ) : (
+                                    <span style={{ color: '#DF7D46' }}> ({goldDetail.rate}%)</span>
+                                )}
+                            </S.StockMidLeftPrice>
+                        </S.StockMidLeft>
+                        <S.StockMidRight>
+                            {/* 매도,매수 */}
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    width: '100%',
+                                    height: '100%',
+                                }}
+                            >
+                                <S.Main>
+                                    <S.BtnSection>
+                                        <S.BuyOrSellBtn
+                                            onClick={() => {
+                                                isBuyClick(true);
+                                            }}
+                                            style={{
+                                                backgroundColor: buyClick ? '#F7BC0F' : 'rgba(247, 188, 15, 0.5)',
+                                            }}
+                                        >
+                                            매수
+                                        </S.BuyOrSellBtn>
+                                        <S.BuyOrSellBtn
+                                            onClick={() => {
+                                                isBuyClick(false);
+                                            }}
+                                            style={{
+                                                backgroundColor: !buyClick ? '#F7BC0F' : 'rgba(247, 188, 15, 0.5)',
+                                            }}
+                                        >
+                                            매도
+                                        </S.BuyOrSellBtn>
+                                    </S.BtnSection>
+                                    <BuyOrSell
+                                        isBuy={buyClick}
+                                        StockOrGold='gold'
+                                        price={goldDetail.price}
+                                        amount={portfolios[player].gold.amount}
+                                        money={portfolios[player].money}
+                                    />
+                                </S.Main>
+                            </div>
+                        </S.StockMidRight>
+                    </S.StockMid>
+                    <S.StockDivide />
+                    {buyClick ? (
+                        <S.StockBuyBottom onClick={() => setTradeGold([true, false])}>매수하기</S.StockBuyBottom>
+                    ) : (
+                        <S.StockSellBottom onClick={() => setTradeGold([false, true])}>매도하기</S.StockSellBottom>
+                    )}
+                </S.StockMain>
+            )}
         </Modal>
     );
 }
