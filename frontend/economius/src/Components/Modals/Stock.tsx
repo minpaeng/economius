@@ -100,7 +100,7 @@ function Stock() {
                         <S.StockMidLeft>
                             <StockGraph data={makeStockGraphData(stockDetail.priceHistory)} />
                             <S.StockMidLeftPrice>
-                                현재가 : {stockDetail.price}
+                                현재가 : {stockDetail.price.toLocaleString()}
                                 {stockDetail.rate >= 0 ? (
                                     <span style={{ color: '#DF7D46' }}> (+{stockDetail.rate}%)</span>
                                 ) : (

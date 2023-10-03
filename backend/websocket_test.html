@@ -66,19 +66,19 @@
         function sendJoin2() {
             stompClient.send(`/pub/${roomId}/join`, {}, JSON.stringify({
                 "player": 2,
-                "nickname" : 2
+                "nickname" : "user2"
             }));
         }
         function sendJoin3() {
             stompClient.send(`/pub/${roomId}/join`, {}, JSON.stringify({
                 "player": 3,
-                "nickname" : 3
+                "nickname" : "user3"
             }));
         }
         function sendJoin4() {
             stompClient.send(`/pub/${roomId}/join`, {}, JSON.stringify({
                 "player": 4,
-                "nickname" : 4
+                "nickname" : "user4"
             }));
         }
 
