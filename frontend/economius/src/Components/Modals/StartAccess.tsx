@@ -52,7 +52,9 @@ export default function StartAccess({ videoControl }) {
                         (living or deceased), places, buildings, and products is intended or should be inferred.
                         <br />
                         <br />
-                        (※ FHD 이상의 환경에서 F11(전체화면)으로 플레이하시는 것을 권장합니다.)
+                        <span>
+                            (※ FHD 이상의 환경에서 <span style={{ color: 'red', display: 'inline' }}>F11(전체화면)</span>으로 플레이하시는 것을 권장합니다.)
+                        </span>
                         <br />
                     </S.MidDesc>
                 </S.MidNoImg>
