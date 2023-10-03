@@ -672,12 +672,12 @@ function PlayerSocket() {
     }, [getPrediction]);
 
     // 이동 중, 서버에 이동 정보 보내기
-    useEffect(() => {
-        if (!isMoving) return;
-        connect().then(function () {
-            stompClient.current.send(`/pub/${roomId}/movePlayer`, {}, JSON.stringify({ player: nowPlayer + 1, movementCount: moveDist }));
-        });
-    }, [isMoving]);
+    // useEffect(() => {
+    //     if (!isMoving) return;
+    //     connect().then(function () {
+    //         stompClient.current.send(`/pub/${roomId}/movePlayer`, {}, JSON.stringify({ player: nowPlayer + 1, movementCount: moveDist }));
+    //     });
+    // }, [isMoving]);
 
     //턴 종료
     useEffect(() => {
