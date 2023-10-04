@@ -63,7 +63,7 @@ public class GameService {
         game.getStocks().values().forEach(stock -> stock.initializeOwners(players));
         gameRepository.save(game);
 
-        return new GameStartResponse(roomId);
+        return new GameStartResponse(roomId, game.getCurrentPlayerToRoll());
     }
 
     public GameRoomExitResponse exit(int roomId, Long player) {
