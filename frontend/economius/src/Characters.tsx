@@ -2,7 +2,8 @@
 import { useState, useEffect } from 'react';
 import { Aligator, Bear, Bird, Butterfly, Camel, Cat, Chicken, Cow, Deer, Dog } from './Components/Characters';
 import { useRecoilState } from 'recoil';
-import { NowPlayerState, NowPlayerPositionState, IsMovingState, MoveDistState } from '/src/recoil/animation/atom';
+import { NowPlayerState, NowPlayerPositionState, IsMovingState, MoveDistState, RoomJoinUsersIdState } from '/src/recoil/animation/atom';
+import { PlayerToRollState } from './recoil/game/atom';
 
 // 캐릭터 컴포넌트
 const CharacterComponent = [null, Aligator, Bear, Bird, Butterfly, Camel, Cat, Chicken, Cow, Deer, Dog];
@@ -16,8 +17,10 @@ const steps = 10; // 애니메이션당 프레임 수
 
 function Characters() {
     // 현재 플레이어
+    // 플레이어 배열
     // 현재 플레이어 최종 위치
-    const [nowPlayer, setNowPlayer] = useRecoilState(NowPlayerState);
+    const [playerToRoll, setPlayerToRoll] = useRecoilState(PlayerToRollState);
+    const [roomJoinUsersId, setRoomJoinUsersId] = useRecoilState(RoomJoinUsersIdState);
     const [nowPlayerPosition, setNowPlayerPosition] = useRecoilState(NowPlayerPositionState);
 
     // 캐릭터 이동 여부
@@ -55,14 +58,17 @@ function Characters() {
     // 현재 차례인 플레이어만 불투명
     useEffect(() => {
         setOpacity1(opacity), setOpacity2(opacity), setOpacity3(opacity), setOpacity4(opacity); // 전부 투명
-        setOpacities[nowPlayer](1); // 현재 플레이어만 불투명
-    }, [nowPlayer]);
+        // console.log(roomJoinUsersId);
+        // console.log(playerToRoll);
+        // console.log(roomJoinUsersId.indexOf(playerToRoll));
+        // setOpacities[roomJoinUsersId.indexOf(playerToRoll)](1); // 현재 플레이어만 불투명
+    }, [playerToRoll]);
 
     // 자기 차례인 플레이어만 위치(idx)를 변경함
     useEffect(() => {
         if (!isMoving) return;
-        setPositionIdxs[nowPlayer](idx => (idx + moveDist) & 31); // (현재 위치 + 이동 거리) % 맵 칸 수
-        setNowPlayerPosition((positionIdxs[nowPlayer] + moveDist) & 31);
+        setPositionIdxs[roomJoinUsersId.indexOf(playerToRoll)](idx => (idx + moveDist) & 31); // (현재 위치 + 이동 거리) % 맵 칸 수
+        setNowPlayerPosition((positionIdxs[roomJoinUsersId.indexOf(playerToRoll)] + moveDist) & 31);
     }, [isMoving]);
 
     return (

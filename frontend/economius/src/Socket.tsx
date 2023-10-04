@@ -99,7 +99,7 @@ function PlayerSocket() {
     const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
     const [isMoving, setIsMoving] = useRecoilState(IsMovingState);
     const [financeCenter, setFinanceCenter] = useRecoilState(FinanceCenterState);
-    let moveDist = useRecoilValue(MoveDistState);
+    const [moveDist, setMoveDist] = useRecoilState(MoveDistState);
     // 자산별 모달 정보
     const [monthlyInfo, setMonthlyInfo] = useRecoilState(MonthlyInfoState);
     const [stockInfo, setStockInfo] = useRecoilState(StockInfoState);
@@ -146,7 +146,7 @@ function PlayerSocket() {
     const [roomJoin, setRoomJoin] = useRecoilState(RoomJoinState);
     const [roomJoinUsersNickname, setRoomJoinUsersNickname] = useRecoilState(RoomJoinUsersNicknameState);
     const nickname = localStorage.getItem('nickname');
-    const [playername] = useRecoilState(PlayerIdState);
+    const [playerId] = useRecoilState(PlayerIdState);
     const [showWaitRoom, setShowWaitRoom] = useRecoilState(SetShowWaitRoomState);
 
     const [roomHost, setRoomHost] = useRecoilState(RoomHostState);
@@ -223,24 +223,27 @@ function PlayerSocket() {
         const type = recievedMessage.headers.type || null;
         console.log('전체메시지 type: ', type);
         console.log('전체메시지 message: ', message);
-        if (type === 'finishTurn') {
+        if (type === 'movePlayer') {
+            setMoveDist(message.movementCount);
+            setPlayerToRoll(message.player);
+        } else if (type === 'finishTurn') {
             setStocks(message.stocks);
             setPortfolio(message.portfolios);
             setPlayerToRoll(message.currentPlayerToRoll);
             setCurrentPrevIssues(message.currentPrevIssues);
             setCurrentIssue(message.currentIssue);
             setGameRound(Math.floor(message.gameTurn / 4));
-            // if (message.currentPlayerToRoll === playername) {
+            // if (message.currentPlayerToRoll === playerId) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playername }));
+                stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerId }));
             });
             // }
-            // } else if (type === 'viewMovementCard' && message.player === playername) {
+            // } else if (type === 'viewMovementCard' && message.player === playerId) {
         } else if (type === 'viewMovementCard') {
             setMovementCard(message.cards);
             setMovementCardOpen(true);
             setPlayerRanking(message.players);
-            // else if (type === 'movePlayer' && message.player === playername) {
+            // else if (type === 'movePlayer' && message.player === playerId) {
             //     setNowPlayerPosition(message.location);
             // }
         } else if (type === 'buyStock') {
@@ -363,7 +366,7 @@ function PlayerSocket() {
         else if (type == 'start') {
             setStartReturn(true);
             // 시작 시 차례인 플레이어 이동 카드 조회
-            // if (playername === playerToRoll) {
+            // if (playerId === playerToRoll) {
             connect().then(function () {
                 stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerToRoll }));
             });
@@ -403,13 +406,13 @@ function PlayerSocket() {
             // 구독 정보가 바뀌었다면 재구독
             if (roomId != 0 && stompClient.current.connected) {
                 stompClient.current.unsubscribe();
-                stompClient.current.subscribe(`/sub/player/${playername}`, personalCallBackFunction);
+                stompClient.current.subscribe(`/sub/player/${playerId}`, personalCallBackFunction);
                 stompClient.current.subscribe(`/sub/${roomId}`, broadCastCallBackFunction);
-                stompClient.current.subscribe(`/sub/${roomId}/${playername}`, uniCastCallBackFunction);
+                stompClient.current.subscribe(`/sub/${roomId}/${playerId}`, uniCastCallBackFunction);
                 console.log(`기존 방 구독 취소 후 ${roomId}번 방 구독 완료`);
             }
         });
-    }, [roomId, playername]);
+    }, [roomId, playerId]);
 
     async function connect() {
         // stompClient가 close 상태라면 재생성 후 connect
@@ -420,9 +423,9 @@ function PlayerSocket() {
                 stompClient.current.connect(
                     {},
                     function () {
-                        stompClient.current.subscribe(`/sub/player/${playername}`, personalCallBackFunction);
+                        stompClient.current.subscribe(`/sub/player/${playerId}`, personalCallBackFunction);
                         stompClient.current.subscribe(`/sub/${roomId}`, broadCastCallBackFunction);
-                        stompClient.current.subscribe(`/sub/${roomId}/${playername}`, uniCastCallBackFunction);
+                        stompClient.current.subscribe(`/sub/${roomId}/${playerId}`, uniCastCallBackFunction);
                         console.log(roomId + '번 방 구독 완료');
                         console.log('재연결 완료');
                         resolve(); // 연결 성공 시 resolve 호출
@@ -714,12 +717,12 @@ function PlayerSocket() {
     }, [getPrediction]);
 
     // 이동 중, 서버에 이동 정보 보내기
-    // useEffect(() => {
-    //     if (!isMoving) return;
-    //     connect().then(function () {
-    //         stompClient.current.send(`/pub/${roomId}/movePlayer`, {}, JSON.stringify({ player: nowPlayer + 1, movementCount: moveDist }));
-    //     });
-    // }, [isMoving]);
+    useEffect(() => {
+        if (!isMoving) return;
+        connect().then(function () {
+            stompClient.current.send(`/pub/${roomId}/movePlayer`, {}, JSON.stringify({ player: playerId, movementCount: moveDist }));
+        });
+    }, [isMoving]);
 
     //턴 종료
     useEffect(() => {
@@ -740,7 +743,7 @@ function PlayerSocket() {
                 `/pub/${roomId}/join`,
                 {},
                 JSON.stringify({
-                    player: playername,
+                    player: playerId,
                     nickname: nickname,
                 })
             );
@@ -761,7 +764,7 @@ function PlayerSocket() {
                 `/pub/${roomId}/exit`,
                 {},
                 JSON.stringify({
-                    player: playername,
+                    player: playerId,
                     nickname: nickname,
                 })
             );
@@ -781,7 +784,7 @@ function PlayerSocket() {
                 `/pub/${roomId}/start`,
                 {},
                 JSON.stringify({
-                    hostPlayer: playername,
+                    hostPlayer: playerId,
                 })
             );
         });

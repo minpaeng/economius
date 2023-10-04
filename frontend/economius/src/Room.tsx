@@ -21,7 +21,7 @@ import Join from './Components/Modals/Join';
 import StartLoginCheck from './Components/Modals/StartLoginCheck';
 
 import Socket from './Socket';
-import { PlayerIdState } from '/src/recoil/game/atom.tsx';
+import { PlayerIdState, ClickUserPortfolioState } from '/src/recoil/game/atom.tsx';
 
 export default function Room() {
     // 최상단 컴포넌트에서 모달을 쓸 것이라고 명시 작업이 필요
@@ -51,6 +51,8 @@ export default function Room() {
     const [roomCount, setRoomCount] = useRecoilState(RoomCountState);
     const [startReturn, setStartReturn] = useRecoilState(StartReturnState);
 
+    const [clickUserPortfolio, setClickUserPortfolio] = useRecoilState(ClickUserPortfolioState);
+
     // const [showJoin, setShowJoin] = useState(false);
 
     const navigate = useNavigate();
@@ -79,6 +81,7 @@ export default function Room() {
     // 시작하자마자 모달 열기
     useEffect(() => {
         openModal();
+        setClickUserPortfolio(Number(localStorage.getItem('player')));
     }, []);
 
     // 모달이 닫히면 적용

@@ -26,8 +26,8 @@ export const RoomExitState = atom<boolean>({
 // 현재 방 번호
 export const RoomIdState = atom<number>({
     key: 'RoomIdState',
-    default: 1, // 기본값
-    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+    default: 2, // 기본값
+    effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
 // 현재 방장 번호
@@ -171,5 +171,5 @@ export const RoomJoinUsersNicknameState = atom<string[]>({
 export const RoomJoinUsersIdState = atom<number[]>({
     key: 'RoomJoinUsersIdState',
     default: [0, 0, 0, 0],
-    // effects_UNSTABLE: [persistAtom],
+    effects_UNSTABLE: [persistAtom],
 });
