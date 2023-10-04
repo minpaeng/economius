@@ -41,7 +41,7 @@ public class Stock {
 
     public void updateStockPriceAndRate(int closingRate, int round) {
         updatePrice(closingRate, round);
-        updateRate(closingRate, round);
+        updateRate(closingRate);
     }
 
     public void initializeOwners(List<Long> players) {
@@ -50,10 +50,10 @@ public class Stock {
 
     }
 
-    private void updateRate(int closingRate, int round) {
+    private void updateRate(int closingRate) {
         rate = closingRate;
 
-        rateHistory.add(round, rate);
+        rateHistory.add(rate);
     }
 
     private void updatePrice(int closingRate, int round) {
