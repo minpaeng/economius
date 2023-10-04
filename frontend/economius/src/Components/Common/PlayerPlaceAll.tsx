@@ -1,20 +1,25 @@
 import PlayerPlace from './PlayerPlace';
 import { RoomJoinUsersIdState, RoomJoinUsersNicknameState } from '../../recoil/animation/atom';
+import { RoomJoinUsersCharacterState } from '/src/recoil/animation/atom';
 import { useRecoilValue } from 'recoil';
 
 function PlayerPlaceAll() {
     const NickNameArr = useRecoilValue(RoomJoinUsersNicknameState);
     const UserIdArr = useRecoilValue(RoomJoinUsersIdState);
+    const Characters = useRecoilValue(RoomJoinUsersCharacterState);
 
-    const character1 = 'Butterfly';
-    const character2 = 'Deer';
-    const character3 = 'Bird';
-    const character4 = 'Camel';
+    function objectToArray(obj) {
+        if (obj === null) {
+            return;
+        }
+        if (!obj) {
+            return [];
+        }
+        return Object.values(obj);
+    }
 
-    // const Nick1 = '지니어스';
-    // const Nick2 = '이코노미';
-    // const Nick3 = '비즈니스';
-    // const Nick4 = '퍼스트';
+    const CharacterArr = objectToArray(Characters);
+    // console.log(CharacterArr);
 
     const AllProperty1 = 3400000;
     const AllProperty2 = 5000000;
@@ -39,7 +44,7 @@ function PlayerPlaceAll() {
                 top='6%'
                 left='0%'
                 bgColor='rgba(255, 216, 133, 0.9)'
-                character={character1}
+                character={CharacterArr[0]}
                 AllProperty={AllProperty1}
                 money={money1}
                 Ranking={Ranking1}
@@ -52,7 +57,7 @@ function PlayerPlaceAll() {
                 top='6%'
                 left='50%'
                 bgColor='rgba(131, 213, 233, 0.9)'
-                character={character2}
+                character={CharacterArr[1]}
                 AllProperty={AllProperty2}
                 money={money2}
                 Ranking={Ranking2}
@@ -65,7 +70,7 @@ function PlayerPlaceAll() {
                 top='81%'
                 left='0%'
                 bgColor='rgba(255, 166, 132, 0.90)'
-                character={character3}
+                character={CharacterArr[2]}
                 AllProperty={AllProperty3}
                 money={money3}
                 Ranking={Ranking3}
@@ -79,7 +84,7 @@ function PlayerPlaceAll() {
                 top='81%'
                 left='50%'
                 bgColor='rgba(255, 156, 159, 0.90)'
-                character={character4}
+                character={CharacterArr[3]}
                 AllProperty={AllProperty4}
                 money={money4}
                 Ranking={Ranking4}

@@ -31,6 +31,9 @@ import {
     currentIssueState,
     StockChangeArrState,
 } from '/src/recoil/game/atom';
+
+import { RoomJoinUsersCharacterState } from '/src/recoil/animation/atom';
+
 import axios from 'axios';
 import { RoomIdState } from '/src/recoil/animation/atom.tsx';
 import CoinEffect from '/src/Components/Effect/CoinEffect';
@@ -55,6 +58,19 @@ function App() {
     const setCurrentPrevIssues = useSetRecoilState(currentPrevIssueState);
     const setCurrentIssue = useSetRecoilState(currentIssueState);
     const setStockChangeArr = useSetRecoilState(StockChangeArrState);
+    const [roomJoinUsersCharacter, setRoomJoinUsersCharacter] = useRecoilState(RoomJoinUsersCharacterState);
+
+    function objectToArray(obj) {
+        if (obj === null) {
+            return;
+        }
+        if (!obj) {
+            return [];
+        }
+        return Object.values(obj);
+    }
+
+    const CharacterArr = objectToArray(roomJoinUsersCharacter);
 
     setPlayerId(Number(localStorage.getItem('player')));
 
@@ -70,6 +86,7 @@ function App() {
             setCurrentPrevIssues(data.data.currentPrevIssues);
             setCurrentIssue(data.data.currentIssue);
             setStockChangeArr(data.data.stocks);
+            setRoomJoinUsersCharacter(data.data.characters);
             console.log(data.data);
         });
     }, []);
@@ -84,13 +101,14 @@ function App() {
                 <pointLight ref={light} color={0xffffff} intensity={1} position={[0, 5, 0]} />
 
                 <Map />
-                <Characters />
+                <Characters CharacterArr={CharacterArr} />
             </Canvas>
 
             <Controller />
 
             <NewsBar />
-            <PlayerPlaceAll />
+            {roomJoinUsersCharacter === null ? null : <PlayerPlaceAll />}
+
             {Portfolio === null ? null : <SideBar />}
             <BigEventRound />
 

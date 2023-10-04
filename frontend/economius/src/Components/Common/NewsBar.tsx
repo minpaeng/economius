@@ -26,7 +26,7 @@ function NewsBar() {
             flexDirextion: 'column',
             alignItems: 'center',
 
-            backgroundColor: 'black',
+            backgroundColor: 'rgb(12,14,20)',
             overflow: 'auto',
             zIndex: '1',
             top: 0,
@@ -56,7 +56,7 @@ function NewsBar() {
     return (
         <Modal isOpen={true} style={modalStyle}>
             <img src='NewsBar/megaphone.png' alt='img' style={{ width: '50px' }} />
-            <Ticker slideSpeed={60}>
+            <Ticker slideSpeed={80}>
                 {/* <FinancialTicker id='1' change={true} symbol='test' lastPrice='200' percentage='0.4' currentPrice='160' />
                 <FinancialTicker id='2' change={false} symbol='test' lastPrice='200' percentage='0.4' currentPrice='160' />
                 <FinancialTicker id='3' change={true} symbol='test' lastPrice='200' percentage='0.4' currentPrice='160' />
