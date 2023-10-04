@@ -29,7 +29,6 @@ import {
     buildingState,
     currentPrevIssueState,
     currentIssueState,
-    StockChangeArrState,
 } from '/src/recoil/game/atom';
 
 import { RoomJoinUsersCharacterState } from '/src/recoil/animation/atom';
@@ -104,7 +103,7 @@ function App() {
                 <Characters CharacterArr={CharacterArr} />
             </Canvas>
 
-            <Controller />
+            {/* <Controller /> */}
 
             <NewsBar />
             {roomJoinUsersCharacter === null ? null : <PlayerPlaceAll />}
