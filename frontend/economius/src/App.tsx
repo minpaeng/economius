@@ -40,7 +40,9 @@ function App() {
     const setGoldState = useSetRecoilState(GoldState);
     const setInterestRateState = useSetRecoilState(interestRateState);
     const setBuildingState = useSetRecoilState(buildingState);
-    const setPlayerToRoll = useSetRecoilState(PlayerToRollState);
+    const setPlayerToRoll = useSetRecoilState(PlayerToRollState); 
+    const setCurrentPrevIssues = useSetRecoilState(currentPrevIssueState);
+    const setCurrentIssue = useSetRecoilState(currentIssueState);
 
     // 일단 하드코딩
     setPlayerId(1);
@@ -54,6 +56,8 @@ function App() {
             setBuildingState(data.data.buildings);
             setPlayerToRoll(data.data.currentPlayerToRoll);
             setRoomId(data.data.roomId);
+            setCurrentPrevIssues(data.data.currentPrevIssues);
+            setCurrentIssue(data.data.currentIssue);
             console.log(data.data);
         });
     }, []);
