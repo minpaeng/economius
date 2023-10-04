@@ -1,7 +1,12 @@
 import { atom } from "recoil";
+<<<<<<< HEAD
 import {a} from "@react-spring/web";
 
 export const PlayerIdState = atom({
+=======
+
+export const PlayerIdState = atom<number>({
+>>>>>>> 779df1b (feat: economic News)
   key: "PlayerIdState",
   default: 1,
 });
@@ -44,15 +49,10 @@ export const buildingState = atom({
   default: null,
 });
 
-export const currentPrevIssueState = atom({
-  key: "currentPrevIssueState",
-  default: null,
-});
-
 export const PlayerToRollState = atom({
   key: "playerToRollState",
   default: null,
-})
+});
 
 export const GameRoundState = atom({
   key: "gameRoundState",
@@ -64,3 +64,14 @@ export const PlayerRankingState = atom({
     key: "playerRankingState",
     default: [1,2,3,4],
 })
+
+
+export const currentPrevIssueState = atom({
+  key: "currentPrevIssueState",
+  default: null,
+});
+
+export const currentIssueState = atom({
+  key: "currentIssueState",
+  default: null,
+});
