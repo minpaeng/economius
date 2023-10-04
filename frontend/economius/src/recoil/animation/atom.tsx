@@ -9,6 +9,13 @@ export const StartReturnState = atom<boolean>({
     // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
+// 게임 내부 내턴 정보 저장
+export const MyTurnState = atom<number>({
+    key: 'MyTurnState',
+    default: 1, // 기본값
+    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+});
+
 // 게임 시작 버튼 클릭 여부
 export const GameButtonState = atom<boolean>({
     key: 'GameButtonState',
