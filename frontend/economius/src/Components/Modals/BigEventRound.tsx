@@ -24,8 +24,6 @@ function BigEventRound() {
     }
 
     setIsModalOpen(true);
-
-    console.log(issue);
   }, [issue]);
 
   // modal style
@@ -86,8 +84,6 @@ function BigEventRound() {
     issue?.buildingChange
   );
 
-  console.log(Rate_Gold_Estate);
-
   function StockDataChange(stockChanges) {
     const UpStock = [];
     const StableStock = [];
@@ -118,7 +114,6 @@ function BigEventRound() {
   }
 
   const [Up, Stable, Down] = StockDataChange(issue?.stockChanges);
-  console.log(Up, Stable, Down);
 
   return (
     <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>

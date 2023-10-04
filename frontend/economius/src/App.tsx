@@ -4,28 +4,38 @@ import { Canvas, useLoader, useFrame } from '@react-three/fiber';
 import { OrbitControls, OrthographicCamera, SpotLight, useHelper } from '@react-three/drei';
 import video2 from '/video/video_loading.mp4'; // sound
 
-import Map from '/src/Map';
-import Characters from '/src/Characters';
+import Map from "/src/Map";
+import Characters from "/src/Characters";
 
-import Controller from '/src/Controller';
+import Controller from "/src/Controller";
 
 // import Portforlio from "./Components/Common/Portfolio";
-import NewsBar from './Components/Common/NewsBar';
+import NewsBar from "./Components/Common/NewsBar";
 
-import './App.css';
-import Modals from './Modals';
-import PlayerPlaceAll from './Components/Common/PlayerPlaceAll';
-import SideBar from './Components/Common/SideBar';
+import "./App.css";
+import Modals from "./Modals";
+import PlayerPlaceAll from "./Components/Common/PlayerPlaceAll";
+import SideBar from "./Components/Common/SideBar";
 
-import Socket from './Socket';
-import * as THREE from 'three';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { PlayerIdState, PlayerToRollState, PortfolioState, StockState, GoldState, interestRateState, buildingState } from '/src/recoil/game/atom';
-import axios from 'axios';
-import { RoomIdState } from '/src/recoil/animation/atom.tsx';
-import CoinEffect from '/src/Components/Effect/CoinEffect';
-import Round from '/src/Components/Modals/Round.tsx';
-import MovementCard from './Components/Modals/MovementCard';
+import Socket from "./Socket";
+import * as THREE from "three";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import {
+  PlayerIdState,
+  PlayerToRollState,
+  PortfolioState,
+  StockState,
+  GoldState,
+  interestRateState,
+  buildingState,
+  currentPrevIssueState,
+  currentIssueState,
+} from "/src/recoil/game/atom";
+import axios from "axios";
+import { RoomIdState } from "/src/recoil/animation/atom.tsx";
+import CoinEffect from "/src/Components/Effect/CoinEffect";
+import Round from "/src/Components/Modals/Round.tsx";
+import MovementCard from "./Components/Modals/MovementCard";
 
 import BigEventRound from './Components/Modals/BigEventRound';
 import GameEnd from '/src/Components/Modals/GameEnd.tsx';

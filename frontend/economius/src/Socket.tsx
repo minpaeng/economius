@@ -44,7 +44,9 @@ import {
     PlayerToRollState,
     PortfolioState,
     PredictionState,
-    StockState
+    StockState,
+    currentPrevIssueState,
+    currentIssueState,
 } from '/src/recoil/game/atom.tsx';
 import {
     BankInfoState,
@@ -54,6 +56,7 @@ import {
     RealEstateInfoState,
     StockInfoState,
     BigEventInfoState,
+    FinanceCenterState,
 } from './recoil/modalInfo/atom';
 
 const buildingIds = {
@@ -95,6 +98,7 @@ function PlayerSocket() {
     const [movementCardOpen, setMovementCardOpen] = useRecoilState(MovementCardOpenState);
     const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
     const [isMoving, setIsMoving] = useRecoilState(IsMovingState);
+    const [financeCenter, setFinanceCenter] = useRecoilState(FinanceCenterState);
     let moveDist = useRecoilValue(MoveDistState);
     // 자산별 모달 정보
     const [monthlyInfo, setMonthlyInfo] = useRecoilState(MonthlyInfoState);
@@ -126,6 +130,9 @@ function PlayerSocket() {
     const setPlayerRanking = useSetRecoilState(PlayerRankingState);
 
     const [callBack, setCallBack] = useRecoilState(CallBackState);
+
+    const setCurrentPrevIssues = useSetRecoilState(currentPrevIssueState);
+    const setCurrentIssue = useSetRecoilState(currentIssueState);
 
     //이벤트 카드
     const [chanceCardInfo, setChanceCardInfo] = useRecoilState(ChanceCardInfoState);
@@ -161,21 +168,7 @@ function PlayerSocket() {
         console.log('개인메시지 type: ', type);
         console.log('개인메시지 message: ', message);
         // 주식 변경 recoil 시작
-        if (type === 'stockDetail') {
-            setStockDetail({
-                stockId: message.stockId,
-                name: message.name,
-                stockIndustryId: message.stockIndustryId,
-                companyCategory: message.companyCategory,
-                companySubCategory: message.companySubCategory,
-                owners: message.owners,
-                remainingAmount: message.remainingAmount,
-                price: message.price,
-                rate: message.rate,
-                priceHistory: message.priceHistory,
-                rateHistory: message.rateHistory,
-            });
-        } else if (type === 'selectGolds') {
+        if (type === 'selectGolds') {
             setGoldDetail({
                 player: message.player,
                 price: message.price,
@@ -185,31 +178,6 @@ function PlayerSocket() {
             });
         } else if (type === 'oracle') {
             setPrediction(message);
-        }
-        // 턴 종료 로직
-        else if (type === 'buyStock') {
-            setCallBack(true);
-        } else if (type === 'sellStock') {
-            setCallBack(true);
-        } else if (type === 'buyGolds') {
-            setCallBack(true);
-        } else if (type === 'sellGolds') {
-            setCallBack(true);
-        } else if (type === 'buyBuilding') {
-            setCallBack(true);
-        } else if (type === 'sellBuilding') {
-            setCallBack(true);
-        } else if (type === 'joinSavings') {
-            setCallBack(true);
-        } else if (type === 'stopSavings') {
-            setCallBack(true);
-        } else if (type in ['joinInsurance', 'finishInsurance']) {
-            if (insuranceCnt === 3) {
-                setCallBack(true);
-                setInsuranceCnt(0);
-            } else {
-                setInsuranceCnt(prev => prev + 1);
-            }
         }
     }
 
@@ -259,6 +227,8 @@ function PlayerSocket() {
             setStocks(message.stocks);
             setPortfolio(message.portfolios);
             setPlayerToRoll(message.currentPlayerToRoll);
+            setCurrentPrevIssues(message.currentPrevIssues);
+            setCurrentIssue(message.currentIssue);
             setGameRound(Math.floor(message.gameTurn / 4));
             // if (message.currentPlayerToRoll === playername) {
             connect().then(function () {
@@ -270,11 +240,33 @@ function PlayerSocket() {
             setMovementCard(message.cards);
             setMovementCardOpen(true);
             setPlayerRanking(message.players);
+            // else if (type === 'movePlayer' && message.player === playername) {
+            //     setNowPlayerPosition(message.location);
+            // }
+        } else if (type === 'buyStock') {
+            setCallBack(true);
+        } else if (type === 'sellStock') {
+            setCallBack(true);
+        } else if (type === 'buyGolds') {
+            setCallBack(true);
+        } else if (type === 'sellGolds') {
+            setCallBack(true);
+        } else if (type === 'buyBuilding') {
+            setCallBack(true);
+        } else if (type === 'sellBuilding') {
+            setCallBack(true);
+        } else if (type === 'joinSavings') {
+            setCallBack(true);
+        } else if (type === 'stopSavings') {
+            setCallBack(true);
+        } else if (type in ['joinInsurance', 'finishInsurance']) {
+            if (insuranceCnt === 3) {
+                setCallBack(true);
+                setInsuranceCnt(0);
+            } else {
+                setInsuranceCnt(prev => prev + 1);
+            }
         }
-        // else if (type === 'movePlayer' && message.player === playername) {
-        //     setNowPlayerPosition(message.location);
-        // }
-
         if (type === 'issue') {
             setBigEventInfo({
                 buildingChange: message.buildingChange,
@@ -296,6 +288,20 @@ function PlayerSocket() {
                 changeAmount: message.changeAmount,
                 visitor: message.visitor,
                 owner: message.owner,
+            });
+        } else if (type === 'stockDetail') {
+            setStockDetail({
+                stockId: message.stockId,
+                name: message.name,
+                stockIndustryId: message.stockIndustryId,
+                companyCategory: message.companyCategory,
+                companySubCategory: message.companySubCategory,
+                owners: message.owners,
+                remainingAmount: message.remainingAmount,
+                price: message.price,
+                rate: message.rate,
+                priceHistory: message.priceHistory,
+                rateHistory: message.rateHistory,
             });
         } else if (type == 'bank') {
             setBankInfo({
@@ -459,8 +465,22 @@ function PlayerSocket() {
         //주식 방문
         else if (nowPlayerPosition % 2 === 1) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/buyItem`, {}, JSON.stringify({ player: nowPlayer + 1, stockId: stockIds[nowPlayerPosition] }));
-                stompClient.current.send(`/pub/${roomId}/stockDetail`, {}, JSON.stringify({ player: nowPlayer + 1, stockId: stockIds[nowPlayerPosition] }));
+                stompClient.current.send(
+                    `/pub/${roomId}/buyItem`,
+                    {},
+                    JSON.stringify({
+                        player: nowPlayer + 1,
+                        stockId: stockIds[nowPlayerPosition],
+                    })
+                );
+                stompClient.current.send(
+                    `/pub/${roomId}/stockDetail`,
+                    {},
+                    JSON.stringify({
+                        player: nowPlayer + 1,
+                        stockId: stockIds[nowPlayerPosition],
+                    })
+                );
             });
         }
         // 금거래소 방문
@@ -511,6 +531,17 @@ function PlayerSocket() {
             stompClient.current.send(`/pub/${roomId}/calculate`, {}, JSON.stringify({ player: nowPlayer + 1 }));
         });
     }, [monthlyModalOpen]);
+
+    // 종합금융센터
+    useEffect(() => {
+        // 현재 플레이어의 위치를 바꾸고, 바뀌고 나면 모달을 엶
+        if (financeCenter === -1) return;
+        setNowPlayerPosition(financeCenter);
+        if (nowPlayerPosition === financeCenter) {
+            setIsModalOpen(true);
+            setFinanceCenter(-1);
+        }
+    }, [financeCenter, nowPlayerPosition]);
 
     // 부동산 거래
     useEffect(() => {
