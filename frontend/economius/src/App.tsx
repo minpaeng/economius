@@ -89,23 +89,23 @@ function App() {
 
         <Map />
         <Characters />
-      </Canvas>
+        </Canvas>
 
-      <Controller />
+        <Controller />
 
-      <NewsBar />
-      <PlayerPlaceAll />
-      <SideBar />
-      <BigEventRound />
+        <NewsBar />
+        <PlayerPlaceAll />
+        <SideBar /> 
 
-      <Modals />
-      <Socket />
-      <CoinEffect />
-      <Round />
-      <MovementCard />
-      <GameEnd />
+        <Modals />
+        <Socket />
+        <CoinEffect />
+        <MovementCard />
+        <BigEventRound />
+        <Round />
+        <GameEnd />
     </div>
-  );
+    );
 }
 
 export default App;
