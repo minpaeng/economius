@@ -8,7 +8,6 @@ function BuyOrSell({ isBuy, stockId, StockOrGold, price, money, amount }) {
     const [buyAmount, setBuyAmount] = useRecoilState(BuyAmountState);
     const [sellAmount, setSellAmount] = useRecoilState(SellAmountState);
     const stocks = useRecoilValue(StockState);
-    const owners = stocks[stockId].owners;
     const remainedAmount = useRef(100);
 
     // TODO: 실제 현재 가격으로 변경하기
@@ -33,7 +32,7 @@ function BuyOrSell({ isBuy, stockId, StockOrGold, price, money, amount }) {
     };
 
     const getRemainAmount = () => {
-        console.log(owners);
+        const owners = stocks[stockId].owners;
         let total = 0;
 
         for (const key in owners) {
@@ -48,8 +47,7 @@ function BuyOrSell({ isBuy, stockId, StockOrGold, price, money, amount }) {
         // 처음 열 때 1로 초기화
         setBuyAmount(1);
         setSellAmount(1);
-        getRemainAmount();
-        console.log('=============================: ' + remainedAmount.current);
+        if (stockId !== -1) getRemainAmount();
     }, []);
 
     return (

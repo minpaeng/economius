@@ -23,46 +23,48 @@ function Card({ idx, value, flip, top, left, selected, CardClick }) {
     });
 
     return (
-        <div>
-            <animated.div
-                style={{
-                    position: 'absolute',
-                    top: top,
-                    left: left,
-                    width: '120px',
-                    aspectRatio: '58/90',
-                    opacity: opacity.to(o => 1 - o),
-                    transform,
-                    backgroundImage: `url(${woncardback})`,
-                    backgroundSize: 'contain',
-                }}
-            ></animated.div>
-            <animated.div
-                onClick={CardClick}
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    position: 'absolute',
-                    top: top,
-                    left: left,
-                    ...imageSize,
-                    opacity,
-                    transform,
-                    aspectRatio: '58/90',
-                    rotateY: '180deg',
-                    backgroundImage: `url(${woncardfront})`,
-                    backgroundSize: 'contain',
-                    border: 'soild 1px red',
-                }}
-            >
-                <S.Number>{value}</S.Number>
-            </animated.div>
+        <div className="MovementCardModal">
+            <div>
+                <animated.div
+                    style={{
+                        position: 'absolute',
+                        top: top,
+                        left: left,
+                        width: '120px',
+                        aspectRatio: '58/90',
+                        opacity: opacity.to(o => 1 - o),
+                        transform,
+                        backgroundImage: `url(${woncardback})`,
+                        backgroundSize: 'contain',
+                    }}
+                ></animated.div>
+                <animated.div
+                    onClick={CardClick}
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        position: 'absolute',
+                        top: top,
+                        left: left,
+                        ...imageSize,
+                        opacity,
+                        transform,
+                        aspectRatio: '58/90',
+                        rotateY: '180deg',
+                        backgroundImage: `url(${woncardfront})`,
+                        backgroundSize: 'contain',
+                        border: 'soild 1px red',
+                    }}
+                >
+                    <S.Number>{value}</S.Number>
+                </animated.div>
+            </div>
         </div>
     );
 }
 
-function MovementCard() {
+function MovementCard({}) {
     const [isMoving, setIsMoving] = useRecoilState(IsMovingState); // 캐릭터 이동 여부
     const [moveDist, setMoveDist] = useRecoilState(MoveDistState); // 캐릭터 이동 거리
     const [movementCard, setMovementCard] = useRecoilState(MovementCardState);
