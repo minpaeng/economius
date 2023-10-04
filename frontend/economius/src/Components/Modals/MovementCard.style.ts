@@ -27,17 +27,26 @@ export const Number = styled.div`
 `;
 
 export const Button = styled.div`
-    display: flex;
-    position: absolute;
-    bottom: 9%;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 11px 15px;
+    margin: 0 auto;
+    margin-top: 290px;
+    width: 25%;
+    padding: 12px 15px;
     border-radius: 20px;
     background: #ffdaae;
+    text-align: center;
     &:hover {
         background: #ffaa55;
     }
+`;
+
+export const DisButton = styled.div`
+    margin: 0 auto;
+    margin-top: 290px;
+    width: 50%;
+    padding: 11px 15px;
+    border-radius: 20px;
+    background: #d9d9d9;
+    text-align: center;
 `;
 
 export const Caution = styled.div`

@@ -224,8 +224,10 @@ function PlayerSocket() {
         if (type === 'movePlayer') {
             setMoveDist(message.movementCount);
             setPlayerToRoll(message.player);
-            setIsMoving(true);
-            setMovementCardOpen(false);
+            setTimeout(() => {
+                setIsMoving(true);
+                setMovementCardOpen(false);
+            }, 500);
         } else if (type === 'finishTurn') {
             setStocks(message.stocks);
             setPortfolio(message.portfolios);
@@ -235,11 +237,11 @@ function PlayerSocket() {
             setGameRound(Math.floor(message.gameTurn / 4));
             setCallBack(false);
             setIsModalOpen(false);
-            // if (message.currentPlayerToRoll === playerId) {
-            connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerToRoll }));
-            });
-            // }
+            if (message.currentPlayerToRoll === playerId) {
+                connect().then(function () {
+                    stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerToRoll }));
+                });
+            }
             // } else if (type === 'viewMovementCard' && message.player === playerId) {
         } else if (type === 'viewMovementCard') {
             setMovementCard(message.cards);
@@ -368,9 +370,11 @@ function PlayerSocket() {
         else if (type == 'start') {
             setStartReturn(true);
             // 플레이어 이동 카드 조회
-            connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerToRoll }));
-            });
+            if (playerToRoll === playerId) {
+                connect().then(function () {
+                    stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerToRoll }));
+                });
+            }
         }
     }
 
