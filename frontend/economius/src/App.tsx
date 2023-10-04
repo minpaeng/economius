@@ -29,6 +29,7 @@ import {
     buildingState,
     currentPrevIssueState,
     currentIssueState,
+    StockChangeArrState,
 } from '/src/recoil/game/atom';
 
 import { RoomJoinUsersCharacterState } from '/src/recoil/animation/atom';
