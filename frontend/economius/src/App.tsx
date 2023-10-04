@@ -32,13 +32,14 @@ import {
     currentIssueState,
 } from '/src/recoil/game/atom';
 import axios from 'axios';
-import { RoomIdState } from '/src/recoil/animation/atom.tsx';
+import { RoomIdState, MyTurnState } from '/src/recoil/animation/atom.tsx';
 import CoinEffect from '/src/Components/Effect/CoinEffect';
 import Round from '/src/Components/Modals/Round.tsx';
 import MovementCard from './Components/Modals/MovementCard';
 
 import BigEventRound from './Components/Modals/BigEventRound';
 import GameEnd from '/src/Components/Modals/GameEnd.tsx';
+import StartPlayCheck from './Components/Modals/StartPlayCheck';
 
 function App() {
     const light = useRef();
@@ -55,7 +56,10 @@ function App() {
     const setCurrentPrevIssues = useSetRecoilState(currentPrevIssueState);
     const setCurrentIssue = useSetRecoilState(currentIssueState);
 
+    // SSH Test
     const [showVideo, setShowVideo] = useState(true);
+    const [, setMyTurn] = useRecoilState(MyTurnState);
+    // const [isOpen, setIsOpen] = useState(true);
 
     // 일단 하드코딩
     setPlayerId(1);
@@ -71,6 +75,13 @@ function App() {
             setRoomId(data.data.roomId);
             setCurrentPrevIssues(data.data.currentPrevIssues);
             setCurrentIssue(data.data.currentIssue);
+
+            // 내 턴을 저장
+            for (let i = 0; i < data.data.playerSequence.length; i++) {
+                if (data.data.playerSequence == Number(localStorage.getItem('player'))) {
+                    setMyTurn(i + 1);
+                }
+            }
             console.log(data.data);
         });
     }, []);
@@ -89,9 +100,14 @@ function App() {
 
     return (
         <>
+            <StartPlayCheck />
+            {/* {isOpen && (
+
+
+            )} */}
             {showVideo && (
                 <div className='video-loading'>
-                    <video autoPlay muted loop src='/video/video_loading.mp4' style={{ width: '100%', height: 'auto' }} />{' '}
+                    <video autoPlay muted loop src='/video/video_loading.mp4' style={{ width: '100%', height: 'auto' }} />
                 </div>
             )}
             <div className='canvas-outer' style={{ width: '100%', height: 'calc(100vw * 9 / 16)' }}>
