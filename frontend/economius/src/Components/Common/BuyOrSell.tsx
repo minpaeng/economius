@@ -8,7 +8,7 @@ function BuyOrSell({ isBuy, stockId, StockOrGold, price, money, amount }) {
     const [buyAmount, setBuyAmount] = useRecoilState(BuyAmountState);
     const [sellAmount, setSellAmount] = useRecoilState(SellAmountState);
     const stocks = useRecoilValue(StockState);
-    const remainedAmount = useRef(100);
+    const [remainedAmount, setRemainedAmount] = useState(100);
 
     // TODO: 실제 현재 가격으로 변경하기
     const canUseMoney = money;
@@ -40,8 +40,12 @@ function BuyOrSell({ isBuy, stockId, StockOrGold, price, money, amount }) {
                 total += owners[key];
             }
         }
-        remainedAmount.current = 100 - total < 0 ? 0 : 100 - total;
-    };
+        setRemainedAmount(100 - total < 0 ? 0 : 100 - total);
+    }
+
+    const modalDisableState = () => {
+        return buyAmount + 1 > remainedAmount;
+    }
 
     useEffect(() => {
         // 처음 열 때 1로 초기화
@@ -90,12 +94,13 @@ function BuyOrSell({ isBuy, stockId, StockOrGold, price, money, amount }) {
                             )}
                         </S.StockCntInput>
                         {isBuy ? (
-                            (buyAmount + 1) * currentPrice > canUseMoney || (StockOrGold === 'stock' && buyAmount + 1 > remainedAmount.current) ? (
+                            (buyAmount + 1) * currentPrice > canUseMoney
+                            || (StockOrGold === 'stock' && buyAmount + 1 > remainedAmount) ? (
                                 <S.disableIncBtn disabled>+</S.disableIncBtn>
                             ) : (
                                 <S.IncBtn onClick={handleIncrement}>+</S.IncBtn>
                             )
-                        ) : (sellAmount + 1) * currentPrice > haveStock * currentPrice ? (
+                        ) : (sellAmount + 1) * currentPrice > haveStock * currentPrice || sellAmount >= haveStock? (
                             <S.disableIncBtn disabled>+</S.disableIncBtn>
                         ) : (
                             <S.IncBtn onClick={handleIncrement}>+</S.IncBtn>
