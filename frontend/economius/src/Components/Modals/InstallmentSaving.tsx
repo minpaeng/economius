@@ -60,7 +60,9 @@ function InstallmentSaving() {
                             <S.BankMidPriceDesc>
                                 <p>
                                     월 납부액 : {bankInfo.monthlyDeposit.toLocaleString()}
-                                    {bankInfo.have ? ` (잔여 : ${(bankInfo.monthlyDeposit * bankInfo.finishCount - bankInfo.currentPrice).toLocaleString()})` : null}
+                                    {bankInfo.have
+                                        ? ` (잔여 : ${(bankInfo.monthlyDeposit * bankInfo.finishCount - bankInfo.currentPrice).toLocaleString()})`
+                                        : null}
                                 </p>
                                 <img
                                     src='Bank/dollar-coin 15.png'
@@ -95,17 +97,21 @@ function InstallmentSaving() {
                     </S.BankMid>
                     <S.BankDivide />
                     {bankInfo.have ? (
-                        <S.BankJoinBottom onClick={() => {
-                            setTradeBank([false, true]);
-                            //closeModal();  
-                        }}>
+                        <S.BankJoinBottom
+                            onClick={() => {
+                                setTradeBank([false, true]);
+                                //closeModal();
+                            }}
+                        >
                             적금 해지하기
                         </S.BankJoinBottom>
                     ) : (
-                        <S.BankJoinBottom onClick={() => {
-                            setTradeBank([true, false]);
-                            //closeModal();  
-                        }}>
+                        <S.BankJoinBottom
+                            onClick={() => {
+                                setTradeBank([true, false]);
+                                //closeModal();
+                            }}
+                        >
                             적금 가입하기
                         </S.BankJoinBottom>
                     )}

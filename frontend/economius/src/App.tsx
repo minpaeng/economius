@@ -20,7 +20,17 @@ import SideBar from './Components/Common/SideBar';
 import Socket from './Socket';
 import * as THREE from 'three';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { PlayerIdState, PlayerToRollState, PortfolioState, StockState, GoldState, interestRateState, buildingState } from '/src/recoil/game/atom';
+import {
+    PlayerIdState,
+    PlayerToRollState,
+    PortfolioState,
+    StockState,
+    GoldState,
+    interestRateState,
+    buildingState,
+    currentPrevIssueState,
+    currentIssueState,
+} from '/src/recoil/game/atom';
 import axios from 'axios';
 import { RoomIdState } from '/src/recoil/animation/atom.tsx';
 import CoinEffect from '/src/Components/Effect/CoinEffect';
@@ -42,6 +52,8 @@ function App() {
     const setInterestRateState = useSetRecoilState(interestRateState);
     const setBuildingState = useSetRecoilState(buildingState);
     const setPlayerToRoll = useSetRecoilState(PlayerToRollState);
+    const setCurrentPrevIssues = useSetRecoilState(currentPrevIssueState);
+    const setCurrentIssue = useSetRecoilState(currentIssueState);
 
     const [showVideo, setShowVideo] = useState(true);
 
@@ -57,6 +69,8 @@ function App() {
             setBuildingState(data.data.buildings);
             setPlayerToRoll(data.data.currentPlayerToRoll);
             setRoomId(data.data.roomId);
+            setCurrentPrevIssues(data.data.currentPrevIssues);
+            setCurrentIssue(data.data.currentIssue);
             console.log(data.data);
         });
     }, []);
@@ -97,13 +111,13 @@ function App() {
                 <NewsBar />
                 <PlayerPlaceAll />
                 <SideBar />
-                <BigEventRound />
 
                 <Modals />
                 <Socket />
                 <CoinEffect />
-                <Round />
                 <MovementCard />
+                <BigEventRound />
+                <Round />
                 <GameEnd />
             </div>
         </>

@@ -69,3 +69,15 @@ padding-bottom: 56.24%;
     display: flex;
     z-index: 999;
 }
+
+.RoundModal {
+    z-index: 3;
+}
+
+.BigEventRoundModal {
+    z-index: 2;
+}
+
+.MovementCardModal {
+    z-index: 1;
+}

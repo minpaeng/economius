@@ -7,16 +7,15 @@ export const BigEvent = styled.div`
 `;
 
 export const BigEventLeft = styled.div`
-    flex: 5;
+    flex: 5.5;
 `;
 
 export const BigEventRight = styled.div`
-    flex: 5;
+    flex: 4.5;
     display: flex;
     flex-direction: column;
     color: white;
     justify-content: space-evenly;
-    padding-right: 35px;
 `;
 
 export const BigEventRightTitle = styled.div`
