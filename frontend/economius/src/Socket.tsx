@@ -37,15 +37,7 @@ import {
     TradeRealEstateState,
     TradeStockState,
 } from './recoil/trading/atom';
-import {
-    GameRoundState,
-    PlayerIdState,
-    PlayerRankingState,
-    PlayerToRollState,
-    PortfolioState,
-    PredictionState,
-    StockState
-} from '/src/recoil/game/atom.tsx';
+import { GameRoundState, PlayerIdState, PlayerRankingState, PlayerToRollState, PortfolioState, PredictionState, StockState } from '/src/recoil/game/atom.tsx';
 import {
     BankInfoState,
     ChanceCardInfoState,
@@ -161,21 +153,7 @@ function PlayerSocket() {
         console.log('개인메시지 type: ', type);
         console.log('개인메시지 message: ', message);
         // 주식 변경 recoil 시작
-        if (type === 'stockDetail') {
-            setStockDetail({
-                stockId: message.stockId,
-                name: message.name,
-                stockIndustryId: message.stockIndustryId,
-                companyCategory: message.companyCategory,
-                companySubCategory: message.companySubCategory,
-                owners: message.owners,
-                remainingAmount: message.remainingAmount,
-                price: message.price,
-                rate: message.rate,
-                priceHistory: message.priceHistory,
-                rateHistory: message.rateHistory,
-            });
-        } else if (type === 'selectGolds') {
+        if (type === 'selectGolds') {
             setGoldDetail({
                 player: message.player,
                 price: message.price,
@@ -296,6 +274,20 @@ function PlayerSocket() {
                 changeAmount: message.changeAmount,
                 visitor: message.visitor,
                 owner: message.owner,
+            });
+        } else if (type === 'stockDetail') {
+            setStockDetail({
+                stockId: message.stockId,
+                name: message.name,
+                stockIndustryId: message.stockIndustryId,
+                companyCategory: message.companyCategory,
+                companySubCategory: message.companySubCategory,
+                owners: message.owners,
+                remainingAmount: message.remainingAmount,
+                price: message.price,
+                rate: message.rate,
+                priceHistory: message.priceHistory,
+                rateHistory: message.rateHistory,
             });
         } else if (type == 'bank') {
             setBankInfo({
