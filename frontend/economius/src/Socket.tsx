@@ -233,6 +233,8 @@ function PlayerSocket() {
             setCurrentPrevIssues(message.currentPrevIssues);
             setCurrentIssue(message.currentIssue);
             setGameRound(Math.floor(message.gameTurn / 4));
+            setCallBack(false);
+            setIsModalOpen(false);
             // if (message.currentPlayerToRoll === playerId) {
             connect().then(function () {
                 stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerToRoll }));
@@ -710,11 +712,10 @@ function PlayerSocket() {
 
     //턴 종료
     useEffect(() => {
-        if (!callBack) return;
         setCallBack(false);
         setIsModalOpen(false);
+        if (callBack === false) return;
         if (playerToRoll !== playerId) return;
-        console.log('finishTurn repeat???');
         connect().then(function () {
             stompClient.current.send(`/pub/${roomId}/finishTurn`, {}, {});
         });
