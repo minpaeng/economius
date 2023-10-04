@@ -40,7 +40,33 @@ function App() {
     const setGoldState = useSetRecoilState(GoldState);
     const setInterestRateState = useSetRecoilState(interestRateState);
     const setBuildingState = useSetRecoilState(buildingState);
-    const setPlayerToRoll = useSetRecoilState(PlayerToRollState);
+    const setPlayerToRoll = useSetRecoilState(PlayerToRollState); 
+    const [isRoundOpen, setIsRoundOpen] = useState(false);
+    const [isBigEventRoundOpen, setIsBigEventRoundOpen] = useState(false);
+    const [isMovementCardOpen, setIsMovementCardOpen] = useState(false);
+
+    useEffect(() => {
+        if (!isRoundOpen && isBigEventRoundOpen === null) {
+            setIsBigEventRoundOpen(true);
+        }
+    }, [isRoundOpen]);
+    
+    useEffect(() => {
+        if (!isBigEventRoundOpen && isMovementCardOpen === null) {
+            setIsMovementCardOpen(true);
+        }
+    }, [isBigEventRoundOpen]);
+    
+    const handleRoundClose = () => {
+        setIsRoundOpen(false);
+        setIsBigEventRoundOpen(null); // null은 아직 초기화되지 않은 상태를 의미합니다.
+    };
+    
+    const handleBigEventRoundClose = () => {
+        setIsBigEventRoundOpen(false);
+        setIsMovementCardOpen(null);
+    };
+
 
     // 일단 하드코딩
     setPlayerId(1);
@@ -57,6 +83,10 @@ function App() {
             console.log(data.data);
         });
     }, []);
+ 
+
+ 
+
 
     return (
         <div className='canvas-outer' style={{ width: '100%', height: 'calc(100vw * 9 / 16)' }}>
@@ -80,9 +110,17 @@ function App() {
             <Modals />
             <Socket />
             <CoinEffect />
-            <MovementCard />
+            {/* <MovementCard />
             <BigEventRound />
-            <Round />
+            <Round /> */}
+
+            <Round isOpen={isRoundOpen} onClose={handleRoundClose} />
+            {isBigEventRoundOpen !== null && (
+                <BigEventRound isOpen={isBigEventRoundOpen} onClose={handleBigEventRoundClose} />
+            )}
+            {isMovementCardOpen !== null && (
+                <MovementCard isOpen={isMovementCardOpen} onClose={() => setIsMovementCardOpen(false)} />
+            )}
             <GameEnd />
         </div>
     );

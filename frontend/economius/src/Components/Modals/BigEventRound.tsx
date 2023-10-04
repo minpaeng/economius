@@ -10,7 +10,12 @@ import { useEffect, useState } from "react";
 // import { BigEventInfoState } from "../../recoil/modalInfo/atom";
 import BigEventRoundItem from "./BigEventRoundItem";
 
-function BigEventRound() {
+interface BigEventProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+function BigEventRound({isOpen, onClose}: BigEventProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const issue = useRecoilValue(BigEventInfoState);
 
