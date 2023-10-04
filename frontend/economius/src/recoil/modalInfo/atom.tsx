@@ -51,8 +51,8 @@ export const BigEventInfoState = atom({
     default: null,
 });
 
-// 종합금융센터 거래 여부
-export const FinanceCenterState = atom({
+// 종합금융센터 거래 인덱스
+export const FinanceCenterState = atom<number>({
     key: 'FinanceCenterState',
-    default: false,
+    default: -1, // -1 이면 거래 안함
 });

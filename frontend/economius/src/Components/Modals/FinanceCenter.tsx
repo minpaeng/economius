@@ -1,12 +1,13 @@
 import Modal from 'react-modal';
 import { useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { IsModalOpenState } from '/src/recoil/animation/atom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
+import { FinanceCenterState } from '/src/recoil/modalInfo/atom';
 import financecenterimg from '/FinanceCenter/financecenter.png';
 
 import * as S from './FinanceCenter.style';
 
-const buildings = [
+const buildings: [string, number][] = [
     ['대한전력', 1],
     ['궁민은행', 2],
     ['아람쿠', 3],
@@ -34,14 +35,17 @@ const buildings = [
 ];
 
 function FinanceCenter() {
-    const [selectedOption, setSelectedOption] = useState(-1);
+    const [financeCenter, setFinanceCenter] = useRecoilState(FinanceCenterState);
+    const [selectedOption, setSelectedOption] = useState<number>(-1);
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
+    const setCallBack = useSetRecoilState(CallBackState);
     const closeModal = () => {
-        setIsModalOpen(false);
+        setCallBack(true);
+        setFinanceCenter(-1);
     };
 
     return (
-        <Modal isOpen={true} style={S.modalStyle} onRequestClose={closeModal}>
+        <Modal isOpen={isModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
             <S.Main>
                 <S.Top>
                     <img src={financecenterimg} alt='img' style={{ width: '50px', marginRight: '10px' }} />
@@ -52,10 +56,10 @@ function FinanceCenter() {
                 <S.Mid>
                     <S.MidScroll>
                         <hr style={{ width: '200px', marginBottom: '5px' }} />
-                        {buildings.map((val, idx) => (
-                            <S.MidItem key={idx} onClickCapture={() => setSelectedOption(idx)}>
-                                <input type='radio' value={idx} checked={selectedOption === idx} style={{ marginRight: '5px' }} />
-                                <S.MidImg src={`/FinanceCenter/${val[1]}.png`} alt='financecenteritem'></S.MidImg>
+                        {buildings.map(val => (
+                            <S.MidItem key={val[1]} onClick={() => setSelectedOption(val[1])}>
+                                <input type='radio' value={val[1]} checked={selectedOption === val[1]} style={{ marginRight: '5px' }} />
+                                <S.MidImg src={`/FinanceCenter/${val[1]}.png`} alt={`${val[0]}`}></S.MidImg>
                                 <S.MidDesc>{val[0]}</S.MidDesc>
                             </S.MidItem>
                         ))}
@@ -63,7 +67,12 @@ function FinanceCenter() {
                 </S.Mid>
                 {'\u00A0'}
                 <S.Divide />
-                <S.Button style={{ backgroundColor: selectedOption !== -1 ? '#ffaa55' : '#D9D9D9' }}>선택하기</S.Button>
+                <S.Button
+                    onClick={() => (setFinanceCenter(selectedOption), setIsModalOpen(false))}
+                    style={{ backgroundColor: selectedOption !== -1 ? '#ffaa55' : '#D9D9D9' }}
+                >
+                    선택하기
+                </S.Button>
             </S.Main>
         </Modal>
     );

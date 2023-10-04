@@ -21,7 +21,6 @@ import {
     SetShowWaitRoomState,
     StartReturnState,
     UseridState,
-    IsMovingState,
     MoveDistState,
 } from './recoil/animation/atom';
 import {
@@ -46,6 +45,7 @@ import {
     RealEstateInfoState,
     StockInfoState,
     BigEventInfoState,
+    FinanceCenterState,
 } from './recoil/modalInfo/atom';
 
 const buildingIds = {
@@ -86,7 +86,7 @@ function PlayerSocket() {
     const [movementCard, setMovementCard] = useRecoilState(MovementCardState);
     const [movementCardOpen, setMovementCardOpen] = useRecoilState(MovementCardOpenState);
     const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
-    const [isMoving, setIsMoving] = useRecoilState(IsMovingState);
+    const [financeCenter, setFinanceCenter] = useRecoilState(FinanceCenterState);
     let moveDist = useRecoilValue(MoveDistState);
     // 자산별 모달 정보
     const [monthlyInfo, setMonthlyInfo] = useRecoilState(MonthlyInfoState);
@@ -301,8 +301,6 @@ function PlayerSocket() {
                 rate: message.savingDto.rate,
             });
         } else if (type == 'calculate') {
-            console.log('calculate');
-            console.log(message);
             setMonthlyInfo({
                 player: message.player,
                 salary: message.receipt.salary,
@@ -432,7 +430,6 @@ function PlayerSocket() {
         if (!isModalOpen) return;
         // 부동산 방문
         if ([4, 14, 22].includes(nowPlayerPosition)) {
-            console.log(nowPlayer + 1, buildingIds[nowPlayerPosition]);
             // isOpen 상태가 true일 때 메시지를 보내는 코드를 추가
             connect().then(function () {
                 stompClient.current.send(
@@ -501,6 +498,17 @@ function PlayerSocket() {
             stompClient.current.send(`/pub/${roomId}/calculate`, {}, JSON.stringify({ player: nowPlayer + 1 }));
         });
     }, [monthlyModalOpen]);
+
+    // 종합금융센터
+    useEffect(() => {
+        // 현재 플레이어의 위치를 바꾸고, 바뀌고 나면 모달을 엶
+        if (financeCenter === -1) return;
+        setNowPlayerPosition(financeCenter);
+        if (nowPlayerPosition === financeCenter) {
+            setIsModalOpen(true);
+            setFinanceCenter(-1);
+        }
+    }, [financeCenter, nowPlayerPosition]);
 
     // 부동산 거래
     useEffect(() => {
