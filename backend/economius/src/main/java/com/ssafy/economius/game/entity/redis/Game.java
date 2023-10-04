@@ -66,6 +66,10 @@ public class Game {
     // 찬스 이벤트 -
     private Event event;
 
+    public void updatePlayerToRoll(){
+        currentPlayerToRoll = playerSequence.get((gameTurn + 1) % 4);
+    }
+
     public void initializeCharacter(List<Integer> randoms) {
         int index = 0;
         characters = new HashMap<>();
