@@ -9,11 +9,6 @@ import woncardback from '/MovementCard/woncardback.png';
 // import dollarcardback from '/MovementCard/dollarcardback.png';
 import * as S from './MovementCard.style';
 
-interface MovementCardProps { 
-    isOpen: boolean;  
-    onClose: () => void; 
-  }
-
 function Card({ idx, value, flip, top, left, selected, CardClick }) {
     const { opacity, transform } = useSpring({
         opacity: flip ? 1 : 0,
@@ -69,7 +64,7 @@ function Card({ idx, value, flip, top, left, selected, CardClick }) {
     );
 }
 
-function MovementCard({isOpen, onClose}: MovementCardProps) {
+function MovementCard({}) {
     const [isMoving, setIsMoving] = useRecoilState(IsMovingState); // 캐릭터 이동 여부
     const [moveDist, setMoveDist] = useRecoilState(MoveDistState); // 캐릭터 이동 거리
     const [movementCard, setMovementCard] = useRecoilState(MovementCardState);
