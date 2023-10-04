@@ -1,8 +1,8 @@
-import {useState, useEffect, useRef} from 'react';
-import {useRecoilState, useRecoilValue} from 'recoil';
+import { useState, useEffect, useRef } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { BuyAmountState, SellAmountState } from '/src/recoil/trading/atom';
 import * as S from './BuyOrSell.style';
-import {StockState} from "/src/recoil/game/atom.tsx";
+import { StockState } from '/src/recoil/game/atom.tsx';
 
 function BuyOrSell({ isBuy, stockId, StockOrGold, price, money, amount }) {
     const [buyAmount, setBuyAmount] = useRecoilState(BuyAmountState);
@@ -42,14 +42,14 @@ function BuyOrSell({ isBuy, stockId, StockOrGold, price, money, amount }) {
             }
         }
         remainedAmount.current = 100 - total < 0 ? 0 : 100 - total;
-    }
+    };
 
     useEffect(() => {
         // 처음 열 때 1로 초기화
         setBuyAmount(1);
         setSellAmount(1);
         getRemainAmount();
-        console.log("=============================: " + remainedAmount.current);
+        console.log('=============================: ' + remainedAmount.current);
     }, []);
 
     return (
@@ -92,13 +92,12 @@ function BuyOrSell({ isBuy, stockId, StockOrGold, price, money, amount }) {
                             )}
                         </S.StockCntInput>
                         {isBuy ? (
-                            (buyAmount + 1) * currentPrice > canUseMoney
-                            || (StockOrGold === 'stock' && buyAmount + 1 > remainedAmount.current)? (
+                            (buyAmount + 1) * currentPrice > canUseMoney || (StockOrGold === 'stock' && buyAmount + 1 > remainedAmount.current) ? (
                                 <S.disableIncBtn disabled>+</S.disableIncBtn>
                             ) : (
                                 <S.IncBtn onClick={handleIncrement}>+</S.IncBtn>
                             )
-                        ) : (sellAmount + 1) * currentPrice > haveStock * currentPrice? (
+                        ) : (sellAmount + 1) * currentPrice > haveStock * currentPrice ? (
                             <S.disableIncBtn disabled>+</S.disableIncBtn>
                         ) : (
                             <S.IncBtn onClick={handleIncrement}>+</S.IncBtn>

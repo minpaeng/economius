@@ -3,17 +3,17 @@ import styled from 'styled-components';
 export const modalStyle: any = {
     overlay: {
         position: 'fixed',
-        backgroundColor: 'rgba(0,0,0,0.6)',
+        backgroundColor: 'rgba(0,0,0,0.4)',
         zIndex: 10,
     },
     content: {
-        backgroundColor: 'rgba(255,255,255,0.95)',
+        backgroundColor: 'rgba(255,255,255,0.55)',
         overflow: 'hidden',
         zIndex: 10,
         margin: 'auto',
-        right: '25%',
+        right: '29%',
         width: '500px',
-        height: '370px',
+        height: '350px',
         border: '5px solid white',
         borderRadius: '20px',
         padding: '0px',
