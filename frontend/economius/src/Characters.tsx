@@ -58,9 +58,6 @@ function Characters() {
     // 현재 차례인 플레이어만 불투명
     useEffect(() => {
         setOpacity1(opacity), setOpacity2(opacity), setOpacity3(opacity), setOpacity4(opacity); // 전부 투명
-        console.log(roomJoinUsersId);
-        console.log(playerToRoll);
-        console.log(roomJoinUsersId.indexOf(playerToRoll));
         setOpacities[roomJoinUsersId.indexOf(playerToRoll)](1); // 현재 플레이어만 불투명
     }, [playerToRoll]);
 
