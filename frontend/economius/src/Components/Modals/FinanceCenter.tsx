@@ -1,8 +1,9 @@
 import Modal from 'react-modal';
 import { useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
 import { FinanceCenterState } from '/src/recoil/modalInfo/atom';
+import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 import financecenterimg from '/FinanceCenter/financecenter.png';
 
 import * as S from './FinanceCenter.style';
@@ -36,6 +37,8 @@ const buildings: [string, number][] = [
 
 function FinanceCenter() {
     const [financeCenter, setFinanceCenter] = useRecoilState(FinanceCenterState);
+    const playerId = useRecoilValue(PlayerIdState);
+    const PlayerToRoll = useRecoilValue(PlayerToRollState);
     const [selectedOption, setSelectedOption] = useState<number>(-1);
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const setCallBack = useSetRecoilState(CallBackState);
@@ -45,36 +48,42 @@ function FinanceCenter() {
     };
 
     return (
-        <Modal isOpen={isModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
-            <S.Main>
-                <S.Top>
-                    <img src={financecenterimg} alt='img' style={{ width: '50px', marginRight: '10px' }} />
+        <>
+            {playerId === PlayerToRoll ? (
+                <Modal isOpen={isModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
+                    <S.Main>
+                        <S.Top>
+                            <img src={financecenterimg} alt='img' style={{ width: '50px', marginRight: '10px' }} />
 
-                    <S.TopTitle>종합거래소</S.TopTitle>
-                </S.Top>
-                <S.MidTitle>주식, 부동산, 적금, 보험, 금, 코인 등 금융 거래를 한 곳에서 할 수 있습니다.</S.MidTitle>
-                <S.Mid>
-                    <S.MidScroll>
-                        <hr style={{ width: '200px', marginBottom: '5px' }} />
-                        {buildings.map(val => (
-                            <S.MidItem key={val[1]} onClick={() => setSelectedOption(val[1])}>
-                                <input type='radio' value={val[1]} checked={selectedOption === val[1]} style={{ marginRight: '5px' }} />
-                                <S.MidImg src={`/FinanceCenter/${val[1]}.png`} alt={`${val[0]}`}></S.MidImg>
-                                <S.MidDesc>{val[0]}</S.MidDesc>
-                            </S.MidItem>
-                        ))}
-                    </S.MidScroll>
-                </S.Mid>
-                {'\u00A0'}
-                <S.Divide />
-                <S.Button
-                    onClick={() => (setFinanceCenter(selectedOption), setIsModalOpen(false))}
-                    style={{ backgroundColor: selectedOption !== -1 ? '#ffaa55' : '#D9D9D9' }}
-                >
-                    선택하기
-                </S.Button>
-            </S.Main>
-        </Modal>
+                            <S.TopTitle>종합거래소</S.TopTitle>
+                        </S.Top>
+                        <S.MidTitle>주식, 부동산, 적금, 보험, 금, 코인 등 금융 거래를 한 곳에서 할 수 있습니다.</S.MidTitle>
+                        <S.Mid>
+                            <S.MidScroll>
+                                <hr style={{ width: '200px', marginBottom: '5px' }} />
+                                {buildings.map(val => (
+                                    <S.MidItem key={val[1]} onClick={() => setSelectedOption(val[1])}>
+                                        <input type='radio' value={val[1]} checked={selectedOption === val[1]} style={{ marginRight: '5px' }} />
+                                        <S.MidImg src={`/FinanceCenter/${val[1]}.png`} alt={`${val[0]}`}></S.MidImg>
+                                        <S.MidDesc>{val[0]}</S.MidDesc>
+                                    </S.MidItem>
+                                ))}
+                            </S.MidScroll>
+                        </S.Mid>
+                        {'\u00A0'}
+                        <S.Divide />
+                        <S.Button
+                            onClick={() => (setFinanceCenter(selectedOption), setIsModalOpen(false))}
+                            style={{ backgroundColor: selectedOption !== -1 ? '#ffaa55' : '#D9D9D9' }}
+                        >
+                            선택하기
+                        </S.Button>
+                    </S.Main>
+                </Modal>
+            ) : (
+                <div style={{ position: 'absolute', left: '40%', top: '50%', height: '50px', backgroundColor: 'brown' }}>종합거래소에서 다른 사람이 거래중</div>
+            )}
+        </>
     );
 }
 

@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Aligator, Bear, Bird, Butterfly, Camel, Cat, Chicken, Cow, Deer, Dog } from './Components/Characters';
 import { useRecoilState } from 'recoil';
-import { NowPlayerState, NowPlayerPositionState, IsMovingState, MoveDistState, RoomJoinUsersIdState } from '/src/recoil/animation/atom';
+import { NowPlayerPositionState, IsMovingState, MoveDistState, RoomJoinUsersIdState } from '/src/recoil/animation/atom';
 import { PlayerToRollState } from './recoil/game/atom';
 
 // 캐릭터 컴포넌트
@@ -58,10 +58,10 @@ function Characters() {
     // 현재 차례인 플레이어만 불투명
     useEffect(() => {
         setOpacity1(opacity), setOpacity2(opacity), setOpacity3(opacity), setOpacity4(opacity); // 전부 투명
-        // console.log(roomJoinUsersId);
-        // console.log(playerToRoll);
-        // console.log(roomJoinUsersId.indexOf(playerToRoll));
-        // setOpacities[roomJoinUsersId.indexOf(playerToRoll)](1); // 현재 플레이어만 불투명
+        console.log(roomJoinUsersId);
+        console.log(playerToRoll);
+        console.log(roomJoinUsersId.indexOf(playerToRoll));
+        setOpacities[roomJoinUsersId.indexOf(playerToRoll)](1); // 현재 플레이어만 불투명
     }, [playerToRoll]);
 
     // 자기 차례인 플레이어만 위치(idx)를 변경함

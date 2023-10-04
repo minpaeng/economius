@@ -95,14 +95,14 @@ function MovementCard() {
     }, [movementCardOpen]);
 
     const MoveButtonClick = (selectednum: number) => {
-        setTimeout(() => {
-            closeModal();
-            setIsMoving(true);
-            setMoveDist(selectednum === -1 ? movementCard[1] : movementCard[selectednum]);
-        }, 500);
+        setMoveDist(selectednum === -1 ? movementCard[1] : movementCard[selectednum]);
         if (selectednum === -1) {
             setSelected(1);
         }
+        setTimeout(() => {
+            closeModal();
+            setIsMoving(true);
+        }, 500);
     };
 
     return (
@@ -111,12 +111,20 @@ function MovementCard() {
                 `로딩중입니다...`
             ) : (
                 <>
-                    <Card idx={0} value={movementCard[0]} top={'10%'} left={'8%'} flip={flip1} selected={selected} CardClick={() => setSelected(0)} />
-                    <Card idx={1} value={movementCard[1]} top={'10%'} left={'38%'} flip={flip2} selected={selected} CardClick={() => setSelected(1)} />
-                    <Card idx={2} value={movementCard[2]} top={'10%'} left={'68%'} flip={flip3} selected={selected} CardClick={() => setSelected(2)} />
-                    {PlayerToRoll == Number(localStorage.getItem('player')) ? (
-                        <S.Button onClick={() => MoveButtonClick(selected)}>이동카드 선택</S.Button>
-                    ) : null}
+                    {PlayerToRoll === Number(localStorage.getItem('player')) ? (
+                        <>
+                            <Card idx={0} value={movementCard[0]} top={'10%'} left={'8%'} flip={flip1} selected={selected} CardClick={() => setSelected(0)} />
+                            <Card idx={1} value={movementCard[1]} top={'10%'} left={'38%'} flip={flip2} selected={selected} CardClick={() => setSelected(1)} />
+                            <Card idx={2} value={movementCard[2]} top={'10%'} left={'68%'} flip={flip3} selected={selected} CardClick={() => setSelected(2)} />
+                            <S.Button onClick={() => MoveButtonClick(selected)}>이동카드 선택</S.Button>
+                        </>
+                    ) : (
+                        <>
+                            <Card idx={0} value={movementCard[0]} top={'10%'} left={'8%'} flip={flip1} selected={null} CardClick={null} />
+                            <Card idx={1} value={movementCard[1]} top={'10%'} left={'38%'} flip={flip2} selected={null} CardClick={null} />
+                            <Card idx={2} value={movementCard[2]} top={'10%'} left={'68%'} flip={flip3} selected={null} CardClick={null} />
+                        </>
+                    )}
                     {/* <S.Caution>(시간 초과 시 자동으로 선택됩니다)</S.Caution> */}
                 </>
             )}

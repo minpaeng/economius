@@ -15,7 +15,6 @@ function Insurance() {
     const closeModal = () => {
         setInsuranceInfo(null);
         setTradeInsuranceConfirm(false);
-        setIsModalOpen(false);
         setCallBack(true);
     };
 

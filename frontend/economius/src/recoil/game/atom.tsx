@@ -50,6 +50,7 @@ export const buildingState = atom({
 export const PlayerToRollState = atom({
     key: 'playerToRollState',
     default: null,
+    effects_UNSTABLE: [persistAtom],
 });
 
 export const GameRoundState = atom({

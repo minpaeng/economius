@@ -10,7 +10,6 @@ import {
     MovementCardOpenState,
     MovementCardState,
     NowPlayerPositionState,
-    NowPlayerState,
     RoomCountState,
     RoomExitState,
     RoomHostState,
@@ -92,7 +91,6 @@ const bankIds = {
 
 function PlayerSocket() {
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
-    const [nowPlayer, setNowPlayerState] = useRecoilState(NowPlayerState);
     const [nowPlayerPosition, setNowPlayerPosition] = useRecoilState(NowPlayerPositionState);
     const [movementCard, setMovementCard] = useRecoilState(MovementCardState);
     const [movementCardOpen, setMovementCardOpen] = useRecoilState(MovementCardOpenState);
@@ -226,6 +224,8 @@ function PlayerSocket() {
         if (type === 'movePlayer') {
             setMoveDist(message.movementCount);
             setPlayerToRoll(message.player);
+            setIsMoving(true);
+            setMovementCardOpen(false);
         } else if (type === 'finishTurn') {
             setStocks(message.stocks);
             setPortfolio(message.portfolios);
@@ -235,7 +235,7 @@ function PlayerSocket() {
             setGameRound(Math.floor(message.gameTurn / 4));
             // if (message.currentPlayerToRoll === playerId) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerId }));
+                stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerToRoll }));
             });
             // }
             // } else if (type === 'viewMovementCard' && message.player === playerId) {
@@ -365,12 +365,10 @@ function PlayerSocket() {
         // 게임 시작 pub에 대한 결과를 반환 받으면
         else if (type == 'start') {
             setStartReturn(true);
-            // 시작 시 차례인 플레이어 이동 카드 조회
-            // if (playerId === playerToRoll) {
+            // 플레이어 이동 카드 조회
             connect().then(function () {
                 stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerToRoll }));
             });
-            // }
         }
     }
 
@@ -451,14 +449,13 @@ function PlayerSocket() {
         if (!isModalOpen) return;
         // 부동산 방문
         if ([4, 14, 22].includes(nowPlayerPosition)) {
-            console.log(nowPlayer + 1, buildingIds[nowPlayerPosition]);
             // isOpen 상태가 true일 때 메시지를 보내는 코드를 추가
             connect().then(function () {
                 stompClient.current.send(
                     `/pub/${roomId}/visitBuilding`,
                     {},
                     JSON.stringify({
-                        player: nowPlayer + 1,
+                        player: playerToRoll,
                         buildingId: buildingIds[nowPlayerPosition],
                     })
                 );
@@ -472,7 +469,7 @@ function PlayerSocket() {
                     `/pub/${roomId}/buyItem`,
                     {},
                     JSON.stringify({
-                        player: nowPlayer + 1,
+                        player: playerToRoll,
                         stockId: stockIds[nowPlayerPosition],
                     })
                 );
@@ -480,7 +477,7 @@ function PlayerSocket() {
                     `/pub/${roomId}/stockDetail`,
                     {},
                     JSON.stringify({
-                        player: nowPlayer + 1,
+                        player: playerToRoll,
                         stockId: stockIds[nowPlayerPosition],
                     })
                 );
@@ -489,7 +486,7 @@ function PlayerSocket() {
         // 금거래소 방문
         else if (nowPlayerPosition === 30) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/selectGolds`, {}, JSON.stringify({ player: nowPlayer + 1 }));
+                stompClient.current.send(`/pub/${roomId}/selectGolds`, {}, JSON.stringify({ player: playerToRoll }));
             });
         }
         // 은행 방문
@@ -499,7 +496,7 @@ function PlayerSocket() {
                     `/pub/${roomId}/bank`,
                     {},
                     JSON.stringify({
-                        player: nowPlayer + 1,
+                        player: playerToRoll,
                         bankId: bankIds[nowPlayerPosition],
                     })
                 );
@@ -512,7 +509,7 @@ function PlayerSocket() {
                     `/pub/${roomId}/insurance`,
                     {},
                     JSON.stringify({
-                        player: nowPlayer + 1,
+                        player: playerToRoll,
                         insuranceId: '',
                     })
                 );
@@ -521,7 +518,7 @@ function PlayerSocket() {
         // 찬스 카드 방문
         else if ([12, 20, 28].includes(nowPlayerPosition)) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/eventCard`, {}, JSON.stringify({ player: nowPlayer + 1 }));
+                stompClient.current.send(`/pub/${roomId}/eventCard`, {}, JSON.stringify({ player: playerToRoll }));
             });
         }
     }, [isModalOpen]);
@@ -531,7 +528,7 @@ function PlayerSocket() {
         if (!monthlyModalOpen) return;
         // 출발점 통과
         connect().then(function () {
-            stompClient.current.send(`/pub/${roomId}/calculate`, {}, JSON.stringify({ player: nowPlayer + 1 }));
+            stompClient.current.send(`/pub/${roomId}/calculate`, {}, JSON.stringify({ player: playerToRoll }));
         });
     }, [monthlyModalOpen]);
 
@@ -554,7 +551,7 @@ function PlayerSocket() {
                     `/pub/${roomId}/buyBuilding`,
                     {},
                     JSON.stringify({
-                        player: nowPlayer + 1,
+                        player: playerToRoll,
                         buildingId: buildingIds[nowPlayerPosition],
                     })
                 );
@@ -566,7 +563,7 @@ function PlayerSocket() {
                     `/pub/${roomId}/sellBuilding`,
                     {},
                     JSON.stringify({
-                        player: nowPlayer + 1,
+                        player: playerToRoll,
                         buildingId: buildingIds[nowPlayerPosition],
                     })
                 );
@@ -583,7 +580,7 @@ function PlayerSocket() {
                     `/pub/${roomId}/buyStock`,
                     {},
                     JSON.stringify({
-                        player: nowPlayer + 1,
+                        player: playerToRoll,
                         stockId: stockIds[nowPlayerPosition],
                         stockAmount: buyAmount,
                     })
@@ -596,7 +593,7 @@ function PlayerSocket() {
                     `/pub/${roomId}/sellStock`,
                     {},
                     JSON.stringify({
-                        player: nowPlayer + 1,
+                        player: playerToRoll,
                         stockId: stockIds[nowPlayerPosition],
                         stockAmount: sellAmount,
                     })
@@ -614,7 +611,7 @@ function PlayerSocket() {
                     `/pub/${roomId}/buyGolds`,
                     {},
                     JSON.stringify({
-                        player: nowPlayer + 1,
+                        player: playerToRoll,
                         goldAmount: buyAmount,
                     })
                 );
@@ -626,7 +623,7 @@ function PlayerSocket() {
                     `/pub/${roomId}/sellGolds`,
                     {},
                     JSON.stringify({
-                        player: nowPlayer + 1,
+                        player: playerToRoll,
                         goldAmount: sellAmount,
                     })
                 );
@@ -639,26 +636,12 @@ function PlayerSocket() {
     useEffect(() => {
         if (tradeBank[0]) {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/joinSavings`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        bankId: bankIds[nowPlayerPosition],
-                    })
-                );
+                stompClient.current.send(`/pub/${roomId}/joinSavings`, {}, JSON.stringify({ player: playerToRoll, bankId: bankIds[nowPlayerPosition] }));
                 setTradeBank([false, false]);
             });
         } else if (tradeBank[1]) {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/stopSavings`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        bankId: bankIds[nowPlayerPosition],
-                    })
-                );
+                stompClient.current.send(`/pub/${roomId}/stopSavings`, {}, JSON.stringify({ player: playerToRoll, bankId: bankIds[nowPlayerPosition] }));
                 setTradeBank([false, false]);
             });
         }
@@ -670,38 +653,38 @@ function PlayerSocket() {
         // if 가입 else 해지
         if (tradeInsurance[0]) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 3 }));
+                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: playerToRoll, insuranceId: 3 }));
             });
         } else {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 3 }));
+                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: playerToRoll, insuranceId: 3 }));
             });
         }
         if (tradeInsurance[1]) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 4 }));
+                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: playerToRoll, insuranceId: 4 }));
             });
         } else {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 4 }));
+                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: playerToRoll, insuranceId: 4 }));
             });
         }
         if (tradeInsurance[2]) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 1 }));
+                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: playerToRoll, insuranceId: 1 }));
             });
         } else {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 1 }));
+                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: playerToRoll, insuranceId: 1 }));
             });
         }
         if (tradeInsurance[3]) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
+                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: playerToRoll, insuranceId: 2 }));
             });
         } else {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
+                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: playerToRoll, insuranceId: 2 }));
             });
         }
         setTradeInsuranceConfirm(false);
@@ -711,26 +694,29 @@ function PlayerSocket() {
     useEffect(() => {
         if (getPrediction) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/oracle`, {}, JSON.stringify({ player: nowPlayer + 1 }));
+                stompClient.current.send(`/pub/${roomId}/oracle`, {}, JSON.stringify({ player: playerToRoll }));
             });
         }
     }, [getPrediction]);
 
-    // 이동 중, 서버에 이동 정보 보내기
+    // 이동하면 서버에 이동카드 정보 보내기
     useEffect(() => {
         if (!isMoving) return;
+        if (playerId !== playerToRoll) return;
         connect().then(function () {
-            stompClient.current.send(`/pub/${roomId}/movePlayer`, {}, JSON.stringify({ player: playerId, movementCount: moveDist }));
+            stompClient.current.send(`/pub/${roomId}/movePlayer`, {}, JSON.stringify({ player: playerToRoll, movementCount: moveDist }));
         });
     }, [isMoving]);
 
     //턴 종료
     useEffect(() => {
         if (!callBack) return;
+        setCallBack(false);
+        setIsModalOpen(false);
+        if (playerToRoll !== playerId) return;
+        console.log('finishTurn repeat???');
         connect().then(function () {
             stompClient.current.send(`/pub/${roomId}/finishTurn`, {}, {});
-            setCallBack(false);
-            setIsModalOpen(false);
         });
     }, [callBack]);
 

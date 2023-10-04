@@ -1,7 +1,8 @@
 import Modal from 'react-modal';
 import { useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { NowPlayerState, IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
+import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
+import { PlayerToRollState } from '/src/recoil/game/atom';
 import { TradeRealEstateState } from '/src/recoil/trading/atom';
 import { RealEstateInfoState } from '/src/recoil/modalInfo/atom';
 import hotelimg from '/RealState/hotel.png';
@@ -10,7 +11,7 @@ import shopimg from '/RealState/shop.png';
 import * as S from './RealEstate.style';
 
 function RealEstate() {
-    const [nowPlayer, setNowPlayer] = useRecoilState(NowPlayerState);
+    const [playerToRoll, setPlayerToRoll] = useRecoilState(PlayerToRollState);
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     // 부동산 모달 정보
     const [realEstateInfo, setRealEstateInfo] = useRecoilState(RealEstateInfoState);
@@ -41,21 +42,25 @@ function RealEstate() {
                     <S.Mid>
                         <S.MidImg src={realEstateImage[realEstateInfo.buildingId]} alt='img' />
                         <S.MidDesc>
-                            {realEstateInfo.owner && realEstateInfo.owner.player !== nowPlayer
+                            {realEstateInfo.owner && realEstateInfo.owner.player !== playerToRoll
                                 ? description[realEstateInfo.buildingId]
-                                : `가격 : ${realEstateInfo.buildingPrice.toLocaleString()} (원)`} 
-                        </S.MidDesc> 
+                                : `가격 : ${realEstateInfo.buildingPrice.toLocaleString()} (원)`}
+                        </S.MidDesc>
                         <S.MidDesc>
-                            {!realEstateInfo.owner || (realEstateInfo.owner && realEstateInfo.owner.player !== nowPlayer)
-                            ? `방문객에게 ${fee[realEstateInfo.buildingId]}으로 ${(realEstateInfo.buildingPrice / 10).toLocaleString().split('.')[0]} (원)을 받을 수 있습니다.`
-                            : `건물주에게 ${fee[realEstateInfo.buildingId]}으로 ${(realEstateInfo.buildingPrice / 10).toLocaleString().split('.')[0]} (원)을 지불합니다.`}
+                            {!realEstateInfo.owner || (realEstateInfo.owner && realEstateInfo.owner.player !== playerToRoll)
+                                ? `방문객에게 ${fee[realEstateInfo.buildingId]}으로 ${
+                                      (realEstateInfo.buildingPrice / 10).toLocaleString().split('.')[0]
+                                  } (원)을 받을 수 있습니다.`
+                                : `건물주에게 ${fee[realEstateInfo.buildingId]}으로 ${
+                                      (realEstateInfo.buildingPrice / 10).toLocaleString().split('.')[0]
+                                  } (원)을 지불합니다.`}
                         </S.MidDesc>
                     </S.Mid>
 
                     <S.Divide />
                     {!realEstateInfo.owner ? (
                         <S.Botton onClick={() => setTradeRealEstate([true, false])}>매수하기</S.Botton>
-                    ) : realEstateInfo.owner.player === nowPlayer + 1 ? (
+                    ) : realEstateInfo.owner.player === playerToRoll ? (
                         <S.Botton onClick={() => setTradeRealEstate([false, true])}>매도하기</S.Botton>
                     ) : (
                         <S.Botton onClick={() => closeModal}>확인</S.Botton>
