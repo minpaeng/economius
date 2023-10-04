@@ -8,158 +8,25 @@ import PortfolioRealEstate from './PortfolioProperty/PortfolioRealEstate/Portfol
 import PortfolioInsurance from './PortfolioProperty/PortfolioInsurance/PortfolioInsurance';
 import { useRecoilValue } from 'recoil';
 import { PortfolioState, ClickUserPortfolioState } from '../../recoil/game/atom';
-// import { CallBackState } from "../../recoil/animation/atom";
+import { RoomJoinUsersIdState, RoomJoinUsersNicknameState } from '../../recoil/animation/atom';
 // import { useEffect } from "react";
 
 function Portforlio({ setSideBarType }) {
     // const finishTurn = useRecoilValue(CallBackState);
 
     const userId = useRecoilValue(ClickUserPortfolioState);
-    console.log(userId);
+
     const portfolios = useRecoilValue(PortfolioState);
 
-    // || {
-    //     '1  ': {
-    //         player: 1,
-    //         money: 9990000000,
-    //         totalMoney: 500000000,
-    //         gold: {
-    //             totalPrice: 0,
-    //             amount: 0,
-    //             earningPrice: 0,
-    //             earningRete: 0,
-    //         },
-    //         savings: {
-    //             totalPrice: 0,
-    //             amount: 0,
-    //             savings: null,
-    //         },
-    //         buildings: {
-    //             totalPrice: 0,
-    //             earningRate: 0,
-    //             earningPrice: 0,
-    //             amount: 0,
-    //             building: null,
-    //         },
-    //         stocks: {
-    //             totalPrice: 0,
-    //             earningRate: 0,
-    //             earningPrice: 0,
-    //             amount: 0,
-    //             stocks: null,
-    //         },
-    //         insurances: {
-    //             totalPrice: 0,
-    //             amount: 0,
-    //             insurance: null,
-    //         },
-    //     },
-    //     '2': {
-    //         player: 2,
-    //         money: 500000000,
-    //         totalMoney: 500000000,
-    //         gold: {
-    //             totalPrice: 0,
-    //             amount: 0,
-    //             earningPrice: 0,
-    //             earningRete: 0,
-    //         },
-    //         savings: {
-    //             totalPrice: 0,
-    //             amount: 0,
-    //             savings: null,
-    //         },
-    //         buildings: {
-    //             totalPrice: 0,
-    //             earningRate: 0,
-    //             earningPrice: 0,
-    //             amount: 0,
-    //             building: null,
-    //         },
-    //         stocks: {
-    //             totalPrice: 0,
-    //             earningRate: 0,
-    //             earningPrice: 0,
-    //             amount: 0,
-    //             stocks: null,
-    //         },
-    //         insurances: {
-    //             totalPrice: 0,
-    //             amount: 0,
-    //             insurance: null,
-    //         },
-    //     },
-    //     '3': {
-    //         player: 3,
-    //         money: 500000000,
-    //         totalMoney: 500000000,
-    //         gold: {
-    //             totalPrice: 0,
-    //             amount: 0,
-    //             earningPrice: 0,
-    //             earningRete: 0,
-    //         },
-    //         savings: {
-    //             totalPrice: 0,
-    //             amount: 0,
-    //             savings: null,
-    //         },
-    //         buildings: {
-    //             totalPrice: 0,
-    //             earningRate: 0,
-    //             earningPrice: 0,
-    //             amount: 0,
-    //             building: null,
-    //         },
-    //         stocks: {
-    //             totalPrice: 0,
-    //             earningRate: 0,
-    //             earningPrice: 0,
-    //             amount: 0,
-    //             stocks: null,
-    //         },
-    //         insurances: {
-    //             totalPrice: 0,
-    //             amount: 0,
-    //             insurance: null,
-    //         },
-    //     },
-    //     '4': {
-    //         player: 4,
-    //         money: 500000000,
-    //         totalMoney: 500000000,
-    //         gold: {
-    //             totalPrice: 0,
-    //             amount: 0,
-    //             earningPrice: 0,
-    //             earningRete: 0,
-    //         },
-    //         savings: {
-    //             totalPrice: 0,
-    //             amount: 0,
-    //             savings: null,
-    //         },
-    //         buildings: {
-    //             totalPrice: 0,
-    //             earningRate: 0,
-    //             earningPrice: 0,
-    //             amount: 0,
-    //             building: null,
-    //         },
-    //         stocks: {
-    //             totalPrice: 0,
-    //             earningRate: 0,
-    //             earningPrice: 0,
-    //             amount: 0,
-    //             stocks: null,
-    //         },
-    //         insurances: {
-    //             totalPrice: 0,
-    //             amount: 0,
-    //             insurance: null,
-    //         },
-    //     },
-    // };
+    const NickNameArr = useRecoilValue(RoomJoinUsersNicknameState);
+    const UserIdArr = useRecoilValue(RoomJoinUsersIdState);
+
+    function returnNick(Id) {
+        const returnIdx = UserIdArr.indexOf(Id);
+        return NickNameArr[returnIdx];
+    }
+
+    const NickName = returnNick(userId);
 
     function objectToArray(obj) {
         if (!obj) {
@@ -184,7 +51,7 @@ function Portforlio({ setSideBarType }) {
                 }}
             >
                 <img src='Portfolio/Portfolio.png' alt='img' style={{ height: '30px' }} />
-                <span>{userId} 님의 포트폴리오</span>
+                <span>{NickName} 님의 포트폴리오</span>
             </div>
             <PropertyChart
                 money={portfolios[userId].money}
