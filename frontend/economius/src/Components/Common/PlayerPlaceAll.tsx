@@ -6,9 +6,6 @@ function PlayerPlaceAll() {
     const NickNameArr = useRecoilValue(RoomJoinUsersNicknameState);
     const UserIdArr = useRecoilValue(RoomJoinUsersIdState);
 
-    console.log(NickNameArr);
-    console.log(UserIdArr);
-
     const character1 = 'Butterfly';
     const character2 = 'Deer';
     const character3 = 'Bird';

@@ -46,6 +46,7 @@ import {
     StockState,
     currentPrevIssueState,
     currentIssueState,
+    StockChangeArrState,
 } from '/src/recoil/game/atom.tsx';
 import {
     BankInfoState,
@@ -131,6 +132,8 @@ function PlayerSocket() {
 
     const setCurrentPrevIssues = useSetRecoilState(currentPrevIssueState);
     const setCurrentIssue = useSetRecoilState(currentIssueState);
+
+    const setStockChangeArr = useSetRecoilState(StockChangeArrState);
 
     //이벤트 카드
     const [chanceCardInfo, setChanceCardInfo] = useRecoilState(ChanceCardInfoState);
@@ -234,6 +237,7 @@ function PlayerSocket() {
             setPlayerToRoll(message.currentPlayerToRoll);
             setCurrentPrevIssues(message.currentPrevIssues);
             setCurrentIssue(message.currentIssue);
+            setStockChangeArr(message.stocks);
             setGameRound(Math.floor(message.gameTurn / 4));
             setCallBack(false);
             setIsModalOpen(false);
@@ -370,7 +374,11 @@ function PlayerSocket() {
         else if (type == 'start') {
             setStartReturn(true);
             // 플레이어 이동 카드 조회
+<<<<<<< HEAD
             if (playerToRoll === playerId) {
+=======
+            if (message.currentPlayerToRoll === playerId) {
+>>>>>>> e8d1f1db1e169e8fdc4cd7ca4d13f99d2da4ccfd
                 connect().then(function () {
                     stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerToRoll }));
                 });
