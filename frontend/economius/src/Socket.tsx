@@ -179,31 +179,6 @@ function PlayerSocket() {
         } else if (type === 'oracle') {
             setPrediction(message);
         }
-        // 턴 종료 로직
-        else if (type === 'buyStock') {
-            setCallBack(true);
-        } else if (type === 'sellStock') {
-            setCallBack(true);
-        } else if (type === 'buyGolds') {
-            setCallBack(true);
-        } else if (type === 'sellGolds') {
-            setCallBack(true);
-        } else if (type === 'buyBuilding') {
-            setCallBack(true);
-        } else if (type === 'sellBuilding') {
-            setCallBack(true);
-        } else if (type === 'joinSavings') {
-            setCallBack(true);
-        } else if (type === 'stopSavings') {
-            setCallBack(true);
-        } else if (type in ['joinInsurance', 'finishInsurance']) {
-            if (insuranceCnt === 3) {
-                setCallBack(true);
-                setInsuranceCnt(0);
-            } else {
-                setInsuranceCnt(prev => prev + 1);
-            }
-        }
     }
 
     function personalCallBackFunction(recievedMessage: any) {
@@ -265,11 +240,33 @@ function PlayerSocket() {
             setMovementCard(message.cards);
             setMovementCardOpen(true);
             setPlayerRanking(message.players);
+            // else if (type === 'movePlayer' && message.player === playername) {
+            //     setNowPlayerPosition(message.location);
+            // }
+        } else if (type === 'buyStock') {
+            setCallBack(true);
+        } else if (type === 'sellStock') {
+            setCallBack(true);
+        } else if (type === 'buyGolds') {
+            setCallBack(true);
+        } else if (type === 'sellGolds') {
+            setCallBack(true);
+        } else if (type === 'buyBuilding') {
+            setCallBack(true);
+        } else if (type === 'sellBuilding') {
+            setCallBack(true);
+        } else if (type === 'joinSavings') {
+            setCallBack(true);
+        } else if (type === 'stopSavings') {
+            setCallBack(true);
+        } else if (type in ['joinInsurance', 'finishInsurance']) {
+            if (insuranceCnt === 3) {
+                setCallBack(true);
+                setInsuranceCnt(0);
+            } else {
+                setInsuranceCnt(prev => prev + 1);
+            }
         }
-        // else if (type === 'movePlayer' && message.player === playername) {
-        //     setNowPlayerPosition(message.location);
-        // }
-
         if (type === 'issue') {
             setBigEventInfo({
                 buildingChange: message.buildingChange,
