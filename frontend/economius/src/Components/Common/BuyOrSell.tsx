@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { BuyAmountState, SellAmountState } from '/src/recoil/trading/atom';
 import * as S from './BuyOrSell.style';
@@ -41,10 +41,6 @@ function BuyOrSell({ isBuy, stockId, StockOrGold, price, money, amount }) {
             }
         }
         setRemainedAmount(100 - total < 0 ? 0 : 100 - total);
-    }
-
-    const modalDisableState = () => {
-        return buyAmount + 1 > remainedAmount;
     }
 
     useEffect(() => {
