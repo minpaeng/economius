@@ -1,46 +1,47 @@
 import Modal from 'react-modal';
 import { useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { IsModalOpenState } from '/src/recoil/animation/atom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
+import { FinanceCenterState } from '/src/recoil/modalInfo/atom';
 import financecenterimg from '/FinanceCenter/financecenter.png';
-import checksign from '/BeforeBankrupt/checksign.png';
-import dollarcoin from '/BeforeBankrupt/dollarcoin.png';
+
 import * as S from './FinanceCenter.style';
 
-const A = [
-    ['대한전력'],
-    ['궁민은행'],
-    ['아람쿠'],
-    ['상점'],
-    ['포스쿠'],
-    ['보험사'],
-    ['IG화학'],
-    ['코인'],
-    ['화이지'],
-    ['신혼은행'],
-    ['셀트리안'],
-    ['나이카'],
-    ['레스토랑'],
-    ['코카펩시'],
-    ['AIR관광'],
-    ['은행'],
-    ['CZ엔터'],
-    ['K텔레콤'],
-    ['호텔'],
-    ['M소프트'],
-    ['대한운송'],
-    ['보험사'],
-    ['대현건설'],
-    ['넥서스'],
-    ['금 거래소'],
-    ['삼성전자'],
+const buildings: [string, number][] = [
+    ['대한전력', 1],
+    ['궁민은행', 2],
+    ['아람쿠', 3],
+    ['레스토랑', 4],
+    ['포스쿠', 5],
+    ['삼성화재', 6],
+    ['IG화학', 7],
+    ['화이지', 9],
+    ['신혼은행', 10],
+    ['셀트리안', 11],
+    ['나이카', 13],
+    ['상점', 14],
+    ['코카펩시', 15],
+    ['AIR관광', 17],
+    ['은행', 18],
+    ['CZ엔터', 19],
+    ['K텔레콤', 21],
+    ['호텔', 22],
+    ['M소프트', 23],
+    ['대한운송', 25],
+    ['대현건설', 27],
+    ['넥서스', 29],
+    ['금 거래소', 30],
+    ['삼성전자', 31],
 ];
 
 function FinanceCenter() {
-    const [selectedOption, setSelectedOption] = useState(-1);
+    const [financeCenter, setFinanceCenter] = useRecoilState(FinanceCenterState);
+    const [selectedOption, setSelectedOption] = useState<number>(-1);
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
+    const setCallBack = useSetRecoilState(CallBackState);
     const closeModal = () => {
-        setIsModalOpen(false);
+        setCallBack(true);
+        setFinanceCenter(-1);
     };
 
     return (
@@ -55,18 +56,23 @@ function FinanceCenter() {
                 <S.Mid>
                     <S.MidScroll>
                         <hr style={{ width: '200px', marginBottom: '5px' }} />
-                        {A.map((val, idx) => (
-                            <S.MidItem key={idx}>
-                                <input type='radio' value={idx} checked={selectedOption === idx} onChange={() => setSelectedOption(idx)} />
-                                <S.MidImg src={financecenterimg} alt='financecenterimg'></S.MidImg>
-                                <S.MidDesc>{val}</S.MidDesc>
+                        {buildings.map(val => (
+                            <S.MidItem key={val[1]} onClick={() => setSelectedOption(val[1])}>
+                                <input type='radio' value={val[1]} checked={selectedOption === val[1]} style={{ marginRight: '5px' }} />
+                                <S.MidImg src={`/FinanceCenter/${val[1]}.png`} alt={`${val[0]}`}></S.MidImg>
+                                <S.MidDesc>{val[0]}</S.MidDesc>
                             </S.MidItem>
                         ))}
                     </S.MidScroll>
                 </S.Mid>
                 {'\u00A0'}
                 <S.Divide />
-                <S.Button style={{ backgroundColor: selectedOption !== -1 ? '#ffaa55' : '#D9D9D9' }}>선택하기(빈껍데기)</S.Button>
+                <S.Button
+                    onClick={() => (setFinanceCenter(selectedOption), setIsModalOpen(false))}
+                    style={{ backgroundColor: selectedOption !== -1 ? '#ffaa55' : '#D9D9D9' }}
+                >
+                    선택하기
+                </S.Button>
             </S.Main>
         </Modal>
     );
