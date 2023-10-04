@@ -1,13 +1,16 @@
 import Modal from 'react-modal';
 import { useEffect, useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
 import { TradeInsuranceConfirmState } from '/src/recoil/trading/atom';
 import { InsuranceInfoState } from '/src/recoil/modalInfo/atom';
+import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 import * as S from './Insurance.style';
 import InsuranceCard from './InsuranceCard';
 
 function Insurance() {
+    const playerId = useRecoilValue(PlayerIdState);
+    const playerToRoll = useRecoilValue(PlayerToRollState);
     const [tradeInsuranceConfirm, setTradeInsuranceConfirm] = useRecoilState(TradeInsuranceConfirmState);
     const [insuranceInfo, setInsuranceInfo] = useRecoilState(InsuranceInfoState);
     const setCallBack = useSetRecoilState(CallBackState);
@@ -80,31 +83,37 @@ function Insurance() {
     };
 
     return (
-        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
-            {!(insuranceInfo === null) ? (
-                <S.InsuranceMain>
-                    <S.InsuranceTop>
-                        <img src='Insurance/Insurance.png' alt='img' style={{ width: '50px', marginRight: '10px' }} />
-                        <S.InsuranceTopTitle>삼성화재</S.InsuranceTopTitle>
-                    </S.InsuranceTop>
-                    <S.InsuranceMid>
-                        {order.map(index => {
-                            return (
-                                <InsuranceCard
-                                    key={index}
-                                    index={index}
-                                    CardInfo={insuranceInfo[`insurance${index}`]}
-                                    ItemInfo={Items[index - 1]}
-                                ></InsuranceCard>
-                            );
-                        })}
-                    </S.InsuranceMid>
-                    <S.InsuranceConfirmButton onClick={() => setTradeInsuranceConfirm(true)}>확인</S.InsuranceConfirmButton>
-                </S.InsuranceMain>
+        <>
+            {playerId === playerToRoll ? (
+                <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
+                    {!(insuranceInfo === null) ? (
+                        <S.InsuranceMain>
+                            <S.InsuranceTop>
+                                <img src='Insurance/Insurance.png' alt='img' style={{ width: '50px', marginRight: '10px' }} />
+                                <S.InsuranceTopTitle>삼성화재</S.InsuranceTopTitle>
+                            </S.InsuranceTop>
+                            <S.InsuranceMid>
+                                {order.map(index => {
+                                    return (
+                                        <InsuranceCard
+                                            key={index}
+                                            index={index}
+                                            CardInfo={insuranceInfo[`insurance${index}`]}
+                                            ItemInfo={Items[index - 1]}
+                                        ></InsuranceCard>
+                                    );
+                                })}
+                            </S.InsuranceMid>
+                            <S.InsuranceConfirmButton onClick={() => setTradeInsuranceConfirm(true)}>확인</S.InsuranceConfirmButton>
+                        </S.InsuranceMain>
+                    ) : (
+                        '로딩중입니다'
+                    )}
+                </Modal>
             ) : (
-                '로딩중입니다'
+                <div style={{ position: 'absolute', left: '40%', top: '50%', height: '50px', backgroundColor: 'brown' }}>보험에서 다른 사람이 거래중</div>
             )}
-        </Modal>
+        </>
     );
 }
 

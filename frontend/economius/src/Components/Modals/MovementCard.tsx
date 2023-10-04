@@ -97,13 +97,15 @@ function MovementCard() {
     }, [movementCardOpen]);
 
     // 내 차례 아닐 때 선택된 카드 키우기
-    // useEffect(() => {
-    //     if (PlayerId !== PlayerToRoll) {
-    //     }
-    //     return () => {
-    //         setSelected(-1);
-    //     };
-    // }, [moveDist]);
+    useEffect(() => {
+        if (moveDist === 0) return;
+        if (PlayerId !== PlayerToRoll) {
+            setSelected(movementCard.indexOf(moveDist));
+            setTimeout(() => {
+                setSelected(-1);
+            }, 500);
+        }
+    }, [moveDist]);
 
     // 내 차례일 때 선택 누르기
     const MoveButtonClick = (selectednum: number) => {

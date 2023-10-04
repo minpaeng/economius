@@ -29,7 +29,6 @@ import {
     buildingState,
     currentPrevIssueState,
     currentIssueState,
-    StockChangeArrState,
 } from '/src/recoil/game/atom';
 import axios from 'axios';
 import { RoomIdState } from '/src/recoil/animation/atom.tsx';
@@ -54,7 +53,6 @@ function App() {
     const setPlayerToRoll = useSetRecoilState(PlayerToRollState);
     const setCurrentPrevIssues = useSetRecoilState(currentPrevIssueState);
     const setCurrentIssue = useSetRecoilState(currentIssueState);
-    const setStockChangeArr = useSetRecoilState(StockChangeArrState);
 
     setPlayerId(Number(localStorage.getItem('player')));
 
@@ -69,7 +67,6 @@ function App() {
             setRoomId(data.data.roomId);
             setCurrentPrevIssues(data.data.currentPrevIssues);
             setCurrentIssue(data.data.currentIssue);
-            setStockChangeArr(data.data.stocks);
             console.log(data.data);
         });
     }, []);
@@ -87,7 +84,7 @@ function App() {
                 <Characters />
             </Canvas>
 
-            <Controller />
+            {/* <Controller /> */}
 
             <NewsBar />
             <PlayerPlaceAll />

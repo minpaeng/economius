@@ -474,24 +474,12 @@ function PlayerSocket() {
         }
         //주식 방문
         else if (nowPlayerPosition % 2 === 1) {
-            connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/buyItem`,
-                    {},
-                    JSON.stringify({
-                        player: playerToRoll,
-                        stockId: stockIds[nowPlayerPosition],
-                    })
-                );
-                stompClient.current.send(
-                    `/pub/${roomId}/stockDetail`,
-                    {},
-                    JSON.stringify({
-                        player: playerToRoll,
-                        stockId: stockIds[nowPlayerPosition],
-                    })
-                );
-            });
+            if (playerToRoll === playerId) {
+                connect().then(function () {
+                    stompClient.current.send(`/pub/${roomId}/buyItem`, {}, JSON.stringify({ player: playerToRoll, stockId: stockIds[nowPlayerPosition] }));
+                    stompClient.current.send(`/pub/${roomId}/stockDetail`, {}, JSON.stringify({ player: playerToRoll, stockId: stockIds[nowPlayerPosition] }));
+                });
+            }
         }
         // 금거래소 방문
         else if (nowPlayerPosition === 30) {
