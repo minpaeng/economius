@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import video1 from '/video/video_start.mp4'; // 1080p
+import video1 from '/video/video_start2.mp4'; // 1080p
 import video3 from '/video/video_repeat.mp4'; // sound
 import StartAccess from './Components/Modals/StartAccess';
 import * as S from '../src/Components/Modals/GlobalModal.stye';
@@ -19,8 +19,8 @@ export default function Index() {
 
     const videoRef = useRef(null);
     const [isOpen, setIsOpen] = useState(true); // 모달이 열려 있는지 확인
-    const [isMuted, setIsMuted] = useState(true); // 비디오 음소거 상태
     const [currentVideo, setCurrentVideo] = useState(video1);
+    const [isMuted, setIsMuted] = useState(true); // 비디오 음소거 상태
 
     const REST_API_KEY = import.meta.env.VITE_APP_REST_API_KEY;
     const REDIRECT_URI = import.meta.env.VITE_APP_REDIRECT_URI;

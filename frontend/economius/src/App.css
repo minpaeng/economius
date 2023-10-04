@@ -22,13 +22,13 @@ body {
     display: none;
 }
 
-/* #root {
+#root {
     width: 100%;
     height: 100%;
-    background-image: url('bg-black.png');
+    background-image: url('background/9.png');
     background-size: 180%;
     background-position: 68% 32%;
-} */
+}
 
 /* canvas {
 width: 100%;
@@ -63,3 +63,9 @@ padding-bottom: 56.24%;
         max-height: 100%;
     }
 } */
+
+.video-loading {
+    position: absolute;
+    display: flex;
+    z-index: 999;
+}

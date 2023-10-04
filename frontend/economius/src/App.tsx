@@ -2,6 +2,7 @@ import './App.css';
 import { Suspense, useState, useEffect, useRef } from 'react';
 import { Canvas, useLoader, useFrame } from '@react-three/fiber';
 import { OrbitControls, OrthographicCamera, SpotLight, useHelper } from '@react-three/drei';
+import video2 from '/video/video_loading.mp4'; // sound
 
 import Map from '/src/Map';
 import Characters from '/src/Characters';
@@ -26,8 +27,8 @@ import CoinEffect from '/src/Components/Effect/CoinEffect';
 import Round from '/src/Components/Modals/Round.tsx';
 import MovementCard from './Components/Modals/MovementCard';
 
-import BigEventRound from "./Components/Modals/BigEventRound";
-import GameEnd from "/src/Components/Modals/GameEnd.tsx";
+import BigEventRound from './Components/Modals/BigEventRound';
+import GameEnd from '/src/Components/Modals/GameEnd.tsx';
 
 function App() {
     const light = useRef();
@@ -41,6 +42,8 @@ function App() {
     const setInterestRateState = useSetRecoilState(interestRateState);
     const setBuildingState = useSetRecoilState(buildingState);
     const setPlayerToRoll = useSetRecoilState(PlayerToRollState);
+
+    const [showVideo, setShowVideo] = useState(true);
 
     // 일단 하드코딩
     setPlayerId(1);
@@ -58,33 +61,52 @@ function App() {
         });
     }, []);
 
+    // r3f 객체 렌더링 확인 코드
+    const objectsToRender = 1;
+    const [renderedObjectsCount, setRenderedObjectsCount] = useState(0);
+    useEffect(() => {
+        console.log('========================');
+        console.log(renderedObjectsCount);
+        if (renderedObjectsCount === objectsToRender) {
+            console.log('모든 객체가 렌더링되었습니다.');
+            setShowVideo(false);
+        }
+    }, [renderedObjectsCount]);
+
     return (
-        <div className='canvas-outer' style={{ width: '100%', height: 'calc(100vw * 9 / 16)' }}>
-            <Canvas style={{ width: '100%', height: '100%' }}>
-                <OrthographicCamera makeDefault zoom={65} position={[4, 4.1, 4]} />
-                <OrbitControls />
-                <ambientLight intensity={1} />
-                <directionalLight ref={light} color={0xffffff} intensity={3} position={[0, 5, 0]} />
-                <pointLight ref={light} color={0xffffff} intensity={1} position={[0, 5, 0]} />
+        <>
+            {showVideo && (
+                <div className='video-loading'>
+                    <video autoPlay muted loop src='/video/video_loading.mp4' style={{ width: '100%', height: 'auto' }} />{' '}
+                </div>
+            )}
+            <div className='canvas-outer' style={{ width: '100%', height: 'calc(100vw * 9 / 16)' }}>
+                <Canvas style={{ width: '100%', height: '100%' }} onCreated={() => setRenderedObjectsCount(1)}>
+                    <OrthographicCamera makeDefault zoom={64} position={[4, 3.9, 4]} />
+                    <OrbitControls />
+                    <ambientLight intensity={1} />
+                    <directionalLight ref={light} color={0xffffff} intensity={3} position={[0, 5, 0]} />
+                    <pointLight ref={light} color={0xffffff} intensity={1} position={[0, 5, 0]} />
 
-                <Map />
-                <Characters />
-            </Canvas>
+                    <Map />
+                    <Characters />
+                </Canvas>
 
-            <Controller />
+                <Controller />
 
-            <NewsBar />
-            <PlayerPlaceAll />
-            <SideBar />
-            <BigEventRound />
+                <NewsBar />
+                <PlayerPlaceAll />
+                <SideBar />
+                <BigEventRound />
 
-            <Modals />
-            <Socket />
-            <CoinEffect />
-            <Round />
-            <MovementCard />
-            <GameEnd />
-        </div>
+                <Modals />
+                <Socket />
+                <CoinEffect />
+                <Round />
+                <MovementCard />
+                <GameEnd />
+            </div>
+        </>
     );
 }
 
