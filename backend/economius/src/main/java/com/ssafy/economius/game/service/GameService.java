@@ -195,18 +195,6 @@ public class GameService {
 
     public FinishTurnResponse start(int roomId) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
-        List<Long> players = game.getPlayers();
-
-        if (game.getGameTurn() == 0) {
-            // 각자의 포트폴리오 생성
-            uploadInitialPortfolioOnRedis(game);
-
-            game.initializeCharacter(RandomUtil.getUniqueRandomNumbers(4, 1, 10));
-            game.initializePlayerSequence();
-            game.initializeLocations();
-            game.getStocks().values().forEach(stock -> stock.initializeOwners(players));
-            gameRepository.save(game);
-        }
 
         return modelMapper.map(game, FinishTurnResponse.class);
     }
