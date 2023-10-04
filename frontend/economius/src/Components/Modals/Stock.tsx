@@ -144,6 +144,7 @@ function Stock() {
                                     </S.BtnSection>
                                     <BuyOrSell
                                         isBuy={buyClick}
+                                        stockId={stockDetail.stockId}
                                         StockOrGold='stock'
                                         price={stockDetail.price}
                                         amount={getStocks(stocks, stockDetail.stockId, player)}

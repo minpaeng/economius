@@ -32,6 +32,8 @@ import {
   GoldState,
   interestRateState,
   buildingState,
+  currentPrevIssueState,
+  currentIssueState,
 } from "/src/recoil/game/atom";
 import axios from "axios";
 import { RoomIdState } from "/src/recoil/animation/atom.tsx";
@@ -54,6 +56,8 @@ function App() {
   const setInterestRateState = useSetRecoilState(interestRateState);
   const setBuildingState = useSetRecoilState(buildingState);
   const setPlayerToRoll = useSetRecoilState(PlayerToRollState);
+  const setCurrentPrevIssues = useSetRecoilState(currentPrevIssueState);
+  const setCurrentIssue = useSetRecoilState(currentIssueState);
 
   // 일단 하드코딩
   setPlayerId(1);
@@ -67,6 +71,8 @@ function App() {
       setBuildingState(data.data.buildings);
       setPlayerToRoll(data.data.currentPlayerToRoll);
       setRoomId(data.data.roomId);
+      setCurrentPrevIssues(data.data.currentPrevIssues);
+      setCurrentIssue(data.data.currentIssue);
       console.log(data.data);
     });
   }, []);

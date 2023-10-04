@@ -4,6 +4,7 @@ import { useRecoilState } from "recoil";
 import { NewsClickIdxState } from "/src/recoil/animation/atom";
 
 function AfterBigEventNews({ News }) {
+  console.log(News);
   const [NewsClickIdx, setNewsClickIdx] = useRecoilState(NewsClickIdxState);
 
   function shortenText(text, maxLength) {

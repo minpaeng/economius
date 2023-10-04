@@ -51,16 +51,16 @@ function ChanceCard() {
                         <div>
                             {chanceCardInfo.moneyCard ? (
                                 <div>
-                                    <div>현금 -{chanceCardInfo.eventValue}</div>
+                                    <div>현금 -{chanceCardInfo.eventValue.toLocaleString()}</div>
                                     <div>
                                         {chanceCardInfo.apply === 'HX'
-                                            ? '의료 보험 적용'
+                                            ? '(의료 보험이 적용됩니다.)'
                                             : chanceCardInfo.apply === 'HS'
-                                            ? '의료 특약 보험 적용'
+                                            ? '(의료 특약 보험이 적용됩니다.)'
                                             : chanceCardInfo.apply === 'MX'
-                                            ? '상해 보험 적용'
+                                            ? '(상해 보험이 적용됩니다.)'
                                             : chanceCardInfo.apply === 'MS'
-                                            ? '상해 특약 보험 적용'
+                                            ? '(상해 특약이 적용됩니다.)'
                                             : chanceCardInfo.apply}
                                     </div>
                                 </div>

@@ -134,6 +134,7 @@ function Gold() {
                                     </S.BtnSection>
                                     <BuyOrSell
                                         isBuy={buyClick}
+                                        stockId={-1}
                                         StockOrGold='gold'
                                         price={goldDetail.price}
                                         amount={portfolios[player].gold.amount}
