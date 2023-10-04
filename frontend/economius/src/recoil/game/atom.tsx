@@ -73,3 +73,9 @@ export const currentIssueState = atom({
     key: 'currentIssueState',
     default: null,
 });
+
+// 상단 바 주식 변동
+export const StockChangeArrState = atom({
+    key: 'StockChangeArrState',
+    default: null,
+});
