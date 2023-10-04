@@ -121,78 +121,80 @@ function BigEventRound() {
   console.log(Up, Stable, Down);
 
   return (
-    <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
-      <S.BigEvent>
-        <S.BigEventLeft />
-        <S.BigEventRight
-          style={{ color: issue?.type === "BOOM" ? "black" : "white" }}
-        >
-          <S.BigEventRightTitle>{issue?.name}</S.BigEventRightTitle>
-          <S.BigEventRightChange1>{`${issue?.year} / ${issue?.country}`}</S.BigEventRightChange1>
-          <S.BigEventRightDesc>{issue?.description}</S.BigEventRightDesc>
-          <div>
-            <hr />
-            <br />
-            <div style={{ fontSize: "20px" }}>[ 주요 지표 ]</div>
-            <br />
-            <S.BigEventRightRate_Gold_Estate>
-              {Rate_Gold_Estate.map((item, idx) => {
-                return (
-                  <BigEventRoundItem
-                    title={item.title}
-                    changeRate={item.changeRate}
-                    key={idx}
-                  />
-                );
-              })}
-            </S.BigEventRightRate_Gold_Estate>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: "20px" }}>[ 상승 ({Up?.length}) ]</div>
-            <br />
-            <S.BigEventRightUp>
-              {Up.map((item, idx) => {
-                return (
-                  <BigEventRoundItem
-                    title={item.title}
-                    changeRate={item.changeRate}
-                    key={idx}
-                  />
-                );
-              })}
-            </S.BigEventRightUp>
-            <br />
-            <div style={{ fontSize: "20px" }}>[ 안정 ({Stable?.length}) ]</div>
-            <br />
-            <S.BigEventRightStable>
-              {Stable.map((item, idx) => {
-                return (
-                  <BigEventRoundItem
-                    title={item.title}
-                    changeRate={item.changeRate}
-                    key={idx}
-                  />
-                );
-              })}
-            </S.BigEventRightStable>
-            <br />
-            <div style={{ fontSize: "20px" }}>[ 하락 ({Down?.length}) ]</div>
-            <br />
-            <S.BigEventRightDown>
-              {Down.map((item, idx) => {
-                return (
-                  <BigEventRoundItem
-                    title={item.title}
-                    changeRate={item.changeRate}
-                    key={idx}
-                  />
-                );
-              })}
-            </S.BigEventRightDown>
-          </div>
-        </S.BigEventRight>
-      </S.BigEvent>
-    </Modal>
+    <div className="BigEventRoundModal">
+      <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
+        <S.BigEvent>
+          <S.BigEventLeft />
+          <S.BigEventRight
+            style={{ color: issue?.type === "BOOM" ? "black" : "white" }}
+          >
+            <S.BigEventRightTitle>{issue?.name}</S.BigEventRightTitle>
+            <S.BigEventRightChange1>{`${issue?.year} / ${issue?.country}`}</S.BigEventRightChange1>
+            <S.BigEventRightDesc>{issue?.description}</S.BigEventRightDesc>
+            <div>
+              <hr />
+              <br />
+              <div style={{ fontSize: "20px" }}>[ 주요 지표 ]</div>
+              <br />
+              <S.BigEventRightRate_Gold_Estate>
+                {Rate_Gold_Estate.map((item, idx) => {
+                  return (
+                    <BigEventRoundItem
+                      title={item.title}
+                      changeRate={item.changeRate}
+                      key={idx}
+                    />
+                  );
+                })}
+              </S.BigEventRightRate_Gold_Estate>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <div style={{ fontSize: "20px" }}>[ 상승 ({Up?.length}) ]</div>
+              <br />
+              <S.BigEventRightUp>
+                {Up.map((item, idx) => {
+                  return (
+                    <BigEventRoundItem
+                      title={item.title}
+                      changeRate={item.changeRate}
+                      key={idx}
+                    />
+                  );
+                })}
+              </S.BigEventRightUp>
+              <br />
+              <div style={{ fontSize: "20px" }}>[ 안정 ({Stable?.length}) ]</div>
+              <br />
+              <S.BigEventRightStable>
+                {Stable.map((item, idx) => {
+                  return (
+                    <BigEventRoundItem
+                      title={item.title}
+                      changeRate={item.changeRate}
+                      key={idx}
+                    />
+                  );
+                })}
+              </S.BigEventRightStable>
+              <br />
+              <div style={{ fontSize: "20px" }}>[ 하락 ({Down?.length}) ]</div>
+              <br />
+              <S.BigEventRightDown>
+                {Down.map((item, idx) => {
+                  return (
+                    <BigEventRoundItem
+                      title={item.title}
+                      changeRate={item.changeRate}
+                      key={idx}
+                    />
+                  );
+                })}
+              </S.BigEventRightDown>
+            </div>
+          </S.BigEventRight>
+        </S.BigEvent>
+      </Modal>
+    </div>
   );
 }
 

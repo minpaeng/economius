@@ -76,13 +76,13 @@ function App() {
             <NewsBar />
             <PlayerPlaceAll />
             <SideBar />
-            <BigEventRound />
 
             <Modals />
             <Socket />
             <CoinEffect />
-            <Round />
             <MovementCard />
+            <BigEventRound />
+            <Round />
             <GameEnd />
         </div>
     );

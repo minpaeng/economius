@@ -63,3 +63,15 @@ padding-bottom: 56.24%;
         max-height: 100%;
     }
 } */
+
+.RoundModal {
+    z-index: 3; 
+}
+
+.BigEventRoundModal {
+    z-index: 2; 
+}
+
+.MovementCardModal {
+    z-index: 1; 
+}
