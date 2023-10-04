@@ -173,3 +173,10 @@ export const RoomJoinUsersIdState = atom<number[]>({
     default: [0, 0, 0, 0],
     effects_UNSTABLE: [persistAtom],
 });
+
+// 게임 캐릭터
+
+export const RoomJoinUsersCharacterState = atom({
+    key: 'RoomJoinUsersCharacterState',
+    default: null,
+});

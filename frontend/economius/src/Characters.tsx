@@ -15,7 +15,8 @@ const opacity = 0.3;
 const radius = 0.5; // 점프 높이, 반원의 반지름
 const steps = 10; // 애니메이션당 프레임 수
 
-function Characters() {
+function Characters({ CharacterArr }) {
+    console.log(CharacterArr);
     // 현재 플레이어
     // 플레이어 배열
     // 현재 플레이어 최종 위치
@@ -29,10 +30,10 @@ function Characters() {
     const [moveDist, setMoveDist] = useRecoilState(MoveDistState);
 
     // 플레이어의 닉네임, 캐릭터(idx)
-    const [player1, setPlayer1] = useState<[string, number]>(['P1', 9]);
-    const [player2, setPlayer2] = useState<[string, number]>(['P2', 3]);
-    const [player3, setPlayer3] = useState<[string, number]>(['P3', 4]);
-    const [player4, setPlayer4] = useState<[string, number]>(['P4', 5]);
+    const [player1, setPlayer1] = useState<[string, number]>(['P1', CharacterArr[0]]);
+    const [player2, setPlayer2] = useState<[string, number]>(['P2', CharacterArr[1]]);
+    const [player3, setPlayer3] = useState<[string, number]>(['P3', CharacterArr[2]]);
+    const [player4, setPlayer4] = useState<[string, number]>(['P4', CharacterArr[3]]);
 
     // 플레이어의 캐릭터 컴포넌트
     const Player1 = CharacterComponent[player1[1]];
