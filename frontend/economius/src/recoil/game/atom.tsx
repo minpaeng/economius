@@ -1,12 +1,7 @@
 import { atom } from "recoil";
-<<<<<<< HEAD
-import {a} from "@react-spring/web";
-
-export const PlayerIdState = atom({
-=======
+import { a } from "@react-spring/web";
 
 export const PlayerIdState = atom<number>({
->>>>>>> 779df1b (feat: economic News)
   key: "PlayerIdState",
   default: 1,
 });
@@ -57,14 +52,13 @@ export const PlayerToRollState = atom({
 export const GameRoundState = atom({
   key: "gameRoundState",
   default: 0,
-})
+});
 
 // 유저의 순위
 export const PlayerRankingState = atom({
-    key: "playerRankingState",
-    default: [1,2,3,4],
-})
-
+  key: "playerRankingState",
+  default: [1, 2, 3, 4],
+});
 
 export const currentPrevIssueState = atom({
   key: "currentPrevIssueState",
