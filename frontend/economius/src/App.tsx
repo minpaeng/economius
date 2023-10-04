@@ -41,8 +41,8 @@ import CoinEffect from "/src/Components/Effect/CoinEffect";
 import Round from "/src/Components/Modals/Round.tsx";
 import MovementCard from "./Components/Modals/MovementCard";
 
-import BigEventRound from "./Components/Modals/BigEventRound";
-import GameEnd from "/src/Components/Modals/GameEnd.tsx";
+import BigEventRound from './Components/Modals/BigEventRound';
+import GameEnd from '/src/Components/Modals/GameEnd.tsx';
 
 function App() {
   const light = useRef();
