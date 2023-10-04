@@ -221,6 +221,7 @@ function PlayerSocket() {
         console.log('전체메시지 type: ', type);
         console.log('전체메시지 message: ', message);
         if (type === 'movePlayer') {
+            if (playerId === playerToRoll) return;
             setMoveDist(message.movementCount);
             setPlayerToRoll(message.player);
             setTimeout(() => {
