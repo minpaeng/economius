@@ -43,7 +43,7 @@ public class FinishTurnService {
     public synchronized FinishTurnResponse finish(int roomId, Long player) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
-        checkRequestPlayerToFinish(roomId, player, game.getCapablePlayerToFinish());
+        checkRequestPlayerToFinish(roomId, player, game);
 
         int gameTurn = game.updateGameTurn();
 //        if(gameTurn == -1) {
@@ -76,12 +76,15 @@ public class FinishTurnService {
         return modelMapper.map(game, FinishTurnResponse.class);
     }
 
-    private void checkRequestPlayerToFinish(int roomId, Long player, Long playerToFinish) {
-        if (!playerToFinish.equals(player)) {
-            log.info(roomId + " finishTurn 부적절한 플레이어 호출 : " + player + " != " + playerToFinish);
+    private void checkRequestPlayerToFinish(int roomId, Long player, Game game) {
+        if (!game.getCapablePlayerToFinish().equals(player)) {
+            log.info(roomId + " finishTurn 부적절한 플레이어 호출 : " + player + " != "
+                + game.getCapablePlayerToFinish());
+
+            game.updatePlayerToRoll();
 
             throw NotPlayerToRollException.builder()
-                .playerToRoll(playerToFinish)
+                .playerToRoll(game.getCapablePlayerToFinish())
                 .roomId(roomId)
                 .requestPlayer(player)
                 .build();
