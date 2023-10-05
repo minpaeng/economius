@@ -15,9 +15,6 @@ const PlayerLayout = styled.div`
     align-items: center;
     width: 100%;
     height: 100%;
-    /* color: #fff; */
-    /* text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #ff9c9fe6, 0 0 82px #ff9c9fe6, 0 0 92px #ff9c9fe6, 0 0 102px #ff9c9fe6,
-        0 0 151px #ff9c9fe6; */
 `;
 
 function PlayerPlace({ borderRadius, top, left, bgColor, idx, character, borderWidth, Ranking, Nick, userId }) {
@@ -77,7 +74,7 @@ function PlayerPlace({ borderRadius, top, left, bgColor, idx, character, borderW
                     }}
                 >
                     <PlayerRanking Ranking={Ranking} />
-                    <PlayerProperty AllProperty={totalMoney} money={money} Nick={Nick} />
+                    <PlayerProperty AllProperty={totalMoney} money={money} Nick={Nick} userId={userId} />
                     <PlayerChracter character={character} />
                 </PlayerLayout>
             ) : (
@@ -90,7 +87,7 @@ function PlayerPlace({ borderRadius, top, left, bgColor, idx, character, borderW
                     }}
                 >
                     <PlayerChracter character={character} />
-                    <PlayerProperty AllProperty={totalMoney} money={money} Nick={Nick} />
+                    <PlayerProperty AllProperty={totalMoney} money={money} Nick={Nick} userId={userId} />
                     <PlayerRanking Ranking={Ranking} />
                 </PlayerLayout>
             )}
