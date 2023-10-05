@@ -255,25 +255,28 @@ function PlayerSocket() {
         } else if (type === 'viewMovementCard') {
             setMovementCard(message.cards);
             setMovementCardOpen(true);
-        } else if (type === 'buyStock') {
-            setCallBack(true);
-        } else if (type === 'sellStock') {
-            setCallBack(true);
-        } else if (type === 'buyGolds') {
-            setCallBack(true);
-        } else if (type === 'sellGolds') {
-            setCallBack(true);
-        } else if (type === 'buyBuilding') {
-            setCallBack(true);
-        } else if (type === 'sellBuilding') {
-            setCallBack(true);
-        } else if (type === 'joinSavings') {
-            setCallBack(true);
-        } else if (type === 'stopSavings') {
-            setCallBack(true);
-        } else if (type === 'joinInsurance' || type === 'finishInsurance') {
-            if (callBack) return;
-            setCallBack(true);
+        }
+        if (playerToRoll === playerId) {
+            if (type === 'buyStock') {
+                setCallBack(true);
+            } else if (type === 'sellStock') {
+                setCallBack(true);
+            } else if (type === 'buyGolds') {
+                setCallBack(true);
+            } else if (type === 'sellGolds') {
+                setCallBack(true);
+            } else if (type === 'buyBuilding') {
+                setCallBack(true);
+            } else if (type === 'sellBuilding') {
+                setCallBack(true);
+            } else if (type === 'joinSavings') {
+                setCallBack(true);
+            } else if (type === 'stopSavings') {
+                setCallBack(true);
+            } else if (type === 'joinInsurance' || type === 'finishInsurance') {
+                if (callBack) return;
+                setCallBack(true);
+            }
         }
         if (type === 'issue') {
             setBigEventInfo({
