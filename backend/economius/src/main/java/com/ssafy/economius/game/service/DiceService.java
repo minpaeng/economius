@@ -15,6 +15,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -23,14 +27,16 @@ public class DiceService {
     private final GameRepository gameRepository;
     private final GameValidator gameValidator;
 
+    private List<Integer> cardFixList = new ArrayList<>(Arrays.asList(2,4,7));
     public ViewMovementCardResponse makeMovementCard(Long player) {
         /**
          * 플레이어의 턴이 맞는지 확인하는 로직
          * 게임 발리데이터에 할당
          */
-        return new ViewMovementCardResponse(player,
-            RandomUtil.getUniqueRandomNumbers(MOVEMENT_CARD_SIZE.getValue(),
-                MOVEMENT_CARD_LOWER_BOUND.getValue(), MOVEMENT_CARD_UPPER_BOUND.getValue()));
+//        return new ViewMovementCardResponse(player,
+//            RandomUtil.getUniqueRandomNumbers(MOVEMENT_CARD_SIZE.getValue(),
+//                MOVEMENT_CARD_LOWER_BOUND.getValue(), MOVEMENT_CARD_UPPER_BOUND.getValue()));
+        return new ViewMovementCardResponse(player, cardFixList);
     }
 
 
