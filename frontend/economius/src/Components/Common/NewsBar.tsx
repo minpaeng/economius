@@ -51,7 +51,6 @@ function NewsBar() {
 
     const StockRateArr = objectToArray(StockRateObj);
     const LongStockRateArr = [...StockRateArr, ...StockRateArr];
-    console.log(StockRateArr);
 
     return (
         <Modal isOpen={true} style={modalStyle}>

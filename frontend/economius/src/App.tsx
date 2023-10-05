@@ -84,6 +84,7 @@ function App() {
 
     useEffect(() => {
         axios.get(`https://j9b109.p.ssafy.io/api/room/${roomId}/start`).then(data => {
+            console.log(data.data.playerSequence);
             setPortfolioState(data.data.portfolios);
             setStockState(data.data.stocks);
             setGoldState(data.data.gold);
@@ -121,10 +122,9 @@ function App() {
 
     return (
         <S.Rooter>
-            <StartPlayCheck />
             {/* {isOpen && (
-
-
+                
+                
             )} */}
             {showVideo && (
                 <div className='video-loading'>
@@ -146,6 +146,7 @@ function App() {
                 <NewsBar />
                 {roomJoinUsersCharacter === null ? null : <PlayerPlaceAll />}
                 {Portfolio === null ? null : <SideBar />}
+                {PlayerSequenceState === null ? null : <StartPlayCheck />}
 
                 <Modals />
                 <Socket />

@@ -21,8 +21,18 @@ export default function StartPlayCheck() {
 
     const Sequence = useRecoilValue(PlayerSequenceState);
     const userId = useRecoilValue(PlayerIdState);
+    const turn = Sequence && Sequence.indexOf(userId) + 1;
 
-    const turn = Sequence.indexOf(userId) + 1;
+    useEffect(() => {
+        if (Sequence === null) {
+            return;
+        }
+    }, [Sequence]);
+
+    console.log(Sequence);
+    console.log(userId);
+    // const turn = Sequence.indexOf(userId) + 1;
+    // console.log(turn);
 
     // modal style
     const modalStyle: any = {
