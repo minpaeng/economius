@@ -325,8 +325,6 @@ function PlayerSocket() {
                 rate: message.savingDto.rate,
             });
         } else if (type == 'calculate') {
-            console.log('calculate');
-            console.log(message);
             setMonthlyInfo({
                 player: message.player,
                 salary: message.receipt.salary,
@@ -384,7 +382,6 @@ function PlayerSocket() {
         const player2 = message.players[1];
         const player3 = message.players[2];
         const player4 = message.players[3];
-        console.log('player1');
 
         let nick1 = message.nicknames[player1];
         let nick2 = message.nicknames[player2];
