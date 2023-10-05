@@ -107,3 +107,9 @@ export const BankCancelBottom = styled.button`
         background: #ffaa55; /* 원하는 색상으로 변경 */
     }
 `;
+
+export const ExitButton = styled.img`
+    position: absolute;
+    top: 17px;
+    right: 17px;
+`;
