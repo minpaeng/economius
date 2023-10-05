@@ -141,15 +141,14 @@ public class GameService {
         PortfolioSavings savings = portfolio.getSavings();
         PortfolioInsurances insurances = portfolio.getInsurances();
         savings.updateSavings();
-
         int finishSaving = savings.calculateFinishSaving();
         int savingPrice = savings.calculateSavingPrice();
         int insurancePrice = insurances.calculateInsurancePrice();
         int money = portfolio.getMoney();
         int income = (finishSaving - savingPrice - insurancePrice + SALARY.getValue());
+        log.info("===== 적금 만기 금액 : {} =====", finishSaving);
         int tax = (int) (income * (double) game.getTax().get(prize) / 100);
         portfolio.setMoney(money + income - tax);
-
         ReceiptDto receipt = ReceiptDto.builder()
             .tax(tax)
             .salary(SALARY.getValue())

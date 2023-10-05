@@ -18,13 +18,19 @@ public class PortfolioSavings {
 
     public int calculateFinishSaving() {
         if (savings != null) {
-            return this.savings.values().stream()
-                .filter(PortfolioSaving::checkSavingFinish)
-                .mapToInt(this::deleteSaving)
-                .sum();
+            return (int) this.savings.values().stream()
+                    .filter(PortfolioSaving::checkSavingFinish)
+                    .mapToDouble(s -> calculateFinalSavingWithRate(s))
+                    .sum();
         }
         return 0;
     }
+
+    private int calculateFinalSavingWithRate(PortfolioSaving saving) {
+        double calculatedValue = saving.getCurrentPrice() + (saving.getCurrentPrice() * ((double) saving.getRate() / 100));
+        return (int) Math.round(calculatedValue);
+    }
+
 
     public void updateSavings(){
         if (savings != null){
