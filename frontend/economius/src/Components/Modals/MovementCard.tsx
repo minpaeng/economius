@@ -1,13 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import {
-    IsMovingState,
-    MoveDistState,
-    MovementCardState,
-    MovementCardOpenState,
-    MovementCardConfirmState,
-    NicknameToRollSelector,
-} from '../../recoil/animation/atom';
+import { IsMovingState, MoveDistState, MovementCardState, MovementCardOpenState, MovementCardConfirmState } from '../../recoil/animation/atom';
 import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 import { useSpring, animated } from '@react-spring/web';
 import Modal from 'react-modal';
@@ -15,6 +8,7 @@ import woncardfront from '/MovementCard/woncardfront.png';
 import woncardback from '/MovementCard/woncardback.png';
 import * as S from './MovementCard.style';
 import { effectAudioPopup, effectAudioClick } from '/src/Audio';
+import OtherPerson from './OtherPerson';
 
 function Card({ idx, value, flip, top, left, selected, CardClick }) {
     const { opacity, transform } = useSpring({
@@ -79,7 +73,6 @@ function MovementCard({}) {
     const [movementCardConfirm, setMovementCardConfirm] = useRecoilState(MovementCardConfirmState);
     const PlayerToRoll = useRecoilValue(PlayerToRollState);
     const PlayerId = useRecoilValue(PlayerIdState);
-    const NicknameToRoll = useRecoilValue(NicknameToRollSelector);
     // 선택된 이동카드 인덱스
     const [selected, setSelected] = useState(-1);
 
@@ -136,25 +129,21 @@ function MovementCard({}) {
         };
     }, []);
 
-    return (
-        <>
-            {PlayerToRoll === PlayerId ? (
-                <Modal isOpen={movementCardOpen} style={S.modalStyle}>
-                    {movementCard === null ? (
-                        `로딩중입니다...`
-                    ) : (
-                        <>
-                            <Card idx={0} value={movementCard[0]} top={'10%'} left={'8%'} flip={flip1} selected={selected} CardClick={() => setSelected(0)} />
-                            <Card idx={1} value={movementCard[1]} top={'10%'} left={'38%'} flip={flip2} selected={selected} CardClick={() => setSelected(1)} />
-                            <Card idx={2} value={movementCard[2]} top={'10%'} left={'68%'} flip={flip3} selected={selected} CardClick={() => setSelected(2)} />
-                            <S.Button onClick={() => (MoveButtonClick(selected), effectAudioClick.play())}>이동카드 선택</S.Button>) : (
-                        </>
-                    )}
-                </Modal>
+    return PlayerToRoll === PlayerId ? (
+        <Modal isOpen={movementCardOpen} style={S.modalStyle}>
+            {movementCard === null ? (
+                `로딩중입니다...`
             ) : (
-                <S.DisButton>{NicknameToRoll} 님이 카드를 선택중입니다</S.DisButton>
+                <>
+                    <Card idx={0} value={movementCard[0]} top={'10%'} left={'8%'} flip={flip1} selected={selected} CardClick={() => setSelected(0)} />
+                    <Card idx={1} value={movementCard[1]} top={'10%'} left={'38%'} flip={flip2} selected={selected} CardClick={() => setSelected(1)} />
+                    <Card idx={2} value={movementCard[2]} top={'10%'} left={'68%'} flip={flip3} selected={selected} CardClick={() => setSelected(2)} />
+                    <S.Button onClick={() => (MoveButtonClick(selected), effectAudioClick.play())}>이동카드 선택</S.Button>) : (
+                </>
             )}
-        </>
+        </Modal>
+    ) : (
+        <OtherPerson />
     );
 }
 

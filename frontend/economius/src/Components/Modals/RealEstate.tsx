@@ -12,6 +12,7 @@ import shopimg from '/RealState/shop.png';
 import * as S from './RealEstate.style';
 import { ExitButton } from './GlobalModal.stye';
 import { effectAudioPopup, effectAudioClick } from '/src/Audio';
+import OtherPerson from './OtherPerson';
 
 function RealEstate() {
     const playerId = useRecoilValue(PlayerIdState);
@@ -82,7 +83,7 @@ function RealEstate() {
                     )}
                 </Modal>
             ) : (
-                <div style={{ position: 'absolute', left: '40%', top: '50%', height: '50px', backgroundColor: 'brown' }}>부동산에서 다른 사람이 거래중</div>
+                <OtherPerson />
             )}
         </>
     );

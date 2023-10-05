@@ -1,12 +1,16 @@
 import Modal from 'react-modal';
 import { useEffect } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
 import { ChanceCardInfoState } from '/src/recoil/modalInfo/atom';
+import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 import * as S from './ChanceCard.style';
 import { effectAudioPopup, effectAudioClick } from '/src/Audio';
+import OtherPerson from './OtherPerson';
 
 function ChanceCard() {
+    const playerId = useRecoilValue(PlayerIdState);
+    const playerToRoll = useRecoilValue(PlayerToRollState);
     // const dummy = {
     //     title: '교통사고',
     //     desc: '교통사고를 당했습니다.',
@@ -33,7 +37,7 @@ function ChanceCard() {
         };
     }, []);
 
-    return (
+    return playerId === playerToRoll ? (
         <Modal isOpen={isModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
             {!(chanceCardInfo === null) ? (
                 <S.ChanceCard>
@@ -86,6 +90,8 @@ function ChanceCard() {
                 `로딩중입니다...`
             )}
         </Modal>
+    ) : (
+        <OtherPerson />
     );
 }
 

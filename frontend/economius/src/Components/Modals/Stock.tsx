@@ -9,6 +9,7 @@ import { ExitButton } from './GlobalModal.stye';
 import StockGraph from '../Common/StockGraph';
 import BuyOrSell from '../Common/BuyOrSell';
 import { effectAudioPopup, effectAudioClick } from '/src/Audio';
+import OtherPerson from './OtherPerson';
 
 function getStocks(stocks, stockId, userId) {
     return stocks[stockId].owners[userId];
@@ -90,95 +91,91 @@ function Stock() {
         effectAudioPopup.play(); // 출력할 위치에 작성
     }, []);
 
-    return (
-        <>
-            {player === PlayerToRoll ? (
-                <Modal isOpen={isModalOpen} style={modalStyle}>
-                    <ExitButton onClick={() => (closeModal(), effectAudioClick.play())} src='/button/exit.png' alt='exit' />
-                    {stockDetail === null ? (
-                        `loading...`
-                    ) : (
-                        <S.StockMain>
-                            <S.StockTop>
-                                <S.StockTopImg src={`Stock/${stockDetail.stockId}.png`} />
-                                <S.StockTopTitle>
-                                    <S.StockTopTitleEnterprise>{stockDetail.name}</S.StockTopTitleEnterprise>
-                                    <S.StockTopTitleType>{stockDetail.companyCategory}</S.StockTopTitleType>
-                                </S.StockTopTitle>
-                            </S.StockTop>
-                            <S.StockMid>
-                                <S.StockMidLeft>
-                                    <StockGraph data={makeStockGraphData(stockDetail.priceHistory)} />
-                                    <S.StockMidLeftPrice>
-                                        현재가 : {stockDetail.price.toLocaleString()}
-                                        {stockDetail.rate >= 0 ? (
-                                            <span style={{ color: '#DF7D46' }}> (+{stockDetail.rate}%)</span>
-                                        ) : (
-                                            <span style={{ color: '#DF7D46' }}> ({stockDetail.rate}%)</span>
-                                        )}
-                                    </S.StockMidLeftPrice>
-                                </S.StockMidLeft>
-                                <S.StockMidRight>
-                                    {/* 매도,매수 */}
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            width: '100%',
-                                            height: '100%',
-                                        }}
-                                    >
-                                        <S.Main>
-                                            <S.BtnSection>
-                                                <S.BuyOrSellBtn
-                                                    onClick={() => {
-                                                        isBuyClick(true);
-                                                        effectAudioClick.play();
-                                                    }}
-                                                    style={{
-                                                        backgroundColor: buyClick ? '#F7BC0F' : 'rgba(247, 188, 15, 0.5)',
-                                                    }}
-                                                >
-                                                    매수
-                                                </S.BuyOrSellBtn>
-                                                <S.BuyOrSellBtn
-                                                    onClick={() => {
-                                                        isBuyClick(false);
-                                                        effectAudioClick.play();
-                                                    }}
-                                                    style={{
-                                                        backgroundColor: !buyClick ? '#F7BC0F' : 'rgba(247, 188, 15, 0.5)',
-                                                    }}
-                                                >
-                                                    매도
-                                                </S.BuyOrSellBtn>
-                                            </S.BtnSection>
-                                            <BuyOrSell
-                                                isBuy={buyClick}
-                                                stockId={stockDetail.stockId}
-                                                StockOrGold='stock'
-                                                price={stockDetail.price}
-                                                amount={getStocks(stocks, stockDetail.stockId, player)}
-                                                money={portfolios[player].money}
-                                            />
-                                        </S.Main>
-                                    </div>
-                                </S.StockMidRight>
-                            </S.StockMid>
-                            <S.StockDivide />
-                            {buyClick ? (
-                                <S.StockBuyBottom onClick={() => (setTradeStock([true, false]), effectAudioClick.play())}>매수하기</S.StockBuyBottom>
-                            ) : (
-                                <S.StockSellBottom onClick={() => (setTradeStock([false, true]), effectAudioClick.play())}>매도하기</S.StockSellBottom>
-                            )}
-                        </S.StockMain>
-                    )}
-                </Modal>
+    return player === PlayerToRoll ? (
+        <Modal isOpen={isModalOpen} style={modalStyle}>
+            <ExitButton onClick={() => (closeModal(), effectAudioClick.play())} src='/button/exit.png' alt='exit' />
+            {stockDetail === null ? (
+                `loading...`
             ) : (
-                <div style={{ position: 'absolute', left: '40%', top: '50%', height: '50px', backgroundColor: 'brown' }}>다른 사람이 주식을 거래중</div>
+                <S.StockMain>
+                    <S.StockTop>
+                        <S.StockTopImg src={`Stock/${stockDetail.stockId}.png`} />
+                        <S.StockTopTitle>
+                            <S.StockTopTitleEnterprise>{stockDetail.name}</S.StockTopTitleEnterprise>
+                            <S.StockTopTitleType>{stockDetail.companyCategory}</S.StockTopTitleType>
+                        </S.StockTopTitle>
+                    </S.StockTop>
+                    <S.StockMid>
+                        <S.StockMidLeft>
+                            <StockGraph data={makeStockGraphData(stockDetail.priceHistory)} />
+                            <S.StockMidLeftPrice>
+                                현재가 : {stockDetail.price.toLocaleString()}
+                                {stockDetail.rate >= 0 ? (
+                                    <span style={{ color: '#DF7D46' }}> (+{stockDetail.rate}%)</span>
+                                ) : (
+                                    <span style={{ color: '#DF7D46' }}> ({stockDetail.rate}%)</span>
+                                )}
+                            </S.StockMidLeftPrice>
+                        </S.StockMidLeft>
+                        <S.StockMidRight>
+                            {/* 매도,매수 */}
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    width: '100%',
+                                    height: '100%',
+                                }}
+                            >
+                                <S.Main>
+                                    <S.BtnSection>
+                                        <S.BuyOrSellBtn
+                                            onClick={() => {
+                                                isBuyClick(true);
+                                                effectAudioClick.play();
+                                            }}
+                                            style={{
+                                                backgroundColor: buyClick ? '#F7BC0F' : 'rgba(247, 188, 15, 0.5)',
+                                            }}
+                                        >
+                                            매수
+                                        </S.BuyOrSellBtn>
+                                        <S.BuyOrSellBtn
+                                            onClick={() => {
+                                                isBuyClick(false);
+                                                effectAudioClick.play();
+                                            }}
+                                            style={{
+                                                backgroundColor: !buyClick ? '#F7BC0F' : 'rgba(247, 188, 15, 0.5)',
+                                            }}
+                                        >
+                                            매도
+                                        </S.BuyOrSellBtn>
+                                    </S.BtnSection>
+                                    <BuyOrSell
+                                        isBuy={buyClick}
+                                        stockId={stockDetail.stockId}
+                                        StockOrGold='stock'
+                                        price={stockDetail.price}
+                                        amount={getStocks(stocks, stockDetail.stockId, player)}
+                                        money={portfolios[player].money}
+                                    />
+                                </S.Main>
+                            </div>
+                        </S.StockMidRight>
+                    </S.StockMid>
+                    <S.StockDivide />
+                    {buyClick ? (
+                        <S.StockBuyBottom onClick={() => (setTradeStock([true, false]), effectAudioClick.play())}>매수하기</S.StockBuyBottom>
+                    ) : (
+                        <S.StockSellBottom onClick={() => (setTradeStock([false, true]), effectAudioClick.play())}>매도하기</S.StockSellBottom>
+                    )}
+                </S.StockMain>
             )}
-        </>
+        </Modal>
+    ) : (
+        <OtherPerson />
     );
 }
 

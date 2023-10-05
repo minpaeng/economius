@@ -8,6 +8,7 @@ import { BankInfoState } from '/src/recoil/modalInfo/atom';
 import * as S from './InstallmentSaving.style';
 import { ExitButton } from './GlobalModal.stye';
 import { effectAudioPopup, effectAudioClick } from '/src/Audio';
+import OtherPerson from './OtherPerson';
 
 function InstallmentSaving() {
     const playerId = useRecoilValue(PlayerIdState);
@@ -54,90 +55,84 @@ function InstallmentSaving() {
         effectAudioPopup.play(); // 출력할 위치에 작성
     }, []);
 
-    return (
-        <>
-            {playerId === playerToRoll ? (
-                <Modal isOpen={isModalOpen} style={modalStyle}>
-                    <ExitButton onClick={() => (closeModal(), effectAudioClick.play())} src='/button/exit.png' alt='exit' />
-                    {!(bankInfo === null) ? (
-                        <S.BankMain>
-                            <S.BankTop>
-                                {/* title은 우리가 쥐고있는 은행코드로 띄워야 할듯 */}
-                                <img src='Bank/BankTitle.png' alt='img' style={{ width: '50px', marginRight: '10px' }} />
-                                <S.BankTopTitle>{bankInfo.name}</S.BankTopTitle>
-                            </S.BankTop>
-                            <S.BankMid>
-                                <S.BankMidImg src='Bank/image 34.png' alt='img' />
-                                <S.BankMidDesc>
-                                    <S.BankMidPriceDesc>
-                                        <p>
-                                            월 납부액 : {bankInfo.monthlyDeposit.toLocaleString()}
-                                            {bankInfo.have
-                                                ? ` (잔여 : ${(bankInfo.monthlyDeposit * bankInfo.finishCount - bankInfo.currentPrice).toLocaleString()})`
-                                                : null}
-                                        </p>
-                                        <img
-                                            src='Bank/dollar-coin 15.png'
-                                            alt='img'
-                                            style={{
-                                                width: '25px',
-                                                height: '25px',
+    return playerId === playerToRoll ? (
+        <Modal isOpen={isModalOpen} style={modalStyle}>
+            <ExitButton onClick={() => (closeModal(), effectAudioClick.play())} src='/button/exit.png' alt='exit' />
+            {!(bankInfo === null) ? (
+                <S.BankMain>
+                    <S.BankTop>
+                        {/* title은 우리가 쥐고있는 은행코드로 띄워야 할듯 */}
+                        <img src='Bank/BankTitle.png' alt='img' style={{ width: '50px', marginRight: '10px' }} />
+                        <S.BankTopTitle>{bankInfo.name}</S.BankTopTitle>
+                    </S.BankTop>
+                    <S.BankMid>
+                        <S.BankMidImg src='Bank/image 34.png' alt='img' />
+                        <S.BankMidDesc>
+                            <S.BankMidPriceDesc>
+                                <p>
+                                    월 납부액 : {bankInfo.monthlyDeposit.toLocaleString()}
+                                    {bankInfo.have
+                                        ? ` (잔여 : ${(bankInfo.monthlyDeposit * bankInfo.finishCount - bankInfo.currentPrice).toLocaleString()})`
+                                        : null}
+                                </p>
+                                <img
+                                    src='Bank/dollar-coin 15.png'
+                                    alt='img'
+                                    style={{
+                                        width: '25px',
+                                        height: '25px',
 
-                                                marginLeft: '5px',
-                                            }}
-                                        />
-                                    </S.BankMidPriceDesc>
-                                    <S.BankMidCycle>
-                                        <p>
-                                            기간 : {bankInfo.finishCount}
-                                            {bankInfo.have
-                                                ? ` (잔여 : ${bankInfo.finishCount - bankInfo.currentCount} 바퀴)`
-                                                : ` (${bankInfo.finishCount}바퀴)`}
-                                        </p>
-                                        <img
-                                            src='Bank/BankCycle.png'
-                                            alt='img'
-                                            style={{
-                                                width: '25px',
-                                                height: '25px',
-                                                marginRight: '5px',
-                                                marginLeft: '5px',
-                                            }}
-                                        />
-                                    </S.BankMidCycle>
-                                    <div>이율(변동) : 기준금리 + {bankInfo.rate}%p</div>
-                                    <div>중도 해지 : 원금만 수령</div>
-                                </S.BankMidDesc>
-                            </S.BankMid>
-                            <S.BankDivide />
-                            {bankInfo.have ? (
-                                <S.BankJoinBottom
-                                    onClick={() => {
-                                        setTradeBank([false, true]);
-                                        effectAudioClick.play();
+                                        marginLeft: '5px',
                                     }}
-                                >
-                                    적금 해지하기
-                                </S.BankJoinBottom>
-                            ) : (
-                                <S.BankJoinBottom
-                                    onClick={() => {
-                                        setTradeBank([true, false]);
-                                        effectAudioClick.play();
+                                />
+                            </S.BankMidPriceDesc>
+                            <S.BankMidCycle>
+                                <p>
+                                    기간 : {bankInfo.finishCount}
+                                    {bankInfo.have ? ` (잔여 : ${bankInfo.finishCount - bankInfo.currentCount} 바퀴)` : ` (${bankInfo.finishCount}바퀴)`}
+                                </p>
+                                <img
+                                    src='Bank/BankCycle.png'
+                                    alt='img'
+                                    style={{
+                                        width: '25px',
+                                        height: '25px',
+                                        marginRight: '5px',
+                                        marginLeft: '5px',
                                     }}
-                                >
-                                    적금 가입하기
-                                </S.BankJoinBottom>
-                            )}
-                        </S.BankMain>
+                                />
+                            </S.BankMidCycle>
+                            <div>이율(변동) : 기준금리 + {bankInfo.rate}%p</div>
+                            <div>중도 해지 : 원금만 수령</div>
+                        </S.BankMidDesc>
+                    </S.BankMid>
+                    <S.BankDivide />
+                    {bankInfo.have ? (
+                        <S.BankJoinBottom
+                            onClick={() => {
+                                setTradeBank([false, true]);
+                                effectAudioClick.play();
+                            }}
+                        >
+                            적금 해지하기
+                        </S.BankJoinBottom>
                     ) : (
-                        '로딩중입니다...'
+                        <S.BankJoinBottom
+                            onClick={() => {
+                                setTradeBank([true, false]);
+                                effectAudioClick.play();
+                            }}
+                        >
+                            적금 가입하기
+                        </S.BankJoinBottom>
                     )}
-                </Modal>
+                </S.BankMain>
             ) : (
-                <div style={{ position: 'absolute', left: '40%', top: '50%', height: '50px', backgroundColor: 'brown' }}>은행에서 다른 사람이 거래중</div>
+                '로딩중입니다...'
             )}
-        </>
+        </Modal>
+    ) : (
+        <OtherPerson />
     );
 }
 
