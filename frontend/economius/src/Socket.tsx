@@ -7,8 +7,9 @@ import {
     GameButtonState,
     IsModalOpenState,
     MonthlyModalOpenState,
-    MovementCardOpenState,
     MovementCardState,
+    MovementCardOpenState,
+    MovementCardConfirmState,
     NowPlayerPositionState,
     RoomCountState,
     RoomExitState,
@@ -95,6 +96,7 @@ function PlayerSocket() {
     const [nowPlayerPosition, setNowPlayerPosition] = useRecoilState(NowPlayerPositionState);
     const [movementCard, setMovementCard] = useRecoilState(MovementCardState);
     const [movementCardOpen, setMovementCardOpen] = useRecoilState(MovementCardOpenState);
+    const [movementCardConfirm, setMovementCardConfirm] = useRecoilState(MovementCardConfirmState);
     const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
     const [isMoving, setIsMoving] = useRecoilState(IsMovingState);
     const [financeCenter, setFinanceCenter] = useRecoilState(FinanceCenterState);
@@ -221,12 +223,11 @@ function PlayerSocket() {
         console.log('전체메시지 type: ', type);
         console.log('전체메시지 message: ', message);
         if (type === 'movePlayer') {
-            if (playerId === playerToRoll) return;
             setMoveDist(message.movementCount);
             setPlayerToRoll(message.player);
+            setNowPlayerPosition(message.location);
             setTimeout(() => {
                 setIsMoving(true);
-                setMovementCardOpen(false);
             }, 500);
         } else if (type === 'finishTurn') {
             setStocks(message.stocks);
@@ -653,14 +654,14 @@ function PlayerSocket() {
         }
     }, [getPrediction]);
 
-    // 이동하면 서버에 이동카드 정보 보내기
+    // 이동카드 선택 확정하면 서버에 이동카드 정보 보내기
     useEffect(() => {
-        if (!isMoving) return;
+        if (!movementCardConfirm) return;
         if (playerId !== playerToRoll) return;
         connect().then(function () {
             stompClient.current.send(`/pub/${roomId}/movePlayer`, {}, JSON.stringify({ player: playerToRoll, movementCount: moveDist }));
         });
-    }, [isMoving]);
+    }, [movementCardConfirm]);
 
     //턴 종료
     useEffect(() => {
