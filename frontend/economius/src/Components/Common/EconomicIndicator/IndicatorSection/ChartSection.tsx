@@ -42,12 +42,7 @@ function ChartSection({ title, imgPath, data }) {
         );
         chartHistory = <ChartSectionItem data={dataChange(data.priceHistory)} />;
     } else {
-        layoutTopRight = (
-            <S.LayoutTopRight>
-                부동산 뭐라고 함? 뭐가 움직이는거 : {data.currentValue}
-                {percentStyleSpan}
-            </S.LayoutTopRight>
-        );
+        layoutTopRight = <S.LayoutTopRight></S.LayoutTopRight>;
         chartHistory = <RealEstateChart data={data} />;
     }
 

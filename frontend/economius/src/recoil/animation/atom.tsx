@@ -195,3 +195,10 @@ export const RoomJoinUsersCharacterState = atom({
     key: 'RoomJoinUsersCharacterState',
     default: null,
 });
+
+// 플레이어 순서
+
+export const PlayerSequenceState = atom({
+    key: 'PlayerSequenceState',
+    default: null,
+});

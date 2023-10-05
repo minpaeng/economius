@@ -3,36 +3,36 @@ import { PlayerToRollState } from '/src/recoil/game/atom';
 import { RoomJoinUsersIdState } from '/src/recoil/animation/atom';
 import { useRecoilValue } from 'recoil';
 
-function PlayerProperty({ AllProperty, money, Nick, userId }) {
-    const PlayerTurn_1 = styled.div`
-        flex: 5;
-        font-size: 30px;
-        color: #fff;
-        text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px rgba(255, 216, 133, 0.9), 0 0 82px rgba(255, 216, 133, 0.9),
-            0 0 92px rgba(255, 216, 133, 0.9), 0 0 102px rgba(255, 216, 133, 0.9), 0 0 151px rgba(255, 216, 133, 0.9);
-    `;
-    const PlayerTurn_2 = styled.div`
-        flex: 5;
-        font-size: 30px;
-        color: #fff;
-        text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px rgba(131, 213, 233, 0.9), 0 0 82px rgba(131, 213, 233, 0.9),
-            0 0 92px rgba(131, 213, 233, 0.9), 0 0 102px rgba(131, 213, 233, 0.9), 0 0 151px rgba(131, 213, 233, 0.9);
-    `;
-    const PlayerTurn_3 = styled.div`
-        flex: 5;
-        font-size: 30px;
-        color: #fff;
-        text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px rgba(255, 166, 132, 0.9), 0 0 82px rgba(255, 166, 132, 0.9),
-            0 0 92px rgba(255, 166, 132, 0.9), 0 0 102px rgba(255, 166, 132, 0.9), 0 0 151px rgba(255, 166, 132, 0.9);
-    `;
-    const PlayerTurn_4 = styled.div`
-        flex: 5;
-        font-size: 30px;
-        color: #fff;
-        text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px rgba(255, 156, 159, 0.9), 0 0 82px rgba(255, 156, 159, 0.9),
-            0 0 92px rgba(255, 156, 159, 0.9), 0 0 102px rgba(255, 156, 159, 0.9), 0 0 151px rgba(255, 156, 159, 0.9);
-    `;
+const PlayerTurn_1 = styled.div`
+    flex: 5;
+    font-size: 30px;
+    color: #fff;
+    text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px rgba(255, 216, 133, 0.9), 0 0 82px rgba(255, 216, 133, 0.9),
+        0 0 92px rgba(255, 216, 133, 0.9), 0 0 102px rgba(255, 216, 133, 0.9), 0 0 151px rgba(255, 216, 133, 0.9);
+`;
+const PlayerTurn_2 = styled.div`
+    flex: 5;
+    font-size: 30px;
+    color: #fff;
+    text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px rgba(131, 213, 233, 0.9), 0 0 82px rgba(131, 213, 233, 0.9),
+        0 0 92px rgba(131, 213, 233, 0.9), 0 0 102px rgba(131, 213, 233, 0.9), 0 0 151px rgba(131, 213, 233, 0.9);
+`;
+const PlayerTurn_3 = styled.div`
+    flex: 5;
+    font-size: 30px;
+    color: #fff;
+    text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px rgba(255, 166, 132, 0.9), 0 0 82px rgba(255, 166, 132, 0.9),
+        0 0 92px rgba(255, 166, 132, 0.9), 0 0 102px rgba(255, 166, 132, 0.9), 0 0 151px rgba(255, 166, 132, 0.9);
+`;
+const PlayerTurn_4 = styled.div`
+    flex: 5;
+    font-size: 30px;
+    color: #fff;
+    text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px rgba(255, 156, 159, 0.9), 0 0 82px rgba(255, 156, 159, 0.9),
+        0 0 92px rgba(255, 156, 159, 0.9), 0 0 102px rgba(255, 156, 159, 0.9), 0 0 151px rgba(255, 156, 159, 0.9);
+`;
 
+function PlayerProperty({ AllProperty, money, Nick, userId }) {
     const PlayerIdArr = useRecoilValue(RoomJoinUsersIdState);
     const PlayerToRoll = useRecoilValue(PlayerToRollState);
 

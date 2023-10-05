@@ -33,7 +33,7 @@ import {
     PlayerRankingState,
 } from '/src/recoil/game/atom';
 
-import { RoomJoinUsersCharacterState } from '/src/recoil/animation/atom';
+import { RoomJoinUsersCharacterState, MyTurnState, PlayerSequenceState } from '/src/recoil/animation/atom';
 
 import axios from 'axios';
 import { RoomIdState } from '/src/recoil/animation/atom.tsx';
@@ -62,6 +62,7 @@ function App() {
     const setStockChangeArr = useSetRecoilState(StockChangeArrState);
     const [roomJoinUsersCharacter, setRoomJoinUsersCharacter] = useRecoilState(RoomJoinUsersCharacterState);
     const setPlayerRanking = useSetRecoilState(PlayerRankingState);
+    const setPlayerSequence = useSetRecoilState(PlayerSequenceState);
 
     function objectToArray(obj) {
         if (obj === null) {
@@ -95,6 +96,7 @@ function App() {
             setStockChangeArr(data.data.stocks);
             setRoomJoinUsersCharacter(data.data.characters);
             setPlayerRanking(data.data.players);
+            setPlayerSequence(data.data.playerSequence);
             // 내 턴을 저장
             for (let i = 0; i < data.data.playerSequence.length; i++) {
                 if (data.data.playerSequence == Number(localStorage.getItem('player'))) {
