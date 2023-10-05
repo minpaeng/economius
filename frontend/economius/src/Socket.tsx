@@ -256,27 +256,50 @@ function PlayerSocket() {
             setMovementCard(message.cards);
             setMovementCardOpen(true);
         }
-        if (playerToRoll === playerId) {
-            if (type === 'buyStock') {
-                setCallBack(true);
-            } else if (type === 'sellStock') {
-                setCallBack(true);
-            } else if (type === 'buyGolds') {
-                setCallBack(true);
-            } else if (type === 'sellGolds') {
-                setCallBack(true);
-            } else if (type === 'buyBuilding') {
-                setCallBack(true);
-            } else if (type === 'sellBuilding') {
-                setCallBack(true);
-            } else if (type === 'joinSavings') {
-                setCallBack(true);
-            } else if (type === 'stopSavings') {
-                setCallBack(true);
-            } else if (type === 'joinInsurance' || type === 'finishInsurance') {
-                if (callBack) return;
-                setCallBack(true);
-            }
+        if (type === 'buyStock') {
+            if (playerToRoll !== playerId) return;
+            setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 5);
+            setEffect(true);
+            setCallBack(true);
+        } else if (type === 'sellStock') {
+            if (playerToRoll !== playerId) return;
+            setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 1);
+            setEffect(true);
+            setCallBack(true);
+        } else if (type === 'buyGolds') {
+            if (playerToRoll !== playerId) return;
+            setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 5);
+            setEffect(true);
+            setCallBack(true);
+        } else if (type === 'sellGolds') {
+            if (playerToRoll !== playerId) return;
+            setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 1);
+            setEffect(true);
+            setCallBack(true);
+        } else if (type === 'buyBuilding') {
+            if (playerToRoll !== playerId) return;
+            setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 5);
+            setEffect(true);
+            setCallBack(true);
+        } else if (type === 'sellBuilding') {
+            if (playerToRoll !== playerId) return;
+            setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 1);
+            setEffect(true);
+            setCallBack(true);
+        } else if (type === 'joinSavings') {
+            if (playerToRoll !== playerId) return;
+            setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 5);
+            setEffect(true);
+            setCallBack(true);
+        } else if (type === 'stopSavings') {
+            if (playerToRoll !== playerId) return;
+            setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 1);
+            setEffect(true);
+            setCallBack(true);
+        } else if (type === 'joinInsurance' || type === 'finishInsurance') {
+            if (playerToRoll !== playerId) return;
+            if (callBack) return;
+            setCallBack(true);
         }
         if (type === 'issue') {
             setBigEventInfo({
@@ -454,20 +477,20 @@ function PlayerSocket() {
     // 자산별 방문
     useEffect(() => {
         if (!isModalOpen) return;
-        if (playerToRoll !== playerId) return; // 내 캐릭이 아니면 요청 안 함
 
         // 부동산 방문
         if ([4, 14, 22].includes(nowPlayerPosition)) {
             connect().then(function () {
+                if (playerToRoll !== playerId) return; // 내 캐릭이 아니면 요청 안 함
                 stompClient.current.send(`/pub/${roomId}/visitBuilding`, {}, JSON.stringify({ player: playerId, buildingId: buildingIds[nowPlayerPosition] }));
             });
         }
         //주식 방문
         else if (nowPlayerPosition % 2 === 1) {
+            setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 5);
+            setEffect(true);
             connect().then(function () {
-                // 동전 효과
-                setEffectIdx(1);
-                setEffect(true);
+                if (playerToRoll !== playerId) return; // 내 캐릭이 아니면 요청 안 함
                 stompClient.current.send(`/pub/${roomId}/buyItem`, {}, JSON.stringify({ player: playerId, stockId: stockIds[nowPlayerPosition] }));
                 stompClient.current.send(`/pub/${roomId}/stockDetail`, {}, JSON.stringify({ player: playerId, stockId: stockIds[nowPlayerPosition] }));
             });
@@ -475,24 +498,28 @@ function PlayerSocket() {
         // 금거래소 방문
         else if (nowPlayerPosition === 30) {
             connect().then(function () {
+                if (playerToRoll !== playerId) return; // 내 캐릭이 아니면 요청 안 함
                 stompClient.current.send(`/pub/${roomId}/selectGolds`, {}, JSON.stringify({ player: playerId }));
             });
         }
         // 은행 방문
         else if ([2, 10, 18].includes(nowPlayerPosition)) {
             connect().then(function () {
+                if (playerToRoll !== playerId) return; // 내 캐릭이 아니면 요청 안 함
                 stompClient.current.send(`/pub/${roomId}/bank`, {}, JSON.stringify({ player: playerId, bankId: bankIds[nowPlayerPosition] }));
             });
         }
         // 보험 방문
         else if ([6, 26].includes(nowPlayerPosition)) {
             connect().then(function () {
+                if (playerToRoll !== playerId) return; // 내 캐릭이 아니면 요청 안 함
                 stompClient.current.send(`/pub/${roomId}/insurance`, {}, JSON.stringify({ player: playerId, insuranceId: '' }));
             });
         }
         // 찬스 카드 방문
         else if ([12, 20, 28].includes(nowPlayerPosition)) {
             connect().then(function () {
+                if (playerToRoll !== playerId) return; // 내 캐릭이 아니면 요청 안 함
                 stompClient.current.send(`/pub/${roomId}/eventCard`, {}, JSON.stringify({ player: playerId }));
             });
         }
@@ -501,9 +528,11 @@ function PlayerSocket() {
     // 월말정산
     useEffect(() => {
         if (!monthlyModalOpen) return;
-        if (playerToRoll !== playerId) return;
+        setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 1);
+        setEffect(true);
         // 출발점 통과
         connect().then(function () {
+            if (playerToRoll !== playerId) return;
             stompClient.current.send(`/pub/${roomId}/calculate`, {}, JSON.stringify({ player: playerId }));
         });
     }, [monthlyModalOpen]);
@@ -570,6 +599,7 @@ function PlayerSocket() {
             });
         } else if (tradeGold[1]) {
             connect().then(function () {
+                if (playerToRoll !== playerId) return;
                 stompClient.current.send(`/pub/${roomId}/sellGolds`, {}, JSON.stringify({ player: playerId, goldAmount: sellAmount }));
                 setTradeGold([false, false]);
             });
