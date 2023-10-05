@@ -8,6 +8,7 @@ import * as S from './Stock.style';
 import { ExitButton } from './GlobalModal.stye';
 import StockGraph from '../Common/StockGraph';
 import BuyOrSell from '../Common/BuyOrSell';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 function getStocks(stocks, stockId, userId) {
     return stocks[stockId].owners[userId];
@@ -86,7 +87,6 @@ function Stock() {
     };
 
     useEffect(() => {
-        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
         effectAudioPopup.play(); // 출력할 위치에 작성
     }, []);
 
@@ -94,7 +94,7 @@ function Stock() {
         <>
             {player === PlayerToRoll ? (
                 <Modal isOpen={isModalOpen} style={modalStyle}>
-                    <ExitButton onClick={closeModal} src='/button/exit.png' alt='exit' />
+                    <ExitButton onClick={() => (closeModal(), effectAudioClick.play())} src='/button/exit.png' alt='exit' />
                     {stockDetail === null ? (
                         `loading...`
                     ) : (
@@ -134,6 +134,7 @@ function Stock() {
                                                 <S.BuyOrSellBtn
                                                     onClick={() => {
                                                         isBuyClick(true);
+                                                        effectAudioClick.play();
                                                     }}
                                                     style={{
                                                         backgroundColor: buyClick ? '#F7BC0F' : 'rgba(247, 188, 15, 0.5)',
@@ -144,6 +145,7 @@ function Stock() {
                                                 <S.BuyOrSellBtn
                                                     onClick={() => {
                                                         isBuyClick(false);
+                                                        effectAudioClick.play();
                                                     }}
                                                     style={{
                                                         backgroundColor: !buyClick ? '#F7BC0F' : 'rgba(247, 188, 15, 0.5)',
@@ -166,9 +168,9 @@ function Stock() {
                             </S.StockMid>
                             <S.StockDivide />
                             {buyClick ? (
-                                <S.StockBuyBottom onClick={() => setTradeStock([true, false])}>매수하기</S.StockBuyBottom>
+                                <S.StockBuyBottom onClick={() => (setTradeStock([true, false]), effectAudioClick.play())}>매수하기</S.StockBuyBottom>
                             ) : (
-                                <S.StockSellBottom onClick={() => setTradeStock([false, true])}>매도하기</S.StockSellBottom>
+                                <S.StockSellBottom onClick={() => (setTradeStock([false, true]), effectAudioClick.play())}>매도하기</S.StockSellBottom>
                             )}
                         </S.StockMain>
                     )}

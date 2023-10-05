@@ -7,6 +7,7 @@ import { TradeBankState } from '/src/recoil/trading/atom';
 import { BankInfoState } from '/src/recoil/modalInfo/atom';
 import * as S from './InstallmentSaving.style';
 import { ExitButton } from './GlobalModal.stye';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 function InstallmentSaving() {
     const playerId = useRecoilValue(PlayerIdState);
@@ -50,7 +51,6 @@ function InstallmentSaving() {
     };
 
     useEffect(() => {
-        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
         effectAudioPopup.play(); // 출력할 위치에 작성
     }, []);
 
@@ -58,7 +58,7 @@ function InstallmentSaving() {
         <>
             {playerId === playerToRoll ? (
                 <Modal isOpen={isModalOpen} style={modalStyle}>
-                    <ExitButton onClick={closeModal} src='/button/exit.png' alt='exit' />
+                    <ExitButton onClick={() => (closeModal(), effectAudioClick.play())} src='/button/exit.png' alt='exit' />
                     {!(bankInfo === null) ? (
                         <S.BankMain>
                             <S.BankTop>
@@ -114,7 +114,7 @@ function InstallmentSaving() {
                                 <S.BankJoinBottom
                                     onClick={() => {
                                         setTradeBank([false, true]);
-                                        //closeModal();
+                                        effectAudioClick.play();
                                     }}
                                 >
                                     적금 해지하기
@@ -123,7 +123,7 @@ function InstallmentSaving() {
                                 <S.BankJoinBottom
                                     onClick={() => {
                                         setTradeBank([true, false]);
-                                        //closeModal();
+                                        effectAudioClick.play();
                                     }}
                                 >
                                     적금 가입하기

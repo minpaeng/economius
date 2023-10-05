@@ -7,6 +7,7 @@ import Modal from 'react-modal';
 import woncardfront from '/MovementCard/woncardfront.png';
 import woncardback from '/MovementCard/woncardback.png';
 import * as S from './MovementCard.style';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 function Card({ idx, value, flip, top, left, selected, CardClick }) {
     const { opacity, transform } = useSpring({
@@ -22,43 +23,43 @@ function Card({ idx, value, flip, top, left, selected, CardClick }) {
     });
 
     return (
-        <div className="MovementCardModal">
-            <div>
-                <animated.div
-                    style={{
-                        position: 'absolute',
-                        top: top,
-                        left: left,
-                        width: '120px',
-                        aspectRatio: '58/90',
-                        opacity: opacity.to(o => 1 - o),
-                        transform,
-                        backgroundImage: `url(${woncardback})`,
-                        backgroundSize: 'contain',
-                    }}
-                ></animated.div>
-                <animated.div
-                    onClick={CardClick}
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        position: 'absolute',
-                        top: top,
-                        left: left,
-                        ...imageSize,
-                        opacity,
-                        transform,
-                        aspectRatio: '58/90',
-                        rotateY: '180deg',
-                        backgroundImage: `url(${woncardfront})`,
-                        backgroundSize: 'contain',
-                        border: 'soild 1px red',
-                    }}
-                >
-                    <S.Number>{value}</S.Number>
-                </animated.div>
-            </div>
+        <div>
+            <animated.div
+                style={{
+                    position: 'absolute',
+                    top: top,
+                    left: left,
+                    width: '120px',
+                    aspectRatio: '58/90',
+                    opacity: opacity.to(o => 1 - o),
+                    transform,
+                    backgroundImage: `url(${woncardback})`,
+                    backgroundSize: 'contain',
+                    cursor: 'pointer',
+                }}
+            ></animated.div>
+            <animated.div
+                onClick={() => (CardClick(), effectAudioClick.play())}
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    position: 'absolute',
+                    top: top,
+                    left: left,
+                    ...imageSize,
+                    opacity,
+                    transform,
+                    aspectRatio: '58/90',
+                    rotateY: '180deg',
+                    backgroundImage: `url(${woncardfront})`,
+                    backgroundSize: 'contain',
+                    border: 'soild 1px red',
+                    cursor: 'pointer',
+                }}
+            >
+                <S.Number>{value}</S.Number>
+            </animated.div>
         </div>
     );
 }
@@ -121,8 +122,10 @@ function MovementCard({}) {
     };
 
     useEffect(() => {
-        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
         effectAudioPopup.play(); // 출력할 위치에 작성
+        return () => {
+            effectAudioClick.play(); // 출력할 위치에 작성
+        };
     }, []);
 
     return (
@@ -136,7 +139,7 @@ function MovementCard({}) {
                             <Card idx={0} value={movementCard[0]} top={'10%'} left={'8%'} flip={flip1} selected={selected} CardClick={() => setSelected(0)} />
                             <Card idx={1} value={movementCard[1]} top={'10%'} left={'38%'} flip={flip2} selected={selected} CardClick={() => setSelected(1)} />
                             <Card idx={2} value={movementCard[2]} top={'10%'} left={'68%'} flip={flip3} selected={selected} CardClick={() => setSelected(2)} />
-                            <S.Button onClick={() => MoveButtonClick(selected)}>이동카드 선택</S.Button>
+                            <S.Button onClick={() => (MoveButtonClick(selected), effectAudioClick.play())}>이동카드 선택</S.Button>
                         </>
                     ) : (
                         <>

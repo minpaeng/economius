@@ -4,6 +4,7 @@ import { GameRoundState, PlayerRankingState, PortfolioState } from '/src/recoil/
 import { useEffect, useState } from 'react';
 import { InnerDiv, InnerTextDiv, modalStyle, PlayerDiv, PlayerInformation, PrizeDiv } from '/src/Components/Modals/GameEnd.style.ts';
 import { CallBackState } from '/src/recoil/animation/atom.tsx';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 function GameEnd() {
     const gameRound = useRecoilValue(GameRoundState);
@@ -41,8 +42,10 @@ function GameEnd() {
     }, [gameRound]);
 
     useEffect(() => {
-        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
         effectAudioPopup.play(); // 출력할 위치에 작성
+        return () => {
+            effectAudioClick.play(); // 출력할 위치에 작성
+        };
     }, []);
 
     return isModalOpen ? (

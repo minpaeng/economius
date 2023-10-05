@@ -11,6 +11,7 @@ import restaurantimg from '/RealState/restaurant.png';
 import shopimg from '/RealState/shop.png';
 import * as S from './RealEstate.style';
 import { ExitButton } from './GlobalModal.stye';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 function RealEstate() {
     const playerId = useRecoilValue(PlayerIdState);
@@ -35,7 +36,6 @@ function RealEstate() {
     const realEstateImage = [null, restaurantimg, shopimg, hotelimg];
 
     useEffect(() => {
-        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
         effectAudioPopup.play(); // 출력할 위치에 작성
     }, []);
 
@@ -43,7 +43,7 @@ function RealEstate() {
         <>
             {playerId === playerToRoll ? (
                 <Modal isOpen={isModalOpen} style={S.modalStyle}>
-                    <ExitButton onClick={closeModal} src='/button/exit.png' alt='exit' />
+                    <ExitButton onClick={() => (closeModal(), effectAudioClick.play())} src='/button/exit.png' alt='exit' />
                     {!(realEstateInfo === null) ? (
                         <S.Main>
                             <S.Top>
@@ -70,11 +70,11 @@ function RealEstate() {
 
                             <S.Divide />
                             {!realEstateInfo.owner ? (
-                                <S.Botton onClick={() => setTradeRealEstate([true, false])}>매수하기</S.Botton>
+                                <S.Botton onClick={() => (setTradeRealEstate([true, false]), effectAudioClick.play())}>매수하기</S.Botton>
                             ) : realEstateInfo.owner.player === playerToRoll ? (
-                                <S.Botton onClick={() => setTradeRealEstate([false, true])}>매도하기</S.Botton>
+                                <S.Botton onClick={() => (setTradeRealEstate([false, true]), effectAudioClick.play())}>매도하기</S.Botton>
                             ) : (
-                                <S.Botton onClick={() => closeModal}>확인</S.Botton>
+                                <S.Botton onClick={() => (closeModal(), effectAudioClick.play())}>확인</S.Botton>
                             )}
                         </S.Main>
                     ) : (

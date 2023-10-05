@@ -1,6 +1,7 @@
 import * as S from '../../PortfolioProperty/PortfolioProperty.style';
 import { useRecoilState } from 'recoil';
 import { StockClickIdState } from '/src/recoil/animation/atom';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 function StockChangeItem({ id, imgPath, title, type, value, valueChange, setSideBarType }) {
     const [stockId, setStockId] = useRecoilState(StockClickIdState);
@@ -21,7 +22,7 @@ function StockChangeItem({ id, imgPath, title, type, value, valueChange, setSide
     };
 
     return (
-        <S.PropertyLayoutItem onClick={handleButtonClick}>
+        <S.PropertyLayoutItem onClick={() => (handleButtonClick(), effectAudioClick.play())}>
             <S.LayoutTop>
                 <S.LayoutTopLeft>
                     <img src={`Stock/${imgPath}.png`} alt='img' />

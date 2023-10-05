@@ -22,6 +22,7 @@ import StartLoginCheck from './Components/Modals/StartLoginCheck';
 
 import Socket from './Socket';
 import { PlayerIdState, ClickUserPortfolioState } from '/src/recoil/game/atom.tsx';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 export default function Room() {
     // 최상단 컴포넌트에서 모달을 쓸 것이라고 명시 작업이 필요
@@ -228,10 +229,10 @@ export default function Room() {
                 {/* 모달이 닫힌 후 5초 뒤에 렌더링할 내용을 렌더링합니다. */}
                 {renderContent && (
                     <S.ButtonOuter>
-                        <S.RoundButtonRoom onClick={roomMakeHandler}>
+                        <S.RoundButtonRoom onClick={() => (roomMakeHandler(), effectAudioClick.play())}>
                             <span>방 생성하기</span>
                         </S.RoundButtonRoom>
-                        <S.RoundButtonRoom onClick={roomJoinHandler}>
+                        <S.RoundButtonRoom onClick={() => (roomJoinHandler(), effectAudioClick.play())}>
                             <span>방 입장하기</span>
                         </S.RoundButtonRoom>
                     </S.ButtonOuter>

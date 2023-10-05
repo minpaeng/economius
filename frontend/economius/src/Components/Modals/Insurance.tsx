@@ -8,6 +8,7 @@ import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 import * as S from './Insurance.style';
 import { ExitButton } from './GlobalModal.stye';
 import InsuranceCard from './InsuranceCard';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 function Insurance() {
     const playerId = useRecoilValue(PlayerIdState);
@@ -84,7 +85,6 @@ function Insurance() {
     };
 
     useEffect(() => {
-        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
         effectAudioPopup.play(); // 출력할 위치에 작성
     }, []);
 
@@ -92,7 +92,7 @@ function Insurance() {
         <>
             {playerId === playerToRoll ? (
                 <Modal isOpen={isModalOpen} style={modalStyle}>
-                    <ExitButton onClick={closeModal} src='/button/exit.png' alt='exit' />
+                    <ExitButton onClick={() => (closeModal(), effectAudioClick.play())} src='/button/exit.png' alt='exit' />
                     {!(insuranceInfo === null) ? (
                         <S.InsuranceMain>
                             <S.InsuranceTop>
@@ -111,7 +111,7 @@ function Insurance() {
                                     );
                                 })}
                             </S.InsuranceMid>
-                            <S.InsuranceConfirmButton onClick={() => setTradeInsuranceConfirm(true)}>확인</S.InsuranceConfirmButton>
+                            <S.InsuranceConfirmButton onClick={() => (setTradeInsuranceConfirm(true), effectAudioClick.play())}>확인</S.InsuranceConfirmButton>
                         </S.InsuranceMain>
                     ) : (
                         '로딩중입니다'

@@ -5,8 +5,10 @@ import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
 import { FinanceCenterState } from '/src/recoil/modalInfo/atom';
 import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 import financecenterimg from '/FinanceCenter/financecenter.png';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 import * as S from './FinanceCenter.style';
+import { ExitButton } from './GlobalModal.stye';
 
 const buildings: [string, number][] = [
     ['대한전력', 1],
@@ -48,14 +50,14 @@ function FinanceCenter() {
     };
 
     useEffect(() => {
-        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
         effectAudioPopup.play(); // 출력할 위치에 작성
     }, []);
 
     return (
         <>
             {playerId === PlayerToRoll ? (
-                <Modal isOpen={isModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
+                <Modal isOpen={isModalOpen} style={S.modalStyle}>
+                    <ExitButton onClick={() => (closeModal(), effectAudioClick.play())} src='/button/exit.png' alt='exit' />
                     <S.Main>
                         <S.Top>
                             <img src={financecenterimg} alt='img' style={{ width: '50px', marginRight: '10px' }} />
@@ -67,7 +69,7 @@ function FinanceCenter() {
                             <S.MidScroll>
                                 <hr style={{ width: '200px', marginBottom: '5px' }} />
                                 {buildings.map(val => (
-                                    <S.MidItem key={val[1]} onClick={() => setSelectedOption(val[1])}>
+                                    <S.MidItem key={val[1]} onClick={() => (setSelectedOption(val[1]), effectAudioClick.play())}>
                                         <input type='radio' value={val[1]} checked={selectedOption === val[1]} style={{ marginRight: '5px' }} />
                                         <S.MidImg src={`/FinanceCenter/${val[1]}.png`} alt={`${val[0]}`}></S.MidImg>
                                         <S.MidDesc>{val[0]}</S.MidDesc>
@@ -78,7 +80,7 @@ function FinanceCenter() {
                         {'\u00A0'}
                         <S.Divide />
                         <S.Button
-                            onClick={() => (setFinanceCenter(selectedOption), setIsModalOpen(false))}
+                            onClick={() => (setFinanceCenter(selectedOption), setIsModalOpen(false), effectAudioClick.play())}
                             style={{ backgroundColor: selectedOption !== -1 ? '#ffaa55' : '#D9D9D9' }}
                         >
                             선택하기

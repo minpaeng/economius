@@ -4,6 +4,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
 import { ChanceCardInfoState } from '/src/recoil/modalInfo/atom';
 import * as S from './ChanceCard.style';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 function ChanceCard() {
     // const dummy = {
@@ -26,8 +27,10 @@ function ChanceCard() {
     };
 
     useEffect(() => {
-        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
         effectAudioPopup.play(); // 출력할 위치에 작성
+        return () => {
+            effectAudioClick.play(); // 출력할 위치에 작성
+        };
     }, []);
 
     return (

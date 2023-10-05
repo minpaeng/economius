@@ -13,6 +13,7 @@ import {
     SetShowWaitRoomState,
 } from '/src/recoil/animation/atom';
 import { useEffect, useState } from 'react';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 export default function WaitRoom() {
     const [roomid, setRoomid] = useRecoilState(RoomIdState);
@@ -100,7 +101,7 @@ export default function WaitRoom() {
                         <p>{roomJoinUsersNickname[3]}</p>
                     </S.UserBox>
                     <S.InfoBar>
-                        <div onClick={roomNumHandler} className='no'>
+                        <div onClick={() => (roomNumHandler(), effectAudioClick.play())} className='no'>
                             <span>Room No : {roomid} </span>
                             <img src='/navImg/copy.png' alt='' style={{ width: '20px', paddingLeft: '5px' }} />
                         </div>
@@ -109,7 +110,7 @@ export default function WaitRoom() {
                             {roomHost === Number(localStorage.getItem('player')) ? (
                                 roomCount >= 4 ? (
                                     <span>
-                                        <div style={{ cursor: 'pointer' }} onClick={startHandler}>
+                                        <div style={{ cursor: 'pointer' }} onClick={() => (startHandler(), effectAudioClick.play())}>
                                             Start
                                         </div>
                                     </span>
@@ -125,7 +126,7 @@ export default function WaitRoom() {
                                     <p className='overlay-inner'>방장만 시작이 가능합니다</p>
                                 </span>
                             )}
-                            <div onClick={exitHandler}>Exit</div>
+                            <div onClick={() => (exitHandler(), effectAudioClick.play())}>Exit</div>
                         </span>
                     </S.InfoBar>
                 </S.UserBoxOuter>

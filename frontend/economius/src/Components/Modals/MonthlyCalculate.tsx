@@ -9,6 +9,7 @@ import plus from '/MonthlyCalculate/plus.png';
 import minus from '/MonthlyCalculate/minus.png';
 import equal from '/MonthlyCalculate/equal.png';
 import * as S from './MonthlyCalculate.style';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 function MonthlyCalculate() {
     const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
@@ -19,8 +20,10 @@ function MonthlyCalculate() {
     };
 
     useEffect(() => {
-        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
         effectAudioPopup.play(); // 출력할 위치에 작성
+        return () => {
+            effectAudioClick.play(); // 출력할 위치에 작성
+        };
     }, []);
 
     return (
