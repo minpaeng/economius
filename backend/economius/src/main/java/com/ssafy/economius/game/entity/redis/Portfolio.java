@@ -36,6 +36,7 @@ public class Portfolio {
             gold.getEarningPrice() +
                 savings.getTotalPrice() +
                 buildings.getEarningPrice() +
+                buildings.getTotalPrice() +
                 stocks.getEarningPrice() +
                 money;
     }
