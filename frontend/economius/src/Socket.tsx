@@ -59,6 +59,7 @@ import {
     BigEventInfoState,
     FinanceCenterState,
 } from './recoil/modalInfo/atom';
+import { CoinEffectState, CoinEffectIndexState } from './recoil/Effect/atom';
 
 const buildingIds = {
     4: 1,
@@ -101,6 +102,9 @@ function PlayerSocket() {
     const [isMoving, setIsMoving] = useRecoilState(IsMovingState);
     const [financeCenter, setFinanceCenter] = useRecoilState(FinanceCenterState);
     const [moveDist, setMoveDist] = useRecoilState(MoveDistState);
+    // 동전 효과 여부, 번호
+    const [effect, setEffect] = useRecoilState(CoinEffectState);
+    const [effectIdx, setEffectIdx] = useRecoilState(CoinEffectIndexState);
     // 자산별 모달 정보
     const [monthlyInfo, setMonthlyInfo] = useRecoilState(MonthlyInfoState);
     const [stockInfo, setStockInfo] = useRecoilState(StockInfoState);
