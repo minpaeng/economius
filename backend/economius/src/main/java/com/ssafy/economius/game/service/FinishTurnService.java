@@ -42,9 +42,8 @@ public class FinishTurnService {
 
     public synchronized FinishTurnResponse finish(int roomId, Long player) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
-        checkRequestPlayerToFinish(roomId, player, game.getCurrentPlayerToRoll());
 
-        game.updatePlayerToRoll();
+        checkRequestPlayerToFinish(roomId, player, game.getCapablePlayerToFinish());
 
         int gameTurn = game.updateGameTurn();
 //        if(gameTurn == -1) {
