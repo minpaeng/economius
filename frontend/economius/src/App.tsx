@@ -33,7 +33,11 @@ import {
     PlayerRankingState,
 } from '/src/recoil/game/atom';
 
+<<<<<<< HEAD
 import { RoomJoinUsersCharacterState, MyTurnState, PlayerSequenceState } from '/src/recoil/animation/atom';
+=======
+import { RoomJoinUsersCharacterState, MyTurnState } from '/src/recoil/animation/atom';
+>>>>>>> b8e2fde9a1db117b48376fe22ecc6ecc8b2af9b0
 
 import axios from 'axios';
 import { RoomIdState } from '/src/recoil/animation/atom.tsx';

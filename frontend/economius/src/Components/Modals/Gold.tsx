@@ -123,6 +123,7 @@ function Gold() {
                                                 <S.BuyOrSellBtn
                                                     onClick={() => {
                                                         isBuyClick(true);
+                                                        effectAudioClick.play();
                                                     }}
                                                     style={{
                                                         backgroundColor: buyClick ? '#F7BC0F' : 'rgba(247, 188, 15, 0.5)',
@@ -133,6 +134,7 @@ function Gold() {
                                                 <S.BuyOrSellBtn
                                                     onClick={() => {
                                                         isBuyClick(false);
+                                                        effectAudioClick.play();
                                                     }}
                                                     style={{
                                                         backgroundColor: !buyClick ? '#F7BC0F' : 'rgba(247, 188, 15, 0.5)',
@@ -155,9 +157,9 @@ function Gold() {
                             </S.StockMid>
                             <S.StockDivide />
                             {buyClick ? (
-                                <S.StockBuyBottom onClick={() => setTradeGold([true, false])}>매수하기</S.StockBuyBottom>
+                                <S.StockBuyBottom onClick={() => (setTradeGold([true, false]), effectAudioClick.play())}>매수하기</S.StockBuyBottom>
                             ) : (
-                                <S.StockSellBottom onClick={() => setTradeGold([false, true])}>매도하기</S.StockSellBottom>
+                                <S.StockSellBottom onClick={() => (setTradeGold([false, true]), effectAudioClick.play())}>매도하기</S.StockSellBottom>
                             )}
                         </S.StockMain>
                     )}
