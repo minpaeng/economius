@@ -66,6 +66,14 @@ public class Game {
     // 찬스 이벤트 -
     private Event event;
 
+    public Long getCapablePlayerToFinish(){
+        return playerSequence.get((gameTurn) % 4);
+    }
+
+    public void updatePlayerToRoll(){
+        currentPlayerToRoll = playerSequence.get((gameTurn + 1) % 4);
+    }
+
     public void initializeCharacter(List<Integer> randoms) {
         int index = 0;
         characters = new HashMap<>();
@@ -183,9 +191,10 @@ public class Game {
 
     public int updateGameTurn() {
         gameTurn++;
-        if (gameTurn == maxGameTurn) {
-            return -1;
-        }
+        // 추후 주석 풀어야 함
+//        if (gameTurn == maxGameTurn) {
+//            return -1;
+//        }
         return gameTurn;
     }
 }

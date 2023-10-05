@@ -1,6 +1,7 @@
 package com.ssafy.economius.game.controller;
 
 import com.ssafy.economius.game.dto.request.CalculateRequest;
+import com.ssafy.economius.game.dto.request.FinishTurnRequest;
 import com.ssafy.economius.game.dto.request.GameJoinRequest;
 import com.ssafy.economius.game.dto.request.GameRoomExitRequest;
 import com.ssafy.economius.game.dto.request.GameStartRequest;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
@@ -64,7 +66,7 @@ public class GameController {
     }
 
     @MessageMapping(value = "/{roomId}/calculate")
-    public void calculate(@DestinationVariable int roomId, CalculateRequest calculateRequest) {
+    public void calculate(@DestinationVariable int roomId, @Payload CalculateRequest calculateRequest) {
         CalculateResponse calculateResponse = gameService.calculate(
                 roomId, calculateRequest.getPlayer());
 
@@ -74,8 +76,11 @@ public class GameController {
 
 
     @MessageMapping(value = "/{roomId}/finishTurn")
-    public void finishTurn(@DestinationVariable int roomId) {
-        FinishTurnResponse finishTurnResponse = finishTurnService.finish(roomId);
+    public void finishTurn(@DestinationVariable int roomId, @Payload FinishTurnRequest finishTurnRequest) {
+        log.info(roomId + " finishTurn 호출 : " + finishTurnRequest);
+        FinishTurnResponse finishTurnResponse = finishTurnService.finish(roomId,
+            finishTurnRequest.getPlayer());
+        log.info(roomId + " finishTurn 결과 : " + finishTurnResponse);
 
         Map<String, Object> headers = Map.of("success", true, "type", "finishTurn");
         template.convertAndSend("/sub/" + roomId, finishTurnResponse, headers);

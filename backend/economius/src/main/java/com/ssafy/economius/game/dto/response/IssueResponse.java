@@ -11,7 +11,7 @@ import java.util.List;
 @ToString
 @Data
 @Builder
-public class OracleResponse {
+public class IssueResponse {
 
     private int issueId;
     private String name;

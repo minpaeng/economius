@@ -54,19 +54,19 @@
 
         function sendJoin2() {
             stompClient.send("/pub/1/join", {}, JSON.stringify({
-                "player": 22,
+                "player": 2,
                 "nickname" : "user111"
             }));
         }
         function sendJoin3() {
             stompClient.send("/pub/1/join", {}, JSON.stringify({
-                "player": 33,
+                "player": 3,
                 "nickname" : "user222"
             }));
         }
         function sendJoin4() {
             stompClient.send("/pub/1/join", {}, JSON.stringify({
-                "player": 44,
+                "player": 4,
                 "nickname" : "user333"
             }));
         }

@@ -147,8 +147,8 @@ public class StockService {
             .rateHistory(stock.getRateHistory())
             .remainingAmount(stock.getRemainingAmount())
             .priceHistory(priceHistory)
+            .owners(stock.getOwners())
             .build();
     }
-
 
 }
