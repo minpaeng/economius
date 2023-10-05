@@ -153,11 +153,11 @@ public class GameService {
         ReceiptDto receipt = ReceiptDto.builder()
             .tax(tax)
             .salary(SALARY.getValue())
-            .money(game.getPortfolios().get(player).getMoney())
+            .money(portfolio.getMoney())
             .insurancePrice(insurancePrice)
             .savingFinishBenefit(finishSaving)
             .savingsPrice(savingPrice)
-            .totalIncome(income)
+            .totalIncome(income - tax)
             .build();
 
         portfolio.updateTotalMoney();
