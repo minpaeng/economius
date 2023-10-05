@@ -13,7 +13,7 @@ import {
     SetShowWaitRoomState,
 } from '/src/recoil/animation/atom';
 import { useEffect, useState } from 'react';
-import { effectAudioPopup, effectAudioClick } from '/src/Audio';
+import { effectAudioClick } from '/src/Audio';
 
 export default function WaitRoom() {
     const [roomid, setRoomid] = useRecoilState(RoomIdState);
@@ -28,8 +28,6 @@ export default function WaitRoom() {
     const [gameButton, setGameButton] = useRecoilState(GameButtonState);
 
     const [roomJoinUsersId, setRoomJoinUsersId] = useRecoilState(RoomJoinUsersIdState);
-
-    const effectAudioClick = new Audio('/effectSound/click.wav'); // 출력할 소리
 
     useEffect(() => {
         console.log(roomJoinUsersId);
