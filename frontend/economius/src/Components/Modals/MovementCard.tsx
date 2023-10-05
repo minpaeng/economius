@@ -67,6 +67,7 @@ function Card({ idx, value, flip, top, left, selected, CardClick }) {
 
 function MovementCard({}) {
     const [isMoving, setIsMoving] = useRecoilState(IsMovingState); // 캐릭터 이동 여부
+    const [moveDist, setMoveDist] = useRecoilState(MoveDistState); // 캐릭터 이동 여부
     const [movementCard, setMovementCard] = useRecoilState(MovementCardState);
     const [movementCardOpen, setMovementCardOpen] = useRecoilState(MovementCardOpenState);
     const [movementCardConfirm, setMovementCardConfirm] = useRecoilState(MovementCardConfirmState);
@@ -107,6 +108,7 @@ function MovementCard({}) {
 
     // 내 차례일 때 선택 누르기
     const MoveButtonClick = (selectednum: number) => {
+        setMoveDist(selectednum === -1 ? movementCard[1] : movementCard[selectednum]);
         if (selectednum === -1) {
             setSelected(1);
         }
