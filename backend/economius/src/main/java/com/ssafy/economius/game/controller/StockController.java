@@ -73,8 +73,7 @@ public class StockController {
 
         log.info(roomId + ": stockDetail 결과 -> " + selectStockResponse.toString());
         Map<String, Object> headers = Map.of("success", true, "type", "stockDetail");
-        template.convertAndSend("/sub/" + roomId + "/" + selectStockRequest.getPlayer(),
-            selectStockResponse, headers);
+        template.convertAndSend("/sub/" + roomId ,selectStockResponse, headers);
     }
 
 }

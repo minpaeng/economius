@@ -1,6 +1,7 @@
 package com.ssafy.economius.game.controller;
 
 import com.ssafy.economius.game.dto.request.CalculateRequest;
+import com.ssafy.economius.game.dto.request.FinishTurnRequest;
 import com.ssafy.economius.game.dto.request.GameJoinRequest;
 import com.ssafy.economius.game.dto.request.GameRoomExitRequest;
 import com.ssafy.economius.game.dto.request.GameStartRequest;
@@ -8,6 +9,7 @@ import com.ssafy.economius.game.dto.response.CalculateResponse;
 import com.ssafy.economius.game.dto.response.FinishTurnResponse;
 import com.ssafy.economius.game.dto.response.GameJoinResponse;
 import com.ssafy.economius.game.dto.response.GameRoomExitResponse;
+import com.ssafy.economius.game.dto.response.GameStartResponse;
 import com.ssafy.economius.game.service.GameService;
 import com.ssafy.economius.game.service.FinishTurnService;
 
@@ -33,6 +35,7 @@ public class GameController {
 
     @MessageMapping(value = "/{roomId}/join")
     public void join(@DestinationVariable int roomId, GameJoinRequest gameJoinRequest) {
+        log.info(roomId + "번 방 " + gameJoinRequest.getNickname() + " 입장 요청");
         GameJoinResponse gameJoinResponse = gameService.join(
                 roomId,
                 gameJoinRequest.getPlayer(),
@@ -40,11 +43,12 @@ public class GameController {
 
         Map<String, Object> headers = Map.of("success", true, "type", "join");
         template.convertAndSend("/sub/" + roomId, gameJoinResponse, headers);
+        log.info(roomId + "번 방 " + gameJoinRequest.getNickname() + " 입장 완료");
     }
 
     @MessageMapping(value = "/{roomId}/start")
     public void start(@DestinationVariable int roomId, GameStartRequest gameStartRequest) {
-        FinishTurnResponse gameStartResponse = gameService.start(roomId,
+        GameStartResponse gameStartResponse = gameService.start(roomId,
                 gameStartRequest.getHostPlayer());
 
         Map<String, Object> headers = Map.of("success", true, "type", "start");
@@ -71,8 +75,11 @@ public class GameController {
 
 
     @MessageMapping(value = "/{roomId}/finishTurn")
-    public void finishTurn(@DestinationVariable int roomId) {
-        FinishTurnResponse finishTurnResponse = finishTurnService.finish(roomId);
+    public void finishTurn(@DestinationVariable int roomId, FinishTurnRequest finishTurnRequest) {
+        log.info(roomId + " finishTurn 호출 : " + finishTurnRequest);
+        FinishTurnResponse finishTurnResponse = finishTurnService.finish(roomId,
+            finishTurnRequest.getPlayer());
+        log.info(roomId + " finishTurn 결과 : " + finishTurnResponse);
 
         Map<String, Object> headers = Map.of("success", true, "type", "finishTurn");
         template.convertAndSend("/sub/" + roomId, finishTurnResponse, headers);

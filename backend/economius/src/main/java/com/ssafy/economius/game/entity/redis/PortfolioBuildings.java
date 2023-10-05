@@ -8,7 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -20,18 +22,22 @@ public class PortfolioBuildings {
     private int earningRate;
     private int earningPrice;
     private int amount;
-
     private Map<Integer, PortfolioBuilding> building;
 
     public void buyBuilding(int buildingId, Building building) {
-        this.totalPrice += building.getBuildingFee();
+        this.totalPrice += building.getPrice();
         addBuilding(buildingId, building);
-        this.amount = this.building.size();
+        if (this.building == null) this.amount = 0;
+        else this.amount = this.building.size();
         setEarnings();
     }
 
     public void sellBuilding(int buildingId, Building building) {
-        this.totalPrice += building.getBuildingFee();
+        if (this.building == null || this.building.get(buildingId) == null) {
+            log.error("판매 요청이 들어왔으나 소유한 빌딩이 없음: 빌딩 아이디 " + buildingId);
+            return;
+        }
+        this.totalPrice -= building.getPrice();
         this.building.remove(buildingId);
         this.amount = this.building.size();
         setEarnings();
@@ -51,7 +57,15 @@ public class PortfolioBuildings {
     }
 
     public void updateBuildingInfo(int buildingId, Building building) {
+        if (this.building == null || this.building.get(buildingId) == null) {
+            log.error("소유한 빌딩에 대한 가격 재조정 요청이 들어왔지만 소유하고 있는 빌딩이 없음: 빌딩 아이디 " + buildingId);
+            building.setOwnerId(null);
+            return;
+        }
         this.building.get(buildingId).setBuilding(building);
+        this.building.get(buildingId).setEarnings();
+        updateTotalBuildingPrice();
+        setEarnings();
     }
 
     private void setEarnings() {
@@ -66,15 +80,22 @@ public class PortfolioBuildings {
     }
 
     private void calculateEarnings(int totalBoughtPrice, int totalCurrentPrice) {
-        int gap = Math.abs(totalCurrentPrice - totalBoughtPrice);
+        int gap = totalCurrentPrice - totalBoughtPrice;
         int newEarningRate = 0;
-        if (totalBoughtPrice != 0) newEarningRate = (gap / totalBoughtPrice) * 100;
+        if (totalBoughtPrice != 0) newEarningRate = (int)((gap / (float)totalBoughtPrice) * 100);
+        log.info("부동산 earning price 계산중 -> totalBoughtPrice: " + totalBoughtPrice
+                + ", totalCurrentPrice: " + totalCurrentPrice
+                + ", gap: " + gap
+        + ", newEarningRate: " + newEarningRate);
         this.earningRate = newEarningRate;
         this.earningPrice = gap;
+    }
 
-        if (totalBoughtPrice > totalCurrentPrice) {
-            this.earningRate = newEarningRate * -1;
-            this.earningPrice = gap * -1;
+    private void updateTotalBuildingPrice() {
+        int totalBuildingPrice = 0;
+        for (PortfolioBuilding p : this.building.values()) {
+            totalBuildingPrice += p.getBuilding().getPrice();
         }
+        this.totalPrice = totalBuildingPrice;
     }
 }

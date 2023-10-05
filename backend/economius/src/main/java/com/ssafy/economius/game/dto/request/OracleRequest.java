@@ -5,8 +5,8 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class BuyGoldRequest {
+public class OracleRequest {
 
     private Long player;
-    private int goldAmount;
+
 }

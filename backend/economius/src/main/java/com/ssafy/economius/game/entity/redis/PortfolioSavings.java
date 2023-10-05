@@ -1,11 +1,7 @@
 package com.ssafy.economius.game.entity.redis;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
-
-import com.ssafy.economius.game.dto.SavingDto;
-import com.ssafy.economius.game.dto.SavingsDto;
 import lombok.*;
 
 @NoArgsConstructor
@@ -31,23 +27,49 @@ public class PortfolioSavings {
     }
 
     public void updateSavings(){
-        this.savings.values().forEach(PortfolioSaving::updateCurrentCount);
+        if (savings != null){
+            this.savings.values().forEach(PortfolioSaving::updateCurrentCount);
+        }
     }
 
     public int calculateSavingPrice() {
+        int sum = 0;
         if (savings != null) {
-            return this.savings.values().stream()
-                .mapToInt(PortfolioSaving::getMonthlyDeposit)
-                .sum();
-        }
-        return 0;
+            for (PortfolioSaving saving : savings.values()) {
+                saving.increaseCurrentPrice();
+                saving.increaseCurrentCount();
 
+                sum += saving.getMonthlyDeposit();
+            }
+            this.totalPrice += sum;
+        }
+        return sum;
     }
 
     private int deleteSaving(PortfolioSaving saving) {
         int finishPrice = saving.getCurrentPrice();
+        this.totalPrice -= finishPrice;
+        this.amount -= 1;
         this.savings.remove(saving.getBankId());
         return finishPrice;
     }
-    
+
+    public int earlyFinish(PortfolioSaving saving) {
+        int currentPrice = saving.getCurrentPrice();
+        this.totalPrice -= currentPrice;
+        this.amount -= 1;
+        this.savings.remove(saving.getBankId());
+        return currentPrice;
+    }
+
+    public int join(PortfolioSaving saving) {
+        int monthlyPrice = saving.getMonthlyDeposit();
+        this.totalPrice += monthlyPrice;
+        this.amount += 1;
+
+        if(this.savings == null) savings = new HashMap<>();
+        this.savings.put(saving.getBankId(), saving);
+        return monthlyPrice;
+    }
+
 }

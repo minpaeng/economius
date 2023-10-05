@@ -8,4 +8,5 @@ import lombok.Data;
 public class GameStartResponse {
 
     private int roomId;
+    private Long currentPlayerToRoll;
 }

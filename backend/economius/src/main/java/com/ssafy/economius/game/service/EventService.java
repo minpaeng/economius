@@ -42,6 +42,8 @@ public class EventService {
         // 세부 이벤트 선정 및 적용
         EventDto eventDto = EventDto.builder().build();
 
+        EventCardResponse eventCardResponse = EventCardResponse.builder().build();
+
         // Money 이벤트 발생
         if (randomCategory == 0) {
             EventMoney eventMoney = event.getEventMoney().get(random.nextInt(event.getEventMoney().size()));
@@ -75,6 +77,14 @@ public class EventService {
                     gameValidator.throwBankruptcyResponse(roomId, player);
                 }
 
+                eventCardResponse = EventCardResponse.builder()
+                        .isMoneyCard(true)
+                        .name(eventDto.getEventMoneyDto().getName())
+                        .description(eventDto.getEventMoneyDto().getDescription())
+                        .eventValue(eventDto.getEventMoneyDto().getMoney())
+                        .url(eventDto.getEventMoneyDto().getUrl())
+                        .apply(eventDto.getEventMoneyDto().getTypeCode())
+                        .build();
                 game.getPortfolios().get(player).setMoney(resultMoney);
             }
         }
@@ -102,15 +112,17 @@ public class EventService {
 
                 }
             }
+            eventCardResponse = EventCardResponse.builder()
+                    .isMoneyCard(false)
+                    .name(eventDto.getEventStockDto().getName())
+                    .description(eventDto.getEventStockDto().getDescription())
+                    .eventValue(eventDto.getEventStockDto().getRate())
+                    .url(eventDto.getEventStockDto().getUrl())
+                    .apply(eventDto.getEventStockDto().getIndustry())
+                    .build();
         }
 
         gameRepository.save(game);
-
-        // 어떤 이벤트인지 response 던져주기
-        EventCardResponse eventCardResponse = EventCardResponse.builder()
-                .eventDto(eventDto)
-                .bankruptcyPlayers(bankruptcyPlayers)
-                .build();
 
         return eventCardResponse;
     }

@@ -7,6 +7,7 @@ import com.ssafy.economius.game.dto.response.GoldSelectResponse;
 import com.ssafy.economius.game.dto.response.SellGoldResponse;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Portfolio;
+import com.ssafy.economius.game.entity.redis.PortfolioGold;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,9 +34,11 @@ public class GoldService {
             throw new RuntimeException("금액이 부족합니다.");
         }
 
+        PortfolioGold gold = portfolio.getGold();
+
         portfolio.setMoney(portfolio.getMoney() - price * goldAmount);
-        portfolio.getGold().setAmount(portfolio.getGold().getAmount() + goldAmount);
-        portfolio.getGold().setTotalPrice(portfolio.getGold().getAmount() * price);
+        gold.dealGold(goldAmount, price);
+
         gameRepository.save(game);
 
         GoldDto goldDto = modelMapper.map(portfolio.getGold(), GoldDto.class);
@@ -50,12 +53,12 @@ public class GoldService {
     public SellGoldResponse sellGold(int roomId, Long player, int goldAmount) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
         Portfolio portfolio = game.getPortfolios().get(player);
+        goldAmount *= -1;
 
         int price = game.getGold().getPrice();
-
-        portfolio.setMoney(portfolio.getMoney() + price * goldAmount);
-        portfolio.getGold().setAmount(portfolio.getGold().getAmount() - goldAmount);
-        portfolio.getGold().setTotalPrice(portfolio.getGold().getAmount() * price);
+        PortfolioGold gold = portfolio.getGold();
+        gold.dealGold(goldAmount, price);
+        portfolio.setMoney(portfolio.getMoney() - price * goldAmount);
 
         gameRepository.save(game);
 

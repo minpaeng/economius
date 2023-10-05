@@ -2,19 +2,14 @@ package com.ssafy.economius.game.entity.redis;
 
 import static com.ssafy.economius.game.enums.RateEnum.*;
 
-import com.ssafy.economius.game.enums.RateEnum;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
+@ToString
 public class Portfolio {
 
     private Long player;
@@ -38,36 +33,24 @@ public class Portfolio {
 
     public void updateTotalMoney() {
         this.totalMoney =
-            gold.getTotalPrice() +
+            gold.getEarningPrice() +
                 savings.getTotalPrice() +
-                buildings.getTotalPrice() +
-                stocks.getTotalPrice() +
+                buildings.getEarningPrice() +
+                stocks.getEarningPrice() +
                 money;
     }
 
     public void buyBuilding(Long player, int buildingId, Building building) {
         building.setOwnerId(player);
-        this.money -= building.getBuildingFee();
+        this.money -= building.getPrice();
+        if (this.buildings == null) this.buildings = new PortfolioBuildings();
         this.buildings.buyBuilding(buildingId, building);
     }
 
     public void sellBuilding(int buildingId, Building building) {
         building.setOwnerId(null);
-        this.money += building.getBuildingFee();
+        this.money += building.getPrice();
         this.buildings.sellBuilding(buildingId, building);
     }
 
-    @Override
-    public String toString() {
-        return "Portfolio{" +
-            "player=" + player +
-            ", money=" + money +
-            ", totalMoney=" + totalMoney +
-            ", gold=" + gold +
-            ", savings=" + savings +
-            ", buildings=" + buildings +
-            ", stocks=" + stocks +
-            ", insurances=" + insurances +
-            '}';
-    }
 }

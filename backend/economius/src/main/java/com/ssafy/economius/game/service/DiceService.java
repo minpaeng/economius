@@ -44,7 +44,7 @@ public class DiceService {
     public MovePlayerResponse movePlayer(int roomId, Long player, int movementCount) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
         int nextLocation = game.rearrangePlayer(movementCount, player);
-
+        game.updatePlayerToRoll();
         gameRepository.save(game);
 
         return MovePlayerResponse.builder()

@@ -53,7 +53,7 @@ public class InsuranceService {
     public InsuranceVisitResponse visitInsurance(int roomId, InsuranceRequest insuranceRequest) {
         //게임 방 조회
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
-        log.info(game.getInsurances().toString());
+        //log.info(game.getInsurances().toString());
         Map<Integer, Insurance> insurances = game.getInsurances();
 
         //멤버의 보험 상품 별 가입 유무
@@ -83,11 +83,12 @@ public class InsuranceService {
                 .have(have)
                 .insuranceDto(insuranceDto)
                 .build();
-        log.info("============ 보험 방문 : {} ============", response.toString());
+        //log.info("============ 보험 방문 : {} ============", response.toString());
+        log.info("============ 보험 방문 : 플레이어의 포트폴리오 : {} ============", game.getPortfolios().get(insuranceRequest.getPlayer()).getInsurances().toString());
         return response;
     }
 
-    public void joinInsurance(int roomId, InsuranceRequest insuranceRequest) {
+    public synchronized void joinInsurance(int roomId, InsuranceRequest insuranceRequest) {
         //게임 방 조회
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
@@ -114,41 +115,36 @@ public class InsuranceService {
                     .monthlyDeposit(nowInsuranceInfo.getMonthlyDeposit())
                     .build();
 
-            portfolio.setMoney(portfolio.getMoney() - nowInsuranceInfo.getMonthlyDeposit());
-            portfolioInsurance.setTotalPrice(portfolioInsurance.getTotalPrice()+ nowInsuranceInfo.getMonthlyDeposit());
-            portfolioInsurance.setAmount(portfolioInsurance.getAmount() + 1);
-
-            if(portfolioInsurances.getInsurance() == null) portfolioInsurances.setInsurance(new HashMap<>());
-            portfolioInsurances.getInsurance().put(insuranceRequest.getInsuranceId(), nowInsurance);
+            int money = portfolioInsurance.join(nowInsurance);
+            portfolio.setMoney(portfolio.getMoney()-money);
 
             // redis 저장
             gameRepository.save(game);
-            log.info("============ 보험 가입 : {} ============", game.getPortfolios().get(insuranceRequest.getPlayer()).getInsurances().toString());
+            log.info("============ 보험 가입 : {} ============", nowInsurance.toString());
+            log.info("============ 보험 가입 후 보험 포트폴리오 : {} ============", game.getPortfolios().get(insuranceRequest.getPlayer()).getInsurances().toString());
         }
 
 
     }
 
-    public void stopInsurance(int roomId, InsuranceRequest insuranceRequest) {
+    public synchronized void stopInsurance(int roomId, InsuranceRequest insuranceRequest) {
         //게임 방 조회
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
         // 멤버 포트폴리오
         Portfolio portfolio = game.getPortfolios().get(insuranceRequest.getPlayer());
         // 멤버 포트폴리오 - 보험
-        PortfolioInsurances portfolioInsurance = portfolio.getInsurances();
-        //보험 상품 정보
-        Insurance nowInsuranceInfo = game.getInsurances().get(insuranceRequest.getInsuranceId());
+        PortfolioInsurances portfolioInsurances = portfolio.getInsurances();
 
         if(checkHaveInsurance(game, insuranceRequest.getPlayer(), insuranceRequest.getInsuranceId())) {
-            // 현재 보험 정보에 기반하여 해지
-            portfolioInsurance.setAmount(portfolioInsurance.getAmount() - 1);
+            PortfolioInsurance portfolioInsurance = portfolioInsurances.getInsurance().get(insuranceRequest.getInsuranceId());
 
             // 보험 해지
-            portfolioInsurance.getInsurance().remove(insuranceRequest.getInsuranceId());
+            portfolioInsurances.deleteInsurance(portfolioInsurance);
             gameRepository.save(game);
-            
-            log.info("============ 보험 해지 : {} ============", game.getPortfolios().get(insuranceRequest.getPlayer()).getInsurances().toString());
+
+            log.info("============ 보험 해지 : {} ============", portfolioInsurance.toString());
+            log.info("============ 보험 해지 후 보험 포트폴리오: {} ============", game.getPortfolios().get(insuranceRequest.getPlayer()).getInsurances().toString());
         }
     }
 }

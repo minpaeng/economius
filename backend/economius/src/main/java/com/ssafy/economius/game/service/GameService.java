@@ -1,11 +1,16 @@
 package com.ssafy.economius.game.service;
 
+import static com.ssafy.economius.game.enums.RateEnum.INITIAL_MONEY;
+import static com.ssafy.economius.game.enums.RateEnum.INITIAL_ZERO_VALUE;
+import static com.ssafy.economius.game.enums.RateEnum.SALARY;
+
 import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.dto.ReceiptDto;
 import com.ssafy.economius.game.dto.response.CalculateResponse;
 import com.ssafy.economius.game.dto.response.FinishTurnResponse;
 import com.ssafy.economius.game.dto.response.GameJoinResponse;
 import com.ssafy.economius.game.dto.response.GameRoomExitResponse;
+import com.ssafy.economius.game.dto.response.GameStartResponse;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.entity.redis.Portfolio;
 import com.ssafy.economius.game.entity.redis.PortfolioBuildings;
@@ -14,16 +19,14 @@ import com.ssafy.economius.game.entity.redis.PortfolioInsurances;
 import com.ssafy.economius.game.entity.redis.PortfolioSavings;
 import com.ssafy.economius.game.entity.redis.PortfolioStocks;
 import com.ssafy.economius.game.repository.redis.GameRepository;
+import com.ssafy.economius.game.util.RandomUtil;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.ssafy.economius.game.enums.RateEnum.*;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +38,8 @@ public class GameService {
     private final ModelMapper modelMapper;
 
     public GameJoinResponse join(int roomId, Long player, String nickname) {
-        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId,
+            player);
 
         gameValidator.checkCanJoin(game, roomId, player);
 
@@ -46,20 +50,20 @@ public class GameService {
         return makeGameJoinResponse(roomId, game);
     }
 
-    public FinishTurnResponse start(int roomId, Long hostPlayer) {
+    public GameStartResponse start(int roomId, Long hostPlayer) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
         List<Long> players = game.getPlayers();
         gameValidator.canStartGame(players, hostPlayer, roomId);
 
         // 각자의 포트폴리오 생성
         uploadInitialPortfolioOnRedis(game);
-
+        game.initializeCharacter(RandomUtil.getUniqueRandomNumbers(4, 1, 10));
         game.initializePlayerSequence();
         game.initializeLocations();
         game.getStocks().values().forEach(stock -> stock.initializeOwners(players));
         gameRepository.save(game);
 
-        return modelMapper.map(game, FinishTurnResponse.class);
+        return new GameStartResponse(roomId, game.getCurrentPlayerToRoll());
     }
 
     public GameRoomExitResponse exit(int roomId, Long player) {
@@ -115,7 +119,7 @@ public class GameService {
 
     private PortfolioInsurances portfolioInsurances() {
         return PortfolioInsurances.builder()
-            .totalPrice(INITIAL_ZERO_VALUE.getValue())
+            //.totalPrice(INITIAL_ZERO_VALUE.getValue())
             .amount(INITIAL_ZERO_VALUE.getValue())
             .build();
     }
@@ -135,11 +139,12 @@ public class GameService {
 
         Portfolio portfolio = game.getPortfolios().get(player);
         PortfolioSavings savings = portfolio.getSavings();
+        PortfolioInsurances insurances = portfolio.getInsurances();
         savings.updateSavings();
 
-        int finishSaving = portfolio.getSavings().calculateFinishSaving();
+        int finishSaving = savings.calculateFinishSaving();
         int savingPrice = savings.calculateSavingPrice();
-        int insurancePrice = portfolio.getInsurances().getTotalPrice();
+        int insurancePrice = insurances.calculateInsurancePrice();
         int money = portfolio.getMoney();
         int income = (finishSaving - savingPrice - insurancePrice + SALARY.getValue());
         int tax = (int) (income * (double) game.getTax().get(prize) / 100);
@@ -148,11 +153,11 @@ public class GameService {
         ReceiptDto receipt = ReceiptDto.builder()
             .tax(tax)
             .salary(SALARY.getValue())
-            .money(game.getPortfolios().get(player).getMoney())
+            .money(portfolio.getMoney())
             .insurancePrice(insurancePrice)
             .savingFinishBenefit(finishSaving)
             .savingsPrice(savingPrice)
-            .totalIncome(income)
+            .totalIncome(income - tax)
             .build();
 
         portfolio.updateTotalMoney();
@@ -172,19 +177,25 @@ public class GameService {
 
     private GameJoinResponse makeGameJoinResponse(int roomId, Game game) {
         return GameJoinResponse.builder()
-                .roomId(roomId)
-                .players(game.getPlayers())
-                .nicknames(game.getNicknames())
-                .hostPlayer(game.getPlayers().get(0))
-                .build();
+            .roomId(roomId)
+            .players(game.getPlayers())
+            .nicknames(game.getNicknames())
+            .hostPlayer(game.getPlayers().get(0))
+            .build();
     }
 
     private GameRoomExitResponse makeGameExitResponse(int roomId, Game game) {
         return GameRoomExitResponse.builder()
-                .roomId(roomId)
-                .players(game.getPlayers())
-                .nicknames(game.getNicknames())
-                .hostPlayer(game.getPlayers().get(0))
-                .build();
+            .roomId(roomId)
+            .players(game.getPlayers())
+            .nicknames(game.getNicknames())
+            .hostPlayer(game.getPlayers().get(0))
+            .build();
+    }
+
+    public FinishTurnResponse start(int roomId) {
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
+
+        return modelMapper.map(game, FinishTurnResponse.class);
     }
 }

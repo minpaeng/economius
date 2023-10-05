@@ -5,8 +5,7 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class BuyGoldRequest {
+public class FinishTurnRequest {
 
     private Long player;
-    private int goldAmount;
 }

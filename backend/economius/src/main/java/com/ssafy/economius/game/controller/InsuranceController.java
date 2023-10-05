@@ -2,7 +2,6 @@ package com.ssafy.economius.game.controller;
 
 import com.ssafy.economius.game.dto.request.InsuranceRequest;
 import com.ssafy.economius.game.dto.response.InsuranceVisitResponse;
-import com.ssafy.economius.game.dto.response.SavingVisitResponse;
 import com.ssafy.economius.game.service.InsuranceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,16 +29,16 @@ public class InsuranceController {
 
     @MessageMapping(value = "/{roomId}/joinInsurance")
     public void joinInsurance(@DestinationVariable int roomId, InsuranceRequest insuranceRequest) {
-        Map<String, Object> headers = Map.of("success", true,"type", "insurance");
+        Map<String, Object> headers = Map.of("success", true,"type", "joinInsurance");
         insuranceService.joinInsurance(roomId, insuranceRequest);
-        template.convertAndSend("/sub/" + roomId, headers);
+        template.convertAndSend("/sub/" + roomId, insuranceRequest.getPlayer(), headers);
     }
 
     @MessageMapping(value = "/{roomId}/finishInsurance")
     public void finishInsurance(@DestinationVariable int roomId, InsuranceRequest insuranceRequest) {
-        Map<String, Object> headers = Map.of("success", true,"type", "insurance");
+        Map<String, Object> headers = Map.of("success", true,"type", "finishInsurance");
         insuranceService.stopInsurance(roomId, insuranceRequest);
-        template.convertAndSend("/sub/" + roomId, headers);
+        template.convertAndSend("/sub/" + roomId, insuranceRequest.getPlayer(), headers);
     }
 
 }

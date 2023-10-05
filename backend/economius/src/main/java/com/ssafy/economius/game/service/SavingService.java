@@ -1,23 +1,16 @@
 package com.ssafy.economius.game.service;
 
-import com.ssafy.economius.common.exception.CustomWebsocketException;
 import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.dto.SavingDto;
-import com.ssafy.economius.game.dto.SavingsDto;
 import com.ssafy.economius.game.dto.response.SavingVisitResponse;
 import com.ssafy.economius.game.entity.redis.*;
 import com.ssafy.economius.game.dto.request.SavingRequest;
-import com.ssafy.economius.game.dto.response.SavingResponse;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -28,7 +21,7 @@ public class SavingService {
     private final GameValidator gameValidator;
 
     //현재 은행 적금 정보 구하기
-    public Saving findNowSavingInfo(Game game, Long player, int bankId) {
+    public Saving findNowSavingInfo(Game game, int bankId) {
         Saving nowSaving = game.getSavings().get(bankId);
         log.info("============ 현재 은행의 적금 정보 : {} ============", nowSaving.toString());
         return nowSaving;
@@ -53,7 +46,7 @@ public class SavingService {
         PortfolioSavings portfolioSavings = portfolio.getSavings();
 
         // 현재 은행 정보
-        Saving nowSavingInfo = findNowSavingInfo(game, savingRequest.getPlayer(), savingRequest.getBankId());
+        Saving nowSavingInfo = findNowSavingInfo(game, savingRequest.getBankId());
 
         boolean have;
         SavingDto savingDto;
@@ -107,7 +100,7 @@ public class SavingService {
         // 멤버 포트폴리오 - 적금
         PortfolioSavings portfolioSavings = portfolio.getSavings();
         //현재 은행 정보
-        Saving nowSavingInfo = findNowSavingInfo(game, savingRequest.getPlayer(), savingRequest.getBankId());
+        Saving nowSavingInfo = findNowSavingInfo(game, savingRequest.getBankId());
         log.info(String.valueOf(portfolio.getMoney()));
 
 
@@ -126,12 +119,8 @@ public class SavingService {
                     .build();
 
             // 현재 은행 정보에 기반하여 가입
-            portfolio.setMoney(portfolio.getMoney()-nowSaving.getCurrentPrice());
-            portfolioSavings.setTotalPrice(portfolioSavings.getTotalPrice()+ nowSaving.getCurrentPrice());
-            portfolioSavings.setAmount(portfolioSavings.getAmount()+1);
-
-            if (portfolioSavings.getSavings() == null) portfolioSavings.setSavings(new HashMap<>());
-            portfolioSavings.getSavings().put(savingRequest.getBankId(), nowSaving);
+            int money = portfolioSavings.join(nowSaving);
+            portfolio.setMoney(portfolio.getMoney()-money);
 
             // redis 저장
             gameRepository.save(game);
@@ -153,16 +142,15 @@ public class SavingService {
 
         // 가입 되어있는지 확인
         if(checkHaveSaving(game, savingRequest.getPlayer(), savingRequest.getBankId())) {
-            // 현재 은행 정보에 기반하여 해지
-            portfolio.setMoney(portfolio.getMoney() + nowSaving.getCurrentPrice());
-            portfolioSavings.setTotalPrice(portfolioSavings.getTotalPrice() - nowSaving.getCurrentPrice());
-            portfolioSavings.setAmount(portfolioSavings.getAmount()-1);
+            // 적금 중도 해지
+            int money = portfolioSavings.earlyFinish(nowSaving);
 
-            //적금 중도 해지
-            portfolioSavings.getSavings().remove(savingRequest.getBankId());
+            // 해지금 현금화
+            portfolio.setMoney(money);
+
             gameRepository.save(game);
             log.info("============ 은행 적금 해지 : {} ============", game.getPortfolios().get(savingRequest.getPlayer()).getSavings().toString());
         }
-
     }
+
 }

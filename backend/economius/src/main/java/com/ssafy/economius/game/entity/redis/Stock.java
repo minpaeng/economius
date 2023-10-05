@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,6 +13,7 @@ import lombok.*;
 @Setter
 @Builder
 @ToString
+@Slf4j
 public class Stock {
 
     private Integer stockId;
@@ -39,7 +41,7 @@ public class Stock {
 
     public void updateStockPriceAndRate(int closingRate, int round) {
         updatePrice(closingRate, round);
-        updateRate(closingRate, round);
+        updateRate(closingRate);
     }
 
     public void initializeOwners(List<Long> players) {
@@ -48,10 +50,10 @@ public class Stock {
 
     }
 
-    private void updateRate(int closingRate, int round) {
+    private void updateRate(int closingRate) {
         rate = closingRate;
 
-        rateHistory.add(round, rate);
+        rateHistory.add(rate);
     }
 
     private void updatePrice(int closingRate, int round) {

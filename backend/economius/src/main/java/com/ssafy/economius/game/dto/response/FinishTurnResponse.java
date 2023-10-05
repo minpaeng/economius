@@ -2,7 +2,6 @@ package com.ssafy.economius.game.dto.response;
 
 import com.ssafy.economius.game.dto.mysql.PrevIssueDto;
 import com.ssafy.economius.game.entity.redis.Building;
-import com.ssafy.economius.game.entity.redis.Event;
 import com.ssafy.economius.game.entity.redis.Gold;
 import com.ssafy.economius.game.entity.redis.Insurance;
 import com.ssafy.economius.game.entity.redis.InterestRate;
@@ -10,10 +9,9 @@ import com.ssafy.economius.game.entity.redis.Issue;
 import com.ssafy.economius.game.entity.redis.Portfolio;
 import com.ssafy.economius.game.entity.redis.Saving;
 import com.ssafy.economius.game.entity.redis.Stock;
-import lombok.Data;
-
 import java.util.List;
 import java.util.Map;
+import lombok.Data;
 
 @Data
 public class FinishTurnResponse {
@@ -21,6 +19,7 @@ public class FinishTurnResponse {
     private int roomId;
     private List<Long> bankruptcyPlayers;
     private List<Long> players;
+    private Map<Long, Integer> characters;
     private List<Long> playerSequence;
     private Long currentPlayerToRoll;
     private int gameTurn;
@@ -38,5 +37,5 @@ public class FinishTurnResponse {
 
     // 경제 이슈, 전조증상
     private Issue currentIssue;
-    private List<PrevIssueDto> currentPrevIssues; 
+    private List<PrevIssueDto> currentPrevIssues;
 }

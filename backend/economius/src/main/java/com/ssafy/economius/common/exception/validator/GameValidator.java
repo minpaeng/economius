@@ -1,6 +1,7 @@
 package com.ssafy.economius.common.exception.validator;
 
 import com.ssafy.economius.common.exception.CustomWebsocketException;
+import com.ssafy.economius.common.exception.CustomWebsocketRoomException;
 import com.ssafy.economius.common.exception.message.GameRoomMessage;
 import com.ssafy.economius.game.entity.redis.Game;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,19 @@ public class GameValidator {
             log.error("방이 존재하지 않음: " + roomId);
             throw CustomWebsocketException.builder()
                     .roomId(roomId)
+                    .code(GameRoomMessage.GAME_NOT_EXIST.getCode())
+                    .message(GameRoomMessage.GAME_NOT_EXIST.getMessage())
+                    .build();
+        }
+
+        return game.get();
+    }
+
+    public Game checkValidGameRoom(Optional<Game> game, int roomId, Long player) {
+        if (game.isEmpty()) {
+            log.error("방이 존재하지 않음: " + roomId);
+            throw CustomWebsocketRoomException.builder()
+                    .player(player)
                     .code(GameRoomMessage.GAME_NOT_EXIST.getCode())
                     .message(GameRoomMessage.GAME_NOT_EXIST.getMessage())
                     .build();
@@ -58,7 +72,7 @@ public class GameValidator {
     }
 
     public void checkCanJoin(Game game, int roomId, Long player) {
-        checkRoomLimit(game, roomId);
+        checkRoomLimit(game, roomId, player);
         checkPlayer(game, roomId, player);
     }
 
@@ -67,11 +81,11 @@ public class GameValidator {
         underStartLimit(players.size(), roomId);
     }
 
-    private void checkRoomLimit(Game game, int roomId) {
-        log.error(roomId + "번 방 인원 제한 초과");
+    private void checkRoomLimit(Game game, int roomId, Long player) {
         if (game.getPlayers().size() >= 4) {
-            throw CustomWebsocketException.builder()
-                    .roomId(roomId)
+            log.error(roomId + "번 방 인원 제한 초과, 요청자: " + player);
+            throw CustomWebsocketRoomException.builder()
+                    .player(player)
                     .code(GameRoomMessage.ROOM_LIMIT.getCode())
                     .message(GameRoomMessage.ROOM_LIMIT.getMessage())
                     .build();
@@ -79,10 +93,13 @@ public class GameValidator {
     }
 
     private void checkPlayer(Game game, int roomId, Long player) {
-        log.error("이미 참여중인 플레이어: {roomId: " + roomId + ", player: " + player + "}");
         if (game.getNicknames().containsKey(player)) {
-            throw CustomWebsocketException.builder()
-                    .roomId(roomId)
+            log.error("이미 참여중인 플레이어: {roomId: " + roomId + ", player: " + player + "}");
+            throw CustomWebsocketRoomException.builder()
+                    .player(player)
+                    .players(game.getPlayers())
+                    .nicknames(game.getNicknames())
+                    .hostPlayer(game.getPlayers().get(0))
                     .code(GameRoomMessage.ALREADY_JOIN_PLAYER.getCode())
                     .message(GameRoomMessage.ALREADY_JOIN_PLAYER.getMessage())
                     .build();

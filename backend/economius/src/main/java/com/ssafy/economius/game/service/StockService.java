@@ -47,6 +47,7 @@ public class StockService {
         Stock stock = game.getStocks().get(stockId);
 
         if (portfolio.getMoney() - stock.getPrice() < 0) {
+            game.proceedBankruptcy(buyPlayer);
             gameValidator.throwBankruptcyResponse(roomId, buyPlayer);
         }
 
@@ -70,6 +71,7 @@ public class StockService {
         // 모두 통과했다..
         stock.dealStock(player, stockAmount);
         portfolio.getStocks().updatePortfolioStockByDeal(stock, stockAmount);
+        portfolio.spendMoney(stock.getPrice() * stockAmount);
 
         gameRepository.save(game);
 
@@ -87,6 +89,7 @@ public class StockService {
 
         stock.dealStock(player, stockAmount);
         portfolio.getStocks().updatePortfolioStockByDeal(stock, stockAmount);
+        portfolio.spendMoney(-stock.getPrice() * stockAmount);
 
         gameRepository.save(game);
 
@@ -144,8 +147,8 @@ public class StockService {
             .rateHistory(stock.getRateHistory())
             .remainingAmount(stock.getRemainingAmount())
             .priceHistory(priceHistory)
+            .owners(stock.getOwners())
             .build();
     }
-
 
 }

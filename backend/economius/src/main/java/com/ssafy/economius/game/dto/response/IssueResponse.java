@@ -1,18 +1,17 @@
-package com.ssafy.economius.game.entity.redis;
+package com.ssafy.economius.game.dto.response;
 
+import com.ssafy.economius.game.dto.AssetChangeDto;
 import com.ssafy.economius.game.enums.IssueEnum;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.ToString;
 
 import java.util.List;
 
 @ToString
+@Data
 @Builder
-@AllArgsConstructor
-@Getter
-public class Issue {
+public class IssueResponse {
 
     private int issueId;
     private String name;
@@ -21,5 +20,8 @@ public class Issue {
     private String year;
     private String description;
     private String url;
-    private List<AssetChange> currentAssetChanges;
+    private AssetChangeDto goldChange;
+    private AssetChangeDto interestRateChange;
+    private AssetChangeDto buildingChange;
+    private List<AssetChangeDto> stockChanges;
 }

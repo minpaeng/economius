@@ -1,7 +1,18 @@
 package com.ssafy.economius.game.entity.redis;
 
 
+import static com.ssafy.economius.game.enums.RateEnum.MAX_BOARD_SIZE;
+
 import com.ssafy.economius.game.dto.mysql.PrevIssueDto;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Random;
+import java.util.stream.Collectors;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,16 +22,6 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-
-import static com.ssafy.economius.game.enums.RateEnum.MAX_BOARD_SIZE;
 
 @RedisHash
 @Getter
@@ -38,6 +39,7 @@ public class Game {
     private List<Long> bankruptcyPlayers;
     // 게임 시작하면 0번 index가 1위 다음 2위...
     private List<Long> players;
+    private Map<Long, Integer> characters;
     private Map<Long, String> nicknames;
     private List<Long> playerSequence;
     private Long currentPlayerToRoll;
@@ -49,9 +51,9 @@ public class Game {
 
     // 경제 asset
     private Gold gold;
-    private Map<Integer, Building> buildings; 
+    private Map<Integer, Building> buildings;
     private Map<Integer, Insurance> insurances;
-    private Map<Integer, Stock> stocks; 
+    private Map<Integer, Stock> stocks;
     private Map<Integer, Saving> savings;
     private InterestRate interestRate;
 
@@ -64,8 +66,30 @@ public class Game {
     // 찬스 이벤트 -
     private Event event;
 
+    public Long getCapablePlayerToFinish(){
+        return playerSequence.get((gameTurn) % 4);
+    }
 
-    public void initializeLocations(){
+    public void updatePlayerToRoll(){
+        currentPlayerToRoll = playerSequence.get((gameTurn + 1) % 4);
+    }
+
+    public void initializeCharacter(List<Integer> randoms) {
+        int index = 0;
+        characters = new HashMap<>();
+        for (Long player : players) {
+            characters.put(player, randoms.get(index++));
+        }
+    }
+
+    public Issue getNextIssue() {
+        if (issueIdx < 0) {
+            return null;
+        }
+        return issues.get(issueIdx);
+    }
+
+    public void initializeLocations() {
         log.info("사용자 위치 초기화");
         locations = new HashMap<>();
         players.forEach(player -> locations.put(player, 0));
@@ -104,6 +128,24 @@ public class Game {
         this.portfolios = portfolios;
     }
 
+
+    public void sortPlayersByTotalMoney() {
+        if(players != null && portfolios != null) {
+            players = players.stream()
+                    .sorted((player1, player2) -> {
+                        Portfolio portfolio1 = portfolios.get(player1);
+                        Portfolio portfolio2 = portfolios.get(player2);
+                        // null check
+                        long totalMoney1 = portfolio1 != null ? portfolio1.getTotalMoney() : 0;
+                        long totalMoney2 = portfolio2 != null ? portfolio2.getTotalMoney() : 0;
+
+                        // 내림차순 정렬
+                        return Long.compare(totalMoney2, totalMoney1);
+                    })
+                    .collect(Collectors.toList());
+        }
+    }
+
     public int getPrizeByPlayer(Long player) {
         // 순위 구하기
         int prize = 1;
@@ -119,8 +161,8 @@ public class Game {
     public void updatePrize() {
         List<Entry<Long, Portfolio>> entries = new LinkedList<>(portfolios.entrySet());
         entries.sort((o1, o2) -> Integer.compare(
-                o2.getValue().getTotalMoney(),
-                o1.getValue().getTotalMoney()));
+            o2.getValue().getTotalMoney(),
+            o1.getValue().getTotalMoney()));
 
         int prize = 0;
         for (Entry<Long, Portfolio> entry : entries) {
@@ -129,14 +171,16 @@ public class Game {
     }
 
     public int payBuildingFee(Long player, Long owner, int buildingId) {
-        if (owner == null || owner.equals(player)) return 0;
+        if (owner == null || owner.equals(player)) {
+            return 0;
+        }
         int playerMoney = this.portfolios.get(player).getMoney();
         int ownerMoney = this.portfolios.get(owner).getMoney();
-        int buildingPrice = this.buildings.get(buildingId).getPrice();
+        int buildingFee = this.buildings.get(buildingId).getBuildingFee();
 
-        this.portfolios.get(player).setMoney(playerMoney - buildingPrice);
-        this.portfolios.get(owner).setMoney(ownerMoney + buildingPrice);
-        return buildingPrice;
+        this.portfolios.get(player).setMoney(playerMoney - buildingFee);
+        this.portfolios.get(owner).setMoney(ownerMoney + buildingFee);
+        return buildingFee;
     }
 
     public void proceedBankruptcy(Long player) {
@@ -147,9 +191,10 @@ public class Game {
 
     public int updateGameTurn() {
         gameTurn++;
-        if (gameTurn == maxGameTurn) {
-            return -1;
-        }
+        // 추후 주석 풀어야 함
+//        if (gameTurn == maxGameTurn) {
+//            return -1;
+//        }
         return gameTurn;
     }
 }
