@@ -267,14 +267,9 @@ function PlayerSocket() {
             setCallBack(true);
         } else if (type === 'stopSavings') {
             setCallBack(true);
-        } else if (type in ['joinInsurance', 'finishInsurance']) {
-            console.log(playerId, playerToRoll, insuranceCnt);
-            if (insuranceCnt === 3) {
-                setCallBack(true);
-                setInsuranceCnt(0);
-            } else {
-                setInsuranceCnt(prev => prev + 1);
-            }
+        } else if (type === 'joinInsurance' || type === 'finishInsurance') {
+            if (callBack) return;
+            setCallBack(true);
         }
         if (type === 'issue') {
             setBigEventInfo({

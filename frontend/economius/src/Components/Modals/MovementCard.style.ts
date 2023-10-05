@@ -3,7 +3,9 @@ import styled from 'styled-components';
 export const modalStyle: any = {
     overlay: {
         position: 'fixed',
-        backgroundColor: 'rgba(0,0,0,0.6)',
+        backgroundColor: 'rgba(0,0,0,0.0)',
+        margin: 'auto',
+        right: '25%',
         zIndex: 10,
     },
     content: {

@@ -30,7 +30,7 @@ function BigEventRound() {
         if (!isModalOpen) return;
         setTimeout(() => {
             setIsModalOpen(false);
-        }, 4000);
+        }, 10000);
     }, [isModalOpen]);
 
     // modal style
@@ -42,14 +42,14 @@ function BigEventRound() {
             right: 0,
             bottom: 0,
             backgroundColor: 'rgba(0,0,0,0.6)',
-            zIndex: 10,
+            zIndex: 20,
         },
         content: {
             display: 'flex',
             flexDirextion: 'column',
             //   backgroundColor: "rgba(255,255,255,0.95)",
             overflow: 'auto',
-            zIndex: 10,
+            zIndex: 20,
             top: '80px',
             left: '50px',
             right: '400px',
