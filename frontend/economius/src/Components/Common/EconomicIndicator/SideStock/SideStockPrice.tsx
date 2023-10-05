@@ -4,9 +4,9 @@ function SideStockPrice({ companyCategory, companySubCategory, price, rate }) {
     let percentStyleSpan;
 
     if (rate > 0) {
-        percentStyleSpan = <span style={{ color: 'red' }}> (+{rate}%)</span>;
+        percentStyleSpan = <span style={{ color: 'rgb(221,94,86)' }}> (+{rate}%)</span>;
     } else if (rate < 0) {
-        percentStyleSpan = <span style={{ color: 'blue' }}> ({rate}%)</span>;
+        percentStyleSpan = <span style={{ color: 'rgb(82,165,155)' }}> ({rate}%)</span>;
     } else {
         percentStyleSpan = <span style={{ color: 'black' }}> ({rate}%)</span>;
     }

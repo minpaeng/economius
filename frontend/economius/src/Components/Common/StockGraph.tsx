@@ -44,8 +44,8 @@ function StockGraph({ data }) {
                     plotOptions: {
                         candlestick: {
                             colors: {
-                                upward: '#DF7D46',
-                                downward: '#3C90EB',
+                                upward: 'rgb(82,165,155)',
+                                downward: 'rgb(221,94,86)',
                             },
                         },
                     },

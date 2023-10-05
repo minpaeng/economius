@@ -15,9 +15,9 @@ function ChartSection({ title, imgPath, data }) {
     let percentStyleSpan;
 
     if (data?.rate > 0) {
-        percentStyleSpan = <span style={{ color: 'red' }}> (+{data?.rate}%)</span>;
+        percentStyleSpan = <span style={{ color: 'rgb(221,94,86)' }}> (+{data?.rate}%)</span>;
     } else if (data?.rate < 0) {
-        percentStyleSpan = <span style={{ color: 'blue' }}> ({data?.rate}%)</span>;
+        percentStyleSpan = <span style={{ color: 'rgb(82,165,155)' }}> ({data?.rate}%)</span>;
     } else {
         percentStyleSpan = <span style={{ color: 'black' }}> ({data?.rate}%)</span>;
     }

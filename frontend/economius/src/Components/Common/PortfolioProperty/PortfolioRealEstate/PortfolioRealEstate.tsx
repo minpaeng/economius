@@ -18,9 +18,9 @@ function PortfolioRealEstate({
     let percentStyleSpan;
 
     if (earningRate > 0) {
-        percentStyleSpan = <span style={{ color: 'red' }}> (+{earningRate}%)</span>;
+        percentStyleSpan = <span style={{ color: 'rgb(221,94,86)' }}> (+{earningRate}%)</span>;
     } else if (earningRate < 0) {
-        percentStyleSpan = <span style={{ color: 'blue' }}> ({earningRate}%)</span>;
+        percentStyleSpan = <span style={{ color: 'rgb(82,165,155)' }}> ({earningRate}%)</span>;
     } else {
         percentStyleSpan = <span style={{ color: 'black' }}> ({earningRate}%)</span>;
     }
