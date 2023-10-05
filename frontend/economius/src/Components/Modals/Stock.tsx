@@ -5,6 +5,7 @@ import { PlayerToRollState, PlayerIdState, PortfolioState, StockState } from '/s
 import Modal from 'react-modal';
 import { useEffect, useState } from 'react';
 import * as S from './Stock.style';
+import { ExitButton } from './GlobalModal.stye';
 import StockGraph from '../Common/StockGraph';
 import BuyOrSell from '../Common/BuyOrSell';
 
@@ -87,7 +88,8 @@ function Stock() {
     return (
         <>
             {player === PlayerToRoll ? (
-                <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
+                <Modal isOpen={isModalOpen} style={modalStyle}>
+                    <ExitButton onClick={closeModal} src='/button/exit.png' alt='exit' />
                     {stockDetail === null ? (
                         `loading...`
                     ) : (

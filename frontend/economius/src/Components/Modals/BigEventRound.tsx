@@ -25,7 +25,7 @@ function BigEventRound() {
         setIsModalOpen(true);
     }, [issue]);
 
-    // 4초 후에 자동 꺼짐
+    // 10초 후에 자동 꺼짐
     useEffect(() => {
         if (!isModalOpen) return;
         setTimeout(() => {

@@ -6,6 +6,7 @@ import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 import { TradeBankState } from '/src/recoil/trading/atom';
 import { BankInfoState } from '/src/recoil/modalInfo/atom';
 import * as S from './InstallmentSaving.style';
+import { ExitButton } from './GlobalModal.stye';
 
 function InstallmentSaving() {
     const playerId = useRecoilValue(PlayerIdState);
@@ -51,7 +52,8 @@ function InstallmentSaving() {
     return (
         <>
             {playerId === playerToRoll ? (
-                <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
+                <Modal isOpen={isModalOpen} style={modalStyle}>
+                    <ExitButton onClick={closeModal} src='/button/exit.png' alt='exit' />
                     {!(bankInfo === null) ? (
                         <S.BankMain>
                             <S.BankTop>

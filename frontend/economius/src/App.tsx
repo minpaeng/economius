@@ -104,8 +104,6 @@ function App() {
                 {roomJoinUsersCharacter === null ? null : <Characters CharacterArr={CharacterArr} />}
             </Canvas>
 
-            {/* <Controller /> */}
-
             <NewsBar />
             {roomJoinUsersCharacter === null ? null : <PlayerPlaceAll />}
 

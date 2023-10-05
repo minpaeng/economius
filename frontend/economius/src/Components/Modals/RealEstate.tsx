@@ -10,6 +10,7 @@ import hotelimg from '/RealState/hotel.png';
 import restaurantimg from '/RealState/restaurant.png';
 import shopimg from '/RealState/shop.png';
 import * as S from './RealEstate.style';
+import { ExitButton } from './GlobalModal.stye';
 
 function RealEstate() {
     const playerId = useRecoilValue(PlayerIdState);
@@ -36,7 +37,8 @@ function RealEstate() {
     return (
         <>
             {playerId === playerToRoll ? (
-                <Modal isOpen={isModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
+                <Modal isOpen={isModalOpen} style={S.modalStyle}>
+                    <ExitButton onClick={closeModal} src='/button/exit.png' alt='exit' />
                     {!(realEstateInfo === null) ? (
                         <S.Main>
                             <S.Top>
