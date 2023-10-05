@@ -21,7 +21,7 @@ import Join from './Components/Modals/Join';
 import StartLoginCheck from './Components/Modals/StartLoginCheck';
 
 import Socket from './Socket';
-import { PlayerIdState } from '/src/recoil/game/atom.tsx';
+import { PlayerIdState, ClickUserPortfolioState } from '/src/recoil/game/atom.tsx';
 
 export default function Room() {
     // 최상단 컴포넌트에서 모달을 쓸 것이라고 명시 작업이 필요
@@ -56,6 +56,7 @@ export default function Room() {
     // effectAudioPopup.play(); // 출력할 위치에 작성
 
     const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
+    const [clickUserPortfolio, setClickUserPortfolio] = useRecoilState(ClickUserPortfolioState);
 
     // const [showJoin, setShowJoin] = useState(false);
 
@@ -85,6 +86,7 @@ export default function Room() {
     // 시작하자마자 모달 열기
     useEffect(() => {
         openModal();
+        setClickUserPortfolio(Number(localStorage.getItem('player')));
     }, []);
 
     // 모달이 닫히면 적용

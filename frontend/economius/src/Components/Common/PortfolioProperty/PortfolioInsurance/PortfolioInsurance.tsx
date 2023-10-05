@@ -24,7 +24,7 @@ function PortfolioInsurance({ totalPrice, amount, insuranceList }) {
                                 <div style={{ fontSize: '20px' }}>보험</div>
                             </S.LayoutTopLeft>
                             <S.LayoutTopRight>
-                                {insuranceList.length ? <div> 가입 상품 수 : {amount} (개)</div> : '가입 중인 보험이 없습니다.'}
+                                {insuranceList.length ? <div> 가입 상품 수 : {insuranceList.length} (개)</div> : '가입 중인 보험이 없습니다.'}
                             </S.LayoutTopRight>
                         </S.LayoutTop>
                         <div ref={setCollapsibleElement} style={{ paddingBottom: '5px' }}>

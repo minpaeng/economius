@@ -6,7 +6,7 @@ import EconomicIndicator from './EconomicIndicator';
 import StockCheck from './StockCheck';
 import { useRecoilValue } from 'recoil';
 import { useRecoilState } from 'recoil';
-import { StockClickIdState, SideBarTypeState, isPortfolioState } from '/src/recoil/animation/atom';
+import { StockClickIdState, SideBarTypeState, isPortfolioState, RoomJoinUsersIdState } from '/src/recoil/animation/atom';
 import { ClickUserPortfolioState } from '/src/recoil/game/atom';
 
 function SideBar() {
@@ -18,7 +18,14 @@ function SideBar() {
 
     const [isPortfolio, setIsPortfolio] = useRecoilState(isPortfolioState);
 
-    // const [NewsClickIdx, setNewsClickIdx] = useRecoilState(NewsClickIdxState);
+    const userIdArr = useRecoilValue(RoomJoinUsersIdState);
+
+    function idxReturn(Id) {
+        const returnIdx = userIdArr.indexOf(Id);
+
+        return returnIdx + 1;
+    }
+    const colorIdx = idxReturn(clickUserColor);
 
     // 렌더링할 컴포넌트 정의
     let componentToRender;
@@ -36,13 +43,13 @@ function SideBar() {
 
     let sideBarColor;
 
-    if (clickUserColor === 1) {
+    if (colorIdx === 1) {
         sideBarColor = 'rgba(255, 216, 133, 0.9)';
-    } else if (clickUserColor === 2) {
+    } else if (colorIdx === 2) {
         sideBarColor = 'rgba(131, 213, 233, 0.9)';
-    } else if (clickUserColor === 3) {
+    } else if (colorIdx === 3) {
         sideBarColor = 'rgba(255, 166, 132, 0.90)';
-    } else if (clickUserColor === 4) {
+    } else if (colorIdx === 4) {
         sideBarColor = 'rgba(255, 156, 159, 0.90)';
     }
 

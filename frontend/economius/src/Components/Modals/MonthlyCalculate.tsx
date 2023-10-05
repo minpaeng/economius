@@ -1,5 +1,5 @@
 import Modal from 'react-modal';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { MonthlyModalOpenState } from '/src/recoil/animation/atom';
 import { MonthlyInfoState } from '/src/recoil/modalInfo/atom';
@@ -17,6 +17,11 @@ function MonthlyCalculate() {
         setMonthlyModalOpen(false);
         setMonthlyInfo(null);
     };
+
+    useEffect(() => {
+        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
+        effectAudioPopup.play(); // 출력할 위치에 작성
+    }, []);
 
     return (
         <Modal isOpen={monthlyModalOpen} style={S.modalStyle} onRequestClose={closeModal}>

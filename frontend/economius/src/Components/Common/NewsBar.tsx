@@ -1,9 +1,13 @@
 import Modal from 'react-modal';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { Carousel } from 'react-responsive-carousel';
+// import { Carousel } from 'react-responsive-carousel';
+import Ticker, { FinancialTicker } from 'nice-react-ticker';
+import { useRecoilValue } from 'recoil';
+import { StockChangeArrState } from '/src/recoil/game/atom';
 
 function NewsBar() {
-    const data = ['[속보] 부동산 버블이 증가하고 있어요', '[경제 News] 금리 0.5% 인상', '[속보] 타입스크립트 극혐'];
+    const StockRateObj = useRecoilValue(StockChangeArrState);
+
     // modal style
     const modalStyle: any = {
         overlay: {
@@ -22,7 +26,7 @@ function NewsBar() {
             flexDirextion: 'column',
             alignItems: 'center',
 
-            backgroundColor: '#b8d4ffdb',
+            backgroundColor: 'rgb(12,14,20)',
             overflow: 'auto',
             zIndex: '1',
             top: 0,
@@ -37,28 +41,37 @@ function NewsBar() {
             padding: '0px',
         },
     };
+
+    function objectToArray(obj) {
+        if (!obj) {
+            return [];
+        }
+        return Object.values(obj);
+    }
+
+    const StockRateArr = objectToArray(StockRateObj);
+    const LongStockRateArr = [...StockRateArr, ...StockRateArr];
+    console.log(StockRateArr);
+
     return (
         <Modal isOpen={true} style={modalStyle}>
             <img src='NewsBar/megaphone.png' alt='img' style={{ width: '50px' }} />
-            <div style={{ fontSize: '25px' }}>
-                <Carousel
-                    autoPlay={true}
-                    showArrows={false}
-                    showIndicators={false}
-                    showStatus={false}
-                    showThumbs={false}
-                    centerMode={false}
-                    infiniteLoop={true}
-                    stopOnHover={false}
-                    axis='vertical'
-                >
-                    {data.map((word, index) => (
-                        <span key={index}>
-                            <b>{word}</b>
-                        </span>
-                    ))}
-                </Carousel>
-            </div>
+            <Ticker slideSpeed={80}>
+                {LongStockRateArr.map((item, idx) => {
+                    return (
+                        <div style={{ padding: '0px 8px' }} key={idx}>
+                            <FinancialTicker
+                                id={idx}
+                                symbol={item.name}
+                                lastPrice={`${item.companyCategory}/${item.companySubCategory}`}
+                                currentPrice={item.price}
+                                percentage={`${item.rateHistory[item.rateHistory.length - 1]}%`}
+                                change={item.rateHistory[item.rateHistory.length - 1] >= 0 ? true : false}
+                            />
+                        </div>
+                    );
+                })}
+            </Ticker>
         </Modal>
     );
 }

@@ -2,6 +2,7 @@ import Modal from 'react-modal';
 import { useEffect } from 'react';
 import predictionimg from '/Prediction/prediction.png';
 import * as S from './GlobalModal.stye';
+import { ExitButton } from './GlobalModal.stye';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { CallBackState, IsModalOpenState } from '/src/recoil/animation/atom';
 import { GetPredictionState } from '/src/recoil/trading/atom.tsx';
@@ -54,8 +55,14 @@ function Prediction() {
         },
     };
 
+    useEffect(() => {
+        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
+        effectAudioPopup.play(); // 출력할 위치에 작성
+    }, []);
+
     return prediction == null ? (
-        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
+        <Modal isOpen={isModalOpen} style={modalStyle}>
+            <ExitButton onClick={closeModal} src='/button/exit.png' alt='exit' />
             <S.Main>
                 <S.Top>
                     <S.TopTitle>예언소</S.TopTitle>

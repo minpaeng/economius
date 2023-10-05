@@ -1,8 +1,8 @@
-import Modal from "react-modal";
-import { useRecoilValue } from "recoil";
-import { Img, modalStyle, TextOverlay } from "/src/Components/Modals/Round.style.ts";
-import { GameRoundState } from "/src/recoil/game/atom.tsx";
-import {useEffect, useState} from "react";
+import Modal from 'react-modal';
+import { useRecoilValue } from 'recoil';
+import { Img, modalStyle, TextOverlay } from '/src/Components/Modals/Round.style.ts';
+import { GameRoundState } from '/src/recoil/game/atom.tsx';
+import { useEffect, useState } from 'react';
 
 function Round() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,30 +14,26 @@ function Round() {
     };
 
     useEffect(() => {
-        if (gameRound !== 0){
+        if (gameRound !== 0) {
             setIsModalOpen(true);
-            const timer = setTimeout(() => {
-                closeModal();
-            }, 2500); 
-            setTimerId(timer);
         }
-        return () => {
-            if (timerId) {
-                clearTimeout(timerId);
-            }
-        };
     }, [gameRound]);
 
+    // 3초 후에 자동 꺼짐
+    useEffect(() => {
+        if (!isModalOpen) return;
+        setTimeout(() => {
+            setIsModalOpen(false);
+        }, 3000);
+    }, [isModalOpen]);
 
     return (
-        <div className="RoundModal">
-            <Modal isOpen={isModalOpen} onRequestClose={closeModal} style={modalStyle}>
-                <Img src={"/2D_Chracter/Bear/Bear Pose - 02.png"}/>
-                <TextOverlay>
-                    <div style={{fontSize: "40px", paddingTop:"35px"}}>Round : {gameRound}</div>
-                </TextOverlay>
-            </Modal>
-        </div>
+        <Modal isOpen={isModalOpen} onRequestClose={closeModal} style={modalStyle}>
+            <Img src={'/2D_Chracter/Bear/Bear Pose - 02.png'} />
+            <TextOverlay>
+                <div style={{ fontSize: '40px', paddingTop: '35px' }}>Round : {gameRound}</div>
+            </TextOverlay>
+        </Modal>
     );
 }
 

@@ -8,8 +8,6 @@ import * as S from './App.style';
 import Map from '/src/Map';
 import Characters from '/src/Characters';
 
-import Controller from '/src/Controller';
-
 // import Portforlio from "./Components/Common/Portfolio";
 import NewsBar from './Components/Common/NewsBar';
 
@@ -31,9 +29,14 @@ import {
     buildingState,
     currentPrevIssueState,
     currentIssueState,
+    StockChangeArrState,
+    PlayerRankingState,
 } from '/src/recoil/game/atom';
+
+import { RoomJoinUsersCharacterState } from '/src/recoil/animation/atom';
+
 import axios from 'axios';
-import { RoomIdState, MyTurnState } from '/src/recoil/animation/atom.tsx';
+import { RoomIdState } from '/src/recoil/animation/atom.tsx';
 import CoinEffect from '/src/Components/Effect/CoinEffect';
 import Round from '/src/Components/Modals/Round.tsx';
 import MovementCard from './Components/Modals/MovementCard';
@@ -46,9 +49,9 @@ function App() {
     const light = useRef();
     //   useHelper(light, THREE.DirectionalLightHelper);
 
-    const setPortfolioState = useSetRecoilState(PortfolioState);
+    const [Portfolio, setPortfolioState] = useRecoilState(PortfolioState);
     const setStockState = useSetRecoilState(StockState);
-    const [, setRoomId] = useRecoilState(RoomIdState);
+    const [roomId, setRoomId] = useRecoilState(RoomIdState);
     const [, setPlayerId] = useRecoilState(PlayerIdState);
     const setGoldState = useSetRecoilState(GoldState);
     const setInterestRateState = useSetRecoilState(interestRateState);
@@ -56,17 +59,30 @@ function App() {
     const setPlayerToRoll = useSetRecoilState(PlayerToRollState);
     const setCurrentPrevIssues = useSetRecoilState(currentPrevIssueState);
     const setCurrentIssue = useSetRecoilState(currentIssueState);
+    const setStockChangeArr = useSetRecoilState(StockChangeArrState);
+    const [roomJoinUsersCharacter, setRoomJoinUsersCharacter] = useRecoilState(RoomJoinUsersCharacterState);
+    const setPlayerRanking = useSetRecoilState(PlayerRankingState);
+
+    function objectToArray(obj) {
+        if (obj === null) {
+            return;
+        }
+        if (!obj) {
+            return [];
+        }
+        return Object.values(obj);
+    }
+
+    const CharacterArr = objectToArray(roomJoinUsersCharacter);
+
+    setPlayerId(Number(localStorage.getItem('player')));
 
     // SSH Test
     const [showVideo, setShowVideo] = useState(true);
     const [, setMyTurn] = useRecoilState(MyTurnState);
-    // const [isOpen, setIsOpen] = useState(true);
-
-    // 일단 하드코딩
-    setPlayerId(1);
 
     useEffect(() => {
-        axios.get('https://j9b109.p.ssafy.io/api/room/1/start').then(data => {
+        axios.get(`https://j9b109.p.ssafy.io/api/room/${roomId}/start`).then(data => {
             setPortfolioState(data.data.portfolios);
             setStockState(data.data.stocks);
             setGoldState(data.data.gold);
@@ -76,7 +92,9 @@ function App() {
             setRoomId(data.data.roomId);
             setCurrentPrevIssues(data.data.currentPrevIssues);
             setCurrentIssue(data.data.currentIssue);
-
+            setStockChangeArr(data.data.stocks);
+            setRoomJoinUsersCharacter(data.data.characters);
+            setPlayerRanking(data.data.players);
             // 내 턴을 저장
             for (let i = 0; i < data.data.playerSequence.length; i++) {
                 if (data.data.playerSequence == Number(localStorage.getItem('player'))) {
@@ -120,14 +138,12 @@ function App() {
                     <pointLight ref={light} color={0xffffff} intensity={1} position={[0, 5, 0]} />
 
                     <Map />
-                    <Characters />
+                    {roomJoinUsersCharacter === null ? null : <Characters CharacterArr={CharacterArr} />}
                 </Canvas>
 
-                <Controller />
-
                 <NewsBar />
-                <PlayerPlaceAll />
-                <SideBar />
+                {roomJoinUsersCharacter === null ? null : <PlayerPlaceAll />}
+                {Portfolio === null ? null : <SideBar />}
 
                 <Modals />
                 <Socket />

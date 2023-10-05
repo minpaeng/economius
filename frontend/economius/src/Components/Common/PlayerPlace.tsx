@@ -4,8 +4,8 @@ import PlayerChracter from './PlayerChracter';
 import PlayerProperty from './PlayerProperty';
 import PlayerRanking from './PlayerRanking';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
-import { ClickUserPortfolioState } from '../../recoil/game/atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { PortfolioState, ClickUserPortfolioState } from '../../recoil/game/atom';
 import { isPortfolioState, SideBarTypeState } from '../../recoil/animation/atom';
 
 const PlayerLayout = styled.div`
@@ -16,13 +16,16 @@ const PlayerLayout = styled.div`
     height: 100%;
 `;
 
-function PlayerPlace({ borderRadius, top, left, bgColor, idx, character, AllProperty, money, Ranking, Nick }) {
+function PlayerPlace({ borderRadius, top, left, bgColor, idx, character, borderWidth, Ranking, Nick, userId }) {
     const [clickUserId, setClickUserId] = useRecoilState(ClickUserPortfolioState);
 
     const [isPortfolio, setIsPortfolio] = useRecoilState(isPortfolioState);
 
     const [sideBarType, setSideBarType] = useRecoilState(SideBarTypeState);
 
+    const portfolios = useRecoilValue(PortfolioState);
+    const money = portfolios[userId].money;
+    const totalMoney = portfolios[userId].totalMoney;
     // modal style
     const modalStyle: any = {
         overlay: {
@@ -39,14 +42,18 @@ function PlayerPlace({ borderRadius, top, left, bgColor, idx, character, AllProp
         content: {
             display: 'flex',
             flexDirextion: 'column',
-            backgroundColor: bgColor,
+            color: bgColor,
+            backgroundColor: 'rgba(12,14,20,0.8)',
             overflow: 'auto',
             zIndex: '1',
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            border: 'none',
+            // border: 'none',
+            border: `1px solid ${bgColor}`,
+            // borderLeft: `4px solid ${bgColor} rgba(12,14,20,0.8)`,
+            borderWidth: borderWidth,
             width: '100%',
             height: '100%',
             padding: '0px',
@@ -59,25 +66,25 @@ function PlayerPlace({ borderRadius, top, left, bgColor, idx, character, AllProp
                 // TODO: 이것도 일단 idx로 해둠 ==> 나중에 각각의 userID를 받아서 바꿔줄 것
                 <PlayerLayout
                     onClick={() => {
-                        setClickUserId(idx);
+                        setClickUserId(userId);
                         setSideBarType('portfolio');
                         setIsPortfolio(true);
                     }}
                 >
                     <PlayerRanking Ranking={Ranking} />
-                    <PlayerProperty AllProperty={AllProperty} money={money} Nick={Nick} />
+                    <PlayerProperty AllProperty={totalMoney} money={money} Nick={Nick} userId={userId} />
                     <PlayerChracter character={character} />
                 </PlayerLayout>
             ) : (
                 <PlayerLayout
                     onClick={() => {
-                        setClickUserId(idx);
+                        setClickUserId(userId);
                         setSideBarType('portfolio');
                         setIsPortfolio(true);
                     }}
                 >
                     <PlayerChracter character={character} />
-                    <PlayerProperty AllProperty={AllProperty} money={money} Nick={Nick} />
+                    <PlayerProperty AllProperty={totalMoney} money={money} Nick={Nick} userId={userId} />
                     <PlayerRanking Ranking={Ranking} />
                 </PlayerLayout>
             )}
