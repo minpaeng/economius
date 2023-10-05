@@ -1,5 +1,5 @@
 import Modal from 'react-modal';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
 import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
@@ -48,6 +48,11 @@ function InstallmentSaving() {
             padding: '0px',
         },
     };
+
+    useEffect(() => {
+        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
+        effectAudioPopup.play(); // 출력할 위치에 작성
+    }, []);
 
     return (
         <>

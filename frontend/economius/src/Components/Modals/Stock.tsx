@@ -85,6 +85,11 @@ function Stock() {
         },
     };
 
+    useEffect(() => {
+        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
+        effectAudioPopup.play(); // 출력할 위치에 작성
+    }, []);
+
     return (
         <>
             {player === PlayerToRoll ? (

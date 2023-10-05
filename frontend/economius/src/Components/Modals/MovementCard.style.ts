@@ -4,9 +4,8 @@ export const modalStyle: any = {
     overlay: {
         position: 'fixed',
         backgroundColor: 'rgba(0,0,0,0.0)',
-        margin: 'auto',
-        right: '25%',
         zIndex: 10,
+        margin: 'auto',
     },
     content: {
         backgroundColor: 'rgba(255,255,255,0.95)',

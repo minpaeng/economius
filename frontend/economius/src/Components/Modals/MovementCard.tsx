@@ -118,6 +118,11 @@ function MovementCard() {
         }, 500);
     };
 
+    useEffect(() => {
+        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
+        effectAudioPopup.play(); // 출력할 위치에 작성
+    }, []);
+
     return (
         <Modal isOpen={movementCardOpen} style={S.modalStyle}>
             {movementCard === null ? (

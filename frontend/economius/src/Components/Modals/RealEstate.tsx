@@ -1,5 +1,5 @@
 import Modal from 'react-modal';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
 import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
@@ -33,6 +33,11 @@ function RealEstate() {
     const name = [null, '레스토랑', '상점', '호텔'];
     const description = [null, '식사 비용을 지불합니다', '쇼핑 비용을 지불합니다', '숙박 비용을 지불합니다'];
     const realEstateImage = [null, restaurantimg, shopimg, hotelimg];
+
+    useEffect(() => {
+        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
+        effectAudioPopup.play(); // 출력할 위치에 작성
+    }, []);
 
     return (
         <>

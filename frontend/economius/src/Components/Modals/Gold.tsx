@@ -1,5 +1,5 @@
 import Modal from 'react-modal';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { CallBackState, IsModalOpenState } from '/src/recoil/animation/atom';
 import { GoldDetailState, TradeGoldState } from '/src/recoil/trading/atom';
@@ -48,7 +48,6 @@ function Gold() {
     const playerToRoll = useRecoilValue(PlayerToRollState);
     const portfolios = useRecoilValue(PortfolioState);
 
-    //   const [isGoldOpen, setIsGoldOpen] = useState(false);
     // modal style
     const modalStyle: any = {
         overlay: {
@@ -75,6 +74,11 @@ function Gold() {
             padding: '0px',
         },
     };
+
+    useEffect(() => {
+        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
+        effectAudioPopup.play(); // 출력할 위치에 작성
+    }, []);
 
     return (
         <>

@@ -1,13 +1,10 @@
 import Modal from 'react-modal';
 import * as S from './BigEvent.style';
 
-// import { useRecoilState, useSetRecoilState } from "recoil";
 import { useRecoilValue } from 'recoil';
 import { BigEventInfoState } from '../../recoil/modalInfo/atom';
-// import { CallBackState, IsModalOpenState } from "/src/recoil/animation/atom";
 
 import { useEffect, useState } from 'react';
-// import { BigEventInfoState } from "../../recoil/modalInfo/atom";
 import BigEventRoundItem from './BigEventRoundItem';
 
 function BigEventRound() {
