@@ -667,7 +667,7 @@ function PlayerSocket() {
         if (callBack === false) return;
         if (playerToRoll !== playerId) return;
         connect().then(function () {
-            stompClient.current.send(`/pub/${roomId}/finishTurn`, {}, {});
+            stompClient.current.send(`/pub/${roomId}/finishTurn`, {}, JSON.stringify({ player: playerId }));
         });
     }, [callBack]);
 
