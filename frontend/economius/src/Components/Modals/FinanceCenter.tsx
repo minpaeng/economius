@@ -6,6 +6,7 @@ import { FinanceCenterState } from '/src/recoil/modalInfo/atom';
 import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 import financecenterimg from '/FinanceCenter/financecenter.png';
 import { effectAudioPopup, effectAudioClick } from '/src/Audio';
+import OtherPerson from './OtherPerson';
 
 import * as S from './FinanceCenter.style';
 import { ExitButton } from './GlobalModal.stye';
@@ -25,7 +26,7 @@ const buildings: [string, number][] = [
     ['상점', 14],
     ['코카펩시', 15],
     ['AIR관광', 17],
-    ['은행', 18],
+    ['onebank', 18],
     ['CZ엔터', 19],
     ['K텔레콤', 21],
     ['호텔', 22],
@@ -40,7 +41,7 @@ const buildings: [string, number][] = [
 function FinanceCenter() {
     const [financeCenter, setFinanceCenter] = useRecoilState(FinanceCenterState);
     const playerId = useRecoilValue(PlayerIdState);
-    const PlayerToRoll = useRecoilValue(PlayerToRollState);
+    const playerToRoll = useRecoilValue(PlayerToRollState);
     const [selectedOption, setSelectedOption] = useState<number>(-1);
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const setCallBack = useSetRecoilState(CallBackState);
@@ -55,7 +56,7 @@ function FinanceCenter() {
 
     return (
         <>
-            {playerId === PlayerToRoll ? (
+            {playerId === playerToRoll ? (
                 <Modal isOpen={isModalOpen} style={S.modalStyle}>
                     <ExitButton onClick={() => (closeModal(), effectAudioClick.play())} src='/button/exit.png' alt='exit' />
                     <S.Main>
@@ -88,7 +89,7 @@ function FinanceCenter() {
                     </S.Main>
                 </Modal>
             ) : (
-                <div style={{ position: 'absolute', left: '40%', top: '50%', height: '50px', backgroundColor: 'brown' }}>종합거래소에서 다른 사람이 거래중</div>
+                <OtherPerson />
             )}
         </>
     );

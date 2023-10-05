@@ -1,8 +1,9 @@
 import Modal from 'react-modal';
 import { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { MonthlyModalOpenState } from '/src/recoil/animation/atom';
 import { MonthlyInfoState } from '/src/recoil/modalInfo/atom';
+import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 import monthlymalculate from '/MonthlyCalculate/monthlycalculate.png';
 import dollarcoin from '/MonthlyCalculate/dollarcoin.png';
 import plus from '/MonthlyCalculate/plus.png';
@@ -10,10 +11,13 @@ import minus from '/MonthlyCalculate/minus.png';
 import equal from '/MonthlyCalculate/equal.png';
 import * as S from './MonthlyCalculate.style';
 import { effectAudioPopup, effectAudioClick } from '/src/Audio';
+import OtherPerson from './OtherPerson';
 
 function MonthlyCalculate() {
     const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
     const [monthlyInfo, setMonthlyInfo] = useRecoilState(MonthlyInfoState);
+    const PlayerToRoll = useRecoilValue(PlayerToRollState);
+    const PlayerId = useRecoilValue(PlayerIdState);
     const closeModal = () => {
         setMonthlyModalOpen(false);
         setMonthlyInfo(null);
@@ -26,7 +30,7 @@ function MonthlyCalculate() {
         };
     }, []);
 
-    return (
+    return PlayerToRoll === PlayerId ? (
         <Modal isOpen={monthlyModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
             {monthlyInfo === null ? (
                 '로딩중입니다...'
@@ -116,6 +120,8 @@ function MonthlyCalculate() {
                 </S.Main>
             )}
         </Modal>
+    ) : (
+        <OtherPerson />
     );
 }
 

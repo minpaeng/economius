@@ -10,6 +10,7 @@ import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 import BuyOrSell from '../Common/BuyOrSell';
 import GoldGraph from '../Common/GoldGraph';
+import OtherPerson from './OtherPerson';
 
 function makeGoldGraphData(goldPriceHistoryData) {
     const graphData = [];
@@ -165,7 +166,7 @@ function Gold() {
                     )}
                 </Modal>
             ) : (
-                <div style={{ position: 'absolute', left: '40%', top: '50%', height: '50px', backgroundColor: 'brown' }}>금 거래소에서 다른 사람이 거래중</div>
+                <OtherPerson />
             )}
         </>
     );

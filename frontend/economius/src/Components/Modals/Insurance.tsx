@@ -9,6 +9,7 @@ import * as S from './Insurance.style';
 import { ExitButton } from './GlobalModal.stye';
 import InsuranceCard from './InsuranceCard';
 import { effectAudioPopup, effectAudioClick } from '/src/Audio';
+import OtherPerson from './OtherPerson';
 
 function Insurance() {
     const playerId = useRecoilValue(PlayerIdState);
@@ -118,7 +119,7 @@ function Insurance() {
                     )}
                 </Modal>
             ) : (
-                <div style={{ position: 'absolute', left: '40%', top: '50%', height: '50px', backgroundColor: 'brown' }}>보험에서 다른 사람이 거래중</div>
+                <OtherPerson />
             )}
         </>
     );

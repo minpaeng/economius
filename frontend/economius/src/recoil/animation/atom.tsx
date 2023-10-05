@@ -1,5 +1,6 @@
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
+import { PlayerToRollState } from '../game/atom';
 const { persistAtom } = recoilPersist();
 
 // 시작 결과 반환
@@ -201,4 +202,14 @@ export const RoomJoinUsersCharacterState = atom({
 export const PlayerSequenceState = atom({
     key: 'PlayerSequenceState',
     default: null,
+});
+
+export const NicknameToRollSelector = selector({
+    key: 'NicknameToRollSelector',
+    get: ({ get }) => {
+        const UsersId = get(RoomJoinUsersIdState);
+        const UsersNickname = get(RoomJoinUsersNicknameState);
+        const playerToRoll = get(PlayerToRollState);
+        return UsersNickname[UsersId.indexOf(playerToRoll)];
+    },
 });
