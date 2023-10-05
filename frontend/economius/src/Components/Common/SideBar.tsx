@@ -8,6 +8,7 @@ import { useRecoilValue } from 'recoil';
 import { useRecoilState } from 'recoil';
 import { StockClickIdState, SideBarTypeState, isPortfolioState, RoomJoinUsersIdState } from '/src/recoil/animation/atom';
 import { ClickUserPortfolioState } from '/src/recoil/game/atom';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 function SideBar() {
     const clickUserColor = useRecoilValue(ClickUserPortfolioState);
@@ -92,6 +93,7 @@ function SideBar() {
                         onClick={() => {
                             setSideBarType('portfolio');
                             setIsPortfolio(true);
+                            effectAudioClick.play();
                         }}
                     >
                         <span className='front'>포트폴리오</span>
@@ -100,6 +102,7 @@ function SideBar() {
                         onClick={() => {
                             setSideBarType('economicIndicator');
                             setIsPortfolio(false);
+                            effectAudioClick.play();
                         }}
                     >
                         <span className='front'>경제 지표</span>

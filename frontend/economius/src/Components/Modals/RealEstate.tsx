@@ -37,16 +37,13 @@ function RealEstate() {
 
     useEffect(() => {
         effectAudioPopup.play(); // 출력할 위치에 작성
-        return () => {
-            effectAudioClick.play(); // 출력할 위치에 작성
-        };
     }, []);
 
     return (
         <>
             {playerId === playerToRoll ? (
                 <Modal isOpen={isModalOpen} style={S.modalStyle}>
-                    <ExitButton onClick={closeModal} src='/button/exit.png' alt='exit' />
+                    <ExitButton onClick={() => (closeModal(), effectAudioClick.play())} src='/button/exit.png' alt='exit' />
                     {!(realEstateInfo === null) ? (
                         <S.Main>
                             <S.Top>
@@ -73,11 +70,11 @@ function RealEstate() {
 
                             <S.Divide />
                             {!realEstateInfo.owner ? (
-                                <S.Botton onClick={() => setTradeRealEstate([true, false])}>매수하기</S.Botton>
+                                <S.Botton onClick={() => (setTradeRealEstate([true, false]), effectAudioClick.play())}>매수하기</S.Botton>
                             ) : realEstateInfo.owner.player === playerToRoll ? (
-                                <S.Botton onClick={() => setTradeRealEstate([false, true])}>매도하기</S.Botton>
+                                <S.Botton onClick={() => (setTradeRealEstate([false, true]), effectAudioClick.play())}>매도하기</S.Botton>
                             ) : (
-                                <S.Botton onClick={() => closeModal}>확인</S.Botton>
+                                <S.Botton onClick={() => (closeModal(), effectAudioClick.play())}>확인</S.Botton>
                             )}
                         </S.Main>
                     ) : (

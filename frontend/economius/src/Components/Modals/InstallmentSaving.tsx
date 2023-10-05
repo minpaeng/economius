@@ -52,16 +52,13 @@ function InstallmentSaving() {
 
     useEffect(() => {
         effectAudioPopup.play(); // 출력할 위치에 작성
-        return () => {
-            effectAudioClick.play(); // 출력할 위치에 작성
-        };
     }, []);
 
     return (
         <>
             {playerId === playerToRoll ? (
                 <Modal isOpen={isModalOpen} style={modalStyle}>
-                    <ExitButton onClick={closeModal} src='/button/exit.png' alt='exit' />
+                    <ExitButton onClick={() => (closeModal(), effectAudioClick.play())} src='/button/exit.png' alt='exit' />
                     {!(bankInfo === null) ? (
                         <S.BankMain>
                             <S.BankTop>
@@ -117,7 +114,7 @@ function InstallmentSaving() {
                                 <S.BankJoinBottom
                                     onClick={() => {
                                         setTradeBank([false, true]);
-                                        //closeModal();
+                                        effectAudioClick.play();
                                     }}
                                 >
                                     적금 해지하기
@@ -126,7 +123,7 @@ function InstallmentSaving() {
                                 <S.BankJoinBottom
                                     onClick={() => {
                                         setTradeBank([true, false]);
-                                        //closeModal();
+                                        effectAudioClick.play();
                                     }}
                                 >
                                     적금 가입하기

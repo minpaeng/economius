@@ -58,14 +58,11 @@ function Prediction() {
 
     useEffect(() => {
         effectAudioPopup.play(); // 출력할 위치에 작성
-        return () => {
-            effectAudioClick.play(); // 출력할 위치에 작성
-        };
     }, []);
 
     return prediction == null ? (
         <Modal isOpen={isModalOpen} style={modalStyle}>
-            <ExitButton onClick={closeModal} src='/button/exit.png' alt='exit' />
+            <ExitButton onClick={() => (closeModal(), effectAudioClick.play())} src='/button/exit.png' alt='exit' />
             <S.Main>
                 <S.Top>
                     <S.TopTitle>예언소</S.TopTitle>
@@ -76,7 +73,7 @@ function Prediction() {
                     <S.MidDesc>다음에 일어날 경제 이슈를 예언해줍니다.</S.MidDesc>
                 </S.Mid>
 
-                <S.RoundButton onClick={() => setGetPrediction(true)}>
+                <S.RoundButton onClick={() => (setGetPrediction(true), effectAudioClick.play())}>
                     <span>예언듣기</span>
                 </S.RoundButton>
             </S.Main>

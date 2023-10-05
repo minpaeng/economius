@@ -86,16 +86,13 @@ function Insurance() {
 
     useEffect(() => {
         effectAudioPopup.play(); // 출력할 위치에 작성
-        return () => {
-            effectAudioClick.play(); // 출력할 위치에 작성
-        };
     }, []);
 
     return (
         <>
             {playerId === playerToRoll ? (
                 <Modal isOpen={isModalOpen} style={modalStyle}>
-                    <ExitButton onClick={closeModal} src='/button/exit.png' alt='exit' />
+                    <ExitButton onClick={() => (closeModal(), effectAudioClick.play())} src='/button/exit.png' alt='exit' />
                     {!(insuranceInfo === null) ? (
                         <S.InsuranceMain>
                             <S.InsuranceTop>
@@ -114,7 +111,7 @@ function Insurance() {
                                     );
                                 })}
                             </S.InsuranceMid>
-                            <S.InsuranceConfirmButton onClick={() => setTradeInsuranceConfirm(true)}>확인</S.InsuranceConfirmButton>
+                            <S.InsuranceConfirmButton onClick={() => (setTradeInsuranceConfirm(true), effectAudioClick.play())}>확인</S.InsuranceConfirmButton>
                         </S.InsuranceMain>
                     ) : (
                         '로딩중입니다'

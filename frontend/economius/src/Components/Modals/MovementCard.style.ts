@@ -35,6 +35,7 @@ export const Button = styled.div`
     border-radius: 20px;
     background: #ffdaae;
     text-align: center;
+    cursor: pointer;
     &:hover {
         background: #ffaa55;
     }
