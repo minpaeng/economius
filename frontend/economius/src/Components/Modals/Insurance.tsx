@@ -6,6 +6,7 @@ import { TradeInsuranceConfirmState } from '/src/recoil/trading/atom';
 import { InsuranceInfoState } from '/src/recoil/modalInfo/atom';
 import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 import * as S from './Insurance.style';
+import { ExitButton } from './GlobalModal.stye';
 import InsuranceCard from './InsuranceCard';
 
 function Insurance() {
@@ -85,7 +86,8 @@ function Insurance() {
     return (
         <>
             {playerId === playerToRoll ? (
-                <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
+                <Modal isOpen={isModalOpen} style={modalStyle}>
+                    <ExitButton onClick={closeModal} src='/button/exit.png' alt='exit' />
                     {!(insuranceInfo === null) ? (
                         <S.InsuranceMain>
                             <S.InsuranceTop>

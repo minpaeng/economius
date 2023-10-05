@@ -89,7 +89,8 @@ export const NowPlayerPositionState = atom<number>({
 // 이동 카드 모달 여부
 export const MovementCardOpenState = atom({
     key: 'MovementCardOpenState',
-    default: false,
+    default: true,
+    effects_UNSTABLE: [persistAtom],
 });
 
 // 이동 카드 번호
@@ -97,6 +98,13 @@ export const MovementCardState = atom({
     key: 'MovementCardState',
     default: null,
     // effects_UNSTABLE: [persistAtom],
+});
+
+// 이동 카드 선택 확정 여부
+export const MovementCardConfirmState = atom({
+    key: 'MovementCardConfirmState',
+    default: false,
+    effects_UNSTABLE: [persistAtom],
 });
 
 // 캐릭터 이동 여부

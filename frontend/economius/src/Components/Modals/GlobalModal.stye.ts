@@ -141,3 +141,9 @@ export const RealRoundButton = styled.span`
         }
     }
 `;
+
+export const ExitButton = styled.img`
+    position: absolute;
+    top: 10px;
+    right: 10px;
+`;

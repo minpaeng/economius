@@ -5,6 +5,7 @@ import { CallBackState, IsModalOpenState } from '/src/recoil/animation/atom';
 import { GoldDetailState, TradeGoldState } from '/src/recoil/trading/atom';
 import { PlayerToRollState, PlayerIdState, PortfolioState } from '/src/recoil/game/atom';
 import * as S from './Stock.style';
+import { ExitButton } from './GlobalModal.stye';
 
 import BuyOrSell from '../Common/BuyOrSell';
 import GoldGraph from '../Common/GoldGraph';
@@ -78,7 +79,8 @@ function Gold() {
     return (
         <>
             {playerId === playerToRoll ? (
-                <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
+                <Modal isOpen={isModalOpen} style={modalStyle}>
+                    <ExitButton onClick={closeModal} src='/button/exit.png' alt='exit' />
                     {goldDetail === null ? (
                         `loading...`
                     ) : (

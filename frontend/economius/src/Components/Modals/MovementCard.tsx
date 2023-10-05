@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { IsMovingState, MoveDistState, MovementCardState, MovementCardOpenState } from '../../recoil/animation/atom';
+import { IsMovingState, MoveDistState, MovementCardState, MovementCardOpenState, MovementCardConfirmState } from '../../recoil/animation/atom';
 import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 import { useSpring, animated } from '@react-spring/web';
 import Modal from 'react-modal';
@@ -66,6 +66,7 @@ function MovementCard() {
     const [moveDist, setMoveDist] = useRecoilState(MoveDistState); // 캐릭터 이동 거리
     const [movementCard, setMovementCard] = useRecoilState(MovementCardState);
     const [movementCardOpen, setMovementCardOpen] = useRecoilState(MovementCardOpenState);
+    const [movementCardConfirm, setMovementCardConfirm] = useRecoilState(MovementCardConfirmState);
     const PlayerToRoll = useRecoilValue(PlayerToRollState);
     const PlayerId = useRecoilValue(PlayerIdState);
     // 선택된 이동카드 인덱스
@@ -96,16 +97,15 @@ function MovementCard() {
         flipAll();
     }, [movementCardOpen]);
 
-    // 내 차례 아닐 때 선택된 카드 키우기
+    // movePlay에서 받았을 때 선택된 카드 크기 키우고 값 초기화
     useEffect(() => {
-        if (moveDist === 0) return;
-        if (PlayerId !== PlayerToRoll) {
+        if (movementCard !== null) {
             setSelected(movementCard.indexOf(moveDist));
             setTimeout(() => {
-                setSelected(-1);
+                closeModal();
             }, 500);
         }
-    }, [moveDist]);
+    }, [isMoving]);
 
     // 내 차례일 때 선택 누르기
     const MoveButtonClick = (selectednum: number) => {
@@ -114,8 +114,7 @@ function MovementCard() {
             setSelected(1);
         }
         setTimeout(() => {
-            closeModal();
-            setIsMoving(true);
+            setMovementCardConfirm(true);
         }, 500);
     };
 
