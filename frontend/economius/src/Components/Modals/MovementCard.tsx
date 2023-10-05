@@ -7,6 +7,7 @@ import Modal from 'react-modal';
 import woncardfront from '/MovementCard/woncardfront.png';
 import woncardback from '/MovementCard/woncardback.png';
 import * as S from './MovementCard.style';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 function Card({ idx, value, flip, top, left, selected, CardClick }) {
     const { opacity, transform } = useSpring({
@@ -119,8 +120,10 @@ function MovementCard() {
     };
 
     useEffect(() => {
-        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
         effectAudioPopup.play(); // 출력할 위치에 작성
+        return () => {
+            effectAudioClick.play(); // 출력할 위치에 작성
+        };
     }, []);
 
     return (

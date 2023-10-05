@@ -5,6 +5,7 @@ import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
 import { FinanceCenterState } from '/src/recoil/modalInfo/atom';
 import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 import financecenterimg from '/FinanceCenter/financecenter.png';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 import * as S from './FinanceCenter.style';
 
@@ -48,8 +49,10 @@ function FinanceCenter() {
     };
 
     useEffect(() => {
-        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
         effectAudioPopup.play(); // 출력할 위치에 작성
+        return () => {
+            effectAudioClick.play(); // 출력할 위치에 작성
+        };
     }, []);
 
     return (

@@ -6,6 +6,7 @@ import { GoldDetailState, TradeGoldState } from '/src/recoil/trading/atom';
 import { PlayerToRollState, PlayerIdState, PortfolioState } from '/src/recoil/game/atom';
 import * as S from './Stock.style';
 import { ExitButton } from './GlobalModal.stye';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 import BuyOrSell from '../Common/BuyOrSell';
 import GoldGraph from '../Common/GoldGraph';
@@ -76,8 +77,10 @@ function Gold() {
     };
 
     useEffect(() => {
-        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
         effectAudioPopup.play(); // 출력할 위치에 작성
+        return () => {
+            effectAudioClick.play(); // 출력할 위치에 작성
+        };
     }, []);
 
     return (

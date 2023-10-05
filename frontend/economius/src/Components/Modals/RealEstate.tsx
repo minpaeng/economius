@@ -11,6 +11,7 @@ import restaurantimg from '/RealState/restaurant.png';
 import shopimg from '/RealState/shop.png';
 import * as S from './RealEstate.style';
 import { ExitButton } from './GlobalModal.stye';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 function RealEstate() {
     const playerId = useRecoilValue(PlayerIdState);
@@ -35,8 +36,10 @@ function RealEstate() {
     const realEstateImage = [null, restaurantimg, shopimg, hotelimg];
 
     useEffect(() => {
-        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
         effectAudioPopup.play(); // 출력할 위치에 작성
+        return () => {
+            effectAudioClick.play(); // 출력할 위치에 작성
+        };
     }, []);
 
     return (

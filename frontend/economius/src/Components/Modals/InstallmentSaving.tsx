@@ -7,6 +7,7 @@ import { TradeBankState } from '/src/recoil/trading/atom';
 import { BankInfoState } from '/src/recoil/modalInfo/atom';
 import * as S from './InstallmentSaving.style';
 import { ExitButton } from './GlobalModal.stye';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 function InstallmentSaving() {
     const playerId = useRecoilValue(PlayerIdState);
@@ -50,8 +51,10 @@ function InstallmentSaving() {
     };
 
     useEffect(() => {
-        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
         effectAudioPopup.play(); // 출력할 위치에 작성
+        return () => {
+            effectAudioClick.play(); // 출력할 위치에 작성
+        };
     }, []);
 
     return (

@@ -8,6 +8,7 @@ import { CallBackState, IsModalOpenState } from '/src/recoil/animation/atom';
 import { GetPredictionState } from '/src/recoil/trading/atom.tsx';
 import { PredictionState } from '/src/recoil/game/atom.tsx';
 import BigEvent from '/src/Components/Modals/BigEvent.tsx';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 function Prediction() {
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
@@ -56,8 +57,10 @@ function Prediction() {
     };
 
     useEffect(() => {
-        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
         effectAudioPopup.play(); // 출력할 위치에 작성
+        return () => {
+            effectAudioClick.play(); // 출력할 위치에 작성
+        };
     }, []);
 
     return prediction == null ? (

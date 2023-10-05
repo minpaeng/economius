@@ -8,6 +8,7 @@ import * as S from './Stock.style';
 import { ExitButton } from './GlobalModal.stye';
 import StockGraph from '../Common/StockGraph';
 import BuyOrSell from '../Common/BuyOrSell';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 function getStocks(stocks, stockId, userId) {
     return stocks[stockId].owners[userId];
@@ -86,8 +87,10 @@ function Stock() {
     };
 
     useEffect(() => {
-        const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
         effectAudioPopup.play(); // 출력할 위치에 작성
+        return () => {
+            effectAudioClick.play(); // 출력할 위치에 작성
+        };
     }, []);
 
     return (
