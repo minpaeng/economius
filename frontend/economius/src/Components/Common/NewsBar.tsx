@@ -56,16 +56,16 @@ function NewsBar() {
         <Modal isOpen={true} style={modalStyle}>
             <img src='NewsBar/megaphone.png' alt='img' style={{ width: '50px' }} />
             <Ticker slideSpeed={80}>
-                {LongStockRateArr.map((item, idx) => {
+                {LongStockRateArr.map(({companyCategory, companySubCategory, name, price, rateHistory}, idx) => {
                     return (
                         <div style={{ padding: '0px 8px' }} key={idx}>
                             <FinancialTicker
                                 id={idx}
-                                symbol={item.name}
-                                lastPrice={`${item.companyCategory}/${item.companySubCategory}`}
-                                currentPrice={item.price}
-                                percentage={`${item.rateHistory[item.rateHistory.length - 1]}%`}
-                                change={item.rateHistory[item.rateHistory.length - 1] >= 0 ? true : false}
+                                symbol={name}
+                                lastPrice={`${companyCategory}/${companySubCategory}`}
+                                currentPrice={price}
+                                percentage={`${rateHistory[rateHistory.length - 1]}%`}
+                                change={rateHistory[rateHistory.length - 1] >= 0 ? true : false}
                             />
                         </div>
                     );
