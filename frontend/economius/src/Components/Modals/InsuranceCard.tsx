@@ -37,7 +37,7 @@ function InsuranceCard({ CardInfo, ItemInfo, index }) {
                 <S.CardMainTop>
                     <S.InsuranceName>{CardInfo.getInsuranceName}</S.InsuranceName>
                     <S.CardMainTopPrice>
-                        <p>월 보험료 : {CardInfo.perPrice.toLocaleString()}</p>
+                        <p style={{ fontSize: '15px' }}>월 보험료 : {CardInfo.perPrice.toLocaleString()}</p>
                         <img
                             src='Bank/dollar-coin 15.png'
                             alt='img'
