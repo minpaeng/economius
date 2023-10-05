@@ -1,14 +1,32 @@
 import Modal from 'react-modal';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import predictionimg from '/Prediction/prediction.png';
 import * as S from './GlobalModal.stye';
-import { useRecoilState } from 'recoil';
-import { NowPlayerPositionState, IsModalOpenState } from '/src/recoil/animation/atom';
+import { ExitButton } from './GlobalModal.stye';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { CallBackState, IsModalOpenState } from '/src/recoil/animation/atom';
+import { GetPredictionState } from '/src/recoil/trading/atom.tsx';
+import { PredictionState } from '/src/recoil/game/atom.tsx';
+import BigEvent from '/src/Components/Modals/BigEvent.tsx';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 function Prediction() {
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
+    const setGetPrediction = useSetRecoilState(GetPredictionState);
+    const [prediction, setPrediction] = useRecoilState(PredictionState);
+    const setCallBack = useSetRecoilState(CallBackState);
+
+    useEffect(() => {
+        if (prediction !== null) {
+            console.log(prediction);
+        }
+    }, [prediction]);
+
     const closeModal = () => {
         setIsModalOpen(false);
+        setGetPrediction(false);
+        setPrediction(null);
+        setCallBack(true);
     };
 
     // modal style
@@ -29,6 +47,7 @@ function Prediction() {
             overflow: 'auto',
             zIndex: 10,
             margin: 'auto',
+            right: '25%',
             width: '500px',
             height: '350px',
             border: '5px solid white',
@@ -37,8 +56,13 @@ function Prediction() {
         },
     };
 
-    return (
-        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
+    useEffect(() => {
+        effectAudioPopup.play(); // 출력할 위치에 작성
+    }, []);
+
+    return prediction == null ? (
+        <Modal isOpen={isModalOpen} style={modalStyle}>
+            <ExitButton onClick={() => (closeModal(), effectAudioClick.play())} src='/button/exit.png' alt='exit' />
             <S.Main>
                 <S.Top>
                     <S.TopTitle>예언소</S.TopTitle>
@@ -49,11 +73,13 @@ function Prediction() {
                     <S.MidDesc>다음에 일어날 경제 이슈를 예언해줍니다.</S.MidDesc>
                 </S.Mid>
 
-                <S.RoundButton>
+                <S.RoundButton onClick={() => (setGetPrediction(true), effectAudioClick.play())}>
                     <span>예언듣기</span>
                 </S.RoundButton>
             </S.Main>
         </Modal>
+    ) : (
+        <BigEvent issue={prediction} predictionFlag={true}></BigEvent>
     );
 }
 

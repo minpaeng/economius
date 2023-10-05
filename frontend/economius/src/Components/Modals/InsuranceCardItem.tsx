@@ -1,25 +1,26 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const CardItem = styled.div`
-  display: flex;
-  width: 70%;
-  justify-content: flex-start;
+    margin: 1px 0;
+    display: flex;
+    justify-content: center;
+    width: 70%;
 `;
 
 const CardItemImg = styled.img`
-  width: 20px;
-  margin-right: 10px;
+    width: 20px;
+    margin-right: 10px;
 `;
 
 const CardItemeDesc = styled.div``;
 
 function InsuranceCardItem({ img_path, name }) {
-  return (
-    <CardItem>
-      <CardItemImg src={`Insurance/${img_path}.png`} alt="img" />
-      <CardItemeDesc>{name}</CardItemeDesc>
-    </CardItem>
-  );
+    return (
+        <CardItem>
+            <CardItemImg src={`Insurance/${img_path}.png`} alt='img' />
+            <CardItemeDesc>{name}</CardItemeDesc>
+        </CardItem>
+    );
 }
 
 export default InsuranceCardItem;

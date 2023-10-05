@@ -1,42 +1,63 @@
-import { useRecoilState } from 'recoil';
-import { IsModalOpenState } from '/src/recoil/animation/atom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
+import { StockDetailState, TradeStockState } from '/src/recoil/trading/atom';
+import { PlayerToRollState, PlayerIdState, PortfolioState, StockState } from '/src/recoil/game/atom.tsx';
 import Modal from 'react-modal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as S from './Stock.style';
+import { ExitButton } from './GlobalModal.stye';
 import StockGraph from '../Common/StockGraph';
 import BuyOrSell from '../Common/BuyOrSell';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
+
+function getStocks(stocks, stockId, userId) {
+    return stocks[stockId].owners[userId];
+}
+
+function makeStockGraphData(stockPriceHistoryData) {
+    const graphData = [];
+    let index = 0;
+    for (index; index < stockPriceHistoryData.length; index++) {
+        graphData.push({
+            turn: index + 1,
+            open: stockPriceHistoryData[index].openingPrice,
+            high: stockPriceHistoryData[index].highPrice,
+            low: stockPriceHistoryData[index].lowPrice,
+            close: stockPriceHistoryData[index].closingPrice,
+        });
+    }
+
+    for (index; index < 20; index++) {
+        graphData.push({
+            turn: index + 1,
+            open: null,
+            high: null,
+            low: null,
+            close: null,
+        });
+    }
+
+    return graphData;
+}
 
 function Stock() {
-    const data: any = [
-        { turn: 1, open: 6629.81, high: 6650.5, low: 6623.04, close: 6633.33 },
-        { turn: 2, open: 6632.01, high: 6643.59, low: 6620, close: 6630.11 },
-        { turn: 3, open: 6630.71, high: 6648.95, low: 6623.34, close: 6635.65 },
-        { turn: 4, open: 6635.651, high: 6651, low: 6629.67, close: 6638.24 },
-        { turn: 5, open: 6638.24, high: 6640, low: 6620, close: 6624.47 },
-        { turn: 6, open: 6624.53, high: 6636.03, low: 6621.68, close: 6624.31 },
-        { turn: 7, open: 6624.61, high: 6632.2, low: 6617, close: 6626.02 },
-        { turn: 8, open: 6627, high: 6627.62, low: 6584.22, close: 6603.02 },
-        { turn: 9, open: 6605, high: 6608.03, low: 6598.95, close: 6604.01 },
-        { turn: 10, open: 6604.5, high: 6614.4, low: 6602.26, close: 6608.02 },
-        { turn: 11, open: 6608.02, high: 6610.68, low: 6601.99, close: 6608.91 },
-        { turn: 12, open: 6608.91, high: 6618.99, low: 6608.01, close: 6612 },
-        { turn: 13, open: null, high: null, low: null, close: null },
-        { turn: 14, open: null, high: null, low: null, close: null },
-        { turn: 15, open: null, high: null, low: null, close: null },
-        { turn: 16, open: null, high: null, low: null, close: null },
-        { turn: 17, open: null, high: null, low: null, close: null },
-        { turn: 18, open: null, high: null, low: null, close: null },
-        { turn: 19, open: null, high: null, low: null, close: null },
-        { turn: 20, open: null, high: null, low: null, close: null },
-    ];
+    // 턴 종료 플래그
+    const setCallBack = useSetRecoilState(CallBackState);
 
-    //  매수,매도 구분 플래그
+    //  매수,매도 탭 구분 플래그
     const [buyClick, isBuyClick] = useState(true);
-
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const closeModal = () => {
-        setIsModalOpen(false);
+        setStockDetail(null);
+        setCallBack(true);
     };
+    // 주식 매수, 매도 여부
+    const [tradeStock, setTradeStock] = useRecoilState(TradeStockState);
+    const [stockDetail, setStockDetail] = useRecoilState(StockDetailState);
+    const player = useRecoilValue(PlayerIdState);
+    const PlayerToRoll = useRecoilValue(PlayerToRollState);
+    const portfolios = useRecoilValue(PortfolioState);
+    const stocks = useRecoilValue(StockState);
 
     // modal style
     const modalStyle: any = {
@@ -65,66 +86,99 @@ function Stock() {
         },
     };
 
+    useEffect(() => {
+        effectAudioPopup.play(); // 출력할 위치에 작성
+    }, []);
+
     return (
-        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
-            <S.StockMain>
-                <S.StockTop>
-                    <S.StockTopImg src='Stock/samsung.png' />
-                    <S.StockTopTitle>
-                        <S.StockTopTitleEnterprise>삼성전자</S.StockTopTitleEnterprise>
-                        <S.StockTopTitleType>반도체</S.StockTopTitleType>
-                    </S.StockTopTitle>
-                </S.StockTop>
-                <S.StockMid>
-                    <S.StockMidLeft>
-                        <StockGraph data={data} />
-                        <S.StockMidLeftPrice>
-                            현재가 : 70700 <span style={{ color: '#DF7D46' }}>(+3%)</span>
-                        </S.StockMidLeftPrice>
-                    </S.StockMidLeft>
-                    <S.StockMidRight>
-                        {/* 매도,매수 */}
-                        <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                width: '100%',
-                                height: '100%',
-                            }}
-                        >
-                            <S.Main>
-                                <S.BtnSection>
-                                    <S.BuyOrSellBtn
-                                        onClick={() => {
-                                            isBuyClick(true);
-                                        }}
+        <>
+            {player === PlayerToRoll ? (
+                <Modal isOpen={isModalOpen} style={modalStyle}>
+                    <ExitButton onClick={() => (closeModal(), effectAudioClick.play())} src='/button/exit.png' alt='exit' />
+                    {stockDetail === null ? (
+                        `loading...`
+                    ) : (
+                        <S.StockMain>
+                            <S.StockTop>
+                                <S.StockTopImg src={`Stock/${stockDetail.stockId}.png`} />
+                                <S.StockTopTitle>
+                                    <S.StockTopTitleEnterprise>{stockDetail.name}</S.StockTopTitleEnterprise>
+                                    <S.StockTopTitleType>{stockDetail.companyCategory}</S.StockTopTitleType>
+                                </S.StockTopTitle>
+                            </S.StockTop>
+                            <S.StockMid>
+                                <S.StockMidLeft>
+                                    <StockGraph data={makeStockGraphData(stockDetail.priceHistory)} />
+                                    <S.StockMidLeftPrice>
+                                        현재가 : {stockDetail.price.toLocaleString()}
+                                        {stockDetail.rate >= 0 ? (
+                                            <span style={{ color: '#DF7D46' }}> (+{stockDetail.rate}%)</span>
+                                        ) : (
+                                            <span style={{ color: '#DF7D46' }}> ({stockDetail.rate}%)</span>
+                                        )}
+                                    </S.StockMidLeftPrice>
+                                </S.StockMidLeft>
+                                <S.StockMidRight>
+                                    {/* 매도,매수 */}
+                                    <div
                                         style={{
-                                            backgroundColor: buyClick ? '#F7BC0F' : 'rgba(247, 188, 15, 0.5)',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            width: '100%',
+                                            height: '100%',
                                         }}
                                     >
-                                        매수
-                                    </S.BuyOrSellBtn>
-                                    <S.BuyOrSellBtn
-                                        onClick={() => {
-                                            isBuyClick(false);
-                                        }}
-                                        style={{
-                                            backgroundColor: !buyClick ? '#F7BC0F' : 'rgba(247, 188, 15, 0.5)',
-                                        }}
-                                    >
-                                        매도
-                                    </S.BuyOrSellBtn>
-                                </S.BtnSection>
-                                <BuyOrSell isBuy={buyClick} StockOrGold='stock' />
-                            </S.Main>
-                        </div>
-                    </S.StockMidRight>
-                </S.StockMid>
-                <S.StockDivide />
-                {buyClick ? <S.StockBuyBottom>매수하기</S.StockBuyBottom> : <S.StockSellBottom>매도하기</S.StockSellBottom>}
-            </S.StockMain>
-        </Modal>
+                                        <S.Main>
+                                            <S.BtnSection>
+                                                <S.BuyOrSellBtn
+                                                    onClick={() => {
+                                                        isBuyClick(true);
+                                                        effectAudioClick.play();
+                                                    }}
+                                                    style={{
+                                                        backgroundColor: buyClick ? '#F7BC0F' : 'rgba(247, 188, 15, 0.5)',
+                                                    }}
+                                                >
+                                                    매수
+                                                </S.BuyOrSellBtn>
+                                                <S.BuyOrSellBtn
+                                                    onClick={() => {
+                                                        isBuyClick(false);
+                                                        effectAudioClick.play();
+                                                    }}
+                                                    style={{
+                                                        backgroundColor: !buyClick ? '#F7BC0F' : 'rgba(247, 188, 15, 0.5)',
+                                                    }}
+                                                >
+                                                    매도
+                                                </S.BuyOrSellBtn>
+                                            </S.BtnSection>
+                                            <BuyOrSell
+                                                isBuy={buyClick}
+                                                stockId={stockDetail.stockId}
+                                                StockOrGold='stock'
+                                                price={stockDetail.price}
+                                                amount={getStocks(stocks, stockDetail.stockId, player)}
+                                                money={portfolios[player].money}
+                                            />
+                                        </S.Main>
+                                    </div>
+                                </S.StockMidRight>
+                            </S.StockMid>
+                            <S.StockDivide />
+                            {buyClick ? (
+                                <S.StockBuyBottom onClick={() => (setTradeStock([true, false]), effectAudioClick.play())}>매수하기</S.StockBuyBottom>
+                            ) : (
+                                <S.StockSellBottom onClick={() => (setTradeStock([false, true]), effectAudioClick.play())}>매도하기</S.StockSellBottom>
+                            )}
+                        </S.StockMain>
+                    )}
+                </Modal>
+            ) : (
+                <div style={{ position: 'absolute', left: '40%', top: '50%', height: '50px', backgroundColor: 'brown' }}>다른 사람이 주식을 거래중</div>
+            )}
+        </>
     );
 }
 

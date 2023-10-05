@@ -1,17 +1,40 @@
 import Modal from 'react-modal';
-import { useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { IsModalOpenState } from '/src/recoil/animation/atom';
+import { useEffect, useState } from 'react';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
+import { TradeInsuranceConfirmState } from '/src/recoil/trading/atom';
+import { InsuranceInfoState } from '/src/recoil/modalInfo/atom';
+import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 import * as S from './Insurance.style';
+import { ExitButton } from './GlobalModal.stye';
 import InsuranceCard from './InsuranceCard';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 function Insurance() {
-    // 의료보험
+    const playerId = useRecoilValue(PlayerIdState);
+    const playerToRoll = useRecoilValue(PlayerToRollState);
+    const [tradeInsuranceConfirm, setTradeInsuranceConfirm] = useRecoilState(TradeInsuranceConfirmState);
+    const [insuranceInfo, setInsuranceInfo] = useRecoilState(InsuranceInfoState);
+    const setCallBack = useSetRecoilState(CallBackState);
+    const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
+    const closeModal = () => {
+        setInsuranceInfo(null);
+        setTradeInsuranceConfirm(false);
+        setCallBack(true);
+    };
+
+    // 의료보험 - 일반
     const Life: any = [
-        ['교통사고', 'car-accident'],
+        ['교통사고', 'car-accident-medical'],
+        ['건강검진', 'hospital'],
+        ['감기 유행', 'covid-19'],
+    ];
+    // 의료보험 - 특약
+    const LifeSpecial: any = [
+        ['교통사고', 'car-accident-medical'],
         ['건강검진', 'hospital'],
         ['임플란트', 'dental-care'],
-        ['폐암 진단', 'lung-cancer'],
+        ['암', 'lung-cancer'],
         ['식중독', 'rotten'],
         ['심혈관 질환', 'blood-vessel'],
         ['감기 유행', 'covid-19'],
@@ -20,53 +43,19 @@ function Insurance() {
     const NonLife: any = [
         ['교통사고', 'car-accident'],
         ['화재발생', 'fire'],
+        ['도둑', 'robbery'],
+    ];
+    const NonLifeSpecial: any = [
+        ['교통사고', 'car-accident'],
+        ['화재발생', 'fire'],
         ['해상사고', 'shipwreck'],
         ['토네이도', 'tornado'],
         ['홍수', 'flood'],
         ['산재사고', 'slip'],
         ['도둑', 'robbery'],
     ];
-
-    // 보험 정보
-    const InsuranceInfo: any = [
-        {
-            type: 1,
-            title: '의료보험',
-            perPrice: 100,
-            ensurePercent: 30,
-            ensureInfo: Life,
-            isJoin: true,
-        },
-        {
-            type: 2,
-            title: '의료보험 + 특약',
-            perPrice: 250,
-            ensurePercent: 120,
-            ensureInfo: Life,
-            isJoin: false,
-        },
-        {
-            type: 3,
-            title: '손해보험',
-            perPrice: 100,
-            ensurePercent: 30,
-            ensureInfo: NonLife,
-            isJoin: false,
-        },
-        {
-            type: 4,
-            title: '손해보험 + 특약',
-            perPrice: 250,
-            ensurePercent: 120,
-            ensureInfo: NonLife,
-            isJoin: true,
-        },
-    ];
-
-    const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
+    const Items = [Life, LifeSpecial, NonLife, NonLifeSpecial];
+    const order = [3, 4, 1, 2];
 
     // modal style
     const modalStyle: any = {
@@ -95,20 +84,43 @@ function Insurance() {
         },
     };
 
+    useEffect(() => {
+        effectAudioPopup.play(); // 출력할 위치에 작성
+    }, []);
+
     return (
-        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
-            <S.InsuranceMain>
-                <S.InsuranceTop>
-                    <img src='Insurance/Insurance.png' alt='img' style={{ width: '50px', marginRight: '10px' }} />
-                    <S.InsuranceTopTitle>한화생명</S.InsuranceTopTitle>
-                </S.InsuranceTop>
-                <S.InsuranceMid>
-                    {InsuranceInfo.map(insurance => {
-                        return <InsuranceCard CardInfo={insurance}></InsuranceCard>;
-                    })}
-                </S.InsuranceMid>
-            </S.InsuranceMain>
-        </Modal>
+        <>
+            {playerId === playerToRoll ? (
+                <Modal isOpen={isModalOpen} style={modalStyle}>
+                    <ExitButton onClick={() => (closeModal(), effectAudioClick.play())} src='/button/exit.png' alt='exit' />
+                    {!(insuranceInfo === null) ? (
+                        <S.InsuranceMain>
+                            <S.InsuranceTop>
+                                <img src='Insurance/Insurance.png' alt='img' style={{ width: '50px', marginRight: '10px' }} />
+                                <S.InsuranceTopTitle>삼성화재</S.InsuranceTopTitle>
+                            </S.InsuranceTop>
+                            <S.InsuranceMid>
+                                {order.map(index => {
+                                    return (
+                                        <InsuranceCard
+                                            key={index}
+                                            index={index}
+                                            CardInfo={insuranceInfo[`insurance${index}`]}
+                                            ItemInfo={Items[index - 1]}
+                                        ></InsuranceCard>
+                                    );
+                                })}
+                            </S.InsuranceMid>
+                            <S.InsuranceConfirmButton onClick={() => (setTradeInsuranceConfirm(true), effectAudioClick.play())}>확인</S.InsuranceConfirmButton>
+                        </S.InsuranceMain>
+                    ) : (
+                        '로딩중입니다'
+                    )}
+                </Modal>
+            ) : (
+                <div style={{ position: 'absolute', left: '40%', top: '50%', height: '50px', backgroundColor: 'brown' }}>보험에서 다른 사람이 거래중</div>
+            )}
+        </>
     );
 }
 

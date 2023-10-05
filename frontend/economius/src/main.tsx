@@ -1,13 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
-import { RecoilRoot } from 'recoil';
-import './index.css';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { RecoilRoot } from "recoil";
+import "./index.css";
+import Root from "./Root.tsx";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-    <React.StrictMode>
-        <RecoilRoot>
-            <App />
-        </RecoilRoot>
-    </React.StrictMode>
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  // <React.StrictMode>
+  <RecoilRoot>
+    <Root />
+  </RecoilRoot>
+  // </React.StrictMode>
 );

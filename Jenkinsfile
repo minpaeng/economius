@@ -5,7 +5,8 @@ pipeline {
             steps {
                 script {
                     echo "Setting Variables..." 
-                    IMAGE_NAME_FE = "economius-frontend"  
+                    IMAGE_NAME_FE = "economius-frontend" 
+                    APPLICATION_ENV_PATH = "settings/.env"  
                     CONTAINER_NAME_FE = "economius_fe" 
                     PROJECT_DIR_FE = "frontend/economius"
                     echo "Variables set."
@@ -14,6 +15,12 @@ pipeline {
         }
  
  
+        stage("Copy env") {
+            steps {
+                echo "Current PATH: ${env.PATH}"
+                sh "cp ${APPLICATION_ENV_PATH} ${PROJECT_DIR_FE}"
+            }
+        }
 
         stage("Container Cleaning") {
             steps {
