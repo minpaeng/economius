@@ -57,21 +57,18 @@ function NewsBar() {
         <Modal isOpen={true} style={modalStyle}>
             <img src='NewsBar/megaphone.png' alt='img' style={{ width: '50px' }} />
             <Ticker slideSpeed={80}>
-                {/* <FinancialTicker id='1' change={true} symbol='test' lastPrice='200' percentage='0.4' currentPrice='160' />
-                <FinancialTicker id='2' change={false} symbol='test' lastPrice='200' percentage='0.4' currentPrice='160' />
-                <FinancialTicker id='3' change={true} symbol='test' lastPrice='200' percentage='0.4' currentPrice='160' />
-                <FinancialTicker id='4' change={true} symbol='test' lastPrice='200' percentage='0.4' currentPrice='160' />
-                <FinancialTicker id='5' change={true} symbol='test' lastPrice='200' percentage='0.4' currentPrice='160' /> */}
                 {LongStockRateArr.map((item, idx) => {
                     return (
-                        <FinancialTicker
-                            id={idx}
-                            symbol={item.name}
-                            lastPrice={`${item.companyCategory}/${item.companySubCategory}`}
-                            currentPrice={item.price}
-                            percentage={`${item.rateHistory[item.rateHistory.length - 1]}%`}
-                            change={item.rateHistory[item.rateHistory.length - 1] >= 0 ? true : false}
-                        />
+                        <div style={{ padding: '0px 8px' }} key={idx}>
+                            <FinancialTicker
+                                id={idx}
+                                symbol={item.name}
+                                lastPrice={`${item.companyCategory}/${item.companySubCategory}`}
+                                currentPrice={item.price}
+                                percentage={`${item.rateHistory[item.rateHistory.length - 1]}%`}
+                                change={item.rateHistory[item.rateHistory.length - 1] >= 0 ? true : false}
+                            />
+                        </div>
                     );
                 })}
             </Ticker>
@@ -80,25 +77,3 @@ function NewsBar() {
 }
 
 export default NewsBar;
-
-{
-    /* <div style={{ fontSize: "25px" }}>
-        <Carousel
-          autoPlay={true}
-          showArrows={false}
-          showIndicators={false}
-          showStatus={false}
-          showThumbs={false}
-          centerMode={false}
-          infiniteLoop={true}
-          stopOnHover={false}
-          axis="vertical"
-        >
-          {data.map((word, index) => (
-            <span key={index}>
-              <b>{word}</b>
-            </span>
-          ))}
-        </Carousel>
-      </div> */
-}

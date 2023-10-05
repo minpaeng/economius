@@ -1,6 +1,7 @@
 import PlayerPlace from './PlayerPlace';
 import { RoomJoinUsersIdState, RoomJoinUsersNicknameState } from '../../recoil/animation/atom';
 import { RoomJoinUsersCharacterState } from '/src/recoil/animation/atom';
+import { PlayerRankingState } from '/src/recoil/game/atom.tsx';
 import { useRecoilValue } from 'recoil';
 
 function PlayerPlaceAll() {
@@ -19,22 +20,24 @@ function PlayerPlaceAll() {
     }
 
     const CharacterArr = objectToArray(Characters);
-    // console.log(CharacterArr);
 
-    const AllProperty1 = 3400000;
-    const AllProperty2 = 5000000;
-    const AllProperty3 = 1890000;
-    const AllProperty4 = 1988000;
+    const borderWidth = ['0px 5px 5px 0px', '0px 0px 5px 5px', '5px 5px 0px 0px', '5px 0px 0px 5px'];
 
-    const money1 = 2000000;
-    const money2 = 1680000;
-    const money3 = 1220000;
-    const money4 = 380000;
+    const PlayerRanking = useRecoilValue(PlayerRankingState);
 
-    const Ranking1 = 2;
-    const Ranking2 = 1;
-    const Ranking3 = 4;
-    const Ranking4 = 3;
+    console.log(PlayerRanking);
+
+    function rankingCheck(PlayerRanking) {
+        const returnRank = [];
+        for (let i = 0; i < PlayerRanking?.length; i++) {
+            returnRank.push(PlayerRanking?.indexOf(UserIdArr[i]) + 1);
+        }
+        console.log(returnRank);
+        return returnRank;
+    }
+
+    const Rank = rankingCheck(PlayerRanking);
+    console.log(Rank);
 
     return (
         <>
@@ -45,9 +48,8 @@ function PlayerPlaceAll() {
                 left='0%'
                 bgColor='rgba(255, 216, 133, 0.9)'
                 character={CharacterArr[0]}
-                AllProperty={AllProperty1}
-                money={money1}
-                Ranking={Ranking1}
+                borderWidth={borderWidth[0]}
+                Ranking={Rank[0]}
                 Nick={NickNameArr[0]}
                 userId={UserIdArr[0]}
             />
@@ -58,9 +60,8 @@ function PlayerPlaceAll() {
                 left='50%'
                 bgColor='rgba(131, 213, 233, 0.9)'
                 character={CharacterArr[1]}
-                AllProperty={AllProperty2}
-                money={money2}
-                Ranking={Ranking2}
+                Ranking={Rank[1]}
+                borderWidth={borderWidth[1]}
                 Nick={NickNameArr[1]}
                 userId={UserIdArr[1]}
             />
@@ -71,9 +72,8 @@ function PlayerPlaceAll() {
                 left='0%'
                 bgColor='rgba(255, 166, 132, 0.90)'
                 character={CharacterArr[2]}
-                AllProperty={AllProperty3}
-                money={money3}
-                Ranking={Ranking3}
+                Ranking={Rank[2]}
+                borderWidth={borderWidth[2]}
                 Nick={NickNameArr[2]}
                 userId={UserIdArr[2]}
             />
@@ -85,9 +85,8 @@ function PlayerPlaceAll() {
                 left='50%'
                 bgColor='rgba(255, 156, 159, 0.90)'
                 character={CharacterArr[3]}
-                AllProperty={AllProperty4}
-                money={money4}
-                Ranking={Ranking4}
+                Ranking={Rank[3]}
+                borderWidth={borderWidth[3]}
                 Nick={NickNameArr[3]}
                 userId={UserIdArr[3]}
             />
