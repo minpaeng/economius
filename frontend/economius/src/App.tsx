@@ -30,6 +30,7 @@ import {
     currentPrevIssueState,
     currentIssueState,
     StockChangeArrState,
+    PlayerRankingState,
 } from '/src/recoil/game/atom';
 
 import { RoomJoinUsersCharacterState } from '/src/recoil/animation/atom';
@@ -59,6 +60,7 @@ function App() {
     const setCurrentIssue = useSetRecoilState(currentIssueState);
     const setStockChangeArr = useSetRecoilState(StockChangeArrState);
     const [roomJoinUsersCharacter, setRoomJoinUsersCharacter] = useRecoilState(RoomJoinUsersCharacterState);
+    const setPlayerRanking = useSetRecoilState(PlayerRankingState);
 
     function objectToArray(obj) {
         if (obj === null) {
@@ -87,6 +89,7 @@ function App() {
             setCurrentIssue(data.data.currentIssue);
             setStockChangeArr(data.data.stocks);
             setRoomJoinUsersCharacter(data.data.characters);
+            setPlayerRanking(data.data.players);
             console.log(data.data);
         });
     }, []);
@@ -101,7 +104,7 @@ function App() {
                 <pointLight ref={light} color={0xffffff} intensity={1} position={[0, 5, 0]} />
 
                 <Map />
-                <Characters CharacterArr={CharacterArr} />
+                {roomJoinUsersCharacter === null ? null : <Characters CharacterArr={CharacterArr} />}
             </Canvas>
 
             {/* <Controller /> */}

@@ -135,6 +135,8 @@ function PlayerSocket() {
 
     const setStockChangeArr = useSetRecoilState(StockChangeArrState);
 
+    // const setPlayerRanking = useSetRecoilState(PlayerRankingState);
+
     //이벤트 카드
     const [chanceCardInfo, setChanceCardInfo] = useRecoilState(ChanceCardInfoState);
 
@@ -235,6 +237,7 @@ function PlayerSocket() {
             setCurrentPrevIssues(message.currentPrevIssues);
             setCurrentIssue(message.currentIssue);
             setStockChangeArr(message.stocks);
+            setPlayerRanking(message.players);
             setGameRound(Math.floor(message.gameTurn / 4));
             setCallBack(false);
             setIsModalOpen(false);
@@ -247,7 +250,7 @@ function PlayerSocket() {
         } else if (type === 'viewMovementCard') {
             setMovementCard(message.cards);
             setMovementCardOpen(true);
-            setPlayerRanking(message.players);
+            // setPlayerRanking(message.players);
             // setNowPlayerPosition(message.location);
         } else if (type === 'buyStock') {
             setCallBack(true);

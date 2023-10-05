@@ -5,7 +5,7 @@ import PlayerProperty from './PlayerProperty';
 import PlayerRanking from './PlayerRanking';
 import styled from 'styled-components';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { ClickUserPortfolioState } from '../../recoil/game/atom';
+import { PortfolioState, ClickUserPortfolioState } from '../../recoil/game/atom';
 import { isPortfolioState, SideBarTypeState } from '../../recoil/animation/atom';
 
 const PlayerLayout = styled.div`
@@ -14,15 +14,21 @@ const PlayerLayout = styled.div`
     align-items: center;
     width: 100%;
     height: 100%;
+    /* color: #fff; */
+    /* text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #ff9c9fe6, 0 0 82px #ff9c9fe6, 0 0 92px #ff9c9fe6, 0 0 102px #ff9c9fe6,
+        0 0 151px #ff9c9fe6; */
 `;
 
-function PlayerPlace({ borderRadius, top, left, bgColor, idx, character, AllProperty, money, Ranking, Nick, userId }) {
+function PlayerPlace({ borderRadius, top, left, bgColor, idx, character, borderWidth, Ranking, Nick, userId }) {
     const [clickUserId, setClickUserId] = useRecoilState(ClickUserPortfolioState);
 
     const [isPortfolio, setIsPortfolio] = useRecoilState(isPortfolioState);
 
     const [sideBarType, setSideBarType] = useRecoilState(SideBarTypeState);
 
+    const portfolios = useRecoilValue(PortfolioState);
+    const money = portfolios[userId].money;
+    const totalMoney = portfolios[userId].totalMoney;
     // modal style
     const modalStyle: any = {
         overlay: {
@@ -39,14 +45,18 @@ function PlayerPlace({ borderRadius, top, left, bgColor, idx, character, AllProp
         content: {
             display: 'flex',
             flexDirextion: 'column',
-            backgroundColor: bgColor,
+            color: bgColor,
+            backgroundColor: 'rgba(12,14,20,0.8)',
             overflow: 'auto',
             zIndex: '1',
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            border: 'none',
+            // border: 'none',
+            border: `1px solid ${bgColor}`,
+            // borderLeft: `4px solid ${bgColor} rgba(12,14,20,0.8)`,
+            borderWidth: borderWidth,
             width: '100%',
             height: '100%',
             padding: '0px',
@@ -65,7 +75,7 @@ function PlayerPlace({ borderRadius, top, left, bgColor, idx, character, AllProp
                     }}
                 >
                     <PlayerRanking Ranking={Ranking} />
-                    <PlayerProperty AllProperty={AllProperty} money={money} Nick={Nick} />
+                    <PlayerProperty AllProperty={totalMoney} money={money} Nick={Nick} />
                     <PlayerChracter character={character} />
                 </PlayerLayout>
             ) : (
@@ -77,7 +87,7 @@ function PlayerPlace({ borderRadius, top, left, bgColor, idx, character, AllProp
                     }}
                 >
                     <PlayerChracter character={character} />
-                    <PlayerProperty AllProperty={AllProperty} money={money} Nick={Nick} />
+                    <PlayerProperty AllProperty={totalMoney} money={money} Nick={Nick} />
                     <PlayerRanking Ranking={Ranking} />
                 </PlayerLayout>
             )}
