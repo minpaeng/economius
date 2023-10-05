@@ -56,7 +56,7 @@ function NewsBar() {
 
     return (
         <Modal isOpen={true} style={modalStyle}>
-            <img onClick={() => setCallBack(true)} src='NewsBar/megaphone.png' alt='img' style={{ width: '50px' }} />
+            <img onClick={() => setCallBack(true)} src='NewsBar/megaphone.png' alt='img' style={{ width: '50px', zIndex: '50' }} />
             <Ticker slideSpeed={80}>
                 {LongStockRateArr.map(({ companyCategory, companySubCategory, name, price, rateHistory }, idx) => {
                     return (

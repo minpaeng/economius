@@ -66,15 +66,15 @@ function CoinEffect() {
         }, 1500); // 1.5초 후 동전 효과 사라짐
     }, [effect]);
 
-    const coinBtnClick = num => {
-        if (effect) return;
-        setEffectIdx(num);
-        setEffect(true); // 동전 효과 시작
-    };
+    // const coinBtnClick = num => {
+    //     if (effect) return;
+    //     setEffectIdx(num);
+    //     setEffect(true); // 동전 효과 시작
+    // };
 
     return (
         <>
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((number, index) => (
+            {/* {[1, 2, 3, 4, 5, 6, 7, 8].map((number, index) => (
                 <button
                     key={index}
                     onClick={() => coinBtnClick(number)}
@@ -87,7 +87,7 @@ function CoinEffect() {
                 >
                     {number}
                 </button>
-            ))}
+            ))} */}
             {effect ? <Coins effectIdx={effectIdx} /> : null}
         </>
     );

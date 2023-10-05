@@ -465,6 +465,9 @@ function PlayerSocket() {
         //주식 방문
         else if (nowPlayerPosition % 2 === 1) {
             connect().then(function () {
+                // 동전 효과
+                setEffectIdx(1);
+                setEffect(true);
                 stompClient.current.send(`/pub/${roomId}/buyItem`, {}, JSON.stringify({ player: playerId, stockId: stockIds[nowPlayerPosition] }));
                 stompClient.current.send(`/pub/${roomId}/stockDetail`, {}, JSON.stringify({ player: playerId, stockId: stockIds[nowPlayerPosition] }));
             });
