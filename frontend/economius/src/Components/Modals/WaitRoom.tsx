@@ -28,11 +28,10 @@ export default function WaitRoom() {
 
     const [roomJoinUsersId, setRoomJoinUsersId] = useRecoilState(RoomJoinUsersIdState);
 
+    const effectAudioClick = new Audio('/effectSound/click.wav'); // 출력할 소리
+
     useEffect(() => {
-        console.log('아이디ㅣㅣㅣㅣㅣㅣ디ㅣ디디디!');
-
         console.log(roomJoinUsersId);
-
         // setRoomJoin(1);
     }, [roomJoinUsersId]);
 
@@ -41,6 +40,8 @@ export default function WaitRoom() {
     };
 
     const exitHandler = () => {
+        effectAudioClick.play(); // 출력할 위치에 작성
+
         setRoomExit(true);
 
         // 모달 끄기
@@ -66,12 +67,10 @@ export default function WaitRoom() {
         document.execCommand('copy');
         document.body.removeChild(tempElement);
         alert('방 번호가 복사되었습니다.');
-        console.log('wow');
     };
 
     const startHandler = () => {
-        console.log('시작 버튼 눌렸다아아아아아아아');
-
+        effectAudioClick.play(); // 출력할 위치에 작성
         setGameButton(true);
 
         // const [gameButton, setGameButton] = useRecoilState(GameButtonState);

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import video3 from '/video/video_repeat.mp4'; // sound
+import video3 from '/video/video_repeat_final.mp4'; // sound
 import StartAccess from './Components/Modals/StartAccess';
 import * as S from '../src/Components/Modals/GlobalModal.stye';
 import {
@@ -50,6 +50,12 @@ export default function Room() {
     const [roomHost, setRoomHost] = useRecoilState(RoomHostState);
     const [roomCount, setRoomCount] = useRecoilState(RoomCountState);
     const [startReturn, setStartReturn] = useRecoilState(StartReturnState);
+
+    // effect-sound 추가방법 ex
+    // const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
+    // effectAudioPopup.play(); // 출력할 위치에 작성
+
+    const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
 
     // const [showJoin, setShowJoin] = useState(false);
 
@@ -162,6 +168,9 @@ export default function Room() {
 
     // 방 생성
     const roomMakeHandler = async () => {
+        effectAudioPopup.play();
+        console.log('play');
+
         try {
             // localStorage에서 player 값을 가져옵니다.
             const player = localStorage.getItem('player');
@@ -190,6 +199,8 @@ export default function Room() {
 
     // 방 코드로 입장하기
     const roomJoinHandler = () => {
+        effectAudioPopup.play();
+
         setPlayerId(Number(localStorage.getItem('player')));
         setShowJoin(true);
     };

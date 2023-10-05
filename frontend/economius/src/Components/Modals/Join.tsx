@@ -16,15 +16,18 @@ export default function Join() {
     const [roomJoin, setRoomJoin] = useRecoilState(RoomJoinState);
     const [roomId, setRoomId] = useRecoilState(RoomIdState);
 
+    const effectAudioClick = new Audio('/effectSound/click.wav'); // 출력할 소리
+
     const closeModal = () => {
+        effectAudioClick.play(); // 출력할 위치에 작성
+
         setIsModalOpen(false);
         setShowJoin(false);
     };
 
     const JoinButtonClickHandler = () => {
         // 여기에 연결학세요!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        console.log('CLICK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111');
-        console.log(inputValue);
+        effectAudioClick.play(); // 출력할 위치에 작성
         setRoomId(Number(inputValue)); // 방 번호를 변경
         setRoomJoin(1); // 방 입장하겠음
 
@@ -44,13 +47,14 @@ export default function Join() {
     const [tradeBank, setTradeBank] = useRecoilState(TradeBankState);
 
     return (
-        <Modal isOpen={isModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
+        <Modal isOpen={isModalOpen} style={S.modalStyle}>
+            <S.ExitButton onClick={closeModal} src='/button/exit.png' alt='exit' />
             <S.Main>
                 <S.Mid>
                     <S.MidImg src={charImg} alt='char-img'></S.MidImg>
 
                     {/* input 추가 */}
-                    <input className='input_class' type='text' value={inputValue} onChange={handleChange} placeholder='방 번호를 입력해주세요.' />
+                    <input className='input_class' type='text' vxue={inputValue} onChange={handleChange} placeholder='방 번호를 입력해주세요.' />
                 </S.Mid>
                 <S.BankDivide />
                 <S.BankJoinBottom onClick={JoinButtonClickHandler}>방 입장하기</S.BankJoinBottom>
