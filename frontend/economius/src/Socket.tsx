@@ -248,12 +248,9 @@ function PlayerSocket() {
                     stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerToRoll }));
                 });
             }
-            // } else if (type === 'viewMovementCard' && message.currentPlayerToRoll === playerId) {
         } else if (type === 'viewMovementCard') {
             setMovementCard(message.cards);
             setMovementCardOpen(true);
-            // setPlayerRanking(message.players);
-            // setNowPlayerPosition(message.location);
         } else if (type === 'buyStock') {
             setCallBack(true);
         } else if (type === 'sellStock') {
