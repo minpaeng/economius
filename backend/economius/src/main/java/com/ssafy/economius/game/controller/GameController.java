@@ -1,6 +1,7 @@
 package com.ssafy.economius.game.controller;
 
 import com.ssafy.economius.game.dto.request.CalculateRequest;
+import com.ssafy.economius.game.dto.request.FinishTurnRequest;
 import com.ssafy.economius.game.dto.request.GameJoinRequest;
 import com.ssafy.economius.game.dto.request.GameRoomExitRequest;
 import com.ssafy.economius.game.dto.request.GameStartRequest;
@@ -74,8 +75,11 @@ public class GameController {
 
 
     @MessageMapping(value = "/{roomId}/finishTurn")
-    public void finishTurn(@DestinationVariable int roomId) {
-        FinishTurnResponse finishTurnResponse = finishTurnService.finish(roomId);
+    public void finishTurn(@DestinationVariable int roomId, FinishTurnRequest finishTurnRequest) {
+        log.info(roomId + " finishTurn 호출 : " + finishTurnRequest);
+        FinishTurnResponse finishTurnResponse = finishTurnService.finish(roomId,
+            finishTurnRequest.getPlayer());
+        log.info(roomId + " finishTurn 결과 : " + finishTurnResponse);
 
         Map<String, Object> headers = Map.of("success", true, "type", "finishTurn");
         template.convertAndSend("/sub/" + roomId, finishTurnResponse, headers);

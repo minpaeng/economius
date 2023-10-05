@@ -1,5 +1,16 @@
 package com.ssafy.economius.game.service;
 
+import static com.ssafy.economius.game.enums.RateEnum.BUILDING_RATE_LOWER_BOUND;
+import static com.ssafy.economius.game.enums.RateEnum.BUILDING_RATE_UPPER_BOUND;
+import static com.ssafy.economius.game.enums.RateEnum.GOLD_RATE_LOWER_BOUND;
+import static com.ssafy.economius.game.enums.RateEnum.GOLD_RATE_UPPER_BOUND;
+import static com.ssafy.economius.game.enums.RateEnum.INTEREST_RATE_LOWER_BOUND;
+import static com.ssafy.economius.game.enums.RateEnum.INTEREST_RATE_UPPER_BOUND;
+import static com.ssafy.economius.game.enums.RateEnum.ISSUE_COUNT;
+import static com.ssafy.economius.game.enums.RateEnum.STOCK_RATE_LOWER_BOUND;
+import static com.ssafy.economius.game.enums.RateEnum.STOCK_RATE_UPPER_BOUND;
+
+import com.ssafy.economius.common.exception.NotPlayerToRollException;
 import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.controller.IssueController;
 import com.ssafy.economius.game.dto.response.FinishTurnResponse;
@@ -13,14 +24,11 @@ import com.ssafy.economius.game.enums.InitialData;
 import com.ssafy.economius.game.enums.VolatileEnum;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import com.ssafy.economius.game.util.RandomUtil;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-
-import static com.ssafy.economius.game.enums.RateEnum.*;
 
 @Component
 @RequiredArgsConstructor
@@ -32,8 +40,10 @@ public class FinishTurnService {
     private final ModelMapper modelMapper;
     private final IssueController issueController;
 
-    public FinishTurnResponse finish(int roomId) {
+    public FinishTurnResponse finish(int roomId, Long player) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
+
+        checkRequestPlayerToFinish(roomId, player, game.getCapablePlayerToFinish());
 
         int gameTurn = game.updateGameTurn();
 //        if(gameTurn == -1) {
@@ -66,8 +76,22 @@ public class FinishTurnService {
         return modelMapper.map(game, FinishTurnResponse.class);
     }
 
+    private void checkRequestPlayerToFinish(int roomId, Long player, Long playerToFinish) {
+        if (!playerToFinish.equals(player)) {
+            log.info(roomId + " finishTurn 부적절한 플레이어 호출 : " + player + " != " + playerToFinish);
+
+            throw NotPlayerToRollException.builder()
+                .playerToRoll(playerToFinish)
+                .roomId(roomId)
+                .requestPlayer(player)
+                .build();
+        }
+    }
+
     private void changePrevIssue(Game game, int round) {
-        if (round % 4 != 0) return;
+        if (round % 4 != 0) {
+            return;
+        }
         int idx = game.getIssueIdx();
         if (idx >= ISSUE_COUNT.getValue()) {
             game.setCurrentPrevIssues(null);
@@ -80,12 +104,14 @@ public class FinishTurnService {
 
     private void setPrevIssue(Game game, int idx) {
         game.setCurrentPrevIssues(
-                InitialData.getPrevIssue(game.getIssues().get(idx).getIssueId()));
+            InitialData.getPrevIssue(game.getIssues().get(idx).getIssueId()));
         game.setCurrentIssue(null);
     }
 
     private void checkIssueRound(Game game, int round, int roomId) {
-        if (round % 4 != 1 || game.getIssueIdx() >= ISSUE_COUNT.getValue()) return;
+        if (round % 4 != 1 || game.getIssueIdx() >= ISSUE_COUNT.getValue()) {
+            return;
+        }
         // 여기서 OracleResponse를 리턴하여야 한다.
         issueController.issue(roomId);
         game.setCurrentPrevIssues(null);
@@ -94,8 +120,11 @@ public class FinishTurnService {
     }
 
     private void applyIssueEffect(Game game, int round) {
-        if (round % 4 == 0 || game.getIssueIdx() >= ISSUE_COUNT.getValue()) return;
-        List<AssetChange> assetChanges = game.getIssues().get(game.getIssueIdx()).getCurrentAssetChanges();
+        if (round % 4 == 0 || game.getIssueIdx() >= ISSUE_COUNT.getValue()) {
+            return;
+        }
+        List<AssetChange> assetChanges = game.getIssues().get(game.getIssueIdx())
+            .getCurrentAssetChanges();
         log.info("발생한 이슈: " + game.getIssues().get(game.getIssueIdx()).getName());
         for (AssetChange assetChange : assetChanges) {
             applyChanges(game, assetChange, round);
@@ -106,7 +135,7 @@ public class FinishTurnService {
         String type = assetChange.getAssetType();
         int changeRate = assetChange.getChangeRate().getValue();
         log.info("경제 이슈 발생으로 인한 변동률: " + changeRate + "%, 변동 자산: "
-                + type + ", 자산 아이디: " + assetChange.getAssetId());
+            + type + ", 자산 아이디: " + assetChange.getAssetId());
 
         if (type.equals(VolatileEnum.GOLD.getValue())) {
             game.getGold().updateGoldPrice(changeRate);
@@ -134,14 +163,14 @@ public class FinishTurnService {
 
     private void interestRateRearrange(Game game) {
         int newPrice = RandomUtil.getRanges(INTEREST_RATE_LOWER_BOUND.getValue(),
-                INTEREST_RATE_UPPER_BOUND.getValue());
+            INTEREST_RATE_UPPER_BOUND.getValue());
         game.getInterestRate().updateInterestRate(newPrice);
     }
 
     private void buildingRearrange(Game game) {
         for (int buildingId : game.getBuildings().keySet()) {
             int newRate = RandomUtil.getRanges(BUILDING_RATE_LOWER_BOUND.getValue(),
-                    BUILDING_RATE_UPPER_BOUND.getValue());
+                BUILDING_RATE_UPPER_BOUND.getValue());
             updateBuildingPrice(newRate, game, buildingId);
         }
     }
@@ -149,14 +178,16 @@ public class FinishTurnService {
     private void updateBuildingPrice(int newRate, Game game, int buildingId) {
         Building building = game.getBuildings().get(buildingId);
         building.updateBuildingPrice(newRate);
-        if (building.getOwnerId() == null) return;
+        if (building.getOwnerId() == null) {
+            return;
+        }
         game.getPortfolios().get(building.getOwnerId())
-                .getBuildings().updateBuildingInfo(buildingId, building);
+            .getBuildings().updateBuildingInfo(buildingId, building);
     }
 
     private void goldRearrange(Game game) {
         int newRate = RandomUtil.getRanges(GOLD_RATE_LOWER_BOUND.getValue(),
-                GOLD_RATE_UPPER_BOUND.getValue());
+            GOLD_RATE_UPPER_BOUND.getValue());
         Gold gold = game.getGold();
         gold.updateGoldPrice(newRate);
 
@@ -167,7 +198,7 @@ public class FinishTurnService {
     private void stockRearrange(Game game, int round) {
         game.getStocks().values().forEach(stock -> {
             int newRate = RandomUtil.getRanges
-                    (STOCK_RATE_LOWER_BOUND.getValue(), STOCK_RATE_UPPER_BOUND.getValue());
+                (STOCK_RATE_LOWER_BOUND.getValue(), STOCK_RATE_UPPER_BOUND.getValue());
             updateStock(game, stock, newRate, round);
         });
     }
@@ -175,6 +206,6 @@ public class FinishTurnService {
     private void updateStock(Game game, Stock stock, int newRate, int round) {
         stock.updateStockPriceAndRate(newRate, round);
         game.getPortfolios().values()
-                .forEach(portfolio -> portfolio.getStocks().updatePortfolioStockByStockChange(stock));
+            .forEach(portfolio -> portfolio.getStocks().updatePortfolioStockByStockChange(stock));
     }
 }
