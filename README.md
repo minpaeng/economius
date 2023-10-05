@@ -1,21 +1,172 @@
-# economius
+<div align="center">
+  <br />
+  <img src="/uploads/6355c0b253718d167c214b81044a5bac/readme.gif" width="80%"/>
+  <br />
+</div>
 
-### 🔑 Commit Convention 
-|태그|설명|예시|
-|:--:|:--:|:--:|
-|Feat|새로운 기능 추가|Feat: 특정 기능 추가|
-|Fix|버그 수정|Fix: 특정 기능 버그 수정|
-|Build|빌드 관련 파일 수정|Build: Docker 파일 수정|
-|Docs|문서 추가/수정/삭제|Docs: 리드미 수정|
-|Style|코드형식 변경(비즈니스 로직 변경 ❌)|Style: 코드 형식 변경|
-|Refactor|코드 리팩토링|Refactor: 비즈니스 로직 리팩토링|
-|Test|테스트|Test: 회원가입 테스트|
-|Chore|기타 변경사항|Chore: 공백 제거|
+<div align="center">
+ <h3><b>EconomiuS</b></h3>
+  2023.09.21 ~ 2023.10.06
+  <br><br>
 
-### 🔑 Branch
-- develop/be : 백엔드 프로젝트 배포<br>
-- develop/fe  : 프론트엔드 프로젝트 배포<br>
-- feature/be/[기능명] : 백엔드 기능 개발
-- feature/fe/[기능명] : 프론트엔드 기능 개발
-- hotfix/be/[기능명] : 급한 백엔드 에러 수정<br>
-- hotfix/fe/[기능명] : 급한 프론트엔드 에러 수정<br>
+[Notion]() | [UCC]()
+
+</div>
+
+
+<br>
+
+# 🖥 **프로젝트 개요**
+
+### 팀원 소개
+
+<table>
+    <tr>
+        <td height="140px" align="center"> <a href="https://github.com/Dayoung1014">
+            <img src="https://avatars.githubusercontent.com/Dayoung1014" width="140px" /> <br><br> 👑 이다영 <br>(Back-End) </a> <br></td>
+        <td height="140px" align="center"> <a href="https://github.com/minpaeng">
+            <img src="https://avatars.githubusercontent.com/minpaeng" width="140px" /> <br><br> 🎀 권민정 <br>(Back-End) </a> <br></td>
+        <td height="140px" align="center"> <a href="https://github.com/uttamapaksa">
+            <img src="https://avatars.githubusercontent.com/uttamapaksa" width="140px" /> <br><br> 🐟 김준섭 <br>(Front-End) </a> <br></td>
+        <td height="140px" align="center"> <a href="https://github.com/ssh5212">
+            <img src="https://avatars.githubusercontent.com/ssh5212" width="140px" /> <br><br> 🐲 신승헌 <br>(Front-End) </a> <br></td>
+        <td height="140px" align="center"> <a href="https://github.com/qkdk">
+            <img src="https://avatars.githubusercontent.com/qkdk" width="140px" /> <br><br> 🐰 안규보 <br>(Back-End) </a> <br></td>
+        <td height="140px" align="center"> <a href="https://github.com/yoon-dh">
+            <img src="https://avatars.githubusercontent.com/yoon-dh" width="140px" /> <br><br> 🐯 윤동훈 <br>(Front-End) </a> <br></td>
+    </tr>
+</table>
+
+<br>
+
+### 서비스 배경
+* 경제 교육이 부족하고 개념이 어려워 관심이 많지만 경제를 잘 모르는 사람들이 많습니다.
+* '이코노미어스'는 과거 실제 경제적 이슈들을 통해, 어려운 경제를 쉽고 즐겁게 배울 수 있도록 하는 것에 목적을 두고 있습니다. 
+
+<br>
+
+### 서비스 이름 및 설명
+* `Econo` (경제) + `mius` (사람) : 경제적인 사람
+* `Econo` (경제) + `mius` (천재) : 경제적 천재
+* `Economy` (경제) + `us` (함께) : 함께 경제를 배우자!
+
+
+<br>
+
+# 🔎 프로젝트 설계
+
+### 시스템 구성도
+<div align="center">
+  <br />
+  <img src="/uploads/b3a2ee53d1f2dc490b099b327d882c1b/시스템구성도.PNG" width="80%"/>
+  <br />
+</div>
+
+<br>
+
+
+### ERD
+
+<div align="center">
+  <br />
+  <img src="/uploads/4a5ef6e34721ba419776d5b6592d05a5/ERD2.png" width="80%"/>
+  <br />
+</div>
+
+
+<br>
+
+
+# 🔨 개발 환경 및 기술 스택
+
+| FrontEnd                | BackEnd                         | DB            | CI/CD                     | 협업툴    |
+| ----------------------- | ------------------------------- | ------------- |-------------------------- | -------- |
+| Node 18.16.1            | Java SE Development Kit 11.0.19 | MySQL 5.7.35  | AWS EC2(Ubuntu 20.04 LTS) | GitLab   |
+| React 18.2.0            | Spring Boot 2.7.15              | Redis 7.0.12  | Nginx 1.18.0              | Jira     |
+| React-Router-Dom 6.16.0 | Gradle 8.0                      |               | Docker 24.0.5             | Notion   |
+| Recoil 0.7.7            | Apache Tomcat 9.0.78            |               |                           | figma    |
+| Axios 1.5.0             | modelmapper 3.1.1               |               |                           | Postman  |
+| sockjs-client 1.6.1     | logstash-logback-encoder 4.1.1  |               |                           | Logstash |
+| stompjs 2.3.5           | jjwt-api 0.11.5                 |               |                           |          |
+| three 0.156.1           | jjwt-impl 0.11.5                |               |                           |          |
+| react-three/fiber 8.14.1| jjwt-jackson 0.11.5             |               |                           |          |
+
+
+<br>
+
+# 📚 프로젝트 기능
+
+### 1. 소셜 로그인
+
+<div align="center">
+  <br />
+  <img src="/uploads/22965c9a6858e6b3a41432ee24f03470/login.gif" width="80%"/>
+  <br />
+</div>
+
+
+* 홈 화면에서 카카오 로그인이 가능합니다.
+
+* 로그인이 완료되면 게임 방 생성 및 입장이 가능합니다.
+
+
+<br>
+
+### 2. 게임 방 생성 및 입장
+* 방 생성 및 입장 버튼을 눌러 게임 진행을 위한 대기 화면으로 진입합니다.
+* 방 입장 시, 방 코드를 입력합니다.
+* 4명의 인원이 모두 모이면, 방장이 게임을 시작할 수 있습니다.
+
+
+### 3. 게임 로딩
+<div align="center">
+  <br />
+  <img src="/uploads/81d4de02d8697bfdc393bfc32276c22a/loading1.gif" width="80%"/>
+  <br />
+</div>
+
+* 게임이 준비되는 동안 플레이어들은 로딩 화면에서 대기합니다.
+
+
+### 4. 게임 화면
+<div align="center">
+  <br />
+  <img src="/uploads/00647ad4440cea8fa65969cb0de88466/image__2_.png" width="80%"/>
+  <br />
+</div>
+
+
+* 루틴을 혼자 진행하기에 어려움을 겪는 사람들을 위해 단체 루틴을 진행할 수 있는 서비스를 제공합니다.
+
+* 단체 루틴은 서로 다른 루틴을 진행하고 있는 사람들이 모일 수 있는 화상 미팅 방입니다.
+
+* 단체 루틴을 진행에 있어 어려움을 겪을 수 있기 때문에 진행을 도울 수 있는 안내 멘트를 출력하는 서비스를 제공합니다.
+
+
+<br>
+
+<div align="center">
+  <br />
+  <img src="/uploads/97915a0d1c6d772b3b2210d0c4883184/261219365-e7cddab8-2782-4c84-8b69-fcfb4047dd3e.gif" width="80%"/>
+  <br />
+</div>
+
+
+* 단체 루틴을 진행할 때에 같은 방에 있는 사람들끼리 팔로우를 신청할 수 있습니다. 팔로우, 팔로잉 내역은 마이페이지 내에서 확인할 수 있습니다.
+
+<br>
+
+
+### 4. 경제 이슈 발생
+
+<div align="center">
+  <br />
+  <img src="/uploads/03b65b41877407ec15d9f21b6e19f166/경제이슈모달.PNG" width="80%"/>
+  <br />
+</div>
+
+
+* 과거에 실제로 일어났던 경제적 이슈들이 게임 진행 과정에서 주기적으로 발생하며 게임 내 플레이어의 자산과 게임 전략에 영향을 미칩니다.
+* 과거의 경제적 사건들을 통해 여러 요소들이 경제에 미치는 영향을 파악하여 경제 관념을 정립할 수 있도록 도와 줍니다.
+
+<br>
