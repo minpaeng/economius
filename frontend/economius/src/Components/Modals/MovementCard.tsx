@@ -101,19 +101,13 @@ function MovementCard({}) {
         flipAll();
     }, [movementCardOpen]);
 
-    // movePlay에서 받았을 때 선택된 카드 크기 키우고 값 초기화
+    // movePlay 에서 응답을 받았을 때 값 초기화
     useEffect(() => {
-        if (movementCard !== null) {
-            setSelected(movementCard.indexOf(moveDist));
-            setTimeout(() => {
-                closeModal();
-            }, 500);
-        }
+        closeModal();
     }, [isMoving]);
 
     // 내 차례일 때 선택 누르기
     const MoveButtonClick = (selectednum: number) => {
-        setMoveDist(selectednum === -1 ? movementCard[1] : movementCard[selectednum]);
         if (selectednum === -1) {
             setSelected(1);
         }
@@ -138,7 +132,7 @@ function MovementCard({}) {
                     <Card idx={0} value={movementCard[0]} top={'10%'} left={'8%'} flip={flip1} selected={selected} CardClick={() => setSelected(0)} />
                     <Card idx={1} value={movementCard[1]} top={'10%'} left={'38%'} flip={flip2} selected={selected} CardClick={() => setSelected(1)} />
                     <Card idx={2} value={movementCard[2]} top={'10%'} left={'68%'} flip={flip3} selected={selected} CardClick={() => setSelected(2)} />
-                    <S.Button onClick={() => (MoveButtonClick(selected), effectAudioClick.play())}>이동카드 선택</S.Button>) : (
+                    <S.Button onClick={() => (MoveButtonClick(selected), effectAudioClick.play())}>이동카드 선택</S.Button>
                 </>
             )}
         </Modal>
