@@ -227,7 +227,7 @@ public class GameRoomService {
 //        int lowerBound = 0;
 //        int upperBound = InitialData.ISSUES.size() - 1;
 //        List<Integer> numbers = RandomUtil.getUniqueRandomNumbers(size, lowerBound, upperBound);
-        List<Integer> numbers = List.of(1, 16, 10, 8, 18);
+        List<Integer> numbers = List.of(10, 1, 16, 8, 18);
         return makePickIssues(numbers);
     }
 
@@ -235,6 +235,7 @@ public class GameRoomService {
     private List<IssueDto> makePickIssues(List<Integer> numbers) {
         List<IssueDto> issues = new ArrayList<>();
         numbers.forEach(number -> issues.add(InitialData.ISSUES.get(number)));
+        log.info("발생 이슈: " + issues);
         return issues;
     }
 
