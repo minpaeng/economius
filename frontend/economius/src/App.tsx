@@ -101,7 +101,7 @@ function App() {
                 <pointLight ref={light} color={0xffffff} intensity={1} position={[0, 5, 0]} />
 
                 <Map />
-                <Characters CharacterArr={CharacterArr} />
+                {roomJoinUsersCharacter === null ? null : <Characters CharacterArr={CharacterArr} />}
             </Canvas>
 
             {/* <Controller /> */}

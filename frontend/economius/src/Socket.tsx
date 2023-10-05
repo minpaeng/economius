@@ -226,6 +226,7 @@ function PlayerSocket() {
             setMoveDist(message.movementCount);
             setPlayerToRoll(message.player);
             setNowPlayerPosition(message.location);
+            setMovementCardConfirm(false);
             setTimeout(() => {
                 setIsMoving(true);
             }, 500);
@@ -267,6 +268,7 @@ function PlayerSocket() {
         } else if (type === 'stopSavings') {
             setCallBack(true);
         } else if (type in ['joinInsurance', 'finishInsurance']) {
+            console.log(playerId, playerToRoll, insuranceCnt);
             if (insuranceCnt === 3) {
                 setCallBack(true);
                 setInsuranceCnt(0);

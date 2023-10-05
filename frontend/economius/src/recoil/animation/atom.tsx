@@ -104,7 +104,7 @@ export const MovementCardState = atom({
 export const MovementCardConfirmState = atom({
     key: 'MovementCardConfirmState',
     default: false,
-    // effects_UNSTABLE: [persistAtom],
+    effects_UNSTABLE: [persistAtom],
 });
 
 // 캐릭터 이동 여부
