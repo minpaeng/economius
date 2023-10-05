@@ -76,7 +76,7 @@ public class GameController {
 
 
     @MessageMapping(value = "/{roomId}/finishTurn")
-    public void finishTurn(@DestinationVariable int roomId, FinishTurnRequest finishTurnRequest) {
+    public void finishTurn(@DestinationVariable int roomId, @Payload FinishTurnRequest finishTurnRequest) {
         log.info(roomId + " finishTurn 호출 : " + finishTurnRequest);
         FinishTurnResponse finishTurnResponse = finishTurnService.finish(roomId,
             finishTurnRequest.getPlayer());
