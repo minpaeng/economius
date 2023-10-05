@@ -141,13 +141,11 @@ function PlayerSocket() {
 
     const setStockChangeArr = useSetRecoilState(StockChangeArrState);
 
-    // const setPlayerRanking = useSetRecoilState(PlayerRankingState);
-
     //이벤트 카드
-    const [chanceCardInfo, setChanceCardInfo] = useRecoilState(ChanceCardInfoState);
+    const setChanceCardInfo = useSetRecoilState(ChanceCardInfoState);
 
     // 대이벤트 정보
-    const [bigEventInfo, setBigEventInfo] = useRecoilState(BigEventInfoState);
+    const setBigEventInfo = useSetRecoilState(BigEventInfoState);
 
     // 방 연결을 위한 recoil
     const [userId, setUserId] = useRecoilState(UseridState);
@@ -155,11 +153,11 @@ function PlayerSocket() {
     const [roomJoin, setRoomJoin] = useRecoilState(RoomJoinState);
     const [roomJoinUsersNickname, setRoomJoinUsersNickname] = useRecoilState(RoomJoinUsersNicknameState);
     const nickname = localStorage.getItem('nickname');
-    const [playerId] = useRecoilState(PlayerIdState);
+    const playerId = useRecoilValue(PlayerIdState);
     const [showWaitRoom, setShowWaitRoom] = useRecoilState(SetShowWaitRoomState);
 
-    const [roomHost, setRoomHost] = useRecoilState(RoomHostState);
-    const [roomCount, setRoomCount] = useRecoilState(RoomCountState);
+    const setRoomHost = useSetRecoilState(RoomHostState);
+    const setRoomCount = useSetRecoilState(RoomCountState);
 
     const [roomExit, setRoomExit] = useRecoilState(RoomExitState);
     const [gameButton, setGameButton] = useRecoilState(GameButtonState);

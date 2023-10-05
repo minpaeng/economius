@@ -1,7 +1,7 @@
 import Modal from 'react-modal';
 import { useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { MonthlyModalOpenState } from '/src/recoil/animation/atom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { MonthlyModalOpenState, NowPlayerPositionState, CallBackState } from '/src/recoil/animation/atom';
 import { MonthlyInfoState } from '/src/recoil/modalInfo/atom';
 import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 import monthlymalculate from '/MonthlyCalculate/monthlycalculate.png';
@@ -16,11 +16,16 @@ import OtherPerson from './OtherPerson';
 function MonthlyCalculate() {
     const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
     const [monthlyInfo, setMonthlyInfo] = useRecoilState(MonthlyInfoState);
+    const NowPlayerPosition = useRecoilValue(NowPlayerPositionState);
     const PlayerToRoll = useRecoilValue(PlayerToRollState);
     const PlayerId = useRecoilValue(PlayerIdState);
+    const setCallBack = useSetRecoilState(CallBackState);
     const closeModal = () => {
         setMonthlyModalOpen(false);
         setMonthlyInfo(null);
+        if (NowPlayerPosition === 0) {
+            setCallBack(false);
+        }
     };
 
     useEffect(() => {
