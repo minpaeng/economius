@@ -151,7 +151,7 @@ function App() {
                 <Modals />
                 <Socket />
                 <CoinEffect />
-                <MovementCard />
+                {/* <MovementCard /> */}
                 <BigEventRound />
                 <Round />
                 <GameEnd />

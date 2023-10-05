@@ -44,14 +44,24 @@ function SideBar() {
 
     let sideBarColor;
 
+    // if (colorIdx === 1) {
+    //     sideBarColor = 'rgb(252, 238, 205)';
+    // } else if (colorIdx === 2) {
+    //     sideBarColor = 'rgb(207, 235, 244)';
+    // } else if (colorIdx === 3) {
+    //     sideBarColor = 'rgb(249, 216, 202)';
+    // } else if (colorIdx === 4) {
+    //     sideBarColor = 'rgb(249, 212, 212)';
+    // }
+
     if (colorIdx === 1) {
-        sideBarColor = 'rgba(255, 216, 133, 0.9)';
+        sideBarColor = 'rgba(255, 216, 133, 0.95)';
     } else if (colorIdx === 2) {
-        sideBarColor = 'rgba(131, 213, 233, 0.9)';
+        sideBarColor = 'rgba(131, 213, 233, 0.95)';
     } else if (colorIdx === 3) {
-        sideBarColor = 'rgba(255, 166, 132, 0.90)';
+        sideBarColor = 'rgba(255, 166, 132, 0.95)';
     } else if (colorIdx === 4) {
-        sideBarColor = 'rgba(255, 156, 159, 0.90)';
+        sideBarColor = 'rgba(255, 156, 159, 0.95)';
     }
 
     // modal style
@@ -69,7 +79,8 @@ function SideBar() {
         content: {
             display: 'flex',
             flexDirextion: 'column',
-            backgroundColor: isPortfolio ? sideBarColor : defaultColor,
+            // backgroundColor: isPortfolio ? sideBarColor : defaultColor,
+            backgroundColor: 'rgba(12,14,20,0.8)',
             overflow: 'auto',
             zIndex: 1,
             top: 0,
@@ -111,8 +122,11 @@ function SideBar() {
 
                 <S.SideBarMainSection
                     style={{
-                        backgroundColor: sideBarType === 'StockCheck' ? 'white' : 'rgba(255, 255, 255, 0.5)',
+                        backgroundColor: sideBarType === 'StockCheck' ? 'white' : sideBarType === 'portfolio' ? sideBarColor : defaultColor,
                     }}
+                    // style={{
+                    //     backgroundColor: sideBarType === 'StockCheck' ? 'white' : sideBarColor,
+                    // }}
                 >
                     {componentToRender}
                 </S.SideBarMainSection>
