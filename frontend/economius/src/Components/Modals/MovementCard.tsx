@@ -99,11 +99,12 @@ function MovementCard() {
 
     // movePlay에서 받았을 때 선택된 카드 크기 키우고 값 초기화
     useEffect(() => {
-        if (moveDist === 0) return;
-        setSelected(movementCard.indexOf(moveDist));
-        setTimeout(() => {
-            closeModal();
-        }, 500);
+        if (movementCard !== null) {
+            setSelected(movementCard.indexOf(moveDist));
+            setTimeout(() => {
+                closeModal();
+            }, 500);
+        }
     }, [isMoving]);
 
     // 내 차례일 때 선택 누르기
@@ -113,7 +114,6 @@ function MovementCard() {
             setSelected(1);
         }
         setTimeout(() => {
-            closeModal();
             setMovementCardConfirm(true);
         }, 500);
     };
