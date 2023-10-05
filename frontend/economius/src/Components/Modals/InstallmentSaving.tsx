@@ -20,7 +20,7 @@ function InstallmentSaving() {
     // 모달 끄기
     const closeModal = () => {
         setBankInfo(null);
-        setIsModalOpen(false);
+        // setIsModalOpen(false);
         setCallBack(true);
     };
 

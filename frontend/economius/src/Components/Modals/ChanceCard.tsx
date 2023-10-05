@@ -6,7 +6,6 @@ import { ChanceCardInfoState } from '/src/recoil/modalInfo/atom';
 import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 import * as S from './ChanceCard.style';
 import { effectAudioPopup, effectAudioClick } from '/src/Audio';
-import OtherPerson from './OtherPerson';
 
 function ChanceCard() {
     const playerId = useRecoilValue(PlayerIdState);
@@ -25,6 +24,7 @@ function ChanceCard() {
     const setCallBack = useSetRecoilState(CallBackState);
     console.log(chanceCardInfo);
     const closeModal = () => {
+        if (playerToRoll !== playerId) return;
         setChanceCardInfo(null);
         setIsModalOpen(false);
         setCallBack(true);
@@ -37,8 +37,8 @@ function ChanceCard() {
         };
     }, []);
 
-    return playerId === playerToRoll ? (
-        <Modal isOpen={isModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
+    return (
+        <Modal isOpen={isModalOpen} style={S.modalStyle} onRequestClose={playerToRoll !== playerId ? null : closeModal}>
             {!(chanceCardInfo === null) ? (
                 <S.ChanceCard>
                     <S.ChanceCardTop>
@@ -90,8 +90,6 @@ function ChanceCard() {
                 `로딩중입니다...`
             )}
         </Modal>
-    ) : (
-        <OtherPerson />
     );
 }
 
