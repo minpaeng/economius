@@ -40,7 +40,7 @@ public class FinishTurnService {
     private final ModelMapper modelMapper;
     private final IssueController issueController;
 
-    public FinishTurnResponse finish(int roomId, Long player) {
+    public synchronized FinishTurnResponse finish(int roomId, Long player) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
         checkRequestPlayerToFinish(roomId, player, game.getCapablePlayerToFinish());

@@ -79,7 +79,7 @@ public class GameController {
         log.info(roomId + " finishTurn 호출 : " + finishTurnRequest);
         FinishTurnResponse finishTurnResponse = finishTurnService.finish(roomId,
             finishTurnRequest.getPlayer());
-        log.info(roomId + " finishTurn 결과 : " + finishTurnResponse);
+        log.info(roomId + " finishTurn 결과 : " + finishTurnResponse + " by " + finishTurnRequest.getPlayer());
 
         Map<String, Object> headers = Map.of("success", true, "type", "finishTurn");
         template.convertAndSend("/sub/" + roomId, finishTurnResponse, headers);
