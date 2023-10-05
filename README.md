@@ -9,7 +9,7 @@
   2023.09.21 ~ 2023.10.06
   <br><br>
 
-[Notion]() | [UCC]()
+[Notion](https://warm-care-7c5.notion.site/PJT-42d5848006134d259f285d0ba657be2c?pvs=4) | [UCC]()
 
 </div>
 
