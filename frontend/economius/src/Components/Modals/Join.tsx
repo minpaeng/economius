@@ -16,6 +16,8 @@ export default function Join() {
     const [roomJoin, setRoomJoin] = useRecoilState(RoomJoinState);
     const [roomId, setRoomId] = useRecoilState(RoomIdState);
 
+    const effectAudioClick = new Audio('/effectSound/click.wav'); // 출력할 소리
+
     const closeModal = () => {
         setIsModalOpen(false);
         setShowJoin(false);
@@ -23,8 +25,7 @@ export default function Join() {
 
     const JoinButtonClickHandler = () => {
         // 여기에 연결학세요!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        console.log('CLICK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111');
-        console.log(inputValue);
+        effectAudioClick.play(); // 출력할 위치에 작성
         setRoomId(Number(inputValue)); // 방 번호를 변경
         setRoomJoin(1); // 방 입장하겠음
 
