@@ -249,7 +249,7 @@ function PlayerSocket() {
             setIsModalOpen(false);
             if (message.currentPlayerToRoll === playerId) {
                 connect().then(function () {
-                    stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerToRoll }));
+                    stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerId }));
                 });
             }
         } else if (type === 'viewMovementCard') {
