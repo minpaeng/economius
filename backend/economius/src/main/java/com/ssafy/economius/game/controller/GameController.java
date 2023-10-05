@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
@@ -65,7 +66,7 @@ public class GameController {
     }
 
     @MessageMapping(value = "/{roomId}/calculate")
-    public void calculate(@DestinationVariable int roomId, CalculateRequest calculateRequest) {
+    public void calculate(@DestinationVariable int roomId, @Payload CalculateRequest calculateRequest) {
         CalculateResponse calculateResponse = gameService.calculate(
                 roomId, calculateRequest.getPlayer());
 
@@ -75,7 +76,7 @@ public class GameController {
 
 
     @MessageMapping(value = "/{roomId}/finishTurn")
-    public void finishTurn(@DestinationVariable int roomId, FinishTurnRequest finishTurnRequest) {
+    public void finishTurn(@DestinationVariable int roomId, @Payload FinishTurnRequest finishTurnRequest) {
         log.info(roomId + " finishTurn 호출 : " + finishTurnRequest);
         FinishTurnResponse finishTurnResponse = finishTurnService.finish(roomId,
             finishTurnRequest.getPlayer());
