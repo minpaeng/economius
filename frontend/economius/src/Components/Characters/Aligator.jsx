@@ -93,6 +93,7 @@ function Aligator({ positionIdx, moveDist, opacity, radius, steps }) {
                 // 비동기 프레임 갱신
                 await new Promise(resolve => requestAnimationFrame(resolve));
             }
+            // 점프 소리
             effectAudioSteps.play();
             // 오류방지를 위해 한 칸마다 위치 갱신
             setPosition(mapPosition[mapIdx]);
