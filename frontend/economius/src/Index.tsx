@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import video1 from '/video/video_start2.mp4'; // 1080p
-import video3 from '/video/video_repeat.mp4'; // sound
+import video3 from '/video/video_repeat_final.mp4'; // sound
+// import video3 from '/video/video_test3.mp4'; // sound
 import StartAccess from './Components/Modals/StartAccess';
 import * as S from '../src/Components/Modals/GlobalModal.stye';
 import { UseridState } from './recoil/animation/atom';
@@ -87,9 +88,11 @@ export default function Index() {
 
             // 비디오 1의 로드 이벤트 핸들러를 추가합니다.
             videoElement.addEventListener('loadeddata', handleLoadedData);
+            videoElement.loop = true;
 
             // 컴포넌트가 언마운트될 때 이벤트 리스너를 제거합니다.
             return () => {
+                console.log('언마운트 되나요?');
                 videoElement.removeEventListener('loadeddata', handleLoadedData);
             };
         }

@@ -3,6 +3,7 @@ import { Suspense, useState, useEffect, useRef } from 'react';
 import { Canvas, useLoader, useFrame } from '@react-three/fiber';
 import { OrbitControls, OrthographicCamera, SpotLight, useHelper } from '@react-three/drei';
 import video2 from '/video/video_loading.mp4'; // sound
+import * as S from './App.style';
 
 import Map from '/src/Map';
 import Characters from '/src/Characters';
@@ -99,7 +100,7 @@ function App() {
     }, [renderedObjectsCount]);
 
     return (
-        <>
+        <S.Rooter>
             <StartPlayCheck />
             {/* {isOpen && (
 
@@ -136,7 +137,7 @@ function App() {
                 <Round />
                 <GameEnd />
             </div>
-        </>
+        </S.Rooter>
     );
 }
 
