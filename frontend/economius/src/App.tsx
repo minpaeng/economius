@@ -122,10 +122,6 @@ function App() {
 
     return (
         <S.Rooter>
-            {/* {isOpen && (
-                
-                
-            )} */}
             {showVideo && (
                 <div className='video-loading'>
                     <video autoPlay muted loop src='/video/video_loading.mp4' style={{ width: '100%', height: 'auto' }} />
@@ -151,7 +147,7 @@ function App() {
                 <Modals />
                 <Socket />
                 <CoinEffect />
-                {/* <MovementCard /> */}
+                <MovementCard />
                 <BigEventRound />
                 <Round />
                 <GameEnd />
