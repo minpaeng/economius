@@ -12,7 +12,7 @@ pipeline {
                     echo "Variables set."
                 }
             }
-        }
+        } 
 
         stage("Copy yml") {
             steps {
