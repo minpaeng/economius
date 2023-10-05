@@ -43,13 +43,13 @@ public class DiceService {
 
     public synchronized MovePlayerResponse movePlayer(int roomId, Long player, int movementCount) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
-        if (!player.equals(game.getCurrentPlayerToRoll())){
-            log.info("부적절한 플레이어 움직임");
-            throw new RuntimeException();
-        }
+//        if (!player.equals(game.getCurrentPlayerToRoll())){
+//            log.info("부적절한 플레이어 움직임");
+//            throw new RuntimeException();
+//        }
 
         int nextLocation = game.rearrangePlayer(movementCount, player);
-        game.updatePlayerToRoll();
+//        game.updatePlayerToRoll();
         gameRepository.save(game);
 
         return MovePlayerResponse.builder()
