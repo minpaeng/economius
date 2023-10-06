@@ -73,7 +73,7 @@ function ChanceCard() {
                                             : chanceCardInfo.apply === 'MX'
                                             ? '(의료 보험이 적용됩니다.)'
                                             : chanceCardInfo.apply === 'MS'
-                                            ? '(의려 특약 보험이 적용됩니다.)'
+                                            ? '(의료 특약 보험이 적용됩니다.)'
                                             : chanceCardInfo.apply}
                                     </div>
                                 </div>
