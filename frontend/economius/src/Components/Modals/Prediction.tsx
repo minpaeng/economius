@@ -85,8 +85,8 @@ function Prediction() {
                     </S.Main>
                 </Modal>
             ) : (
-                // <BigEvent issue={prediction} predictionFlag={true}></BigEvent>
-                <BigEventRound />
+                <BigEvent issue={prediction} predictionFlag={true}></BigEvent>
+                // <BigEventRound />
             )}
         </>
     ) : (
