@@ -3,14 +3,15 @@ import * as S from './BigEvent.style';
 
 import { useRecoilValue } from 'recoil';
 import { BigEventInfoState } from '../../recoil/modalInfo/atom';
+import { PredictionState } from '/src/recoil/game/atom';
 
 import { useEffect, useState } from 'react';
 import BigEventRoundItem from './BigEventRoundItem';
 
 function BigEventRound() {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const issue = useRecoilValue(BigEventInfoState);
-
+    // const issue = useRecoilValue(BigEventInfoState);
+    const issue = useRecoilValue(PredictionState);
     function closeModal() {
         setIsModalOpen(false);
     }

@@ -10,6 +10,7 @@ import { PredictionState, PlayerToRollState, PlayerIdState } from '/src/recoil/g
 import BigEvent from '/src/Components/Modals/BigEvent.tsx';
 import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 import OtherPerson from './OtherPerson';
+import BigEventRound from './BigEventRound';
 
 function Prediction() {
     const playerId = useRecoilValue(PlayerIdState);
@@ -84,7 +85,8 @@ function Prediction() {
                     </S.Main>
                 </Modal>
             ) : (
-                <BigEvent issue={prediction} predictionFlag={true}></BigEvent>
+                // <BigEvent issue={prediction} predictionFlag={true}></BigEvent>
+                <BigEventRound />
             )}
         </>
     ) : (
