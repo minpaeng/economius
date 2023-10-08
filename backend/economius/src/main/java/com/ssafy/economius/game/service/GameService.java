@@ -133,7 +133,6 @@ public class GameService {
 
     public CalculateResponse calculate(int roomId, Long player) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
-
         game.updatePrize();
         int prize = game.getPrizeByPlayer(player);
 
@@ -161,7 +160,6 @@ public class GameService {
             .build();
 
         portfolio.updateTotalMoney();
-
         gameRepository.save(game);
 
         return CalculateResponse.builder()
