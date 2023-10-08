@@ -2,10 +2,12 @@ package com.ssafy.economius.game.dto.mysql;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ToString
 @Getter
 @Setter
 public class IssueDto {
