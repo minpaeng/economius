@@ -16,7 +16,6 @@ const radius = 0.5; // 점프 높이, 반원의 반지름
 const steps = 10; // 애니메이션당 프레임 수
 
 function Characters({ CharacterArr }) {
-    console.log(CharacterArr);
     // 현재 플레이어
     // 플레이어 배열
     // 현재 플레이어 최종 위치
