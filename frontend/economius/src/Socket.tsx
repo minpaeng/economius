@@ -686,7 +686,6 @@ function PlayerSocket() {
     // 이동 카드 조회 요청
     useEffect(() => {
         if (!movementCardRequest) return;
-        // test
         setMovementCardOpen(false);
         connect().then(function () {
             stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerId }));
@@ -705,8 +704,8 @@ function PlayerSocket() {
 
     //턴 종료
     useEffect(() => {
-        if (callBack === false) return;
-        if (playerToRoll !== playerId) return;
+        if (!callBack) return;
+        // if (playerToRoll !== playerId) return;
         connect().then(function () {
             stompClient.current.send(`/pub/${roomId}/finishTurn`, {}, JSON.stringify({ player: playerId }));
         });
