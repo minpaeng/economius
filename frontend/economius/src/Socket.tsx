@@ -275,6 +275,7 @@ function PlayerSocket() {
                 });
             }
         } else if (type === 'viewMovementCard') {
+            if (playerToRoll !== playerId) return;
             setMovementCard(message.cards);
             setMovementCardOpen(true);
         } else if (type === 'buyStock') {
@@ -334,6 +335,7 @@ function PlayerSocket() {
                 year: message.year,
             });
         } else if (type == 'visitBuilding') {
+            if (playerToRoll !== playerId) return;
             setRealEstateInfo({
                 buildingId: message.buildingId,
                 buildingPrice: message.buildingPrice,
@@ -342,6 +344,7 @@ function PlayerSocket() {
                 owner: message.owner,
             });
         } else if (type === 'stockDetail') {
+            if (playerToRoll !== playerId) return;
             setStockDetail({
                 stockId: message.stockId,
                 name: message.name,
@@ -356,6 +359,7 @@ function PlayerSocket() {
                 rateHistory: message.rateHistory,
             });
         } else if (type == 'bank') {
+            if (playerToRoll !== playerId) return;
             setBankInfo({
                 player: message.player,
                 money: message.money,
@@ -369,6 +373,7 @@ function PlayerSocket() {
                 rate: message.savingDto.rate,
             });
         } else if (type == 'calculate') {
+            if (playerToRoll !== playerId) return;
             setMonthlyInfo({
                 player: message.player,
                 salary: message.receipt.salary,
@@ -389,6 +394,7 @@ function PlayerSocket() {
                 apply: message.apply,
             });
         } else if (type == 'insurance') {
+            if (playerToRoll !== playerId) return;
             setInsuranceInfo({
                 player: message.player,
                 insurance1: message.insuranceDto[1],
@@ -705,7 +711,7 @@ function PlayerSocket() {
     //턴 종료
     useEffect(() => {
         if (!callBack) return;
-        // if (playerToRoll !== playerId) return;
+        if (playerToRoll !== playerId) return;
         connect().then(function () {
             stompClient.current.send(`/pub/${roomId}/finishTurn`, {}, JSON.stringify({ player: playerId }));
         });
