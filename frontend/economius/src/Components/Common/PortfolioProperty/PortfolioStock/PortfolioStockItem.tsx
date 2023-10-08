@@ -24,7 +24,7 @@ function PortforlioStockItem({ id, imgPath, title, type, cnt, value, valueChange
     return (
         <S.PropertyLayoutItem
             onClick={() => {
-                handleButtonClick;
+                handleButtonClick();
                 effectAudioClick.play();
             }}
         >

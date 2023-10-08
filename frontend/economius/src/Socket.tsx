@@ -10,6 +10,7 @@ import {
     MovementCardState,
     MovementCardOpenState,
     MovementCardConfirmState,
+    MovementCardRequestState,
     NowPlayerPositionState,
     RoomCountState,
     RoomExitState,
@@ -98,6 +99,7 @@ function PlayerSocket() {
     const [movementCard, setMovementCard] = useRecoilState(MovementCardState);
     const [movementCardOpen, setMovementCardOpen] = useRecoilState(MovementCardOpenState);
     const [movementCardConfirm, setMovementCardConfirm] = useRecoilState(MovementCardConfirmState);
+    const [movementCardRequest, setMovementCardRequest] = useRecoilState(MovementCardRequestState);
     const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
     const [isMoving, setIsMoving] = useRecoilState(IsMovingState);
     const [financeCenter, setFinanceCenter] = useRecoilState(FinanceCenterState);
@@ -234,6 +236,18 @@ function PlayerSocket() {
             setTimeout(() => {
                 setIsMoving(true);
             }, 500);
+        } else if (type === 'exeption') {
+            if (message.code === 1010) {
+                setPlayerToRoll(message.currentPlayerToRoll);
+                connect().then(function () {
+                    stompClient.current.send(`/pub/${roomId}/finishTurn`, {}, JSON.stringify({ player: message.currentPlayerToRoll }));
+                });
+            } else if (message.code === 1011) {
+                setPlayerToRoll(message.currentPlayerToRoll);
+                connect().then(function () {
+                    stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: message.currentPlayerToRoll }));
+                });
+            }
         } else if (type === 'finishTurn') {
             setStocks(message.stocks);
             setPortfolio(message.portfolios);
@@ -293,9 +307,8 @@ function PlayerSocket() {
             setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 1);
             setEffect(true);
             setCallBack(true);
-        } else if (type === 'joinInsurance' || type === 'finishInsurance') {
+        } else if (type === 'joinInsurance') {
             if (playerToRoll !== playerId) return;
-            if (callBack) return;
             setCallBack(true);
         } else if (type === 'issue') {
             setBigEventInfo({
@@ -659,6 +672,15 @@ function PlayerSocket() {
             });
         }
     }, [getPrediction]);
+
+    // 이동 카드 조회 요청
+    useEffect(() => {
+        if (!movementCardRequest) return;
+        connect().then(function () {
+            stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerId }));
+        });
+        setMovementCardRequest(false);
+    }, [movementCardRequest]);
 
     // 이동카드 선택 확정하면 서버에 이동카드 정보 보내기
     useEffect(() => {

@@ -1,6 +1,9 @@
 import * as S from '../PortfolioProperty.style';
+import { useSetRecoilState } from 'recoil';
+import { CallBackState } from '/src/recoil/animation/atom';
 
 function PortfolioGold({ totalPrice, amount, earningPrice, earningRate }) {
+    const setCallBack = useSetRecoilState(CallBackState);
     let percentStyleSpan;
 
     if (earningRate > 0) {
@@ -12,7 +15,7 @@ function PortfolioGold({ totalPrice, amount, earningPrice, earningRate }) {
     }
 
     return (
-        <>
+        <div onClick={() => setCallBack(true)}>
             {amount ? (
                 <S.PropertyLayout style={{ padding: '8px 12px 5px 12px', margin: '8px 0px' }}>
                     <S.LayoutTop>
@@ -51,7 +54,7 @@ function PortfolioGold({ totalPrice, amount, earningPrice, earningRate }) {
                     </S.LayoutTop>
                 </S.ToggleLayout>
             )}
-        </>
+        </div>
     );
 }
 export default PortfolioGold;

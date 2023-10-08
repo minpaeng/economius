@@ -1,8 +1,12 @@
 import * as S from '../PortfolioProperty.style';
+import { useSetRecoilState } from 'recoil';
+import { MovementCardRequestState } from '/src/recoil/animation/atom';
 
 function PortfolioMoney({ money }) {
+    const setMovementCardRequest = useSetRecoilState(MovementCardRequestState);
+
     return (
-        <S.ToggleLayout>
+        <S.ToggleLayout onClick={() => setMovementCardRequest(true)}>
             <S.LayoutTop>
                 <S.LayoutTopLeft>
                     <img src='Bank/dollar-coin 15.png' alt='img' />
