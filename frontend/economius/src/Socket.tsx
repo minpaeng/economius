@@ -49,6 +49,9 @@ import {
     currentPrevIssueState,
     currentIssueState,
     StockChangeArrState,
+    GoldState,
+    interestRateState,
+    buildingState,
 } from '/src/recoil/game/atom.tsx';
 import {
     BankInfoState,
@@ -142,6 +145,10 @@ function PlayerSocket() {
     const setCurrentIssue = useSetRecoilState(currentIssueState);
 
     const setStockChangeArr = useSetRecoilState(StockChangeArrState);
+
+    const setGoldState = useSetRecoilState(GoldState);
+    const setInterestRateState = useSetRecoilState(interestRateState);
+    const setBuildingState = useSetRecoilState(buildingState);
 
     //이벤트 카드
     const setChanceCardInfo = useSetRecoilState(ChanceCardInfoState);
@@ -259,6 +266,9 @@ function PlayerSocket() {
             setGameRound(Math.floor(message.gameTurn / 4));
             setCallBack(false);
             setIsModalOpen(false);
+            setBuildingState(message.buildings);
+            setGoldState(message.gold);
+            setInterestRateState(message.interestRate);
             if (message.currentPlayerToRoll === playerId) {
                 connect().then(function () {
                     stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerId }));
