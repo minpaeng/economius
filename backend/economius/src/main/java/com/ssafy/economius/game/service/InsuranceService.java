@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -83,7 +84,6 @@ public class InsuranceService {
                 .have(have)
                 .insuranceDto(insuranceDto)
                 .build();
-        //log.info("============ 보험 방문 : {} ============", response.toString());
         log.info("============ 보험 방문 : 플레이어의 포트폴리오 : {} ============", game.getPortfolios().get(insuranceRequest.getPlayer()).getInsurances().toString());
         return response;
     }
@@ -96,15 +96,16 @@ public class InsuranceService {
         Portfolio portfolio = game.getPortfolios().get(insuranceRequest.getPlayer());
         // 멤버 포트폴리오 - 보험
         PortfolioInsurances portfolioInsurance = portfolio.getInsurances();
-        //보험 상품 정보
-        Insurance nowInsuranceInfo = game.getInsurances().get(insuranceRequest.getInsuranceId());
-
-        // 지불 가능한지 먼저 확인
-        gameValidator.canBuy(roomId, portfolio.getMoney(), nowInsuranceInfo.getMonthlyDeposit());
 
         PortfolioInsurances portfolioInsurances = portfolio.getInsurances();
         //가입 안되어 있는지 확인
-        for(int id : insuranceRequest.getInsuranceId()) {
+        for(int id : insuranceRequest.getJoinId()) {
+            //보험 상품 정보
+            Insurance nowInsuranceInfo = game.getInsurances().get(id);
+
+            // 지불 가능한지 먼저 확인
+            gameValidator.canBuy(roomId, portfolio.getMoney(), nowInsuranceInfo.getMonthlyDeposit());
+
             if(!checkHaveInsurance(game, insuranceRequest.getPlayer(), id)) {
                 PortfolioInsurance nowInsurance = PortfolioInsurance.builder()
                         .insuranceId(id)
@@ -136,9 +137,9 @@ public class InsuranceService {
         // 멤버 포트폴리오 - 보험
         PortfolioInsurances portfolioInsurances = portfolio.getInsurances();
 
-        for(int id : insuranceRequest.getInsuranceId()) {
+        for(int id : insuranceRequest.getFinishId()) {
             if(checkHaveInsurance(game, insuranceRequest.getPlayer(), id)) {
-                PortfolioInsurance portfolioInsurance = portfolioInsurances.getInsurance().get(insuranceRequest.getInsuranceId());
+                PortfolioInsurance portfolioInsurance = portfolioInsurances.getInsurance().get(id);
 
                 // 보험 해지
                 portfolioInsurances.deleteInsurance(portfolioInsurance);
@@ -147,5 +148,11 @@ public class InsuranceService {
         }
         gameRepository.save(game);
         log.info("============ 보험 해지 후 보험 포트폴리오: {} ============", game.getPortfolios().get(insuranceRequest.getPlayer()).getInsurances().toString());
+    }
+
+
+    public void joinFinishInsurance(int roomId, InsuranceRequest insuranceRequest) {
+        joinInsurance(roomId, insuranceRequest);
+        stopInsurance(roomId, insuranceRequest);
     }
 }

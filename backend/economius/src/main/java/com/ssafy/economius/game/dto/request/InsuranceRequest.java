@@ -5,5 +5,6 @@ import lombok.Getter;
 @Getter
 public class InsuranceRequest {
     private Long player;
-    private int[] insuranceId;
+    private int[] joinId;
+    private int[] finishId;
 }
