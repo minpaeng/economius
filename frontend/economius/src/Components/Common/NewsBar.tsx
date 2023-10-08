@@ -2,14 +2,11 @@ import Modal from 'react-modal';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 // import { Carousel } from 'react-responsive-carousel';
 import Ticker, { FinancialTicker } from 'nice-react-ticker';
-import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { StockChangeArrState } from '/src/recoil/game/atom';
-import { CallBackState, MovementCardConfirmState } from '/src/recoil/animation/atom';
 
 function NewsBar() {
     const StockRateObj = useRecoilValue(StockChangeArrState);
-    // const setCallBack = useSetRecoilState(CallBackState);
-    const setMovementCardConfirm = useSetRecoilState(MovementCardConfirmState);
 
     // modal style
     const modalStyle: any = {
@@ -57,7 +54,7 @@ function NewsBar() {
 
     return (
         <Modal isOpen={true} style={modalStyle}>
-            <img onClick={() => setMovementCardConfirm(true)} src='NewsBar/megaphone.png' alt='img' style={{ width: '50px', zIndex: '50' }} />
+            <img src='NewsBar/megaphone.png' alt='img' style={{ width: '50px', zIndex: '50' }} />
             <Ticker slideSpeed={80}>
                 {LongStockRateArr.map(({ companyCategory, companySubCategory, name, price, rateHistory }, idx) => {
                     return (
