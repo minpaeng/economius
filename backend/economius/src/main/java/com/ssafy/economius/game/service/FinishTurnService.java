@@ -44,6 +44,7 @@ public class FinishTurnService {
         gameValidator.checkRequestPlayerToFinish(roomId, player, game.getCapablePlayerToFinish());
 
         int gameTurn = game.updateGameTurn();
+        game.updatePlayerToRoll();
 //        if(gameTurn == -1) {
 //            // 게임 종료 로직
 //            throw new IllegalStateException("Game has ended, gameTurn: -1");
@@ -56,6 +57,17 @@ public class FinishTurnService {
         stockRearrange(game, round);
 
         // 새로운 라운드일경우
+        setNewRoundEffect(game, roomId, gameTurn, round);
+
+        // 플레이어 순위 재산정
+        game.sortPlayersByTotalMoney();
+
+        game.getPortfolios().values().forEach(Portfolio::updateTotalMoney);
+        gameRepository.save(game);
+        return modelMapper.map(game, FinishTurnResponse.class);
+    }
+
+    private void setNewRoundEffect(Game game, int roomId, int gameTurn, int round) {
         if (gameTurn % 4 == 0) {
             log.info("새로운 라운드 시작: " + round);
             goldRearrange(game);
@@ -66,13 +78,6 @@ public class FinishTurnService {
             checkIssueRound(game, round, roomId);
             applyIssueEffect(game, round);
         }
-
-        // 플레이어 순위 재산정
-        game.sortPlayersByTotalMoney();
-
-        game.getPortfolios().values().forEach(Portfolio::updateTotalMoney);
-        gameRepository.save(game);
-        return modelMapper.map(game, FinishTurnResponse.class);
     }
 
     private void changePrevIssue(Game game, int round) {

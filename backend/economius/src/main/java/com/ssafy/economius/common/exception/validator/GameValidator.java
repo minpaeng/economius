@@ -89,9 +89,9 @@ public class GameValidator {
             throw NotPlayerToRollException.builder()
                     .code(GameRoomMessage.INVALID_CURRENT_PLAYER_TO_ROLL.getCode())
                     .message(GameRoomMessage.INVALID_CURRENT_PLAYER_TO_ROLL.getMessage())
-                    .playerToRoll(playerToFinish)
                     .roomId(roomId)
                     .requestPlayer(player)
+                    .playerToRoll(playerToFinish)
                     .build();
         }
     }
@@ -103,9 +103,9 @@ public class GameValidator {
             throw NotPlayerToRollException.builder()
                     .code(GameRoomMessage.INVALID_MOVE_PLAYER.getCode())
                     .message(GameRoomMessage.INVALID_MOVE_PLAYER.getMessage())
-                    .playerToRoll(playerToMove)
                     .roomId(roomId)
                     .requestPlayer(player)
+                    .playerToRoll(playerToMove)
                     .build();
         }
     }
