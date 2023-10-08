@@ -10,7 +10,6 @@ import static com.ssafy.economius.game.enums.RateEnum.ISSUE_COUNT;
 import static com.ssafy.economius.game.enums.RateEnum.STOCK_RATE_LOWER_BOUND;
 import static com.ssafy.economius.game.enums.RateEnum.STOCK_RATE_UPPER_BOUND;
 
-import com.ssafy.economius.common.exception.NotPlayerToRollException;
 import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.controller.IssueController;
 import com.ssafy.economius.game.dto.response.FinishTurnResponse;
@@ -42,8 +41,7 @@ public class FinishTurnService {
 
     public FinishTurnResponse finish(int roomId, Long player) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
-
-        checkRequestPlayerToFinish(roomId, player, game.getCapablePlayerToFinish());
+        gameValidator.checkRequestPlayerToFinish(roomId, player, game.getCapablePlayerToFinish());
 
         int gameTurn = game.updateGameTurn();
 //        if(gameTurn == -1) {
@@ -74,18 +72,6 @@ public class FinishTurnService {
         game.getPortfolios().values().forEach(Portfolio::updateTotalMoney);
         gameRepository.save(game);
         return modelMapper.map(game, FinishTurnResponse.class);
-    }
-
-    private void checkRequestPlayerToFinish(int roomId, Long player, Long playerToFinish) {
-        if (!playerToFinish.equals(player)) {
-            log.info(roomId + " finishTurn 부적절한 플레이어 호출 : " + player + " != " + playerToFinish);
-
-            throw NotPlayerToRollException.builder()
-                .playerToRoll(playerToFinish)
-                .roomId(roomId)
-                .requestPlayer(player)
-                .build();
-        }
     }
 
     private void changePrevIssue(Game game, int round) {

@@ -14,7 +14,9 @@ public enum GameRoomMessage {
     ALREADY_JOIN_PLAYER(1006, "이미 방에 참여중인 플레이어입니다."),
     NOT_ROOM_HOST(1007, "호스트만 게임을 시작할 수 있습니다"),
     UNDER_GAME_START_LIMIT(1008, "게임 시작 인원 미만입니다."),
-    NOT_HOST_PLAYER(1009, "호스트가 아닌 사용자의 요청입니다.");
+    NOT_HOST_PLAYER(1009, "호스트가 아닌 사용자의 요청입니다."),
+    INVALID_CURRENT_PLAYER_TO_ROLL(1010, "finishTurn 부적절한 플레이어의 호출입니다."),
+    INVALID_MOVE_PLAYER(1011, "movePlayer 부적절한 플레이어의 호출입니다.");
 
     private final int code;
     private final String message;

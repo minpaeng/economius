@@ -7,11 +7,9 @@ import com.ssafy.economius.common.exception.message.GameRoomMessage;
 import com.ssafy.economius.common.exception.response.AlreadyJoinResponse;
 import com.ssafy.economius.common.exception.response.NotPlayerToRollResponse;
 import com.ssafy.economius.common.exception.response.WebsocketErrorResponse;
-import com.ssafy.economius.game.dto.response.FinishTurnResponse;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,7 +21,6 @@ import java.util.Map;
 public class WebSocketExceptionHandler {
 
     private final SimpMessagingTemplate template;
-    private final ModelMapper modelMapper;
     private final GameRepository gameRepository;
 
     @MessageExceptionHandler(NotPlayerToRollException.class)
@@ -32,7 +29,12 @@ public class WebSocketExceptionHandler {
 
         template.convertAndSend(
             "/sub/" + e.getRoomId(),
-            modelMapper.map(game, FinishTurnResponse.class),
+            NotPlayerToRollResponse.builder()
+                    .code(e.getCode())
+                    .message(e.getMessage())
+                    .roomId(e.getRoomId())
+                    .requestPlayer(e.getRequestPlayer())
+                    .playerToRoll(e.getPlayerToRoll()),
             Map.of("success", false, "type", "finishTurn"));
     }
 
