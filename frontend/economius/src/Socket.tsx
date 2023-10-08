@@ -276,6 +276,7 @@ function PlayerSocket() {
             }
         } else if (type === 'viewMovementCard') {
             if (playerToRoll !== playerId) return;
+
             setMovementCard(message.cards);
             setMovementCardOpen(true);
         } else if (type === 'buyStock') {
