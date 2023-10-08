@@ -1,16 +1,11 @@
 package com.ssafy.economius.game.service;
 
-import static com.ssafy.economius.game.enums.RateEnum.MOVEMENT_CARD_LOWER_BOUND;
-import static com.ssafy.economius.game.enums.RateEnum.MOVEMENT_CARD_SIZE;
-import static com.ssafy.economius.game.enums.RateEnum.MOVEMENT_CARD_UPPER_BOUND;
-
 import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.dto.message.DiceTurnMessage;
 import com.ssafy.economius.game.dto.response.MovePlayerResponse;
 import com.ssafy.economius.game.dto.response.ViewMovementCardResponse;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.repository.redis.GameRepository;
-import com.ssafy.economius.game.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -49,10 +44,7 @@ public class DiceService {
 
     public synchronized MovePlayerResponse movePlayer(int roomId, Long player, int movementCount) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
-        if (!player.equals(game.getCurrentPlayerToRoll())){
-            log.info("부적절한 플레이어 움직임");
-            throw new RuntimeException();
-        }
+        gameValidator.checkMovePlayerStatus(player, roomId, game.getCurrentPlayerToRoll());
 
         int nextLocation = game.rearrangePlayer(movementCount, player);
         game.updatePlayerToRoll();
