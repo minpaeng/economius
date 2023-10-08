@@ -100,7 +100,7 @@ function Gold() {
                                 <S.StockMidLeft>
                                     <GoldGraph data={makeGoldGraphData(goldDetail.priceHistory)} />
                                     <S.StockMidLeftPrice>
-                                        현재가 : {goldDetail.price}
+                                        현재가 : {goldDetail.price.toLocaleString()}
                                         {goldDetail.rate >= 0 ? (
                                             <span style={{ color: '#DF7D46' }}> (+{goldDetail.rate}%)</span>
                                         ) : (
