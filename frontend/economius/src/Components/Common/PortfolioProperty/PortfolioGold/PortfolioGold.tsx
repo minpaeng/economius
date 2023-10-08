@@ -15,7 +15,7 @@ function PortfolioGold({ totalPrice, amount, earningPrice, earningRate }) {
     }
 
     return (
-        <div>
+        <>
             {amount ? (
                 <S.PropertyLayout style={{ padding: '8px 12px 5px 12px', margin: '8px 0px' }}>
                     <S.LayoutTop>
@@ -54,7 +54,7 @@ function PortfolioGold({ totalPrice, amount, earningPrice, earningRate }) {
                     </S.LayoutTop>
                 </S.ToggleLayout>
             )}
-        </div>
+        </>
     );
 }
 export default PortfolioGold;
