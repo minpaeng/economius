@@ -41,7 +41,7 @@ public class DiceController {
         log.info(roomId + ": viewMovementCard 호출 -> " + viewMovementCardRequest.toString());
 
         ViewMovementCardResponse viewMovementCardResponse = diceService.makeMovementCard(
-            viewMovementCardRequest.getPlayer());
+            roomId, viewMovementCardRequest.getPlayer());
 
         log.info(roomId + ": viewMovementCard 결과 -> " + viewMovementCardResponse.toString());
         Map<String, Object> headers = Map.of("success", true, "type", "viewMovementCard");

@@ -23,11 +23,13 @@ public class DiceService {
     private final GameValidator gameValidator;
 
     private List<Integer> cardFixList = new ArrayList<>(Arrays.asList(3, 4, 16));
-    public ViewMovementCardResponse makeMovementCard(Long player) {
+    public ViewMovementCardResponse makeMovementCard(int roomId, Long player) {
         /**
          * 플레이어의 턴이 맞는지 확인하는 로직
          * 게임 발리데이터에 할당
          */
+        Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
+        gameValidator.checkMovePlayerStatus(player, roomId, game.getCurrentPlayerToRoll());
 //        return new ViewMovementCardResponse(player,
 //            RandomUtil.getUniqueRandomNumbers(MOVEMENT_CARD_SIZE.getValue(),
 //                MOVEMENT_CARD_LOWER_BOUND.getValue(), MOVEMENT_CARD_UPPER_BOUND.getValue()));
