@@ -44,7 +44,6 @@ public class FinishTurnService {
         gameValidator.checkRequestPlayerToFinish(roomId, player, game.getCapablePlayerToFinish());
 
         int gameTurn = game.updateGameTurn();
-        game.updatePlayerToRoll();
 //        if(gameTurn == -1) {
 //            // 게임 종료 로직
 //            throw new IllegalStateException("Game has ended, gameTurn: -1");
@@ -63,6 +62,7 @@ public class FinishTurnService {
         game.sortPlayersByTotalMoney();
 
         game.getPortfolios().values().forEach(Portfolio::updateTotalMoney);
+        game.updatePlayerToRoll();
         gameRepository.save(game);
         return modelMapper.map(game, FinishTurnResponse.class);
     }
