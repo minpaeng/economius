@@ -84,7 +84,7 @@ public class GameValidator {
 
     public void checkRequestPlayerToFinish(int roomId, Long player, Long playerToFinish) {
         if (!playerToFinish.equals(player)) {
-            log.info(roomId + " finishTurn 부적절한 플레이어 호출 : " + player + " != " + playerToFinish);
+            log.error(roomId + " finishTurn 부적절한 플레이어 호출 : " + player + " != " + playerToFinish);
 
             throw NotPlayerToRollException.builder()
                     .code(GameRoomMessage.INVALID_CURRENT_PLAYER_TO_ROLL.getCode())
@@ -98,7 +98,7 @@ public class GameValidator {
 
     public void checkMovePlayerStatus(Long player, int roomId, Long playerToMove) {
         if (!player.equals(playerToMove)) {
-            log.info(roomId + "번 방 movePlayer 부적절한 호출. 현재 플레이어: " + playerToMove + ", 요청자: " + player);
+            log.error(roomId + "번 방 movePlayer 부적절한 호출. 현재 플레이어: " + playerToMove + ", 요청자: " + player);
 
             throw NotPlayerToRollException.builder()
                     .code(GameRoomMessage.INVALID_MOVE_PLAYER.getCode())
