@@ -144,12 +144,14 @@ export const MapAnimationIndexState = atom<number>({
 export const IsModalOpenState = atom<boolean>({
     key: 'IsModalOpenState',
     default: false,
+    effects_UNSTABLE: [persistAtom],
 });
 
 // 월말정산 모달 오픈 여부
 export const MonthlyModalOpenState = atom<boolean>({
     key: 'MonthlyModalOpenState',
     default: false,
+    effects_UNSTABLE: [persistAtom],
 });
 
 // 뉴스 클릭
@@ -162,6 +164,7 @@ export const NewsClickIdxState = atom<boolean>({
 export const CallBackState = atom<boolean>({
     key: 'CallBackState',
     default: false,
+    effects_UNSTABLE: [persistAtom],
 });
 
 // 주식 클릭
@@ -172,7 +175,6 @@ export const StockClickIdState = atom<number>({
 });
 
 // sideBarType
-
 export const SideBarTypeState = atom<string>({
     key: 'SideBarTypeState',
     default: 'portfolio',
