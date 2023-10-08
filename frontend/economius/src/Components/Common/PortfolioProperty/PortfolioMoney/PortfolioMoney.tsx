@@ -6,10 +6,10 @@ function PortfolioMoney({ money }) {
     const setMovementCardRequest = useSetRecoilState(MovementCardRequestState);
 
     return (
-        <S.ToggleLayout onClick={() => setMovementCardRequest(true)}>
+        <S.ToggleLayout>
             <S.LayoutTop>
                 <S.LayoutTopLeft>
-                    <img src='Bank/dollar-coin 15.png' alt='img' />
+                    <img onClick={() => setMovementCardRequest(true)} src='Bank/dollar-coin 15.png' alt='img' />
                     <div style={{ fontSize: '20px' }}>현금</div>
                 </S.LayoutTopLeft>
                 <S.LayoutTopRight>{money ? <div> {money.toLocaleString()} (원)</div> : '보유 중인 현금이 없습니다.'}</S.LayoutTopRight>

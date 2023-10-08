@@ -15,12 +15,12 @@ function PortfolioGold({ totalPrice, amount, earningPrice, earningRate }) {
     }
 
     return (
-        <div onClick={() => setCallBack(true)}>
+        <div>
             {amount ? (
                 <S.PropertyLayout style={{ padding: '8px 12px 5px 12px', margin: '8px 0px' }}>
                     <S.LayoutTop>
                         <S.LayoutTopLeft>
-                            <img src={`Gold/goldbar.png`} alt='img' style={{ width: '30px', height: '30px' }} />
+                            <img onClick={() => setCallBack(true)} src={`Gold/goldbar.png`} alt='img' style={{ width: '30px', height: '30px' }} />
 
                             <div style={{ fontSize: '20px' }}>금</div>
                         </S.LayoutTopLeft>
