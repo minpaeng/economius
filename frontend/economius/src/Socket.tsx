@@ -244,16 +244,16 @@ function PlayerSocket() {
                 setIsMoving(true);
             }, 500);
         } else if (message.code && message.code === 1010) {
-            setPlayerToRoll(message.currentPlayerToRoll);
+            setPlayerToRoll(message.playerToRoll);
             console.log('exeption 1010: ', message.code, message);
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/finishTurn`, {}, JSON.stringify({ player: message.currentPlayerToRoll }));
+                stompClient.current.send(`/pub/${roomId}/finishTurn`, {}, JSON.stringify({ player: message.playerToRoll }));
             });
         } else if (message.code && message.code === 1011) {
-            setPlayerToRoll(message.currentPlayerToRoll);
+            setPlayerToRoll(message.playerToRoll);
             console.log('exeption 1011: ', message.code, message);
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: message.currentPlayerToRoll }));
+                stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: message.playerToRoll }));
             });
         } else if (type === 'finishTurn') {
             setStocks(message.stocks);
