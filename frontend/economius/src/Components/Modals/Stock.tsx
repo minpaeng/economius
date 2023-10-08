@@ -1,12 +1,15 @@
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
 import { StockDetailState, TradeStockState } from '/src/recoil/trading/atom';
+import { PlayerToRollState, PlayerIdState, PortfolioState, StockState } from '/src/recoil/game/atom.tsx';
 import Modal from 'react-modal';
 import { useEffect, useState } from 'react';
 import * as S from './Stock.style';
+import { ExitButton } from './GlobalModal.stye';
 import StockGraph from '../Common/StockGraph';
 import BuyOrSell from '../Common/BuyOrSell';
-import { PlayerIdState, PortfolioState, StockState } from '/src/recoil/game/atom.tsx';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
+import OtherPerson from './OtherPerson';
 
 function getStocks(stocks, stockId, userId) {
     return stocks[stockId].owners[userId];
@@ -53,6 +56,7 @@ function Stock() {
     const [tradeStock, setTradeStock] = useRecoilState(TradeStockState);
     const [stockDetail, setStockDetail] = useRecoilState(StockDetailState);
     const player = useRecoilValue(PlayerIdState);
+    const PlayerToRoll = useRecoilValue(PlayerToRollState);
     const portfolios = useRecoilValue(PortfolioState);
     const stocks = useRecoilValue(StockState);
 
@@ -83,8 +87,13 @@ function Stock() {
         },
     };
 
-    return (
-        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
+    useEffect(() => {
+        effectAudioPopup.play(); // 출력할 위치에 작성
+    }, []);
+
+    return player === PlayerToRoll ? (
+        <Modal isOpen={isModalOpen} style={modalStyle}>
+            <ExitButton onClick={() => (closeModal(), effectAudioClick.play())} src='/button/exit.png' alt='exit' />
             {stockDetail === null ? (
                 `loading...`
             ) : (
@@ -124,6 +133,7 @@ function Stock() {
                                         <S.BuyOrSellBtn
                                             onClick={() => {
                                                 isBuyClick(true);
+                                                effectAudioClick.play();
                                             }}
                                             style={{
                                                 backgroundColor: buyClick ? '#F7BC0F' : 'rgba(247, 188, 15, 0.5)',
@@ -134,6 +144,7 @@ function Stock() {
                                         <S.BuyOrSellBtn
                                             onClick={() => {
                                                 isBuyClick(false);
+                                                effectAudioClick.play();
                                             }}
                                             style={{
                                                 backgroundColor: !buyClick ? '#F7BC0F' : 'rgba(247, 188, 15, 0.5)',
@@ -156,13 +167,15 @@ function Stock() {
                     </S.StockMid>
                     <S.StockDivide />
                     {buyClick ? (
-                        <S.StockBuyBottom onClick={() => setTradeStock([true, false])}>매수하기</S.StockBuyBottom>
+                        <S.StockBuyBottom onClick={() => (setTradeStock([true, false]), effectAudioClick.play())}>매수하기</S.StockBuyBottom>
                     ) : (
-                        <S.StockSellBottom onClick={() => setTradeStock([false, true])}>매도하기</S.StockSellBottom>
+                        <S.StockSellBottom onClick={() => (setTradeStock([false, true]), effectAudioClick.play())}>매도하기</S.StockSellBottom>
                     )}
                 </S.StockMain>
             )}
         </Modal>
+    ) : (
+        <OtherPerson />
     );
 }
 

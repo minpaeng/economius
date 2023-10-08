@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import video3 from '/video/video_repeat.mp4'; // sound
+import video3 from '/video/video_repeat_final.mp4'; // sound
 import StartAccess from './Components/Modals/StartAccess';
 import * as S from '../src/Components/Modals/GlobalModal.stye';
 import {
@@ -21,7 +21,8 @@ import Join from './Components/Modals/Join';
 import StartLoginCheck from './Components/Modals/StartLoginCheck';
 
 import Socket from './Socket';
-import { PlayerIdState } from '/src/recoil/game/atom.tsx';
+import { PlayerIdState, ClickUserPortfolioState } from '/src/recoil/game/atom.tsx';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 export default function Room() {
     // 최상단 컴포넌트에서 모달을 쓸 것이라고 명시 작업이 필요
@@ -51,6 +52,13 @@ export default function Room() {
     const [roomCount, setRoomCount] = useRecoilState(RoomCountState);
     const [startReturn, setStartReturn] = useRecoilState(StartReturnState);
 
+    // effect-sound 추가방법 ex
+    // const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
+    // effectAudioPopup.play(); // 출력할 위치에 작성
+
+    const effectAudioPopup = new Audio('/effectSound/modal-popup.mp3'); // 출력할 소리
+    const [clickUserPortfolio, setClickUserPortfolio] = useRecoilState(ClickUserPortfolioState);
+
     // const [showJoin, setShowJoin] = useState(false);
 
     const navigate = useNavigate();
@@ -79,6 +87,7 @@ export default function Room() {
     // 시작하자마자 모달 열기
     useEffect(() => {
         openModal();
+        setClickUserPortfolio(Number(localStorage.getItem('player')));
     }, []);
 
     // 모달이 닫히면 적용
@@ -162,6 +171,9 @@ export default function Room() {
 
     // 방 생성
     const roomMakeHandler = async () => {
+        effectAudioPopup.play();
+        console.log('play');
+
         try {
             // localStorage에서 player 값을 가져옵니다.
             const player = localStorage.getItem('player');
@@ -190,6 +202,8 @@ export default function Room() {
 
     // 방 코드로 입장하기
     const roomJoinHandler = () => {
+        effectAudioPopup.play();
+
         setPlayerId(Number(localStorage.getItem('player')));
         setShowJoin(true);
     };
@@ -215,10 +229,10 @@ export default function Room() {
                 {/* 모달이 닫힌 후 5초 뒤에 렌더링할 내용을 렌더링합니다. */}
                 {renderContent && (
                     <S.ButtonOuter>
-                        <S.RoundButtonRoom onClick={roomMakeHandler}>
+                        <S.RoundButtonRoom onClick={() => (roomMakeHandler(), effectAudioClick.play())}>
                             <span>방 생성하기</span>
                         </S.RoundButtonRoom>
-                        <S.RoundButtonRoom onClick={roomJoinHandler}>
+                        <S.RoundButtonRoom onClick={() => (roomJoinHandler(), effectAudioClick.play())}>
                             <span>방 입장하기</span>
                         </S.RoundButtonRoom>
                     </S.ButtonOuter>

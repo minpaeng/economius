@@ -13,6 +13,7 @@ import {
     SetShowWaitRoomState,
 } from '/src/recoil/animation/atom';
 import { useEffect, useState } from 'react';
+import { effectAudioClick } from '/src/Audio';
 
 export default function WaitRoom() {
     const [roomid, setRoomid] = useRecoilState(RoomIdState);
@@ -29,10 +30,7 @@ export default function WaitRoom() {
     const [roomJoinUsersId, setRoomJoinUsersId] = useRecoilState(RoomJoinUsersIdState);
 
     useEffect(() => {
-        console.log('아이디ㅣㅣㅣㅣㅣㅣ디ㅣ디디디!');
-
         console.log(roomJoinUsersId);
-
         // setRoomJoin(1);
     }, [roomJoinUsersId]);
 
@@ -41,6 +39,8 @@ export default function WaitRoom() {
     };
 
     const exitHandler = () => {
+        effectAudioClick.play(); // 출력할 위치에 작성
+
         setRoomExit(true);
 
         // 모달 끄기
@@ -66,12 +66,10 @@ export default function WaitRoom() {
         document.execCommand('copy');
         document.body.removeChild(tempElement);
         alert('방 번호가 복사되었습니다.');
-        console.log('wow');
     };
 
     const startHandler = () => {
-        console.log('시작 버튼 눌렸다아아아아아아아');
-
+        effectAudioClick.play(); // 출력할 위치에 작성
         setGameButton(true);
 
         // const [gameButton, setGameButton] = useRecoilState(GameButtonState);
@@ -101,7 +99,7 @@ export default function WaitRoom() {
                         <p>{roomJoinUsersNickname[3]}</p>
                     </S.UserBox>
                     <S.InfoBar>
-                        <div onClick={roomNumHandler} className='no'>
+                        <div onClick={() => (roomNumHandler(), effectAudioClick.play())} className='no'>
                             <span>Room No : {roomid} </span>
                             <img src='/navImg/copy.png' alt='' style={{ width: '20px', paddingLeft: '5px' }} />
                         </div>
@@ -110,7 +108,7 @@ export default function WaitRoom() {
                             {roomHost === Number(localStorage.getItem('player')) ? (
                                 roomCount >= 4 ? (
                                     <span>
-                                        <div style={{ cursor: 'pointer' }} onClick={startHandler}>
+                                        <div style={{ cursor: 'pointer' }} onClick={() => (startHandler(), effectAudioClick.play())}>
                                             Start
                                         </div>
                                     </span>
@@ -126,7 +124,7 @@ export default function WaitRoom() {
                                     <p className='overlay-inner'>방장만 시작이 가능합니다</p>
                                 </span>
                             )}
-                            <div onClick={exitHandler}>Exit</div>
+                            <div onClick={() => (exitHandler(), effectAudioClick.play())}>Exit</div>
                         </span>
                     </S.InfoBar>
                 </S.UserBoxOuter>

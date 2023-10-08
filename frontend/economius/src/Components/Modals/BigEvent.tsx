@@ -2,31 +2,31 @@ import Modal from 'react-modal';
 import * as S from './BigEvent.style';
 import * as SS from './GlobalModal.stye';
 
-import {useRecoilState, useSetRecoilState} from 'recoil';
-import {CallBackState, IsModalOpenState} from '/src/recoil/animation/atom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { CallBackState, IsModalOpenState } from '/src/recoil/animation/atom';
 
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 
-function BigEvent({issue, predictionFlag}) {
+function BigEvent({ issue, predictionFlag }) {
     // 원래는 초기값 false로 두고 해당 턴이 되면 true로 바꿔줘야할듯
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
-    const [wordColor, setWordColor] = useState("white");
+    const [wordColor, setWordColor] = useState('white');
     const setCallBack = useSetRecoilState(CallBackState);
 
     const closeModal = () => {
         setIsModalOpen(false);
-        if(predictionFlag){
+        if (predictionFlag) {
             setCallBack(true);
         }
     };
 
     useEffect(() => {
-        if (issue.type === "BOOM") {
-            setWordColor("black");
+        if (issue.type === 'BOOM') {
+            setWordColor('black');
         } else {
-            setWordColor("white");
+            setWordColor('white');
         }
-    })
+    });
     // modal style
     const modalStyle: any = {
         overlay: {
@@ -81,24 +81,27 @@ function BigEvent({issue, predictionFlag}) {
         },
     };
 
-
     function getGoldAndInterestRatesChanges() {
-        return <S.BigEventRightChange1>{issue.interestRateChange.assetType} {issue.interestRateChange.changePercentage}%
-            / {issue.goldChange.assetType} {issue.goldChange.changePercentage} %</S.BigEventRightChange1>;
+        return (
+            <S.BigEventRightChange1>
+                {issue.interestRateChange.assetType} {issue.interestRateChange.changePercentage}% / {issue.goldChange.assetType}{' '}
+                {issue.goldChange.changePercentage} %
+            </S.BigEventRightChange1>
+        );
     }
 
     function getStockChanges(index) {
-        let description = "";
+        let description = '';
 
         for (let i = index * 3; i < index * 3 + 3; i++) {
-            description += `${issue.stockChanges[i].stockType} ${issue.stockChanges[i].changePercentage} %  / `
+            description += `${issue.stockChanges[i].stockType} ${issue.stockChanges[i].changePercentage} %  / `;
         }
 
         description = description.slice(0, -2);
-        return <S.BigEventRightChange1>{description}</S.BigEventRightChange1>
+        return <S.BigEventRightChange1>{description}</S.BigEventRightChange1>;
     }
 
-    return issue.issueId < 0 ?
+    return issue.issueId < 0 ? (
         <Modal isOpen={isModalOpen} style={noneModalStyle} onRequestClose={closeModal}>
             <SS.Main>
                 <SS.Top>
@@ -108,17 +111,18 @@ function BigEvent({issue, predictionFlag}) {
                     <SS.MidDesc>다음 이벤트가 없습니다.</SS.MidDesc>
                 </SS.Mid>
             </SS.Main>
-        </Modal> : (
+        </Modal>
+    ) : (
         <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
             <S.BigEvent>
-                <S.BigEventLeft/>
-                <S.BigEventRight style={{color: wordColor}}>
+                <S.BigEventLeft />
+                <S.BigEventRight style={{ color: wordColor }}>
                     <S.BigEventRightTitle>{issue.name}</S.BigEventRightTitle>
                     <S.BigEventRightChange1>{issue.year}</S.BigEventRightChange1>
                     <S.BigEventRightDesc>{issue.description}</S.BigEventRightDesc>
-                    <br/>
+                    <br />
                     {getGoldAndInterestRatesChanges()}
-                    <br/>
+                    <br />
                     {getStockChanges(0)}
                     {getStockChanges(1)}
                     {getStockChanges(2)}

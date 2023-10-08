@@ -7,10 +7,10 @@ import {
     GameButtonState,
     IsModalOpenState,
     MonthlyModalOpenState,
-    MovementCardOpenState,
     MovementCardState,
+    MovementCardOpenState,
+    MovementCardConfirmState,
     NowPlayerPositionState,
-    NowPlayerState,
     RoomCountState,
     RoomExitState,
     RoomHostState,
@@ -47,6 +47,7 @@ import {
     StockState,
     currentPrevIssueState,
     currentIssueState,
+    StockChangeArrState,
 } from '/src/recoil/game/atom.tsx';
 import {
     BankInfoState,
@@ -58,6 +59,7 @@ import {
     BigEventInfoState,
     FinanceCenterState,
 } from './recoil/modalInfo/atom';
+import { CoinEffectState, CoinEffectIndexState } from './recoil/Effect/atom';
 
 const buildingIds = {
     4: 1,
@@ -92,14 +94,17 @@ const bankIds = {
 
 function PlayerSocket() {
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
-    const [nowPlayer, setNowPlayerState] = useRecoilState(NowPlayerState);
     const [nowPlayerPosition, setNowPlayerPosition] = useRecoilState(NowPlayerPositionState);
     const [movementCard, setMovementCard] = useRecoilState(MovementCardState);
     const [movementCardOpen, setMovementCardOpen] = useRecoilState(MovementCardOpenState);
+    const [movementCardConfirm, setMovementCardConfirm] = useRecoilState(MovementCardConfirmState);
     const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
     const [isMoving, setIsMoving] = useRecoilState(IsMovingState);
     const [financeCenter, setFinanceCenter] = useRecoilState(FinanceCenterState);
-    let moveDist = useRecoilValue(MoveDistState);
+    const [moveDist, setMoveDist] = useRecoilState(MoveDistState);
+    // 동전 효과 여부, 번호
+    const [effect, setEffect] = useRecoilState(CoinEffectState);
+    const [effectIdx, setEffectIdx] = useRecoilState(CoinEffectIndexState);
     // 자산별 모달 정보
     const [monthlyInfo, setMonthlyInfo] = useRecoilState(MonthlyInfoState);
     const [stockInfo, setStockInfo] = useRecoilState(StockInfoState);
@@ -134,11 +139,13 @@ function PlayerSocket() {
     const setCurrentPrevIssues = useSetRecoilState(currentPrevIssueState);
     const setCurrentIssue = useSetRecoilState(currentIssueState);
 
+    const setStockChangeArr = useSetRecoilState(StockChangeArrState);
+
     //이벤트 카드
-    const [chanceCardInfo, setChanceCardInfo] = useRecoilState(ChanceCardInfoState);
+    const setChanceCardInfo = useSetRecoilState(ChanceCardInfoState);
 
     // 대이벤트 정보
-    const [bigEventInfo, setBigEventInfo] = useRecoilState(BigEventInfoState);
+    const setBigEventInfo = useSetRecoilState(BigEventInfoState);
 
     // 방 연결을 위한 recoil
     const [userId, setUserId] = useRecoilState(UseridState);
@@ -146,11 +153,11 @@ function PlayerSocket() {
     const [roomJoin, setRoomJoin] = useRecoilState(RoomJoinState);
     const [roomJoinUsersNickname, setRoomJoinUsersNickname] = useRecoilState(RoomJoinUsersNicknameState);
     const nickname = localStorage.getItem('nickname');
-    const [playername] = useRecoilState(PlayerIdState);
+    const playerId = useRecoilValue(PlayerIdState);
     const [showWaitRoom, setShowWaitRoom] = useRecoilState(SetShowWaitRoomState);
 
-    const [roomHost, setRoomHost] = useRecoilState(RoomHostState);
-    const [roomCount, setRoomCount] = useRecoilState(RoomCountState);
+    const setRoomHost = useSetRecoilState(RoomHostState);
+    const setRoomCount = useSetRecoilState(RoomCountState);
 
     const [roomExit, setRoomExit] = useRecoilState(RoomExitState);
     const [gameButton, setGameButton] = useRecoilState(GameButtonState);
@@ -184,10 +191,8 @@ function PlayerSocket() {
     function personalCallBackFunction(recievedMessage: any) {
         const message = JSON.parse(recievedMessage.body);
         const header = JSON.parse(recievedMessage.headers.success);
-        console.log('민정이가 부른 헤더');
-        console.log(header);
-
-        console.log('전체메시지', message);
+        console.log('personal header: ', header);
+        console.log('personal message: ', message);
 
         // if (message.code == '') {
         //     console.log('정상~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
@@ -217,55 +222,82 @@ function PlayerSocket() {
     }
 
     function broadCastCallBackFunction(recievedMessage: any) {
-        console.log('여기 뜬다요?');
-
         const message = JSON.parse(recievedMessage.body);
         const type = recievedMessage.headers.type || null;
         console.log('전체메시지 type: ', type);
         console.log('전체메시지 message: ', message);
-        if (type === 'finishTurn') {
+        if (type === 'movePlayer') {
+            setMoveDist(message.movementCount);
+            setPlayerToRoll(message.player);
+            setNowPlayerPosition(message.location);
+            setMovementCardConfirm(false);
+            setTimeout(() => {
+                setIsMoving(true);
+            }, 500);
+        } else if (type === 'finishTurn') {
             setStocks(message.stocks);
             setPortfolio(message.portfolios);
             setPlayerToRoll(message.currentPlayerToRoll);
             setCurrentPrevIssues(message.currentPrevIssues);
             setCurrentIssue(message.currentIssue);
+            setStockChangeArr(message.stocks);
+            setPlayerRanking(message.players);
             setGameRound(Math.floor(message.gameTurn / 4));
-            // if (message.currentPlayerToRoll === playername) {
-            connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playername }));
-            });
-            // }
-            // } else if (type === 'viewMovementCard' && message.player === playername) {
+            setCallBack(false);
+            setIsModalOpen(false);
+            if (message.currentPlayerToRoll === playerId) {
+                connect().then(function () {
+                    stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerId }));
+                });
+            }
         } else if (type === 'viewMovementCard') {
             setMovementCard(message.cards);
             setMovementCardOpen(true);
-            setPlayerRanking(message.players);
-            // else if (type === 'movePlayer' && message.player === playername) {
-            //     setNowPlayerPosition(message.location);
-            // }
-        } else if (type === 'buyStock') {
+        }
+        if (type === 'buyStock') {
+            if (playerToRoll !== playerId) return;
+            setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 5);
+            setEffect(true);
             setCallBack(true);
         } else if (type === 'sellStock') {
+            if (playerToRoll !== playerId) return;
+            setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 1);
+            setEffect(true);
             setCallBack(true);
         } else if (type === 'buyGolds') {
+            if (playerToRoll !== playerId) return;
+            setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 5);
+            setEffect(true);
             setCallBack(true);
         } else if (type === 'sellGolds') {
+            if (playerToRoll !== playerId) return;
+            setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 1);
+            setEffect(true);
             setCallBack(true);
         } else if (type === 'buyBuilding') {
+            if (playerToRoll !== playerId) return;
+            setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 5);
+            setEffect(true);
             setCallBack(true);
         } else if (type === 'sellBuilding') {
+            if (playerToRoll !== playerId) return;
+            setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 1);
+            setEffect(true);
             setCallBack(true);
         } else if (type === 'joinSavings') {
+            if (playerToRoll !== playerId) return;
+            setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 5);
+            setEffect(true);
             setCallBack(true);
         } else if (type === 'stopSavings') {
+            if (playerToRoll !== playerId) return;
+            setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 1);
+            setEffect(true);
             setCallBack(true);
-        } else if (type in ['joinInsurance', 'finishInsurance']) {
-            if (insuranceCnt === 3) {
-                setCallBack(true);
-                setInsuranceCnt(0);
-            } else {
-                setInsuranceCnt(prev => prev + 1);
-            }
+        } else if (type === 'joinInsurance' || type === 'finishInsurance') {
+            if (playerToRoll !== playerId) return;
+            if (callBack) return;
+            setCallBack(true);
         }
         if (type === 'issue') {
             setBigEventInfo({
@@ -317,8 +349,6 @@ function PlayerSocket() {
                 rate: message.savingDto.rate,
             });
         } else if (type == 'calculate') {
-            console.log('calculate');
-            console.log(message);
             setMonthlyInfo({
                 player: message.player,
                 salary: message.receipt.salary,
@@ -362,12 +392,12 @@ function PlayerSocket() {
         // 게임 시작 pub에 대한 결과를 반환 받으면
         else if (type == 'start') {
             setStartReturn(true);
-            // 시작 시 차례인 플레이어 이동 카드 조회
-            // if (playername === playerToRoll) {
-            connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerToRoll }));
-            });
-            // }
+            // 플레이어 이동 카드 조회
+            if (playerToRoll === playerId) {
+                connect().then(function () {
+                    stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerId }));
+                });
+            }
         }
     }
 
@@ -376,7 +406,6 @@ function PlayerSocket() {
         const player2 = message.players[1];
         const player3 = message.players[2];
         const player4 = message.players[3];
-        console.log('player1');
 
         let nick1 = message.nicknames[player1];
         let nick2 = message.nicknames[player2];
@@ -403,13 +432,13 @@ function PlayerSocket() {
             // 구독 정보가 바뀌었다면 재구독
             if (roomId != 0 && stompClient.current.connected) {
                 stompClient.current.unsubscribe();
-                stompClient.current.subscribe(`/sub/player/${playername}`, personalCallBackFunction);
+                stompClient.current.subscribe(`/sub/player/${playerId}`, personalCallBackFunction);
                 stompClient.current.subscribe(`/sub/${roomId}`, broadCastCallBackFunction);
-                stompClient.current.subscribe(`/sub/${roomId}/${playername}`, uniCastCallBackFunction);
+                stompClient.current.subscribe(`/sub/${roomId}/${playerId}`, uniCastCallBackFunction);
                 console.log(`기존 방 구독 취소 후 ${roomId}번 방 구독 완료`);
             }
         });
-    }, [roomId, playername]);
+    }, [roomId, playerId]);
 
     async function connect() {
         // stompClient가 close 상태라면 재생성 후 connect
@@ -420,9 +449,9 @@ function PlayerSocket() {
                 stompClient.current.connect(
                     {},
                     function () {
-                        stompClient.current.subscribe(`/sub/player/${playername}`, personalCallBackFunction);
+                        stompClient.current.subscribe(`/sub/player/${playerId}`, personalCallBackFunction);
                         stompClient.current.subscribe(`/sub/${roomId}`, broadCastCallBackFunction);
-                        stompClient.current.subscribe(`/sub/${roomId}/${playername}`, uniCastCallBackFunction);
+                        stompClient.current.subscribe(`/sub/${roomId}/${playerId}`, uniCastCallBackFunction);
                         console.log(roomId + '번 방 구독 완료');
                         console.log('재연결 완료');
                         resolve(); // 연결 성공 시 resolve 호출
@@ -446,79 +475,50 @@ function PlayerSocket() {
     // 자산별 방문
     useEffect(() => {
         if (!isModalOpen) return;
+
         // 부동산 방문
         if ([4, 14, 22].includes(nowPlayerPosition)) {
-            console.log(nowPlayer + 1, buildingIds[nowPlayerPosition]);
-            // isOpen 상태가 true일 때 메시지를 보내는 코드를 추가
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/visitBuilding`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        buildingId: buildingIds[nowPlayerPosition],
-                    })
-                );
-                // 0번째 player를 서버에 1로 보내줘야 해서
+                if (playerToRoll !== playerId) return; // 내 캐릭이 아니면 요청 안 함
+                stompClient.current.send(`/pub/${roomId}/visitBuilding`, {}, JSON.stringify({ player: playerId, buildingId: buildingIds[nowPlayerPosition] }));
             });
         }
         //주식 방문
         else if (nowPlayerPosition % 2 === 1) {
+            setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 5);
+            setEffect(true);
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/buyItem`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        stockId: stockIds[nowPlayerPosition],
-                    })
-                );
-                stompClient.current.send(
-                    `/pub/${roomId}/stockDetail`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        stockId: stockIds[nowPlayerPosition],
-                    })
-                );
+                if (playerToRoll !== playerId) return; // 내 캐릭이 아니면 요청 안 함
+                stompClient.current.send(`/pub/${roomId}/buyItem`, {}, JSON.stringify({ player: playerId, stockId: stockIds[nowPlayerPosition] }));
+                stompClient.current.send(`/pub/${roomId}/stockDetail`, {}, JSON.stringify({ player: playerId, stockId: stockIds[nowPlayerPosition] }));
             });
         }
         // 금거래소 방문
         else if (nowPlayerPosition === 30) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/selectGolds`, {}, JSON.stringify({ player: nowPlayer + 1 }));
+                if (playerToRoll !== playerId) return; // 내 캐릭이 아니면 요청 안 함
+                stompClient.current.send(`/pub/${roomId}/selectGolds`, {}, JSON.stringify({ player: playerId }));
             });
         }
         // 은행 방문
         else if ([2, 10, 18].includes(nowPlayerPosition)) {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/bank`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        bankId: bankIds[nowPlayerPosition],
-                    })
-                );
+                if (playerToRoll !== playerId) return; // 내 캐릭이 아니면 요청 안 함
+                stompClient.current.send(`/pub/${roomId}/bank`, {}, JSON.stringify({ player: playerId, bankId: bankIds[nowPlayerPosition] }));
             });
         }
         // 보험 방문
         else if ([6, 26].includes(nowPlayerPosition)) {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/insurance`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        insuranceId: '',
-                    })
-                );
+                if (playerToRoll !== playerId) return; // 내 캐릭이 아니면 요청 안 함
+                stompClient.current.send(`/pub/${roomId}/insurance`, {}, JSON.stringify({ player: playerId, insuranceId: '' }));
             });
         }
         // 찬스 카드 방문
         else if ([12, 20, 28].includes(nowPlayerPosition)) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/eventCard`, {}, JSON.stringify({ player: nowPlayer + 1 }));
+                if (playerToRoll !== playerId) return; // 내 캐릭이 아니면 요청 안 함
+                stompClient.current.send(`/pub/${roomId}/eventCard`, {}, JSON.stringify({ player: playerId }));
             });
         }
     }, [isModalOpen]);
@@ -526,9 +526,12 @@ function PlayerSocket() {
     // 월말정산
     useEffect(() => {
         if (!monthlyModalOpen) return;
+        setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 1);
+        setEffect(true);
         // 출발점 통과
         connect().then(function () {
-            stompClient.current.send(`/pub/${roomId}/calculate`, {}, JSON.stringify({ player: nowPlayer + 1 }));
+            if (playerToRoll !== playerId) return;
+            stompClient.current.send(`/pub/${roomId}/calculate`, {}, JSON.stringify({ player: playerId }));
         });
     }, [monthlyModalOpen]);
 
@@ -536,6 +539,7 @@ function PlayerSocket() {
     useEffect(() => {
         // 현재 플레이어의 위치를 바꾸고, 바뀌고 나면 모달을 엶
         if (financeCenter === -1) return;
+        if (playerToRoll !== playerId) return;
         setNowPlayerPosition(financeCenter);
         if (nowPlayerPosition === financeCenter) {
             setIsModalOpen(true);
@@ -545,28 +549,15 @@ function PlayerSocket() {
 
     // 부동산 거래
     useEffect(() => {
+        if (playerToRoll !== playerId) return;
         if (tradeRealEstate[0]) {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/buyBuilding`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        buildingId: buildingIds[nowPlayerPosition],
-                    })
-                );
+                stompClient.current.send(`/pub/${roomId}/buyBuilding`, {}, JSON.stringify({ player: playerId, buildingId: buildingIds[nowPlayerPosition] }));
                 setTradeRealEstate([false, false]);
             });
         } else if (tradeRealEstate[1]) {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/sellBuilding`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        buildingId: buildingIds[nowPlayerPosition],
-                    })
-                );
+                stompClient.current.send(`/pub/${roomId}/sellBuilding`, {}, JSON.stringify({ player: playerId, buildingId: buildingIds[nowPlayerPosition] }));
                 setTradeRealEstate([false, false]);
             });
         }
@@ -574,16 +565,13 @@ function PlayerSocket() {
 
     // 주식 거래
     useEffect(() => {
+        if (playerToRoll !== playerId) return;
         if (tradeStock[0]) {
             connect().then(function () {
                 stompClient.current.send(
                     `/pub/${roomId}/buyStock`,
                     {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        stockId: stockIds[nowPlayerPosition],
-                        stockAmount: buyAmount,
-                    })
+                    JSON.stringify({ player: playerId, stockId: stockIds[nowPlayerPosition], stockAmount: buyAmount })
                 );
                 setTradeStock([false, false]);
             });
@@ -592,11 +580,7 @@ function PlayerSocket() {
                 stompClient.current.send(
                     `/pub/${roomId}/sellStock`,
                     {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        stockId: stockIds[nowPlayerPosition],
-                        stockAmount: sellAmount,
-                    })
+                    JSON.stringify({ player: playerId, stockId: stockIds[nowPlayerPosition], stockAmount: sellAmount })
                 );
                 setTradeStock([false, false]);
             });
@@ -605,28 +589,16 @@ function PlayerSocket() {
 
     // 금 거래
     useEffect(() => {
+        if (playerToRoll !== playerId) return;
         if (tradeGold[0]) {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/buyGolds`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        goldAmount: buyAmount,
-                    })
-                );
+                stompClient.current.send(`/pub/${roomId}/buyGolds`, {}, JSON.stringify({ player: playerId, goldAmount: buyAmount }));
                 setTradeGold([false, false]);
             });
         } else if (tradeGold[1]) {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/sellGolds`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        goldAmount: sellAmount,
-                    })
-                );
+                if (playerToRoll !== playerId) return;
+                stompClient.current.send(`/pub/${roomId}/sellGolds`, {}, JSON.stringify({ player: playerId, goldAmount: sellAmount }));
                 setTradeGold([false, false]);
             });
         }
@@ -634,28 +606,15 @@ function PlayerSocket() {
 
     // 은행 거래
     useEffect(() => {
+        if (playerToRoll !== playerId) return;
         if (tradeBank[0]) {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/joinSavings`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        bankId: bankIds[nowPlayerPosition],
-                    })
-                );
+                stompClient.current.send(`/pub/${roomId}/joinSavings`, {}, JSON.stringify({ player: playerId, bankId: bankIds[nowPlayerPosition] }));
                 setTradeBank([false, false]);
             });
         } else if (tradeBank[1]) {
             connect().then(function () {
-                stompClient.current.send(
-                    `/pub/${roomId}/stopSavings`,
-                    {},
-                    JSON.stringify({
-                        player: nowPlayer + 1,
-                        bankId: bankIds[nowPlayerPosition],
-                    })
-                );
+                stompClient.current.send(`/pub/${roomId}/stopSavings`, {}, JSON.stringify({ player: playerId, bankId: bankIds[nowPlayerPosition] }));
                 setTradeBank([false, false]);
             });
         }
@@ -664,41 +623,42 @@ function PlayerSocket() {
     // 보험 거래
     useEffect(() => {
         if (!tradeInsuranceConfirm) return;
+        if (playerToRoll !== playerId) return;
         // if 가입 else 해지
         if (tradeInsurance[0]) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 3 }));
+                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: playerId, insuranceId: 3 }));
             });
         } else {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 3 }));
+                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: playerId, insuranceId: 3 }));
             });
         }
         if (tradeInsurance[1]) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 4 }));
+                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: playerId, insuranceId: 4 }));
             });
         } else {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 4 }));
+                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: playerId, insuranceId: 4 }));
             });
         }
         if (tradeInsurance[2]) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 1 }));
+                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: playerId, insuranceId: 1 }));
             });
         } else {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 1 }));
+                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: playerId, insuranceId: 1 }));
             });
         }
         if (tradeInsurance[3]) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
+                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: playerId, insuranceId: 2 }));
             });
         } else {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: nowPlayer + 1, insuranceId: 2 }));
+                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: playerId, insuranceId: 2 }));
             });
         }
         setTradeInsuranceConfirm(false);
@@ -706,28 +666,31 @@ function PlayerSocket() {
 
     //예언소
     useEffect(() => {
+        if (playerToRoll !== playerId) return;
         if (getPrediction) {
             connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/oracle`, {}, JSON.stringify({ player: nowPlayer + 1 }));
+                stompClient.current.send(`/pub/${roomId}/oracle`, {}, JSON.stringify({ player: playerId }));
             });
         }
     }, [getPrediction]);
 
-    // 이동 중, 서버에 이동 정보 보내기
-    // useEffect(() => {
-    //     if (!isMoving) return;
-    //     connect().then(function () {
-    //         stompClient.current.send(`/pub/${roomId}/movePlayer`, {}, JSON.stringify({ player: nowPlayer + 1, movementCount: moveDist }));
-    //     });
-    // }, [isMoving]);
+    // 이동카드 선택 확정하면 서버에 이동카드 정보 보내기
+    useEffect(() => {
+        if (!movementCardConfirm) return;
+        if (playerId !== playerToRoll) return;
+        connect().then(function () {
+            stompClient.current.send(`/pub/${roomId}/movePlayer`, {}, JSON.stringify({ player: playerId, movementCount: moveDist }));
+        });
+    }, [movementCardConfirm]);
 
     //턴 종료
     useEffect(() => {
-        if (!callBack) return;
+        setCallBack(false);
+        setIsModalOpen(false);
+        if (callBack === false) return;
+        if (playerToRoll !== playerId) return;
         connect().then(function () {
-            stompClient.current.send(`/pub/${roomId}/finishTurn`, {}, {});
-            setCallBack(false);
-            setIsModalOpen(false);
+            stompClient.current.send(`/pub/${roomId}/finishTurn`, {}, JSON.stringify({ player: playerId }));
         });
     }, [callBack]);
 
@@ -740,7 +703,7 @@ function PlayerSocket() {
                 `/pub/${roomId}/join`,
                 {},
                 JSON.stringify({
-                    player: playername,
+                    player: playerId,
                     nickname: nickname,
                 })
             );
@@ -761,7 +724,7 @@ function PlayerSocket() {
                 `/pub/${roomId}/exit`,
                 {},
                 JSON.stringify({
-                    player: playername,
+                    player: playerId,
                     nickname: nickname,
                 })
             );
@@ -781,7 +744,7 @@ function PlayerSocket() {
                 `/pub/${roomId}/start`,
                 {},
                 JSON.stringify({
-                    hostPlayer: playername,
+                    hostPlayer: playerId,
                 })
             );
         });

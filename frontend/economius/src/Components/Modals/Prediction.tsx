@@ -2,13 +2,19 @@ import Modal from 'react-modal';
 import { useEffect } from 'react';
 import predictionimg from '/Prediction/prediction.png';
 import * as S from './GlobalModal.stye';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { ExitButton } from './GlobalModal.stye';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { CallBackState, IsModalOpenState } from '/src/recoil/animation/atom';
 import { GetPredictionState } from '/src/recoil/trading/atom.tsx';
-import { PredictionState } from '/src/recoil/game/atom.tsx';
+import { PredictionState, PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom.tsx';
 import BigEvent from '/src/Components/Modals/BigEvent.tsx';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
+import OtherPerson from './OtherPerson';
+import BigEventRound from './BigEventRound';
 
 function Prediction() {
+    const playerId = useRecoilValue(PlayerIdState);
+    const playerToRoll = useRecoilValue(PlayerToRollState);
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const setGetPrediction = useSetRecoilState(GetPredictionState);
     const [prediction, setPrediction] = useRecoilState(PredictionState);
@@ -54,25 +60,37 @@ function Prediction() {
         },
     };
 
-    return prediction == null ? (
-        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
-            <S.Main>
-                <S.Top>
-                    <S.TopTitle>예언소</S.TopTitle>
-                </S.Top>
+    useEffect(() => {
+        effectAudioPopup.play(); // 출력할 위치에 작성
+    }, []);
 
-                <S.Mid>
-                    <S.MidImg src={predictionimg} alt='predictionimg' />
-                    <S.MidDesc>다음에 일어날 경제 이슈를 예언해줍니다.</S.MidDesc>
-                </S.Mid>
+    return playerToRoll === playerId ? (
+        <>
+            {prediction == null ? (
+                <Modal isOpen={isModalOpen} style={modalStyle}>
+                    <ExitButton onClick={() => (closeModal(), effectAudioClick.play())} src='/button/exit.png' alt='exit' />
+                    <S.Main>
+                        <S.Top>
+                            <S.TopTitle>예언소</S.TopTitle>
+                        </S.Top>
 
-                <S.RoundButton onClick={() => setGetPrediction(true)}>
-                    <span>예언듣기</span>
-                </S.RoundButton>
-            </S.Main>
-        </Modal>
+                        <S.Mid>
+                            <S.MidImg src={predictionimg} alt='predictionimg' />
+                            <S.MidDesc>다음에 일어날 경제 이슈를 예언해줍니다.</S.MidDesc>
+                        </S.Mid>
+
+                        <S.RoundButton onClick={() => (setGetPrediction(true), effectAudioClick.play())}>
+                            <span>예언듣기</span>
+                        </S.RoundButton>
+                    </S.Main>
+                </Modal>
+            ) : (
+                <BigEvent issue={prediction} predictionFlag={true}></BigEvent>
+                // <BigEventRound />
+            )}
+        </>
     ) : (
-        <BigEvent issue={prediction} predictionFlag={true}></BigEvent>
+        <OtherPerson />
     );
 }
 

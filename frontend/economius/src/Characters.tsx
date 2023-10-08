@@ -2,7 +2,8 @@
 import { useState, useEffect } from 'react';
 import { Aligator, Bear, Bird, Butterfly, Camel, Cat, Chicken, Cow, Deer, Dog } from './Components/Characters';
 import { useRecoilState } from 'recoil';
-import { NowPlayerState, NowPlayerPositionState, IsMovingState, MoveDistState } from '/src/recoil/animation/atom';
+import { NowPlayerPositionState, IsMovingState, MoveDistState, RoomJoinUsersIdState } from '/src/recoil/animation/atom';
+import { PlayerToRollState } from './recoil/game/atom';
 
 // 캐릭터 컴포넌트
 const CharacterComponent = [null, Aligator, Bear, Bird, Butterfly, Camel, Cat, Chicken, Cow, Deer, Dog];
@@ -14,10 +15,13 @@ const opacity = 0.3;
 const radius = 0.5; // 점프 높이, 반원의 반지름
 const steps = 10; // 애니메이션당 프레임 수
 
-function Characters() {
+function Characters({ CharacterArr }) {
+    console.log(CharacterArr);
     // 현재 플레이어
+    // 플레이어 배열
     // 현재 플레이어 최종 위치
-    const [nowPlayer, setNowPlayer] = useRecoilState(NowPlayerState);
+    const [playerToRoll, setPlayerToRoll] = useRecoilState(PlayerToRollState);
+    const [roomJoinUsersId, setRoomJoinUsersId] = useRecoilState(RoomJoinUsersIdState);
     const [nowPlayerPosition, setNowPlayerPosition] = useRecoilState(NowPlayerPositionState);
 
     // 캐릭터 이동 여부
@@ -26,10 +30,10 @@ function Characters() {
     const [moveDist, setMoveDist] = useRecoilState(MoveDistState);
 
     // 플레이어의 닉네임, 캐릭터(idx)
-    const [player1, setPlayer1] = useState<[string, number]>(['P1', 9]);
-    const [player2, setPlayer2] = useState<[string, number]>(['P2', 3]);
-    const [player3, setPlayer3] = useState<[string, number]>(['P3', 4]);
-    const [player4, setPlayer4] = useState<[string, number]>(['P4', 5]);
+    const [player1, setPlayer1] = useState<[string, number]>(['P1', CharacterArr[0]]);
+    const [player2, setPlayer2] = useState<[string, number]>(['P2', CharacterArr[1]]);
+    const [player3, setPlayer3] = useState<[string, number]>(['P3', CharacterArr[2]]);
+    const [player4, setPlayer4] = useState<[string, number]>(['P4', CharacterArr[3]]);
 
     // 플레이어의 캐릭터 컴포넌트
     const Player1 = CharacterComponent[player1[1]];
@@ -55,14 +59,14 @@ function Characters() {
     // 현재 차례인 플레이어만 불투명
     useEffect(() => {
         setOpacity1(opacity), setOpacity2(opacity), setOpacity3(opacity), setOpacity4(opacity); // 전부 투명
-        setOpacities[nowPlayer](1); // 현재 플레이어만 불투명
-    }, [nowPlayer]);
+        setOpacities[roomJoinUsersId.indexOf(playerToRoll)](1); // 현재 플레이어만 불투명
+    }, [playerToRoll]);
 
     // 자기 차례인 플레이어만 위치(idx)를 변경함
     useEffect(() => {
         if (!isMoving) return;
-        setPositionIdxs[nowPlayer](idx => (idx + moveDist) & 31); // (현재 위치 + 이동 거리) % 맵 칸 수
-        setNowPlayerPosition((positionIdxs[nowPlayer] + moveDist) & 31);
+        setPositionIdxs[roomJoinUsersId.indexOf(playerToRoll)](idx => (idx + moveDist) & 31); // (현재 위치 + 이동 거리) % 맵 칸 수
+        setNowPlayerPosition((positionIdxs[roomJoinUsersId.indexOf(playerToRoll)] + moveDist) & 31);
     }, [isMoving]);
 
     return (

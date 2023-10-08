@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSprings, animated, to as interpolate } from '@react-spring/web';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { CoinEffectState, CoinEffectIndexState } from '/src/recoil/Effect/atom';
 import dollarcoin from '/BeforeBankrupt/dollarcoin.png';
 
@@ -57,7 +57,7 @@ function Coins({ effectIdx }) {
 
 function CoinEffect() {
     const [effect, setEffect] = useRecoilState(CoinEffectState); // 코인 효과 여부
-    const [effectIdx, setEffectIdx] = useRecoilState(CoinEffectIndexState); // 코인 효과 번호
+    const effectIdx = useRecoilValue(CoinEffectIndexState); // 코인 효과 번호
 
     useEffect(() => {
         if (!effect) return;
@@ -66,15 +66,15 @@ function CoinEffect() {
         }, 1500); // 1.5초 후 동전 효과 사라짐
     }, [effect]);
 
-    const coinBtnClick = num => {
-        if (effect) return;
-        setEffectIdx(num);
-        setEffect(true); // 동전 효과 시작
-    };
+    // const coinBtnClick = num => {
+    //     if (effect) return;
+    //     setEffectIdx(num);
+    //     setEffect(true); // 동전 효과 시작
+    // };
 
     return (
         <>
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((number, index) => (
+            {/* {[1, 2, 3, 4, 5, 6, 7, 8].map((number, index) => (
                 <button
                     key={index}
                     onClick={() => coinBtnClick(number)}
@@ -87,7 +87,7 @@ function CoinEffect() {
                 >
                     {number}
                 </button>
-            ))}
+            ))} */}
             {effect ? <Coins effectIdx={effectIdx} /> : null}
         </>
     );

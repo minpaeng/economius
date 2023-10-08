@@ -33,6 +33,8 @@ export const InsuranceName = styled.div`
 
 export const CardMainTopPrice = styled.div`
     display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 export const CardMainBottom = styled.div`

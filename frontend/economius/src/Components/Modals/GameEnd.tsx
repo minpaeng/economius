@@ -1,16 +1,10 @@
-import Modal from "react-modal";
-import {useRecoilValue} from "recoil";
-import {GameRoundState, PlayerRankingState, PortfolioState} from "/src/recoil/game/atom.tsx";
-import {useEffect, useState} from "react";
-import {
-    InnerDiv,
-    InnerTextDiv,
-    modalStyle,
-    PlayerDiv,
-    PlayerInformation,
-    PrizeDiv
-} from "/src/Components/Modals/GameEnd.style.ts";
-import {CallBackState} from "/src/recoil/animation/atom.tsx";
+import Modal from 'react-modal';
+import { useRecoilValue } from 'recoil';
+import { GameRoundState, PlayerRankingState, PortfolioState } from '/src/recoil/game/atom.tsx';
+import { useEffect, useState } from 'react';
+import { InnerDiv, InnerTextDiv, modalStyle, PlayerDiv, PlayerInformation, PrizeDiv } from '/src/Components/Modals/GameEnd.style.ts';
+import { CallBackState } from '/src/recoil/animation/atom.tsx';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 function GameEnd() {
     const gameRound = useRecoilValue(GameRoundState);
@@ -47,21 +41,28 @@ function GameEnd() {
         }
     }, [gameRound]);
 
-    return isModalOpen? (
+    useEffect(() => {
+        effectAudioPopup.play(); // 출력할 위치에 작성
+        return () => {
+            effectAudioClick.play(); // 출력할 위치에 작성
+        };
+    }, []);
+
+    return isModalOpen ? (
         <Modal isOpen={isModalOpen} onRequestClose={closeModal} style={modalStyle}>
-            <InnerTextDiv>
-                GameEnd
-            </InnerTextDiv>
+            <InnerTextDiv>GameEnd</InnerTextDiv>
             <InnerDiv>
                 {playerRanking.map((item, index) => (
                     <PlayerDiv>
-                        <PrizeDiv>{index + 1}등 - player : {item}</PrizeDiv>
+                        <PrizeDiv>
+                            {index + 1}등 - player : {item}
+                        </PrizeDiv>
                         <PlayerInformation> 총자산 : {portfolio[item].totalMoney}</PlayerInformation>
                     </PlayerDiv>
                 ))}
             </InnerDiv>
         </Modal>
-    ) : null
+    ) : null;
 }
 
 export default GameEnd;

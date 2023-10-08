@@ -1,12 +1,18 @@
 import Modal from 'react-modal';
-import { useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useEffect } from 'react';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
+import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 import { TradeBankState } from '/src/recoil/trading/atom';
 import { BankInfoState } from '/src/recoil/modalInfo/atom';
 import * as S from './InstallmentSaving.style';
+import { ExitButton } from './GlobalModal.stye';
+import { effectAudioPopup, effectAudioClick } from '/src/Audio';
+import OtherPerson from './OtherPerson';
 
 function InstallmentSaving() {
+    const playerId = useRecoilValue(PlayerIdState);
+    const playerToRoll = useRecoilValue(PlayerToRollState);
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState);
     const [tradeBank, setTradeBank] = useRecoilState(TradeBankState);
     const [bankInfo, setBankInfo] = useRecoilState(BankInfoState);
@@ -14,7 +20,7 @@ function InstallmentSaving() {
     // 모달 끄기
     const closeModal = () => {
         setBankInfo(null);
-        setIsModalOpen(false);
+        // setIsModalOpen(false);
         setCallBack(true);
     };
 
@@ -45,8 +51,13 @@ function InstallmentSaving() {
         },
     };
 
-    return (
-        <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={closeModal}>
+    useEffect(() => {
+        effectAudioPopup.play(); // 출력할 위치에 작성
+    }, []);
+
+    return playerId === playerToRoll ? (
+        <Modal isOpen={isModalOpen} style={modalStyle}>
+            <ExitButton onClick={() => (closeModal(), effectAudioClick.play())} src='/button/exit.png' alt='exit' />
             {!(bankInfo === null) ? (
                 <S.BankMain>
                     <S.BankTop>
@@ -60,7 +71,9 @@ function InstallmentSaving() {
                             <S.BankMidPriceDesc>
                                 <p>
                                     월 납부액 : {bankInfo.monthlyDeposit.toLocaleString()}
-                                    {bankInfo.have ? ` (잔여 : ${(bankInfo.monthlyDeposit * bankInfo.finishCount - bankInfo.currentPrice).toLocaleString()})` : null}
+                                    {bankInfo.have
+                                        ? ` (잔여 : ${(bankInfo.monthlyDeposit * bankInfo.finishCount - bankInfo.currentPrice).toLocaleString()})`
+                                        : null}
                                 </p>
                                 <img
                                     src='Bank/dollar-coin 15.png'
@@ -95,17 +108,21 @@ function InstallmentSaving() {
                     </S.BankMid>
                     <S.BankDivide />
                     {bankInfo.have ? (
-                        <S.BankJoinBottom onClick={() => {
-                            setTradeBank([false, true]);
-                            //closeModal();  
-                        }}>
+                        <S.BankJoinBottom
+                            onClick={() => {
+                                setTradeBank([false, true]);
+                                effectAudioClick.play();
+                            }}
+                        >
                             적금 해지하기
                         </S.BankJoinBottom>
                     ) : (
-                        <S.BankJoinBottom onClick={() => {
-                            setTradeBank([true, false]);
-                            //closeModal();  
-                        }}>
+                        <S.BankJoinBottom
+                            onClick={() => {
+                                setTradeBank([true, false]);
+                                effectAudioClick.play();
+                            }}
+                        >
                             적금 가입하기
                         </S.BankJoinBottom>
                     )}
@@ -114,6 +131,8 @@ function InstallmentSaving() {
                 '로딩중입니다...'
             )}
         </Modal>
+    ) : (
+        <OtherPerson />
     );
 }
 

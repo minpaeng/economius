@@ -1,35 +1,26 @@
 @font-face {
-  font-family: "netmarbleB";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.1/netmarbleB.woff")
-    format("woff");
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'netmarbleB';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.1/netmarbleB.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
 }
 
 * {
-  margin: 0;
-  padding: 0;
-  font-family: "netmarbleB";
+    margin: 0;
+    padding: 0;
+    font-family: 'netmarbleB';
 }
 
 body {
-  width: 100%;
-  /* max-width: 1920px; */
-  /* max-height: 1080px; */
-  margin: auto;
+    width: 100%;
+    /* max-width: 1920px; */
+    /* max-height: 1080px; */
+    margin: auto;
 }
 
 ::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
-
-/* #root {
-  width: 100%;
-  height: 100%;
-  background-image: url("bg-black.png");
-  background-size: 180%;
-  background-position: 68% 32%;
-} */
 
 /* canvas {
 width: 100%;
@@ -65,14 +56,20 @@ padding-bottom: 56.24%;
     }
 } */
 
+.video-loading {
+    position: absolute;
+    display: flex;
+    z-index: 999;
+}
+
 .RoundModal {
-    z-index: 3; 
+    z-index: 3;
 }
 
 .BigEventRoundModal {
-    z-index: 2; 
+    z-index: 2;
 }
 
 .MovementCardModal {
-    z-index: 1; 
+    z-index: 1;
 }

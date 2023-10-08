@@ -1,11 +1,19 @@
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
+import { PlayerToRollState } from '../game/atom';
 const { persistAtom } = recoilPersist();
 
 // 시작 결과 반환
 export const StartReturnState = atom<boolean>({
     key: 'StartReturnState',
     default: false, // 기본값
+    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+});
+
+// 게임 내부 내턴 정보 저장
+export const MyTurnState = atom<number>({
+    key: 'MyTurnState',
+    default: 1, // 기본값
     // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
@@ -26,8 +34,8 @@ export const RoomExitState = atom<boolean>({
 // 현재 방 번호
 export const RoomIdState = atom<number>({
     key: 'RoomIdState',
-    default: 1, // 기본값
-    // effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
+    default: 2, // 기본값
+    effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
 // 현재 방장 번호
@@ -89,7 +97,8 @@ export const NowPlayerPositionState = atom<number>({
 // 이동 카드 모달 여부
 export const MovementCardOpenState = atom({
     key: 'MovementCardOpenState',
-    default: false,
+    default: true,
+    effects_UNSTABLE: [persistAtom],
 });
 
 // 이동 카드 번호
@@ -97,6 +106,13 @@ export const MovementCardState = atom({
     key: 'MovementCardState',
     default: null,
     // effects_UNSTABLE: [persistAtom],
+});
+
+// 이동 카드 선택 확정 여부
+export const MovementCardConfirmState = atom({
+    key: 'MovementCardConfirmState',
+    default: false,
+    effects_UNSTABLE: [persistAtom],
 });
 
 // 캐릭터 이동 여부
@@ -171,5 +187,29 @@ export const RoomJoinUsersNicknameState = atom<string[]>({
 export const RoomJoinUsersIdState = atom<number[]>({
     key: 'RoomJoinUsersIdState',
     default: [0, 0, 0, 0],
-    // effects_UNSTABLE: [persistAtom],
+    effects_UNSTABLE: [persistAtom],
+});
+
+// 게임 캐릭터
+
+export const RoomJoinUsersCharacterState = atom({
+    key: 'RoomJoinUsersCharacterState',
+    default: null,
+});
+
+// 플레이어 순서
+
+export const PlayerSequenceState = atom({
+    key: 'PlayerSequenceState',
+    default: null,
+});
+
+export const NicknameToRollSelector = selector({
+    key: 'NicknameToRollSelector',
+    get: ({ get }) => {
+        const UsersId = get(RoomJoinUsersIdState);
+        const UsersNickname = get(RoomJoinUsersNicknameState);
+        const playerToRoll = get(PlayerToRollState);
+        return UsersNickname[UsersId.indexOf(playerToRoll)];
+    },
 });

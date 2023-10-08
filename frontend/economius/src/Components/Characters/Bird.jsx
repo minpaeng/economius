@@ -4,6 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
 import { useRecoilState } from 'recoil';
 import { MapAnimationIndexState, IsMovingState } from '/src/recoil/animation/atom';
+import { effectAudioSteps } from '/src/Audio';
 
 // 맵 좌표
 const mapPosition = [
@@ -92,6 +93,8 @@ function Bird({ positionIdx, moveDist, opacity, radius, steps }) {
                 // 비동기 프레임 갱신
                 await new Promise(resolve => requestAnimationFrame(resolve));
             }
+            // 점프 소리
+            effectAudioSteps.play();
             // 오류방지를 위해 한 칸마다 위치 갱신
             setPosition(mapPosition[mapIdx]);
             // 맵 애니메이션 칸 갱신
