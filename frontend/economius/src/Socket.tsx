@@ -263,8 +263,7 @@ function PlayerSocket() {
         } else if (type === 'viewMovementCard') {
             setMovementCard(message.cards);
             setMovementCardOpen(true);
-        }
-        if (type === 'buyStock') {
+        } else if (type === 'buyStock') {
             if (playerToRoll !== playerId) return;
             setEffectIdx(roomJoinUsersId.indexOf(playerToRoll) + 5);
             setEffect(true);
@@ -308,8 +307,7 @@ function PlayerSocket() {
             if (playerToRoll !== playerId) return;
             if (callBack) return;
             setCallBack(true);
-        }
-        if (type === 'issue') {
+        } else if (type === 'issue') {
             setBigEventInfo({
                 buildingChange: message.buildingChange,
                 country: message.country,
@@ -322,8 +320,7 @@ function PlayerSocket() {
                 url: message.url,
                 year: message.year,
             });
-        }
-        if (type == 'visitBuilding') {
+        } else if (type == 'visitBuilding') {
             setRealEstateInfo({
                 buildingId: message.buildingId,
                 buildingPrice: message.buildingPrice,
@@ -575,8 +572,8 @@ function PlayerSocket() {
 
     // 주식 거래
     useEffect(() => {
-        if (playerToRoll !== playerId) return;
         if (tradeStock[0]) {
+            if (playerToRoll !== playerId) return;
             connect().then(function () {
                 stompClient.current.send(
                     `/pub/${roomId}/buyStock`,
@@ -586,6 +583,7 @@ function PlayerSocket() {
                 setTradeStock([false, false]);
             });
         } else if (tradeStock[1]) {
+            if (playerToRoll !== playerId) return;
             connect().then(function () {
                 stompClient.current.send(
                     `/pub/${roomId}/sellStock`,
@@ -634,43 +632,31 @@ function PlayerSocket() {
     useEffect(() => {
         if (!tradeInsuranceConfirm) return;
         if (playerToRoll !== playerId) return;
-        // if 가입 else 해지
+        let joinArr: number[] = [];
+        let finishArr: number[] = [];
         if (tradeInsurance[0]) {
-            connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: playerId, insuranceId: 3 }));
-            });
+            joinArr.push(3);
         } else {
-            connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: playerId, insuranceId: 3 }));
-            });
+            finishArr.push(3);
         }
         if (tradeInsurance[1]) {
-            connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: playerId, insuranceId: 4 }));
-            });
+            joinArr.push(4);
         } else {
-            connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: playerId, insuranceId: 4 }));
-            });
+            finishArr.push(4);
         }
         if (tradeInsurance[2]) {
-            connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: playerId, insuranceId: 1 }));
-            });
+            joinArr.push(1);
         } else {
-            connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: playerId, insuranceId: 1 }));
-            });
+            finishArr.push(1);
         }
         if (tradeInsurance[3]) {
-            connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/joinInsurance`, {}, JSON.stringify({ player: playerId, insuranceId: 2 }));
-            });
+            joinArr.push(2);
         } else {
-            connect().then(function () {
-                stompClient.current.send(`/pub/${roomId}/finishInsurance`, {}, JSON.stringify({ player: playerId, insuranceId: 2 }));
-            });
+            finishArr.push(2);
         }
+        connect().then(function () {
+            stompClient.current.send(`/pub/${roomId}/joinFinishInsurance`, {}, JSON.stringify({ player: playerId, joinId: joinArr, finishId: finishArr }));
+        });
         setTradeInsuranceConfirm(false);
     }, [tradeInsuranceConfirm]);
 
@@ -695,13 +681,13 @@ function PlayerSocket() {
 
     //턴 종료
     useEffect(() => {
-        setCallBack(false);
-        setIsModalOpen(false);
         if (callBack === false) return;
         if (playerToRoll !== playerId) return;
         connect().then(function () {
             stompClient.current.send(`/pub/${roomId}/finishTurn`, {}, JSON.stringify({ player: playerId }));
         });
+        setIsModalOpen(false);
+        setCallBack(false);
     }, [callBack]);
 
     // 방 입장 시

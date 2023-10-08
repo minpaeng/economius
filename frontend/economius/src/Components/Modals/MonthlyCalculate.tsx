@@ -52,14 +52,14 @@ function MonthlyCalculate() {
                             <S.MidItem>
                                 <S.MidDesc>월급</S.MidDesc>
                                 <S.MidAmount>
-                                    + {monthlyInfo.salary}
+                                    + {monthlyInfo.salary.toLocaleString()}
                                     <S.MidImg src={dollarcoin}></S.MidImg>
                                 </S.MidAmount>
                             </S.MidItem>
                             <S.MidItem>
                                 <S.MidDesc>적금 만기</S.MidDesc>
                                 <S.MidAmount>
-                                    + {monthlyInfo.savingFinishBenefit}
+                                    + {monthlyInfo.savingFinishBenefit.toLocaleString()}
                                     <S.MidImg src={dollarcoin}></S.MidImg>
                                 </S.MidAmount>
                             </S.MidItem>
@@ -69,21 +69,21 @@ function MonthlyCalculate() {
                             <S.MidItem>
                                 <S.MidDesc>적금</S.MidDesc>
                                 <S.MidAmount>
-                                    - {monthlyInfo.savingsPrice}
+                                    - {monthlyInfo.savingsPrice.toLocaleString()}
                                     <S.MidImg src={dollarcoin}></S.MidImg>
                                 </S.MidAmount>
                             </S.MidItem>
                             <S.MidItem>
                                 <S.MidDesc>보험비</S.MidDesc>
                                 <S.MidAmount>
-                                    - {monthlyInfo.insurancePrice}
+                                    - {monthlyInfo.insurancePrice.toLocaleString()}
                                     <S.MidImg src={dollarcoin}></S.MidImg>
                                 </S.MidAmount>
                             </S.MidItem>
                             <S.MidItem>
                                 <S.MidDesc>세금</S.MidDesc>
                                 <S.MidAmount>
-                                    - {monthlyInfo.tax}
+                                    - {monthlyInfo.tax.toLocaleString()}
                                     <S.MidImg src={dollarcoin}></S.MidImg>
                                 </S.MidAmount>
                             </S.MidItem>
@@ -93,8 +93,8 @@ function MonthlyCalculate() {
                             <S.MidItem>
                                 <S.MidDesc>총 명세액</S.MidDesc>
                                 <S.MidAmount>
-                                    {monthlyInfo.totalIncome >= 0 ? `+` : `-`}
-                                    {monthlyInfo.totalIncome}
+                                    {monthlyInfo.totalIncome.toLocaleString() >= 0 ? `+` : `-`}
+                                    {monthlyInfo.totalIncome.toLocaleString()}
                                     <S.MidImg src={dollarcoin}></S.MidImg>
                                 </S.MidAmount>
                             </S.MidItem>
@@ -107,10 +107,10 @@ function MonthlyCalculate() {
                                     fontWeight: 'bold',
                                 }}
                             >
-                                <S.MidDesc>내 예금</S.MidDesc>
+                                <S.MidDesc></S.MidDesc>
                                 <S.MidAmount>
-                                    {monthlyInfo.money}({monthlyInfo.totalIncome >= 0 ? `+` : `-`}
-                                    {monthlyInfo.totalIncome})<S.MidImg src={dollarcoin}></S.MidImg>
+                                    {monthlyInfo.money.toLocaleString()}({monthlyInfo.totalIncome >= 0 ? `+` : `-`}
+                                    {monthlyInfo.totalIncome.toLocaleString()})<S.MidImg src={dollarcoin}></S.MidImg>
                                 </S.MidAmount>
                             </S.MidItem>
                         </div>

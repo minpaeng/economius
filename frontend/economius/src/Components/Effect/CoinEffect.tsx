@@ -47,7 +47,7 @@ function Coins({ effectIdx }) {
             {props.map(({ x, y, scale }, i) => (
                 <animated.div key={i} style={{ position: 'absolute', top: top, left: left, width: '100%', height: '100%', x, y, zIndex: 20 }}>
                     <animated.div style={{ transform: interpolate([scale], trans) }}>
-                        <img style={{ width: '18px', height: '20px' }} src={dollarcoin} alt='' />
+                        <img style={{ width: '38px', height: '40px' }} src={dollarcoin} alt='' />
                     </animated.div>
                 </animated.div>
             ))}
@@ -66,31 +66,7 @@ function CoinEffect() {
         }, 1500); // 1.5초 후 동전 효과 사라짐
     }, [effect]);
 
-    // const coinBtnClick = num => {
-    //     if (effect) return;
-    //     setEffectIdx(num);
-    //     setEffect(true); // 동전 효과 시작
-    // };
-
-    return (
-        <>
-            {/* {[1, 2, 3, 4, 5, 6, 7, 8].map((number, index) => (
-                <button
-                    key={index}
-                    onClick={() => coinBtnClick(number)}
-                    style={{
-                        position: 'absolute',
-                        bottom: '30%',
-                        left: `${29 + index * 2}%`,
-                        background: effect ? 'orange' : null,
-                    }}
-                >
-                    {number}
-                </button>
-            ))} */}
-            {effect ? <Coins effectIdx={effectIdx} /> : null}
-        </>
-    );
+    return <>{effect ? <Coins effectIdx={effectIdx} /> : null}</>;
 }
 
 export default CoinEffect;
