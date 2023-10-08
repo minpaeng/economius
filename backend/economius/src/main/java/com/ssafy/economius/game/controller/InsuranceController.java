@@ -27,18 +27,24 @@ public class InsuranceController {
         template.convertAndSend("/sub/" + roomId, insuranceVisitResponse, headers);
     }
 
-    @MessageMapping(value = "/{roomId}/joinInsurance")
-    public void joinInsurance(@DestinationVariable int roomId, InsuranceRequest insuranceRequest) {
-        Map<String, Object> headers = Map.of("success", true,"type", "joinInsurance");
-        insuranceService.joinInsurance(roomId, insuranceRequest);
+//    @MessageMapping(value = "/{roomId}/joinInsurance")
+//    public void joinInsurance(@DestinationVariable int roomId, InsuranceRequest insuranceRequest) {
+//        Map<String, Object> headers = Map.of("success", true,"type", "joinInsurance");
+//        insuranceService.joinInsurance(roomId, insuranceRequest);
+//        template.convertAndSend("/sub/" + roomId, insuranceRequest.getPlayer(), headers);
+//    }
+//
+//    @MessageMapping(value = "/{roomId}/finishInsurance")
+//    public void finishInsurance(@DestinationVariable int roomId, InsuranceRequest insuranceRequest) {
+//        Map<String, Object> headers = Map.of("success", true,"type", "finishInsurance");
+//        insuranceService.stopInsurance(roomId, insuranceRequest);
+//        template.convertAndSend("/sub/" + roomId, insuranceRequest.getPlayer(), headers);
+//    }
+
+    @MessageMapping(value = "/{roomId}/joinFinishInsurance")
+    public void joinFinishInsurance(@DestinationVariable int roomId, InsuranceRequest insuranceRequest) {
+        Map<String, Object> headers = Map.of("success", true,"type", "joinFinishInsurance");
+        insuranceService.joinFinishInsurance(roomId, insuranceRequest);
         template.convertAndSend("/sub/" + roomId, insuranceRequest.getPlayer(), headers);
     }
-
-    @MessageMapping(value = "/{roomId}/finishInsurance")
-    public void finishInsurance(@DestinationVariable int roomId, InsuranceRequest insuranceRequest) {
-        Map<String, Object> headers = Map.of("success", true,"type", "finishInsurance");
-        insuranceService.stopInsurance(roomId, insuranceRequest);
-        template.convertAndSend("/sub/" + roomId, insuranceRequest.getPlayer(), headers);
-    }
-
 }
