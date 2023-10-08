@@ -164,7 +164,6 @@ export const NewsClickIdxState = atom<boolean>({
 export const CallBackState = atom<boolean>({
     key: 'CallBackState',
     default: false,
-    effects_UNSTABLE: [persistAtom],
 });
 
 // 주식 클릭
