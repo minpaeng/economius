@@ -23,11 +23,6 @@ export default function StartPlayCheck() {
     const userId = useRecoilValue(PlayerIdState);
     const turn = Sequence && Sequence.indexOf(userId) + 1;
 
-    console.log(Sequence);
-    console.log(userId);
-    // const turn = Sequence.indexOf(userId) + 1;
-    // console.log(turn);
-
     // modal style
     const modalStyle: any = {
         overlay: {

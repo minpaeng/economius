@@ -94,6 +94,13 @@ export const NowPlayerPositionState = atom<number>({
     effects_UNSTABLE: [persistAtom],
 });
 
+// 이동 카드 조회 요청
+export const MovementCardRequestState = atom({
+    key: 'MovementCardRequestState',
+    default: false,
+    effects_UNSTABLE: [persistAtom],
+});
+
 // 이동 카드 모달 여부
 export const MovementCardOpenState = atom({
     key: 'MovementCardOpenState',

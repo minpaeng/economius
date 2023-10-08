@@ -73,18 +73,6 @@ function EconomicIndicator({ setSideBarType }) {
         return returnArr;
     }
 
-    const buildingtest = makebuildingData(realEstateData);
-
-    console.log('====================================================');
-    console.log('====================================================');
-    console.log('====================================================');
-    console.log(interestRateData);
-    console.log(goldData);
-    console.log(buildingtest);
-    console.log('====================================================');
-    console.log('====================================================');
-    console.log('====================================================');
-
     return (
         <S.EconomicIndicatorMain>
             {/* 경제 뉴스 */}
