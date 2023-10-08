@@ -47,7 +47,6 @@ public class DiceService {
         gameValidator.checkMovePlayerStatus(player, roomId, game.getCurrentPlayerToRoll());
 
         int nextLocation = game.rearrangePlayer(movementCount, player);
-        game.updatePlayerToRoll();
         gameRepository.save(game);
 
         return MovePlayerResponse.builder()

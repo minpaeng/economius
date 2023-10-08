@@ -7,7 +7,6 @@ import com.ssafy.economius.common.exception.message.GameRoomMessage;
 import com.ssafy.economius.common.exception.response.AlreadyJoinResponse;
 import com.ssafy.economius.common.exception.response.NotPlayerToRollResponse;
 import com.ssafy.economius.common.exception.response.WebsocketErrorResponse;
-import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.repository.redis.GameRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
@@ -21,12 +20,9 @@ import java.util.Map;
 public class WebSocketExceptionHandler {
 
     private final SimpMessagingTemplate template;
-    private final GameRepository gameRepository;
 
     @MessageExceptionHandler(NotPlayerToRollException.class)
     public void handleNotPlayerToRollException(NotPlayerToRollException e) {
-        Game game = gameRepository.findById(e.getRoomId()).get();
-
         template.convertAndSend(
             "/sub/" + e.getRoomId(),
             NotPlayerToRollResponse.builder()
