@@ -30,7 +30,8 @@ public class WebSocketExceptionHandler {
                     .message(e.getMessage())
                     .roomId(e.getRoomId())
                     .requestPlayer(e.getRequestPlayer())
-                    .playerToRoll(e.getPlayerToRoll()),
+                    .playerToRoll(e.getPlayerToRoll())
+                    .build(),
             Map.of("success", false));
     }
 
