@@ -27,7 +27,7 @@ public class DiceService {
     private final GameRepository gameRepository;
     private final GameValidator gameValidator;
 
-    private List<Integer> cardFixList = new ArrayList<>(Arrays.asList(2,4,7));
+    private List<Integer> cardFixList = new ArrayList<>(Arrays.asList(3, 4, 16));
     public ViewMovementCardResponse makeMovementCard(Long player) {
         /**
          * 플레이어의 턴이 맞는지 확인하는 로직
