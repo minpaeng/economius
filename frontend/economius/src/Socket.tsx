@@ -686,6 +686,8 @@ function PlayerSocket() {
     // 이동 카드 조회 요청
     useEffect(() => {
         if (!movementCardRequest) return;
+        // test
+        setMovementCardOpen(false);
         connect().then(function () {
             stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerId }));
         });
