@@ -24,14 +24,14 @@ public class WebSocketExceptionHandler {
     @MessageExceptionHandler(NotPlayerToRollException.class)
     public void handleNotPlayerToRollException(NotPlayerToRollException e) {
         template.convertAndSend(
-            "/sub/" + e.getRoomId(),
+                "/sub/" + e.getRoomId(),
             NotPlayerToRollResponse.builder()
                     .code(e.getCode())
                     .message(e.getMessage())
                     .roomId(e.getRoomId())
                     .requestPlayer(e.getRequestPlayer())
                     .playerToRoll(e.getPlayerToRoll()),
-            Map.of("success", false, "type", "finishTurn"));
+            Map.of("success", false));
     }
 
     @MessageExceptionHandler(CustomWebsocketException.class)

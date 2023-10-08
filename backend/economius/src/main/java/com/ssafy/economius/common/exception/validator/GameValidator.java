@@ -87,11 +87,11 @@ public class GameValidator {
             log.error(roomId + " finishTurn 부적절한 플레이어 호출 : " + player + " != " + playerToFinish);
 
             throw NotPlayerToRollException.builder()
-                    .code(GameRoomMessage.INVALID_CURRENT_PLAYER_TO_ROLL.getCode())
-                    .message(GameRoomMessage.INVALID_CURRENT_PLAYER_TO_ROLL.getMessage())
                     .roomId(roomId)
                     .requestPlayer(player)
                     .playerToRoll(playerToFinish)
+                    .code(GameRoomMessage.INVALID_CURRENT_PLAYER_TO_ROLL.getCode())
+                    .message(GameRoomMessage.INVALID_CURRENT_PLAYER_TO_ROLL.getMessage())
                     .build();
         }
     }
@@ -101,11 +101,11 @@ public class GameValidator {
             log.error(roomId + "번 방 movePlayer 부적절한 호출. 현재 플레이어: " + playerToMove + ", 요청자: " + player);
 
             throw NotPlayerToRollException.builder()
-                    .code(GameRoomMessage.INVALID_MOVE_PLAYER.getCode())
-                    .message(GameRoomMessage.INVALID_MOVE_PLAYER.getMessage())
                     .roomId(roomId)
                     .requestPlayer(player)
                     .playerToRoll(playerToMove)
+                    .code(GameRoomMessage.INVALID_MOVE_PLAYER.getCode())
+                    .message(GameRoomMessage.INVALID_MOVE_PLAYER.getMessage())
                     .build();
         }
     }
