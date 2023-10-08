@@ -673,11 +673,11 @@ function PlayerSocket() {
     useEffect(() => {
         if (callBack === false) return;
         if (playerToRoll !== playerId) return;
-        setCallBack(false);
-        setIsModalOpen(false);
         connect().then(function () {
             stompClient.current.send(`/pub/${roomId}/finishTurn`, {}, JSON.stringify({ player: playerId }));
         });
+        setIsModalOpen(false);
+        setCallBack(false);
     }, [callBack]);
 
     // 방 입장 시

@@ -47,7 +47,7 @@ function Coins({ effectIdx }) {
             {props.map(({ x, y, scale }, i) => (
                 <animated.div key={i} style={{ position: 'absolute', top: top, left: left, width: '100%', height: '100%', x, y, zIndex: 20 }}>
                     <animated.div style={{ transform: interpolate([scale], trans) }}>
-                        <img style={{ width: '25px', height: '27px' }} src={dollarcoin} alt='' />
+                        <img style={{ width: '38px', height: '40px' }} src={dollarcoin} alt='' />
                     </animated.div>
                 </animated.div>
             ))}
