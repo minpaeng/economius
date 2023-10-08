@@ -97,7 +97,7 @@ export const NowPlayerPositionState = atom<number>({
 // 이동 카드 모달 여부
 export const MovementCardOpenState = atom({
     key: 'MovementCardOpenState',
-    default: true,
+    default: false,
     effects_UNSTABLE: [persistAtom],
 });
 
