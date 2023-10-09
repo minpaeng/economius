@@ -33,7 +33,7 @@ import {
     PlayerRankingState,
 } from '/src/recoil/game/atom';
 
-import { RoomJoinUsersCharacterState, MyTurnState, PlayerSequenceState, MovementCardRequestState } from '/src/recoil/animation/atom';
+import { IsModalOpenState, RoomJoinUsersCharacterState, MyTurnState, PlayerSequenceState, MovementCardRequestState } from '/src/recoil/animation/atom';
 
 import axios from 'axios';
 import { RoomIdState } from '/src/recoil/animation/atom.tsx';
@@ -48,6 +48,7 @@ import StartPlayCheck from './Components/Modals/StartPlayCheck';
 function App() {
     const light = useRef();
     const [movementCardRequest, setMovementCardRequest] = useRecoilState(MovementCardRequestState);
+    const setIsModalOpen = useSetRecoilState(IsModalOpenState);
 
     //   useHelper(light, THREE.DirectionalLightHelper);
 
@@ -117,6 +118,9 @@ function App() {
             }
             console.log(data.data);
         });
+        return () => {
+            setIsModalOpen(false);
+        };
     }, []);
 
     // r3f 객체 렌더링 확인 코드
