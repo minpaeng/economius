@@ -24,7 +24,7 @@ function MonthlyCalculate() {
         setMonthlyModalOpen(false);
         setMonthlyInfo(null);
         if (NowPlayerPosition === 0) {
-            setCallBack(false);
+            setCallBack(true);
         }
     };
 

@@ -2,10 +2,10 @@ import Modal from 'react-modal';
 import { useEffect } from 'react';
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
-import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
-
+import { PlayerToRollState, PlayerIdState, PortfolioState } from '/src/recoil/game/atom';
 import { TradeRealEstateState } from '/src/recoil/trading/atom';
 import { RealEstateInfoState } from '/src/recoil/modalInfo/atom';
+
 import hotelimg from '/RealState/hotel.png';
 import restaurantimg from '/RealState/restaurant.png';
 import shopimg from '/RealState/shop.png';
@@ -30,6 +30,9 @@ function RealEstate() {
         setIsModalOpen(false);
         setCallBack(true);
     };
+    // 포트폴리오 잔액
+    const portfolios = useRecoilValue(PortfolioState);
+    const money = portfolios[playerId].money;
 
     const fee = [null, '식사 비용', '쇼핑 비용', '숙박 비용'];
     const name = [null, '레스토랑', '상점', '호텔'];
@@ -71,7 +74,11 @@ function RealEstate() {
 
                             <S.Divide />
                             {!realEstateInfo.owner ? (
-                                <S.Botton onClick={() => (setTradeRealEstate([true, false]), effectAudioClick.play())}>매수하기</S.Botton>
+                                money >= realEstateInfo.buildingPrice ? (
+                                    <S.Botton onClick={() => (setTradeRealEstate([true, false]), effectAudioClick.play())}>매수하기</S.Botton>
+                                ) : (
+                                    <S.Botton style={{ backgroundColor: '#D9D9D9' }}>잔액부족</S.Botton>
+                                )
                             ) : realEstateInfo.owner.player === playerToRoll ? (
                                 <S.Botton onClick={() => (setTradeRealEstate([false, true]), effectAudioClick.play())}>매도하기</S.Botton>
                             ) : (

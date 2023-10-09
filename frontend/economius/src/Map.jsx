@@ -4,6 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
 import { useRecoilState } from 'recoil';
 import { MapAnimationIndexState, NowPlayerPositionState, MoveDistState, IsModalOpenState, MonthlyModalOpenState } from '/src/recoil/animation/atom';
+import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 
 // ['0', '1', ... , '30', '31']
 
@@ -20,6 +21,8 @@ function Map() {
     const [moveDist, setMoveDist] = useRecoilState(MoveDistState); // 플레이어 이동 거리
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState); // 자산 모달 여부
     const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState); // 월말정산 모달 여부
+    const playerToRoll = useRecoilValue(PlayerToRollState);
+    const playerId = useRecoilValue(PlayerIdState);
 
     let mixer;
     mixer = new THREE.AnimationMixer(map.scene); // 모델에 적용된 애니메이션을 제어하는 변수
@@ -33,9 +36,11 @@ function Map() {
             clip.clampWhenFinished = true; // 클립이 재생을 완료하면 mixer에서 제거
         }
         if (mapAniIdx === nowPlayerPosition) {
-            // 월말정산 모달 오픈
-            if (nowPlayerPosition < moveDist) {
-                setMonthlyModalOpen(true);
+            if (playerToRoll === playerId) {
+                // 월말정산 모달 오픈
+                if (nowPlayerPosition < moveDist) {
+                    setMonthlyModalOpen(true);
+                }
             }
             // 0.5초 후 자산 모달 오픈
             setTimeout(() => {

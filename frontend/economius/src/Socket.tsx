@@ -267,11 +267,11 @@ function PlayerSocket() {
             setStockChangeArr(message.stocks);
             setPlayerRanking(message.players);
             setGameRound(Math.floor(message.gameTurn / 4));
-            setCallBack(false);
-            setIsModalOpen(false);
             setBuildingState(message.buildings);
             setGoldState(message.gold);
             setInterestRateState(message.interestRate);
+            setCallBack(false);
+            setIsModalOpen(false);
             if (message.currentPlayerToRoll === playerId) {
                 connect().then(function () {
                     stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerId }));
