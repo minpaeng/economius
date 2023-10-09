@@ -258,7 +258,8 @@ function PlayerSocket() {
             connect().then(function () {
                 stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: message.currentPlayerToRoll }));
             });
-        } else if (type === 'fini   shTurn') {
+        } else if (type === 'finishTurn') {
+            console.log(message.stocks);
             setStocks(message.stocks);
             setPortfolio(message.portfolios);
             setPlayerToRoll(message.currentPlayerToRoll);
