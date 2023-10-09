@@ -7,7 +7,6 @@ import com.ssafy.economius.common.exception.message.GameRoomMessage;
 import com.ssafy.economius.common.exception.response.AlreadyJoinResponse;
 import com.ssafy.economius.common.exception.response.NotPlayerToRollResponse;
 import com.ssafy.economius.common.exception.response.WebsocketErrorResponse;
-import com.ssafy.economius.game.repository.redis.GameRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
