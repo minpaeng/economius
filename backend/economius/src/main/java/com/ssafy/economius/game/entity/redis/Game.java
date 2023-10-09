@@ -106,22 +106,32 @@ public class Game {
     }
 
     public void initializePlayerSequence() {
-        playerSequence = new ArrayList<>(List.copyOf(players));
+//        playerSequence = new ArrayList<>(List.copyOf(players));
+//
+//        Random random = new Random();
+//
+//        // 번호를 섞기 위해 Fisher-Yates 알고리즘을 사용
+//        for (int i = playerSequence.size() - 1; i > 0; i--) {
+//            // 배열 내에서 현재 인덱스 이하의 랜덤한 인덱스를 선택
+//            int randomIndex = random.nextInt(i + 1);
+//
+//            // 현재 인덱스와 랜덤하게 선택된 인덱스의 값을 교환
+//            long temp = playerSequence.get(i);
+//            playerSequence.set(i, playerSequence.get(randomIndex));
+//            playerSequence.set(randomIndex, temp);
+//        }
 
-        Random random = new Random();
-
-        // 번호를 섞기 위해 Fisher-Yates 알고리즘을 사용
-        for (int i = playerSequence.size() - 1; i > 0; i--) {
-            // 배열 내에서 현재 인덱스 이하의 랜덤한 인덱스를 선택
-            int randomIndex = random.nextInt(i + 1);
-
-            // 현재 인덱스와 랜덤하게 선택된 인덱스의 값을 교환
-            long temp = playerSequence.get(i);
-            playerSequence.set(i, playerSequence.get(randomIndex));
-            playerSequence.set(randomIndex, temp);
-        }
+        setPracticePlayerSequence();
 
         currentPlayerToRoll = playerSequence.get(0);
+    }
+
+    private void setPracticePlayerSequence() {
+        this.playerSequence = new ArrayList<>();
+        this.playerSequence.add(this.players.get(0));
+        this.playerSequence.add(this.players.get(1));
+        this.playerSequence.add(this.players.get(2));
+        this.playerSequence.add(this.players.get(3));
     }
 
     public void initializePortfolio(Map<Long, Portfolio> portfolios) {
@@ -161,8 +171,8 @@ public class Game {
     public void updatePrize() {
         List<Entry<Long, Portfolio>> entries = new LinkedList<>(portfolios.entrySet());
         entries.sort((o1, o2) -> Integer.compare(
-            o2.getValue().getTotalMoney(),
-            o1.getValue().getTotalMoney()));
+                o2.getValue().getTotalMoney(),
+                o1.getValue().getTotalMoney()));
 
         int prize = 0;
         for (Entry<Long, Portfolio> entry : entries) {
