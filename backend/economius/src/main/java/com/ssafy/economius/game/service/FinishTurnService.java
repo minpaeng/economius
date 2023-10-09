@@ -75,8 +75,8 @@ public class FinishTurnService {
             interestRateRearrange(game);
 
             changePrevIssue(game, round);
-            checkIssueRound(game, round, roomId);
             applyIssueEffect(game, round);
+            checkIssueRound(game, round, roomId);
         }
     }
 
