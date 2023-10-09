@@ -116,7 +116,7 @@ function SideBar() {
                             effectAudioClick.play();
                         }}
                     >
-                        <span className='front'>경제 지표</span>
+                        <span className='front'>경제 뉴스</span>
                     </S.PushableButton>
                 </S.SideBarBtnSection>
 
