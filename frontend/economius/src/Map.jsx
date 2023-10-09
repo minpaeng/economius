@@ -2,7 +2,7 @@ import { Suspense, useState, useEffect, useRef } from 'react';
 import { useLoader, useFrame } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { MapAnimationIndexState, NowPlayerPositionState, MoveDistState, IsModalOpenState, MonthlyModalOpenState } from '/src/recoil/animation/atom';
 import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 
