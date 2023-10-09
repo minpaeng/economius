@@ -68,7 +68,8 @@ public class StockController {
         SelectStockRequest selectStockRequest) {
         log.info(roomId + ": stockDetail 호출 -> " + selectStockRequest.toString());
 
-        SelectStockResponse selectStockResponse = stockService.stockDetail(roomId,
+        SelectStockResponse selectStockResponse = stockService.stockDetail(selectStockRequest.getPlayer(),
+                roomId,
             selectStockRequest.getStockId());
 
         log.info(roomId + ": stockDetail 결과 -> " + selectStockResponse.toString());
