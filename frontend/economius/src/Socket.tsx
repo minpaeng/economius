@@ -352,21 +352,21 @@ function PlayerSocket() {
                 visitor: message.visitor,
                 owner: message.owner,
             });
-        } else if (type === 'stockDetail') {
-            if (playerToRoll !== playerId) return;
-            setStockDetail({
-                stockId: message.stockId,
-                name: message.name,
-                stockIndustryId: message.stockIndustryId,
-                companyCategory: message.companyCategory,
-                companySubCategory: message.companySubCategory,
-                owners: message.owners,
-                remainingAmount: message.remainingAmount,
-                price: message.price,
-                rate: message.rate,
-                priceHistory: message.priceHistory,
-                rateHistory: message.rateHistory,
-            });
+            // } else if (type === 'stockDetail') {
+            //     if (playerToRoll !== playerId) return;
+            //     setStockDetail({
+            //         stockId: message.stockId,
+            //         name: message.name,
+            //         stockIndustryId: message.stockIndustryId,
+            //         companyCategory: message.companyCategory,
+            //         companySubCategory: message.companySubCategory,
+            //         owners: message.owners,
+            //         remainingAmount: message.remainingAmount,
+            //         price: message.price,
+            //         rate: message.rate,
+            //         priceHistory: message.priceHistory,
+            //         rateHistory: message.rateHistory,
+            //     });
         } else if (type == 'bank') {
             if (playerToRoll !== playerId) return;
             setBankInfo({
@@ -530,7 +530,23 @@ function PlayerSocket() {
             connect().then(function () {
                 if (playerToRoll !== playerId) return; // 내 캐릭이 아니면 요청 안 함
                 stompClient.current.send(`/pub/${roomId}/buyItem`, {}, JSON.stringify({ player: playerId, stockId: stockIds[nowPlayerPosition] }));
-                stompClient.current.send(`/pub/${roomId}/stockDetail`, {}, JSON.stringify({ player: playerId, stockId: stockIds[nowPlayerPosition] }));
+                stompClient.current
+                    .send(`/pub/${roomId}/stockDetail`, {}, JSON.stringify({ player: playerId, stockId: stockIds[nowPlayerPosition] }))
+                    .then(message => {
+                        setStockDetail({
+                            stockId: message.stockId,
+                            name: message.name,
+                            stockIndustryId: message.stockIndustryId,
+                            companyCategory: message.companyCategory,
+                            companySubCategory: message.companySubCategory,
+                            owners: message.owners,
+                            remainingAmount: message.remainingAmount,
+                            price: message.price,
+                            rate: message.rate,
+                            priceHistory: message.priceHistory,
+                            rateHistory: message.rateHistory,
+                        });
+                    });
             });
         }
         // 금거래소 방문
