@@ -30,12 +30,11 @@ public class BuildingController {
     @MessageMapping(value = "/{roomId}/buyBuilding")
     public void buyBuilding(@DestinationVariable int roomId,
                              @Payload BuyBuildingRequest buyBuildingRequest) {
-        log.info(buyBuildingRequest.getPlayer() + "번 플레이어" + buyBuildingRequest.getBuildingId() + "번 부동산 구매 요청");
+
         BuyBuildingResponse responseDto = buildingService.buyBuilding(roomId, buyBuildingRequest);
 
         Map<String, Object> headers = Map.of("success", true, "type", "buyBuilding");
         template.convertAndSend("/sub/" + roomId, responseDto, headers);
-        log.info(buyBuildingRequest.getPlayer() + "번 플레이어" + buyBuildingRequest.getBuildingId() + "번 부동산 구매 완료");
     }
 
     @MessageMapping(value = "/{roomId}/sellBuilding")
