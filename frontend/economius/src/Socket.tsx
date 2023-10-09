@@ -258,7 +258,7 @@ function PlayerSocket() {
             connect().then(function () {
                 stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: message.currentPlayerToRoll }));
             });
-        } else if (type === 'fini   shTurn') {
+        } else if (type === 'finishTurn') {
             setStocks(message.stocks);
             setPortfolio(message.portfolios);
             setPlayerToRoll(message.currentPlayerToRoll);
@@ -715,7 +715,7 @@ function PlayerSocket() {
 
     // 이동카드 선택 확정하면 서버에 이동카드 정보 보내기
     useEffect(() => {
-        if (!movementCardConfirm) return;
+        if (movementCardConfirm === false) return;
         if (playerId !== playerToRoll) return;
         connect().then(function () {
             stompClient.current.send(`/pub/${roomId}/movePlayer`, {}, JSON.stringify({ player: playerId, movementCount: moveDist }));
