@@ -227,7 +227,7 @@ public class GameRoomService {
 //        int lowerBound = 0;
 //        int upperBound = InitialData.ISSUES.size() - 1;
 //        List<Integer> numbers = RandomUtil.getUniqueRandomNumbers(size, lowerBound, upperBound);
-        List<Integer> numbers = List.of(10, 1, 16, 8, 18);
+        List<Integer> numbers = List.of(10, 16, 1, 8, 18);
         return makePickIssues(numbers);
     }
 
