@@ -10,6 +10,7 @@ import lombok.Data;
 @Builder
 public class SelectStockResponse {
 
+    private Long player;
     private Integer stockId;
     private String name;
     private Integer stockIndustryId;
