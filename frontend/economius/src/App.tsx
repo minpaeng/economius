@@ -107,6 +107,7 @@ function App() {
                 }
             }
             console.log(data.data);
+            setMovementCardRequest(true);
         });
     }, []);
 
@@ -130,13 +131,7 @@ function App() {
                 </div>
             )}
             <div className='canvas-outer' style={{ width: '100%', height: 'calc(100vw * 9 / 16)' }}>
-                <Canvas
-                    style={{ width: '100%', height: '100%' }}
-                    onCreated={() => {
-                        setRenderedObjectsCount(1);
-                        setMovementCardRequest(true);
-                    }}
-                >
+                <Canvas style={{ width: '100%', height: '100%' }} onCreated={() => setRenderedObjectsCount(1)}>
                     <OrthographicCamera makeDefault zoom={64} position={[4, 3.9, 4]} />
                     <OrbitControls />
                     <ambientLight intensity={1} />

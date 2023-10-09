@@ -696,6 +696,7 @@ function PlayerSocket() {
     // 이동 카드 조회 요청
     useEffect(() => {
         if (!movementCardRequest) return;
+        if (playerToRoll !== playerId) return;
         connect().then(function () {
             stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerId }));
         });
