@@ -102,12 +102,19 @@ function App() {
             setPlayerSequence(data.data.playerSequence);
             // 내 턴을 저장
             for (let i = 0; i < data.data.playerSequence.length; i++) {
-                if (data.data.playerSequence == Number(localStorage.getItem('player'))) {
+                console.log('prevRest : ' + i);
+                if (data.data.playerSequence[i] == Number(localStorage.getItem('player'))) {
                     setMyTurn(i + 1);
+                    console.log('postRest : ' + i);
+                    if (i == 0) {
+                        // viewmoventCard Rqeuest 실행
+                        console.log('movementCard 호출');
+                        setMovementCardRequest(true);
+                        console.log('movementCard 결과');
+                    }
                 }
             }
             console.log(data.data);
-            setMovementCardRequest(true);
         });
     }, []);
 
