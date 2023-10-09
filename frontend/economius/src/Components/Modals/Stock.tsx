@@ -12,6 +12,9 @@ import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 import OtherPerson from './OtherPerson';
 
 function getStocks(stocks, stockId, userId) {
+    console.log(stocks);
+    console.log(stockId);
+    console.log(userId);
     return stocks[stockId].owners[userId];
 }
 
