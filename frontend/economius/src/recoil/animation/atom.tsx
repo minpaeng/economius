@@ -90,6 +90,7 @@ export const NowPlayerState = atom<number>({
 export const NowPlayerPositionState = atom<number>({
     key: 'NowPlayerPositionState',
     default: 0, // 기본값
+    effects_UNSTABLE: [persistAtom],
 });
 
 // 이동 카드 조회 요청
