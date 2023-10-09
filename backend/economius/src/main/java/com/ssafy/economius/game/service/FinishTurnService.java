@@ -42,6 +42,7 @@ public class FinishTurnService {
     public synchronized FinishTurnResponse finish(int roomId, Long player) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
         gameValidator.checkRequestPlayerToFinish(roomId, player, game.getCapablePlayerToFinish());
+        game.updatePlayerToRoll();
 
         int gameTurn = game.updateGameTurn();
 //        if(gameTurn == -1) {
@@ -62,7 +63,6 @@ public class FinishTurnService {
         game.sortPlayersByTotalMoney();
 
         game.getPortfolios().values().forEach(Portfolio::updateTotalMoney);
-        game.updatePlayerToRoll();
         gameRepository.save(game);
         return modelMapper.map(game, FinishTurnResponse.class);
     }
