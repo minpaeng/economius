@@ -128,10 +128,10 @@ public class Game {
 
     private void setPracticePlayerSequence() {
         this.playerSequence = new ArrayList<>();
-        this.playerSequence.add(this.players.get(0));
         this.playerSequence.add(this.players.get(1));
         this.playerSequence.add(this.players.get(2));
         this.playerSequence.add(this.players.get(3));
+        this.playerSequence.add(this.players.get(0));
     }
 
     public void initializePortfolio(Map<Long, Portfolio> portfolios) {
