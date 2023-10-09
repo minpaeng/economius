@@ -13,5 +13,5 @@ public class NotPlayerToRollResponse {
     private String message;
     private int roomId;
     private Long requestPlayer;
-    private Long playerToRoll;
+    private Long currentPlayerToRoll;
 }
