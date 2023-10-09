@@ -423,11 +423,11 @@ function PlayerSocket() {
         else if (type == 'start') {
             setStartReturn(true);
             // 플레이어 이동 카드 조회
-            if (playerToRoll === playerId) {
-                connect().then(function () {
-                    stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerId }));
-                });
-            }
+            // if (playerToRoll === playerId) {
+            //     connect().then(function () {
+            //         stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerId }));
+            //     });
+            // }
         }
     }
 
@@ -696,7 +696,6 @@ function PlayerSocket() {
     // 이동 카드 조회 요청
     useEffect(() => {
         if (!movementCardRequest) return;
-        setMovementCardOpen(false);
         connect().then(function () {
             stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: playerId }));
         });

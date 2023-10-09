@@ -167,9 +167,13 @@ function Stock() {
                     </S.StockMid>
                     <S.StockDivide />
                     {buyClick ? (
-                        <S.StockBuyBottom onClick={() => (setTradeStock([true, false]), effectAudioClick.play())}>매수하기</S.StockBuyBottom>
+                        <S.StockBuyBottom onClick={() => (setTradeStock([true, false]), setStockDetail(null), effectAudioClick.play())}>
+                            매수하기
+                        </S.StockBuyBottom>
                     ) : (
-                        <S.StockSellBottom onClick={() => (setTradeStock([false, true]), effectAudioClick.play())}>매도하기</S.StockSellBottom>
+                        <S.StockSellBottom onClick={() => (setTradeStock([false, true]), setStockDetail(null), effectAudioClick.play())}>
+                            매도하기
+                        </S.StockSellBottom>
                     )}
                 </S.StockMain>
             )}

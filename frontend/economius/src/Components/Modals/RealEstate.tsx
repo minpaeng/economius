@@ -61,19 +61,23 @@ function RealEstate() {
                                 <S.MidDesc>
                                     {!realEstateInfo.owner || (realEstateInfo.owner && realEstateInfo.owner.player === playerToRoll)
                                         ? `방문객에게 ${fee[realEstateInfo.buildingId]}으로 ${
-                                            (realEstateInfo.buildingPrice / 10).toLocaleString().split('.')[0]
-                                        } (원)을 받을 수 있습니다.`
+                                              (realEstateInfo.buildingPrice / 10).toLocaleString().split('.')[0]
+                                          } (원)을 받을 수 있습니다.`
                                         : `건물주에게 ${fee[realEstateInfo.buildingId]}으로 ${
-                                            (realEstateInfo.buildingPrice / 10).toLocaleString().split('.')[0]
-                                        } (원)을 지불합니다.`}
+                                              (realEstateInfo.buildingPrice / 10).toLocaleString().split('.')[0]
+                                          } (원)을 지불합니다.`}
                                 </S.MidDesc>
                             </S.Mid>
 
                             <S.Divide />
                             {!realEstateInfo.owner ? (
-                                <S.Botton onClick={() => (setTradeRealEstate([true, false]), effectAudioClick.play())}>매수하기</S.Botton>
+                                <S.Botton onClick={() => (setTradeRealEstate([true, false]), setRealEstateInfo(null), effectAudioClick.play())}>
+                                    매수하기
+                                </S.Botton>
                             ) : realEstateInfo.owner.player === playerToRoll ? (
-                                <S.Botton onClick={() => (setTradeRealEstate([false, true]), effectAudioClick.play())}>매도하기</S.Botton>
+                                <S.Botton onClick={() => (setTradeRealEstate([false, true]), setRealEstateInfo(null), effectAudioClick.play())}>
+                                    매도하기
+                                </S.Botton>
                             ) : (
                                 <S.Botton onClick={() => (closeModal(), effectAudioClick.play())}>확인</S.Botton>
                             )}

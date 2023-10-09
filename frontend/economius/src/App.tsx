@@ -33,7 +33,7 @@ import {
     PlayerRankingState,
 } from '/src/recoil/game/atom';
 
-import { RoomJoinUsersCharacterState, MyTurnState, PlayerSequenceState } from '/src/recoil/animation/atom';
+import { RoomJoinUsersCharacterState, MyTurnState, PlayerSequenceState, MovementCardRequestState } from '/src/recoil/animation/atom';
 
 import axios from 'axios';
 import { RoomIdState } from '/src/recoil/animation/atom.tsx';
@@ -47,6 +47,8 @@ import StartPlayCheck from './Components/Modals/StartPlayCheck';
 
 function App() {
     const light = useRef();
+    const [movementCardRequest, setMovementCardRequest] = useRecoilState(MovementCardRequestState);
+
     //   useHelper(light, THREE.DirectionalLightHelper);
 
     const [Portfolio, setPortfolioState] = useRecoilState(PortfolioState);
@@ -128,7 +130,13 @@ function App() {
                 </div>
             )}
             <div className='canvas-outer' style={{ width: '100%', height: 'calc(100vw * 9 / 16)' }}>
-                <Canvas style={{ width: '100%', height: '100%' }} onCreated={() => setRenderedObjectsCount(1)}>
+                <Canvas
+                    style={{ width: '100%', height: '100%' }}
+                    onCreated={() => {
+                        setRenderedObjectsCount(1);
+                        setMovementCardRequest(true);
+                    }}
+                >
                     <OrthographicCamera makeDefault zoom={64} position={[4, 3.9, 4]} />
                     <OrbitControls />
                     <ambientLight intensity={1} />
