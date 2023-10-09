@@ -87,6 +87,7 @@ function App() {
     useEffect(() => {
         axios.get(`https://j9b109.p.ssafy.io/api/room/${roomId}/start`).then(data => {
             console.log(data.data.playerSequence);
+            console.log(data.data.currentPlayerToRoll);
             setPortfolioState(data.data.portfolios);
             setStockState(data.data.stocks);
             setGoldState(data.data.gold);
