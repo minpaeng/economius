@@ -40,7 +40,7 @@ function Map() {
             // 0.5초 후 자산 모달 오픈
             setTimeout(() => {
                 setIsModalOpen(true);
-            }, 2000);
+            }, 500);
         }
     }, [mapAniIdx]);
 

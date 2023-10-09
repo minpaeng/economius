@@ -58,6 +58,7 @@ function Characters({ CharacterArr }) {
     // 현재 차례인 플레이어만 불투명
     useEffect(() => {
         setOpacity1(opacity), setOpacity2(opacity), setOpacity3(opacity), setOpacity4(opacity); // 전부 투명
+        if (!roomJoinUsersId) return;
         if (roomJoinUsersId.indexOf(playerToRoll) === -1) return;
         setOpacities[roomJoinUsersId.indexOf(playerToRoll)](1); // 현재 플레이어만 불투명
     }, [playerToRoll]);
@@ -65,6 +66,7 @@ function Characters({ CharacterArr }) {
     // 자기 차례인 플레이어만 위치(idx)를 변경함
     useEffect(() => {
         if (!isMoving) return;
+        if (!roomJoinUsersId) return;
         if (roomJoinUsersId.indexOf(playerToRoll) === -1) return;
         setPositionIdxs[roomJoinUsersId.indexOf(playerToRoll)](idx => (idx + moveDist) & 31); // (현재 위치 + 이동 거리) % 맵 칸 수
         setNowPlayerPosition((positionIdxs[roomJoinUsersId.indexOf(playerToRoll)] + moveDist) & 31);

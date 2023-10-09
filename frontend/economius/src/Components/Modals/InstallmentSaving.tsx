@@ -120,7 +120,6 @@ function InstallmentSaving() {
                         <S.BankJoinBottom
                             onClick={() => {
                                 setTradeBank([true, false]);
-                                setBankInfo(null);
                                 effectAudioClick.play();
                             }}
                         >

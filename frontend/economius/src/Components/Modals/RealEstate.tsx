@@ -71,13 +71,9 @@ function RealEstate() {
 
                             <S.Divide />
                             {!realEstateInfo.owner ? (
-                                <S.Botton onClick={() => (setTradeRealEstate([true, false]), setRealEstateInfo(null), effectAudioClick.play())}>
-                                    매수하기
-                                </S.Botton>
+                                <S.Botton onClick={() => (setTradeRealEstate([true, false]), effectAudioClick.play())}>매수하기</S.Botton>
                             ) : realEstateInfo.owner.player === playerToRoll ? (
-                                <S.Botton onClick={() => (setTradeRealEstate([false, true]), setRealEstateInfo(null), effectAudioClick.play())}>
-                                    매도하기
-                                </S.Botton>
+                                <S.Botton onClick={() => (setTradeRealEstate([false, true]), effectAudioClick.play())}>매도하기</S.Botton>
                             ) : (
                                 <S.Botton onClick={() => (closeModal(), effectAudioClick.play())}>확인</S.Botton>
                             )}
