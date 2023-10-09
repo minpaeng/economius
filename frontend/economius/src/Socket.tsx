@@ -259,10 +259,6 @@ function PlayerSocket() {
                 stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: message.currentPlayerToRoll }));
             });
         } else if (type === 'finishTurn') {
-<<<<<<< HEAD
-            console.log(message.stocks);
-=======
->>>>>>> d77447a0ca041fa60dd7cd3c02908e3327aaa81e
             setStocks(message.stocks);
             setPortfolio(message.portfolios);
             setPlayerToRoll(message.currentPlayerToRoll);
