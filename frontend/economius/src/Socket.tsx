@@ -511,6 +511,11 @@ function PlayerSocket() {
     useEffect(() => {
         if (!isModalOpen) return;
 
+        console.log('자산별 방문 콘솔로그');
+        console.log(nowPlayerPosition);
+        console.log(playerToRoll);
+        console.log(playerId);
+
         // 부동산 방문
         if ([4, 14, 22].includes(nowPlayerPosition)) {
             connect().then(function () {
