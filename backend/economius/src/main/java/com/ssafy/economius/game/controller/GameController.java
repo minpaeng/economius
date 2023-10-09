@@ -49,29 +49,35 @@ public class GameController {
 
     @MessageMapping(value = "/{roomId}/start")
     public void start(@DestinationVariable int roomId, GameStartRequest gameStartRequest) {
+        log.info("websocket start 호출자(방장): " + gameStartRequest.getHostPlayer());
         GameStartResponse gameStartResponse = gameService.start(roomId,
                 gameStartRequest.getHostPlayer());
 
         Map<String, Object> headers = Map.of("success", true, "type", "start");
         template.convertAndSend("/sub/" + roomId, gameStartResponse, headers);
+        log.info("websocket start 호출 결과: " + gameStartResponse);
     }
 
     @MessageMapping(value = "/{roomId}/exit")
     public void exit(@DestinationVariable int roomId, GameRoomExitRequest gameRoomExitRequest) {
+        log.info(gameRoomExitRequest.getPlayer() + "번 플레이어" + roomId + "번 방 퇴장 요청");
         GameRoomExitResponse gameRoomExitResponse = gameService.exit(roomId,
                 gameRoomExitRequest.getPlayer());
 
         Map<String, Object> headers = Map.of("success", true, "type", "exit");
         template.convertAndSend("/sub/" + roomId, gameRoomExitResponse, headers);
+        log.info(gameRoomExitRequest.getPlayer() + "번 플레이어" + roomId + "번 방 퇴장 완료");
     }
 
     @MessageMapping(value = "/{roomId}/calculate")
     public void calculate(@DestinationVariable int roomId, @Payload CalculateRequest calculateRequest) {
+        log.info(calculateRequest.getPlayer() + "번 플레이어" + roomId + "번 방 calculate 요청");
         CalculateResponse calculateResponse = gameService.calculate(
                 roomId, calculateRequest.getPlayer());
 
         Map<String, Object> headers = Map.of("success", true, "type", "calculate");
         template.convertAndSend("/sub/" + roomId, calculateResponse, headers);
+        log.info(calculateRequest.getPlayer() + "번 플레이어" + roomId + "번 방 calculate 요청에 대한 응답 완료");
     }
 
 
