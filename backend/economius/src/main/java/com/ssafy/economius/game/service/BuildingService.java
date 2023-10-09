@@ -129,6 +129,7 @@ public class BuildingService {
         VisitBuildingDto owner = makeVisitBuildingDto(ownerId, game);
 
         return VisitBuildingResponse.builder()
+                .player(playerId)
                 .buildingId(buildingId)
                 .buildingPrice(game.getBuildings().get(buildingId).getPrice())
                 .changeAmount(changeAmount)
