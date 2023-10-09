@@ -532,7 +532,8 @@ function PlayerSocket() {
                 stompClient.current.send(`/pub/${roomId}/buyItem`, {}, JSON.stringify({ player: playerId, stockId: stockIds[nowPlayerPosition] }));
                 stompClient.current
                     .send(`/pub/${roomId}/stockDetail`, {}, JSON.stringify({ player: playerId, stockId: stockIds[nowPlayerPosition] }))
-                    .then(message => {
+                    .then((res: any) => {
+                        const message = JSON.parse(res.body) || null; // 객체
                         setStockDetail({
                             stockId: message.stockId,
                             name: message.name,
