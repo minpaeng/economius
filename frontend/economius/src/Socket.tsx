@@ -258,7 +258,7 @@ function PlayerSocket() {
             connect().then(function () {
                 stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: message.currentPlayerToRoll }));
             });
-        } else if (type === 'finishTurn') {
+        } else if (type === 'fini   shTurn') {
             setStocks(message.stocks);
             setPortfolio(message.portfolios);
             setPlayerToRoll(message.currentPlayerToRoll);
@@ -278,8 +278,13 @@ function PlayerSocket() {
                 });
             }
         } else if (type === 'viewMovementCard') {
-            if (playerToRoll !== playerId) return;
-
+            if (playerToRoll !== playerId) {
+                console.log('안된것같은데');
+                console.log(`message.player:${playerToRoll}, playerId:${playerId}`);
+                console.log('message.player', message.player);
+                return;
+            }
+            console.log(playerToRoll, playerId);
             setMovementCard(message.cards);
             setMovementCardOpen(true);
         } else if (type === 'buyStock') {
