@@ -278,13 +278,13 @@ function PlayerSocket() {
                 });
             }
         } else if (type === 'viewMovementCard') {
-            if (playerToRoll !== playerId) {
+            if (message.player !== playerId) {
                 console.log('안된것같은데');
                 console.log(`message.player:${playerToRoll}, playerId:${playerId}`);
                 console.log('message.player', message.player);
                 return;
             }
-            console.log(playerToRoll, playerId);
+            console.log(message.player, playerId);
             setMovementCard(message.cards);
             setMovementCardOpen(true);
         } else if (type === 'buyStock') {
