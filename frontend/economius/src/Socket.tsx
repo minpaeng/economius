@@ -236,7 +236,6 @@ function PlayerSocket() {
         console.log('전체메시지 type: ', type);
         console.log('전체메시지 message: ', message);
         if (type === 'movePlayer') {
-            console.log('movePlayer player', message.player);
             setMoveDist(message.movementCount);
             // setPlayerToRoll(message.player);
             setNowPlayerPosition(message.location);
@@ -260,7 +259,6 @@ function PlayerSocket() {
                 stompClient.current.send(`/pub/${roomId}/viewMovementCard`, {}, JSON.stringify({ player: message.currentPlayerToRoll }));
             });
         } else if (type === 'finishTurn') {
-            console.log('finishTurn player', message.currentPlayerToRoll);
             setStocks(message.stocks);
             setPortfolio(message.portfolios);
             setPlayerToRoll(message.currentPlayerToRoll);
@@ -280,13 +278,7 @@ function PlayerSocket() {
                 });
             }
         } else if (type === 'viewMovementCard') {
-            if (message.player !== playerId) {
-                console.log('안된것같은데');
-                console.log(`message.player:${playerToRoll}, playerId:${playerId}`);
-                console.log('message.player', message.player);
-                return;
-            }
-            console.log(message.player, playerId);
+            if (message.player !== playerId) return;
             setMovementCard(message.cards);
             setMovementCardOpen(true);
         } else if (type === 'buyStock') {
@@ -346,7 +338,7 @@ function PlayerSocket() {
                 year: message.year,
             });
         } else if (type == 'visitBuilding') {
-            if (playerToRoll !== playerId) return;
+            if (message.player !== playerId) return;
             setRealEstateInfo({
                 buildingId: message.buildingId,
                 buildingPrice: message.buildingPrice,
@@ -370,7 +362,7 @@ function PlayerSocket() {
                 rateHistory: message.rateHistory,
             });
         } else if (type == 'bank') {
-            if (playerToRoll !== playerId) return;
+            if (message.player !== playerId) return;
             setBankInfo({
                 player: message.player,
                 money: message.money,
@@ -384,7 +376,7 @@ function PlayerSocket() {
                 rate: message.savingDto.rate,
             });
         } else if (type == 'calculate') {
-            if (playerToRoll !== playerId) return;
+            if (message.player !== playerId) return;
             setMonthlyInfo({
                 player: message.player,
                 salary: message.receipt.salary,
@@ -405,7 +397,7 @@ function PlayerSocket() {
                 apply: message.apply,
             });
         } else if (type == 'insurance') {
-            if (playerToRoll !== playerId) return;
+            if (message.player !== playerId) return;
             setInsuranceInfo({
                 player: message.player,
                 insurance1: message.insuranceDto[1],
