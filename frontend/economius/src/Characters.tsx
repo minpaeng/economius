@@ -20,7 +20,7 @@ function Characters({ CharacterArr }) {
     // 플레이어 배열
     // 현재 플레이어 최종 위치
     const [playerToRoll, setPlayerToRoll] = useRecoilState(PlayerToRollState);
-    const [roomJoinUsersId, setRoomJoinUsersId] = useRecoilState(RoomJoinUsersIdState);
+    const [roomJoinUsersId, setRoomJoinUsersId] = useRecoilState<number[]>(RoomJoinUsersIdState);
     const [nowPlayerPosition, setNowPlayerPosition] = useRecoilState(NowPlayerPositionState);
 
     // 캐릭터 이동 여부
@@ -58,6 +58,7 @@ function Characters({ CharacterArr }) {
     // 현재 차례인 플레이어만 불투명
     useEffect(() => {
         setOpacity1(opacity), setOpacity2(opacity), setOpacity3(opacity), setOpacity4(opacity); // 전부 투명
+        if (roomJoinUsersId.indexOf(playerToRoll) === -1) return;
         setOpacities[roomJoinUsersId.indexOf(playerToRoll)](1); // 현재 플레이어만 불투명
     }, [playerToRoll]);
 
