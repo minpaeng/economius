@@ -28,9 +28,10 @@ public class StockService {
     private final GameRepository gameRepository;
     private final GameValidator gameValidator;
 
-    public SelectStockResponse stockDetail(Long player, int roomId, int stockId) {
+    public SelectStockResponse stockDetail(int roomId, int stockId) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
         Stock stock = game.getStocks().get(stockId);
+        Long player = game.getCurrentPlayerToRoll();
 
         return getSelectStockResponse(player, stock);
     }
