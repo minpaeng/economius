@@ -63,6 +63,15 @@ padding-bottom: 56.24%;
     z-index: 999;
 }
 
+.image-loading {
+    position: absolute;
+    display: flex;
+    z-index: 998;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+}
+
 .RoundModal {
     z-index: 3;
 }

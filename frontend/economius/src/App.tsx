@@ -138,9 +138,12 @@ function App() {
     return (
         <S.Rooter>
             {showVideo && (
-                <div className='video-loading'>
-                    <video autoPlay muted loop src='/video/video_loading.mp4' style={{ width: '100%', height: 'auto' }} />
-                </div>
+                <>
+                    <div className='image-loading'></div>
+                    <div className='video-loading'>
+                        <video autoPlay muted loop src='/video/video_loading.mp4' style={{ width: '100%', height: 'auto' }} />
+                    </div>
+                </>
             )}
             <div className='canvas-outer' style={{ width: '100%', height: 'calc(100vw * 9 / 16)' }}>
                 <Canvas style={{ width: '100%', height: '100%' }} onCreated={() => setRenderedObjectsCount(1)}>
