@@ -10,7 +10,6 @@
     padding: 0;
     font-family: 'netmarbleB';
     user-select: none;
-    cursor: url('/cursor/1.png') 30 30, auto;
 }
 
 body {
