@@ -5,9 +5,11 @@
 </div>
 
 <div align="center">
- <h3><b>EconomiuS</b></h3>
+ <h3><b>Economius</b></h3>
+
+ <strong>게임 속에서 만들어나가는 나만의 경제 포트폴리오</strong><br>
   2023.08.21 ~ 2023.10.06
-  <br><br>
+  <br>
 
 [Notion](https://warm-care-7c5.notion.site/PJT-42d5848006134d259f285d0ba657be2c?pvs=4) | [UCC]()
 
