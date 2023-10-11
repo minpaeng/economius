@@ -19,7 +19,8 @@ function PlayerPlaceAll() {
         return Object.values(obj);
     }
 
-    const CharacterArr = objectToArray(Characters);
+    // const CharacterArr = objectToArray(Characters);
+    const CharacterArr = [4, 9, 1, 6];
 
     const borderWidth = ['0px 5px 5px 0px', '0px 0px 5px 5px', '5px 5px 0px 0px', '5px 0px 0px 5px'];
 
