@@ -75,9 +75,7 @@ function App() {
     const [roomJoinUsersCharacter, setRoomJoinUsersCharacter] = useRecoilState(RoomJoinUsersCharacterState);
     const setPlayerRanking = useSetRecoilState(PlayerRankingState);
     const setPlayerSequence = useSetRecoilState(PlayerSequenceState);
-    const setNowPlayerPostion = useSetRecoilState(NowPlayerPositionState);
     const setMonthlyModalOpen = useSetRecoilState(MonthlyModalOpenState);
-    const setCallBack = useSetRecoilState(CallBackState);
 
     function objectToArray(obj) {
         if (obj === null) {
@@ -133,8 +131,6 @@ function App() {
         return () => {
             setIsModalOpen(false);
             setMonthlyModalOpen(false);
-            setNowPlayerPostion(0);
-            setCallBack(false);
         };
     }, []);
 
