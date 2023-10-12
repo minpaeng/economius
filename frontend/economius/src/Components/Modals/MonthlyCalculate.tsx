@@ -24,7 +24,7 @@ function MonthlyCalculate() {
         setMonthlyModalOpen(false);
         setMonthlyInfo(null);
         if (NowPlayerPosition === 0) {
-            setCallBack(false);
+            setCallBack(true);
         }
     };
 
@@ -93,7 +93,7 @@ function MonthlyCalculate() {
                             <S.MidItem>
                                 <S.MidDesc>총 명세액</S.MidDesc>
                                 <S.MidAmount>
-                                    {monthlyInfo.totalIncome.toLocaleString() >= 0 ? `+` : `-`}
+                                    {monthlyInfo.totalIncome >= 0 ? `+` : `-`}
                                     {monthlyInfo.totalIncome.toLocaleString()}
                                     <S.MidImg src={dollarcoin}></S.MidImg>
                                 </S.MidAmount>

@@ -84,14 +84,13 @@ export const UseridState = atom({
 export const NowPlayerState = atom<number>({
     key: 'NowPlayerState',
     default: 0, // 기본값
-    effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
 // 현재 플레이어 최종 위치
 export const NowPlayerPositionState = atom<number>({
     key: 'NowPlayerPositionState',
     default: 0, // 기본값
-    effects_UNSTABLE: [persistAtom],
+    // effects_UNSTABLE: [persistAtom],
 });
 
 // 이동 카드 조회 요청
@@ -105,7 +104,7 @@ export const MovementCardRequestState = atom({
 export const MovementCardOpenState = atom({
     key: 'MovementCardOpenState',
     default: false,
-    effects_UNSTABLE: [persistAtom],
+    // effects_UNSTABLE: [persistAtom],
 });
 
 // 이동 카드 번호
@@ -119,7 +118,7 @@ export const MovementCardState = atom({
 export const MovementCardConfirmState = atom({
     key: 'MovementCardConfirmState',
     default: false,
-    effects_UNSTABLE: [persistAtom],
+    // effects_UNSTABLE: [persistAtom],
 });
 
 // 캐릭터 이동 여부

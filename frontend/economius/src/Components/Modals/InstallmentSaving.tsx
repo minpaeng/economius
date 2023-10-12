@@ -20,7 +20,6 @@ function InstallmentSaving() {
     // 모달 끄기
     const closeModal = () => {
         setBankInfo(null);
-        // setIsModalOpen(false);
         setCallBack(true);
     };
 
@@ -111,6 +110,7 @@ function InstallmentSaving() {
                         <S.BankJoinBottom
                             onClick={() => {
                                 setTradeBank([false, true]);
+                                setBankInfo(null);
                                 effectAudioClick.play();
                             }}
                         >

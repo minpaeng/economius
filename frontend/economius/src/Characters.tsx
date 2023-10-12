@@ -20,7 +20,7 @@ function Characters({ CharacterArr }) {
     // 플레이어 배열
     // 현재 플레이어 최종 위치
     const [playerToRoll, setPlayerToRoll] = useRecoilState(PlayerToRollState);
-    const [roomJoinUsersId, setRoomJoinUsersId] = useRecoilState(RoomJoinUsersIdState);
+    const [roomJoinUsersId, setRoomJoinUsersId] = useRecoilState<number[]>(RoomJoinUsersIdState);
     const [nowPlayerPosition, setNowPlayerPosition] = useRecoilState(NowPlayerPositionState);
 
     // 캐릭터 이동 여부
@@ -29,6 +29,7 @@ function Characters({ CharacterArr }) {
     const [moveDist, setMoveDist] = useRecoilState(MoveDistState);
 
     // 플레이어의 닉네임, 캐릭터(idx)
+
     const [player1, setPlayer1] = useState<[string, number]>(['P1', CharacterArr[0]]);
     const [player2, setPlayer2] = useState<[string, number]>(['P2', CharacterArr[1]]);
     const [player3, setPlayer3] = useState<[string, number]>(['P3', CharacterArr[2]]);
@@ -58,12 +59,16 @@ function Characters({ CharacterArr }) {
     // 현재 차례인 플레이어만 불투명
     useEffect(() => {
         setOpacity1(opacity), setOpacity2(opacity), setOpacity3(opacity), setOpacity4(opacity); // 전부 투명
+        if (!roomJoinUsersId) return;
+        if (roomJoinUsersId.indexOf(playerToRoll) === -1) return;
         setOpacities[roomJoinUsersId.indexOf(playerToRoll)](1); // 현재 플레이어만 불투명
     }, [playerToRoll]);
 
     // 자기 차례인 플레이어만 위치(idx)를 변경함
     useEffect(() => {
         if (!isMoving) return;
+        if (!roomJoinUsersId) return;
+        if (roomJoinUsersId.indexOf(playerToRoll) === -1) return;
         setPositionIdxs[roomJoinUsersId.indexOf(playerToRoll)](idx => (idx + moveDist) & 31); // (현재 위치 + 이동 거리) % 맵 칸 수
         setNowPlayerPosition((positionIdxs[roomJoinUsersId.indexOf(playerToRoll)] + moveDist) & 31);
     }, [isMoving]);

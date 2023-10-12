@@ -33,7 +33,16 @@ import {
     PlayerRankingState,
 } from '/src/recoil/game/atom';
 
-import { RoomJoinUsersCharacterState, MyTurnState, PlayerSequenceState } from '/src/recoil/animation/atom';
+import {
+    IsModalOpenState,
+    RoomJoinUsersCharacterState,
+    MyTurnState,
+    PlayerSequenceState,
+    MovementCardRequestState,
+    NowPlayerPositionState,
+    MonthlyModalOpenState,
+    CallBackState,
+} from '/src/recoil/animation/atom';
 
 import axios from 'axios';
 import { RoomIdState } from '/src/recoil/animation/atom.tsx';
@@ -47,6 +56,9 @@ import StartPlayCheck from './Components/Modals/StartPlayCheck';
 
 function App() {
     const light = useRef();
+    const [movementCardRequest, setMovementCardRequest] = useRecoilState(MovementCardRequestState);
+    const setIsModalOpen = useSetRecoilState(IsModalOpenState);
+
     //   useHelper(light, THREE.DirectionalLightHelper);
 
     const [Portfolio, setPortfolioState] = useRecoilState(PortfolioState);
@@ -63,6 +75,9 @@ function App() {
     const [roomJoinUsersCharacter, setRoomJoinUsersCharacter] = useRecoilState(RoomJoinUsersCharacterState);
     const setPlayerRanking = useSetRecoilState(PlayerRankingState);
     const setPlayerSequence = useSetRecoilState(PlayerSequenceState);
+    const setNowPlayerPostion = useSetRecoilState(NowPlayerPositionState);
+    const setMonthlyModalOpen = useSetRecoilState(MonthlyModalOpenState);
+    const setCallBack = useSetRecoilState(CallBackState);
 
     function objectToArray(obj) {
         if (obj === null) {
@@ -85,6 +100,7 @@ function App() {
     useEffect(() => {
         axios.get(`https://j9b109.p.ssafy.io/api/room/${roomId}/start`).then(data => {
             console.log(data.data.playerSequence);
+            console.log(data.data.currentPlayerToRoll);
             setPortfolioState(data.data.portfolios);
             setStockState(data.data.stocks);
             setGoldState(data.data.gold);
@@ -100,12 +116,26 @@ function App() {
             setPlayerSequence(data.data.playerSequence);
             // 내 턴을 저장
             for (let i = 0; i < data.data.playerSequence.length; i++) {
-                if (data.data.playerSequence == Number(localStorage.getItem('player'))) {
+                console.log('prevRest : ' + i);
+                if (data.data.playerSequence[i] == Number(localStorage.getItem('player'))) {
                     setMyTurn(i + 1);
+                    console.log('postRest : ' + i);
+                    if (i == 0) {
+                        // viewmoventCard Rqeuest 실행
+                        console.log('movementCard 호출');
+                        setMovementCardRequest(true);
+                        console.log('movementCard 결과');
+                    }
                 }
             }
             console.log(data.data);
         });
+        return () => {
+            setIsModalOpen(false);
+            setMonthlyModalOpen(false);
+            setNowPlayerPostion(0);
+            setCallBack(false);
+        };
     }, []);
 
     // r3f 객체 렌더링 확인 코드
@@ -123,9 +153,12 @@ function App() {
     return (
         <S.Rooter>
             {showVideo && (
-                <div className='video-loading'>
-                    <video autoPlay muted loop src='/video/video_loading.mp4' style={{ width: '100%', height: 'auto' }} />
-                </div>
+                <>
+                    <div className='image-loading'></div>
+                    <div className='video-loading'>
+                        <video autoPlay muted loop src='/video/video_loading.mp4' style={{ width: '100%', height: 'auto' }} />
+                    </div>
+                </>
             )}
             <div className='canvas-outer' style={{ width: '100%', height: 'calc(100vw * 9 / 16)' }}>
                 <Canvas style={{ width: '100%', height: '100%' }} onCreated={() => setRenderedObjectsCount(1)}>

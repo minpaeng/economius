@@ -7,6 +7,7 @@ import { StockChangeArrState } from '/src/recoil/game/atom';
 
 function NewsBar() {
     const StockRateObj = useRecoilValue(StockChangeArrState);
+    console.log(StockRateObj);
 
     // modal style
     const modalStyle: any = {
