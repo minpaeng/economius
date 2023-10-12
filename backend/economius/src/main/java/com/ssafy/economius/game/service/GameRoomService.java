@@ -222,28 +222,20 @@ public class GameRoomService {
 
 
     private List<IssueDto> pickIssues() {
-//        List<Integer> list = new ArrayList<>(InitialData.ISSUES.keySet());
-//        int size = RateEnum.ISSUE_COUNT.getValue();
-//        int lowerBound = 0;
-//        int upperBound = InitialData.ISSUES.size() - 1;
-//        List<Integer> numbers = RandomUtil.getUniqueRandomNumbers(size, lowerBound, upperBound);
-        List<Integer> numbers = List.of(10, 16, 1, 8, 18);
-        return makePickIssues(numbers);
+        List<Integer> list = new ArrayList<>(InitialData.ISSUES.keySet());
+        int size = RateEnum.ISSUE_COUNT.getValue();
+        int lowerBound = 0;
+        int upperBound = InitialData.ISSUES.size() - 1;
+        List<Integer> numbers = RandomUtil.getUniqueRandomNumbers(size, lowerBound, upperBound);
+
+        return makePickIssues(numbers, list);
     }
 
-    // 시연용 이슈 셋팅
-    private List<IssueDto> makePickIssues(List<Integer> numbers) {
+    private List<IssueDto> makePickIssues(List<Integer> numbers, List<Integer> list) {
         List<IssueDto> issues = new ArrayList<>();
-        numbers.forEach(number -> issues.add(InitialData.ISSUES.get(number)));
-        log.info("발생 이슈: " + issues);
+        numbers.forEach(number -> issues.add(InitialData.ISSUES.get(list.get(number))));
         return issues;
     }
-
-//    private List<IssueDto> makePickIssues(List<Integer> numbers, List<Integer> list) {
-//        List<IssueDto> issues = new ArrayList<>();
-//        numbers.forEach(number -> issues.add(InitialData.ISSUES.get(list.get(number))));
-//        return issues;
-//    }
 
     private Map<Integer, Stock> makeStocks() {
         Map<Integer, Stock> stocks = new HashMap<>();
