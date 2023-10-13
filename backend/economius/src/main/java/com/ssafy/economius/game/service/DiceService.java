@@ -1,11 +1,16 @@
 package com.ssafy.economius.game.service;
 
+import static com.ssafy.economius.game.enums.RateEnum.MOVEMENT_CARD_LOWER_BOUND;
+import static com.ssafy.economius.game.enums.RateEnum.MOVEMENT_CARD_SIZE;
+import static com.ssafy.economius.game.enums.RateEnum.MOVEMENT_CARD_UPPER_BOUND;
+
 import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.dto.message.DiceTurnMessage;
 import com.ssafy.economius.game.dto.response.MovePlayerResponse;
 import com.ssafy.economius.game.dto.response.ViewMovementCardResponse;
 import com.ssafy.economius.game.entity.redis.Game;
 import com.ssafy.economius.game.repository.redis.GameRepository;
+import com.ssafy.economius.game.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
