@@ -1,5 +1,6 @@
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
+import { PlayerToRollState } from '../game/atom';
 const { persistAtom } = recoilPersist();
 
 // 시작 결과 반환
@@ -83,21 +84,27 @@ export const UseridState = atom({
 export const NowPlayerState = atom<number>({
     key: 'NowPlayerState',
     default: 0, // 기본값
-    effects_UNSTABLE: [persistAtom], // 새로고침해도 유지
 });
 
 // 현재 플레이어 최종 위치
 export const NowPlayerPositionState = atom<number>({
     key: 'NowPlayerPositionState',
     default: 0, // 기본값
+    // effects_UNSTABLE: [persistAtom],
+});
+
+// 이동 카드 조회 요청
+export const MovementCardRequestState = atom({
+    key: 'MovementCardRequestState',
+    default: false,
     effects_UNSTABLE: [persistAtom],
 });
 
 // 이동 카드 모달 여부
 export const MovementCardOpenState = atom({
     key: 'MovementCardOpenState',
-    default: true,
-    effects_UNSTABLE: [persistAtom],
+    default: false,
+    // effects_UNSTABLE: [persistAtom],
 });
 
 // 이동 카드 번호
@@ -111,7 +118,7 @@ export const MovementCardState = atom({
 export const MovementCardConfirmState = atom({
     key: 'MovementCardConfirmState',
     default: false,
-    effects_UNSTABLE: [persistAtom],
+    // effects_UNSTABLE: [persistAtom],
 });
 
 // 캐릭터 이동 여부
@@ -136,12 +143,14 @@ export const MapAnimationIndexState = atom<number>({
 export const IsModalOpenState = atom<boolean>({
     key: 'IsModalOpenState',
     default: false,
+    effects_UNSTABLE: [persistAtom],
 });
 
 // 월말정산 모달 오픈 여부
 export const MonthlyModalOpenState = atom<boolean>({
     key: 'MonthlyModalOpenState',
     default: false,
+    effects_UNSTABLE: [persistAtom],
 });
 
 // 뉴스 클릭
@@ -164,7 +173,6 @@ export const StockClickIdState = atom<number>({
 });
 
 // sideBarType
-
 export const SideBarTypeState = atom<string>({
     key: 'SideBarTypeState',
     default: 'portfolio',
@@ -201,4 +209,14 @@ export const RoomJoinUsersCharacterState = atom({
 export const PlayerSequenceState = atom({
     key: 'PlayerSequenceState',
     default: null,
+});
+
+export const NicknameToRollSelector = selector({
+    key: 'NicknameToRollSelector',
+    get: ({ get }) => {
+        const UsersId = get(RoomJoinUsersIdState);
+        const UsersNickname = get(RoomJoinUsersNicknameState);
+        const playerToRoll = get(PlayerToRollState);
+        return UsersNickname[UsersId.indexOf(playerToRoll)];
+    },
 });

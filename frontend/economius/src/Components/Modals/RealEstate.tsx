@@ -2,16 +2,17 @@ import Modal from 'react-modal';
 import { useEffect } from 'react';
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
-import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
-
+import { PlayerToRollState, PlayerIdState, PortfolioState } from '/src/recoil/game/atom';
 import { TradeRealEstateState } from '/src/recoil/trading/atom';
 import { RealEstateInfoState } from '/src/recoil/modalInfo/atom';
+
 import hotelimg from '/RealState/hotel.png';
 import restaurantimg from '/RealState/restaurant.png';
 import shopimg from '/RealState/shop.png';
 import * as S from './RealEstate.style';
 import { ExitButton } from './GlobalModal.stye';
 import { effectAudioPopup, effectAudioClick } from '/src/Audio';
+import OtherPerson from './OtherPerson';
 
 function RealEstate() {
     const playerId = useRecoilValue(PlayerIdState);
@@ -29,6 +30,9 @@ function RealEstate() {
         setIsModalOpen(false);
         setCallBack(true);
     };
+    // 포트폴리오 잔액
+    const portfolios = useRecoilValue(PortfolioState);
+    const money = portfolios[playerId].money;
 
     const fee = [null, '식사 비용', '쇼핑 비용', '숙박 비용'];
     const name = [null, '레스토랑', '상점', '호텔'];
@@ -58,7 +62,7 @@ function RealEstate() {
                                         : `가격 : ${realEstateInfo.buildingPrice.toLocaleString()} (원)`}
                                 </S.MidDesc>
                                 <S.MidDesc>
-                                    {!realEstateInfo.owner || (realEstateInfo.owner && realEstateInfo.owner.player !== playerToRoll)
+                                    {!realEstateInfo.owner || (realEstateInfo.owner && realEstateInfo.owner.player === playerToRoll)
                                         ? `방문객에게 ${fee[realEstateInfo.buildingId]}으로 ${
                                               (realEstateInfo.buildingPrice / 10).toLocaleString().split('.')[0]
                                           } (원)을 받을 수 있습니다.`
@@ -70,7 +74,11 @@ function RealEstate() {
 
                             <S.Divide />
                             {!realEstateInfo.owner ? (
-                                <S.Botton onClick={() => (setTradeRealEstate([true, false]), effectAudioClick.play())}>매수하기</S.Botton>
+                                money >= realEstateInfo.buildingPrice ? (
+                                    <S.Botton onClick={() => (setTradeRealEstate([true, false]), effectAudioClick.play())}>매수하기</S.Botton>
+                                ) : (
+                                    <S.Botton style={{ backgroundColor: '#D9D9D9' }}>잔액부족</S.Botton>
+                                )
                             ) : realEstateInfo.owner.player === playerToRoll ? (
                                 <S.Botton onClick={() => (setTradeRealEstate([false, true]), effectAudioClick.play())}>매도하기</S.Botton>
                             ) : (
@@ -82,7 +90,7 @@ function RealEstate() {
                     )}
                 </Modal>
             ) : (
-                <div style={{ position: 'absolute', left: '40%', top: '50%', height: '50px', backgroundColor: 'brown' }}>부동산에서 다른 사람이 거래중</div>
+                <OtherPerson />
             )}
         </>
     );

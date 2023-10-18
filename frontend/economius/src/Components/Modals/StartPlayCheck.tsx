@@ -21,8 +21,7 @@ export default function StartPlayCheck() {
 
     const Sequence = useRecoilValue(PlayerSequenceState);
     const userId = useRecoilValue(PlayerIdState);
-
-    const turn = Sequence.indexOf(userId) + 1;
+    const turn = Sequence && Sequence.indexOf(userId) + 1;
 
     // modal style
     const modalStyle: any = {
@@ -87,11 +86,11 @@ export default function StartPlayCheck() {
                         </div>
                         <br />
                         <span>
-                            {localStorage.getItem('nickname')}님은 <span style={{ color: 'blue', display: 'inline' }}>{turn}번</span> 플레이어입니다.
+                            {localStorage.getItem('nickname')}님은 <span style={{ color: 'rgb(82,165,155)', display: 'inline' }}>{turn}번</span> 플레이어입니다.
                         </span>
                         <br />
                         <span>
-                            자산을 불리거나 지출을 최소화하여 <span style={{ color: 'red', display: 'inline' }}>승리</span>하세요!
+                            자산을 불리거나 지출을 최소화하여 <span style={{ color: 'rgb(221,94,86)', display: 'inline' }}>승리</span>하세요!
                         </span>
                     </S.MidDesc>
                 </S.MidNoImg>

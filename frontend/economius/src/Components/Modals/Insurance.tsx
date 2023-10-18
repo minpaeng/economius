@@ -9,6 +9,7 @@ import * as S from './Insurance.style';
 import { ExitButton } from './GlobalModal.stye';
 import InsuranceCard from './InsuranceCard';
 import { effectAudioPopup, effectAudioClick } from '/src/Audio';
+import OtherPerson from './OtherPerson';
 
 function Insurance() {
     const playerId = useRecoilValue(PlayerIdState);
@@ -25,27 +26,12 @@ function Insurance() {
 
     // 의료보험 - 일반
     const Life: any = [
-        ['교통사고', 'car-accident-medical'],
-        ['건강검진', 'hospital'],
-        ['감기 유행', 'covid-19'],
-    ];
-    // 의료보험 - 특약
-    const LifeSpecial: any = [
-        ['교통사고', 'car-accident-medical'],
-        ['건강검진', 'hospital'],
-        ['임플란트', 'dental-care'],
-        ['암', 'lung-cancer'],
-        ['식중독', 'rotten'],
-        ['심혈관 질환', 'blood-vessel'],
-        ['감기 유행', 'covid-19'],
-    ];
-    // 손해보험
-    const NonLife: any = [
         ['교통사고', 'car-accident'],
         ['화재발생', 'fire'],
         ['도둑', 'robbery'],
     ];
-    const NonLifeSpecial: any = [
+    // 의료보험 - 특약
+    const LifeSpecial: any = [
         ['교통사고', 'car-accident'],
         ['화재발생', 'fire'],
         ['해상사고', 'shipwreck'],
@@ -53,6 +39,21 @@ function Insurance() {
         ['홍수', 'flood'],
         ['산재사고', 'slip'],
         ['도둑', 'robbery'],
+    ];
+    // 손해보험
+    const NonLife: any = [
+        ['교통사고', 'car-accident-medical'],
+        ['건강검진', 'hospital'],
+        ['감기 유행', 'covid-19'],
+    ]
+    const NonLifeSpecial: any = [
+        ['교통사고', 'car-accident-medical'],
+        ['건강검진', 'hospital'],
+        ['임플란트', 'dental-care'],
+        ['암', 'lung-cancer'],
+        ['식중독', 'rotten'],
+        ['심혈관 질환', 'blood-vessel'],
+        ['감기 유행', 'covid-19'],
     ];
     const Items = [Life, LifeSpecial, NonLife, NonLifeSpecial];
     const order = [3, 4, 1, 2];
@@ -118,7 +119,7 @@ function Insurance() {
                     )}
                 </Modal>
             ) : (
-                <div style={{ position: 'absolute', left: '40%', top: '50%', height: '50px', backgroundColor: 'brown' }}>보험에서 다른 사람이 거래중</div>
+                <OtherPerson />
             )}
         </>
     );

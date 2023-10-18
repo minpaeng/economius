@@ -14,9 +14,9 @@ function PortforlioStockItem({ id, imgPath, title, type, cnt, value, valueChange
     let percentStyleSpan;
 
     if (valueChange > 0) {
-        percentStyleSpan = <span style={{ color: 'red' }}> (+{valueChange}%)</span>;
+        percentStyleSpan = <span style={{ color: 'rgb(82,165,155)' }}> (+{valueChange}%)</span>;
     } else if (valueChange < 0) {
-        percentStyleSpan = <span style={{ color: 'blue' }}> ({valueChange}%)</span>;
+        percentStyleSpan = <span style={{ color: 'rgb(221,94,86)' }}> ({valueChange}%)</span>;
     } else {
         percentStyleSpan = <span style={{ color: 'black' }}> ({valueChange}%)</span>;
     }
@@ -24,7 +24,7 @@ function PortforlioStockItem({ id, imgPath, title, type, cnt, value, valueChange
     return (
         <S.PropertyLayoutItem
             onClick={() => {
-                handleButtonClick;
+                handleButtonClick();
                 effectAudioClick.play();
             }}
         >

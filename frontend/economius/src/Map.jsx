@@ -2,15 +2,15 @@ import { Suspense, useState, useEffect, useRef } from 'react';
 import { useLoader, useFrame } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { MapAnimationIndexState, NowPlayerPositionState, MoveDistState, IsModalOpenState, MonthlyModalOpenState } from '/src/recoil/animation/atom';
+import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 
 // ['0', '1', ... , '30', '31']
-
 const animationNames = Array.from({ length: 32 }, (_, index) => `${index}`);
 
 function Map() {
-    const mapPath = 'animation-map.gltf';
+    const mapPath = 'final-map.gltf';
     const map = useLoader(GLTFLoader, mapPath);
     const mapRef = useRef();
     const position = [1.3, -2, 4.3]; // 오른대각, 위아래, 왼대각
@@ -20,6 +20,8 @@ function Map() {
     const [moveDist, setMoveDist] = useRecoilState(MoveDistState); // 플레이어 이동 거리
     const [isModalOpen, setIsModalOpen] = useRecoilState(IsModalOpenState); // 자산 모달 여부
     const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState); // 월말정산 모달 여부
+    const playerToRoll = useRecoilValue(PlayerToRollState);
+    const playerId = useRecoilValue(PlayerIdState);
 
     let mixer;
     mixer = new THREE.AnimationMixer(map.scene); // 모델에 적용된 애니메이션을 제어하는 변수
@@ -33,9 +35,11 @@ function Map() {
             clip.clampWhenFinished = true; // 클립이 재생을 완료하면 mixer에서 제거
         }
         if (mapAniIdx === nowPlayerPosition) {
-            // 월말정산 모달 오픈
-            if (nowPlayerPosition < moveDist) {
-                setMonthlyModalOpen(true);
+            if (playerToRoll === playerId) {
+                // 월말정산 모달 오픈
+                if (nowPlayerPosition < moveDist) {
+                    setMonthlyModalOpen(true);
+                }
             }
             // 0.5초 후 자산 모달 오픈
             setTimeout(() => {
@@ -44,8 +48,34 @@ function Map() {
         }
     }, [mapAniIdx]);
 
+    // "ChanceAction"과 "ChanceAction.001" 애니메이션에 대한 Mixer와 ClipAction 초기화
+    const chanceActionMixer = new THREE.AnimationMixer(map.scene);
+    const chanceAction001Mixer = new THREE.AnimationMixer(map.scene);
+    const chanceAction003Mixer = new THREE.AnimationMixer(map.scene);
+    const chanceAnimation = map.animations.find(anim => anim.name === 'ChanceAction');
+    const chanceAnimation001 = map.animations.find(anim => anim.name === 'ChanceAction.001');
+    const chanceAnimation003 = map.animations.find(anim => anim.name === '28.001Action.003');
+    if (chanceAnimation) {
+        const chanceActionClip = chanceActionMixer.clipAction(chanceAnimation);
+        chanceActionClip.setLoop(THREE.LoopRepeat); // 무한 반복
+        chanceActionClip.play();
+    }
+    if (chanceAnimation001) {
+        const chanceActionClip001 = chanceAction001Mixer.clipAction(chanceAnimation001);
+        chanceActionClip001.setLoop(THREE.LoopRepeat); // 무한 반복
+        chanceActionClip001.play();
+    }
+    if (chanceAnimation003) {
+        const chanceActionClip003 = chanceAction003Mixer.clipAction(chanceAnimation003);
+        chanceActionClip003.setLoop(THREE.LoopRepeat); // 무한 반복
+        chanceActionClip003.play();
+    }
+
     useFrame((_, delta) => {
         mixer?.update(delta);
+        chanceActionMixer?.update(delta);
+        chanceAction001Mixer?.update(delta);
+        chanceAction003Mixer?.update(delta);
     });
 
     //   map.scene.traverse((child) => {

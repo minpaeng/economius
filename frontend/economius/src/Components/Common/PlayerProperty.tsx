@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { PlayerToRollState } from '/src/recoil/game/atom';
+import { PlayerIdState, PlayerToRollState } from '/src/recoil/game/atom';
 import { RoomJoinUsersIdState } from '/src/recoil/animation/atom';
 import { useRecoilValue } from 'recoil';
 
@@ -35,6 +35,8 @@ const PlayerTurn_4 = styled.div`
 function PlayerProperty({ AllProperty, money, Nick, userId }) {
     const PlayerIdArr = useRecoilValue(RoomJoinUsersIdState);
     const PlayerToRoll = useRecoilValue(PlayerToRollState);
+    console.log(PlayerIdState);
+    console.log(PlayerToRoll);
 
     let userNickstyle;
 

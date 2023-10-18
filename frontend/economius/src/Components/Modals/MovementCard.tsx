@@ -8,6 +8,7 @@ import woncardfront from '/MovementCard/woncardfront.png';
 import woncardback from '/MovementCard/woncardback.png';
 import * as S from './MovementCard.style';
 import { effectAudioPopup, effectAudioClick } from '/src/Audio';
+import OtherPerson from './OtherPerson';
 
 function Card({ idx, value, flip, top, left, selected, CardClick }) {
     const { opacity, transform } = useSpring({
@@ -66,7 +67,7 @@ function Card({ idx, value, flip, top, left, selected, CardClick }) {
 
 function MovementCard({}) {
     const [isMoving, setIsMoving] = useRecoilState(IsMovingState); // 캐릭터 이동 여부
-    const [moveDist, setMoveDist] = useRecoilState(MoveDistState); // 캐릭터 이동 거리
+    const [moveDist, setMoveDist] = useRecoilState(MoveDistState); // 캐릭터 이동 여부
     const [movementCard, setMovementCard] = useRecoilState(MovementCardState);
     const [movementCardOpen, setMovementCardOpen] = useRecoilState(MovementCardOpenState);
     const [movementCardConfirm, setMovementCardConfirm] = useRecoilState(MovementCardConfirmState);
@@ -100,14 +101,9 @@ function MovementCard({}) {
         flipAll();
     }, [movementCardOpen]);
 
-    // movePlay에서 받았을 때 선택된 카드 크기 키우고 값 초기화
+    // movePlay 에서 응답을 받았을 때 값 초기화
     useEffect(() => {
-        if (movementCard !== null) {
-            setSelected(movementCard.indexOf(moveDist));
-            setTimeout(() => {
-                closeModal();
-            }, 500);
-        }
+        closeModal();
     }, [isMoving]);
 
     // 내 차례일 때 선택 누르기
@@ -128,30 +124,21 @@ function MovementCard({}) {
         };
     }, []);
 
-    return (
+    return PlayerToRoll === PlayerId ? (
         <Modal isOpen={movementCardOpen} style={S.modalStyle}>
             {movementCard === null ? (
                 `로딩중입니다...`
             ) : (
                 <>
-                    {PlayerToRoll === Number(localStorage.getItem('player')) ? (
-                        <>
-                            <Card idx={0} value={movementCard[0]} top={'10%'} left={'8%'} flip={flip1} selected={selected} CardClick={() => setSelected(0)} />
-                            <Card idx={1} value={movementCard[1]} top={'10%'} left={'38%'} flip={flip2} selected={selected} CardClick={() => setSelected(1)} />
-                            <Card idx={2} value={movementCard[2]} top={'10%'} left={'68%'} flip={flip3} selected={selected} CardClick={() => setSelected(2)} />
-                            <S.Button onClick={() => (MoveButtonClick(selected), effectAudioClick.play())}>이동카드 선택</S.Button>
-                        </>
-                    ) : (
-                        <>
-                            <Card idx={0} value={movementCard[0]} top={'10%'} left={'8%'} flip={flip1} selected={selected} CardClick={null} />
-                            <Card idx={1} value={movementCard[1]} top={'10%'} left={'38%'} flip={flip2} selected={selected} CardClick={null} />
-                            <Card idx={2} value={movementCard[2]} top={'10%'} left={'68%'} flip={flip3} selected={selected} CardClick={null} />
-                            <S.DisButton>다른 사용자가 카드를 선택중입니다</S.DisButton>
-                        </>
-                    )}
+                    <Card idx={0} value={movementCard[0]} top={'10%'} left={'8%'} flip={flip1} selected={selected} CardClick={() => setSelected(0)} />
+                    <Card idx={1} value={movementCard[1]} top={'10%'} left={'38%'} flip={flip2} selected={selected} CardClick={() => setSelected(1)} />
+                    <Card idx={2} value={movementCard[2]} top={'10%'} left={'68%'} flip={flip3} selected={selected} CardClick={() => setSelected(2)} />
+                    <S.Button onClick={() => (MoveButtonClick(selected), effectAudioClick.play())}>이동카드 선택</S.Button>
                 </>
             )}
         </Modal>
+    ) : (
+        <OtherPerson />
     );
 }
 

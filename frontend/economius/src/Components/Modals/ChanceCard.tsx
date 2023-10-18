@@ -1,12 +1,15 @@
 import Modal from 'react-modal';
 import { useEffect } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { IsModalOpenState, CallBackState } from '/src/recoil/animation/atom';
 import { ChanceCardInfoState } from '/src/recoil/modalInfo/atom';
+import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 import * as S from './ChanceCard.style';
 import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 function ChanceCard() {
+    const playerId = useRecoilValue(PlayerIdState);
+    const playerToRoll = useRecoilValue(PlayerToRollState);
     // const dummy = {
     //     title: '교통사고',
     //     desc: '교통사고를 당했습니다.',
@@ -21,6 +24,7 @@ function ChanceCard() {
     const setCallBack = useSetRecoilState(CallBackState);
     console.log(chanceCardInfo);
     const closeModal = () => {
+        if (playerToRoll !== playerId) return;
         setChanceCardInfo(null);
         setIsModalOpen(false);
         setCallBack(true);
@@ -34,7 +38,7 @@ function ChanceCard() {
     }, []);
 
     return (
-        <Modal isOpen={isModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
+        <Modal isOpen={isModalOpen} style={S.modalStyle} onRequestClose={playerToRoll !== playerId ? null : closeModal}>
             {!(chanceCardInfo === null) ? (
                 <S.ChanceCard>
                     <S.ChanceCardTop>
@@ -63,13 +67,13 @@ function ChanceCard() {
                                     <div>현금 -{chanceCardInfo.eventValue.toLocaleString()}</div>
                                     <div>
                                         {chanceCardInfo.apply === 'HX'
-                                            ? '(의료 보험이 적용됩니다.)'
-                                            : chanceCardInfo.apply === 'HS'
-                                            ? '(의료 특약 보험이 적용됩니다.)'
-                                            : chanceCardInfo.apply === 'MX'
                                             ? '(상해 보험이 적용됩니다.)'
+                                            : chanceCardInfo.apply === 'HS'
+                                            ? '(상해 특약 보험이 적용됩니다.)'
+                                            : chanceCardInfo.apply === 'MX'
+                                            ? '(의료 보험이 적용됩니다.)'
                                             : chanceCardInfo.apply === 'MS'
-                                            ? '(상해 특약이 적용됩니다.)'
+                                            ? '(의료 특약 보험이 적용됩니다.)'
                                             : chanceCardInfo.apply}
                                     </div>
                                 </div>

@@ -1,8 +1,9 @@
 import Modal from 'react-modal';
 import { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import { MonthlyModalOpenState } from '/src/recoil/animation/atom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { MonthlyModalOpenState, NowPlayerPositionState, CallBackState } from '/src/recoil/animation/atom';
 import { MonthlyInfoState } from '/src/recoil/modalInfo/atom';
+import { PlayerToRollState, PlayerIdState } from '/src/recoil/game/atom';
 import monthlymalculate from '/MonthlyCalculate/monthlycalculate.png';
 import dollarcoin from '/MonthlyCalculate/dollarcoin.png';
 import plus from '/MonthlyCalculate/plus.png';
@@ -10,13 +11,21 @@ import minus from '/MonthlyCalculate/minus.png';
 import equal from '/MonthlyCalculate/equal.png';
 import * as S from './MonthlyCalculate.style';
 import { effectAudioPopup, effectAudioClick } from '/src/Audio';
+import OtherPerson from './OtherPerson';
 
 function MonthlyCalculate() {
     const [monthlyModalOpen, setMonthlyModalOpen] = useRecoilState(MonthlyModalOpenState);
     const [monthlyInfo, setMonthlyInfo] = useRecoilState(MonthlyInfoState);
+    const NowPlayerPosition = useRecoilValue(NowPlayerPositionState);
+    const PlayerToRoll = useRecoilValue(PlayerToRollState);
+    const PlayerId = useRecoilValue(PlayerIdState);
+    const setCallBack = useSetRecoilState(CallBackState);
     const closeModal = () => {
         setMonthlyModalOpen(false);
         setMonthlyInfo(null);
+        if (NowPlayerPosition === 0) {
+            setCallBack(true);
+        }
     };
 
     useEffect(() => {
@@ -26,7 +35,7 @@ function MonthlyCalculate() {
         };
     }, []);
 
-    return (
+    return PlayerToRoll === PlayerId ? (
         <Modal isOpen={monthlyModalOpen} style={S.modalStyle} onRequestClose={closeModal}>
             {monthlyInfo === null ? (
                 '로딩중입니다...'
@@ -43,14 +52,14 @@ function MonthlyCalculate() {
                             <S.MidItem>
                                 <S.MidDesc>월급</S.MidDesc>
                                 <S.MidAmount>
-                                    + {monthlyInfo.salary}
+                                    + {monthlyInfo.salary.toLocaleString()}
                                     <S.MidImg src={dollarcoin}></S.MidImg>
                                 </S.MidAmount>
                             </S.MidItem>
                             <S.MidItem>
                                 <S.MidDesc>적금 만기</S.MidDesc>
                                 <S.MidAmount>
-                                    + {monthlyInfo.savingFinishBenefit}
+                                    + {monthlyInfo.savingFinishBenefit.toLocaleString()}
                                     <S.MidImg src={dollarcoin}></S.MidImg>
                                 </S.MidAmount>
                             </S.MidItem>
@@ -60,21 +69,21 @@ function MonthlyCalculate() {
                             <S.MidItem>
                                 <S.MidDesc>적금</S.MidDesc>
                                 <S.MidAmount>
-                                    - {monthlyInfo.savingsPrice}
+                                    - {monthlyInfo.savingsPrice.toLocaleString()}
                                     <S.MidImg src={dollarcoin}></S.MidImg>
                                 </S.MidAmount>
                             </S.MidItem>
                             <S.MidItem>
                                 <S.MidDesc>보험비</S.MidDesc>
                                 <S.MidAmount>
-                                    - {monthlyInfo.insurancePrice}
+                                    - {monthlyInfo.insurancePrice.toLocaleString()}
                                     <S.MidImg src={dollarcoin}></S.MidImg>
                                 </S.MidAmount>
                             </S.MidItem>
                             <S.MidItem>
                                 <S.MidDesc>세금</S.MidDesc>
                                 <S.MidAmount>
-                                    - {monthlyInfo.tax}
+                                    - {monthlyInfo.tax.toLocaleString()}
                                     <S.MidImg src={dollarcoin}></S.MidImg>
                                 </S.MidAmount>
                             </S.MidItem>
@@ -85,7 +94,7 @@ function MonthlyCalculate() {
                                 <S.MidDesc>총 명세액</S.MidDesc>
                                 <S.MidAmount>
                                     {monthlyInfo.totalIncome >= 0 ? `+` : `-`}
-                                    {monthlyInfo.totalIncome}
+                                    {monthlyInfo.totalIncome.toLocaleString()}
                                     <S.MidImg src={dollarcoin}></S.MidImg>
                                 </S.MidAmount>
                             </S.MidItem>
@@ -98,10 +107,10 @@ function MonthlyCalculate() {
                                     fontWeight: 'bold',
                                 }}
                             >
-                                <S.MidDesc>내 예금</S.MidDesc>
+                                <S.MidDesc></S.MidDesc>
                                 <S.MidAmount>
-                                    {monthlyInfo.money}({monthlyInfo.totalIncome >= 0 ? `+` : `-`}
-                                    {monthlyInfo.totalIncome})<S.MidImg src={dollarcoin}></S.MidImg>
+                                    {monthlyInfo.money.toLocaleString()}({monthlyInfo.totalIncome >= 0 ? `+` : `-`}
+                                    {monthlyInfo.totalIncome.toLocaleString()})<S.MidImg src={dollarcoin}></S.MidImg>
                                 </S.MidAmount>
                             </S.MidItem>
                         </div>
@@ -116,6 +125,8 @@ function MonthlyCalculate() {
                 </S.Main>
             )}
         </Modal>
+    ) : (
+        <OtherPerson />
     );
 }
 

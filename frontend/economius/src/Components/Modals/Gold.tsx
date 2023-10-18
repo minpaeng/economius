@@ -3,13 +3,15 @@ import { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { CallBackState, IsModalOpenState } from '/src/recoil/animation/atom';
 import { GoldDetailState, TradeGoldState } from '/src/recoil/trading/atom';
-import { PlayerToRollState, PlayerIdState, PortfolioState } from '/src/recoil/game/atom';
+import { PlayerToRollState, PlayerIdState, PortfolioState, GoldState } from '/src/recoil/game/atom';
 import * as S from './Stock.style';
 import { ExitButton } from './GlobalModal.stye';
 import { effectAudioPopup, effectAudioClick } from '/src/Audio';
+import ChartSectionItem from '../Common/EconomicIndicator/IndicatorSection/ChartSectionItem';
 
 import BuyOrSell from '../Common/BuyOrSell';
 import GoldGraph from '../Common/GoldGraph';
+import OtherPerson from './OtherPerson';
 
 function makeGoldGraphData(goldPriceHistoryData) {
     const graphData = [];
@@ -48,6 +50,17 @@ function Gold() {
     const playerId = useRecoilValue(PlayerIdState);
     const playerToRoll = useRecoilValue(PlayerToRollState);
     const portfolios = useRecoilValue(PortfolioState);
+
+    const goldData = useRecoilValue(GoldState);
+
+    function dataChange(arr) {
+        const returnData = [];
+        for (let i = 0; i < arr.length; i++) {
+            returnData.push({ turn: i + 1, price: arr[i] });
+        }
+
+        return returnData;
+    }
 
     // modal style
     const modalStyle: any = {
@@ -97,13 +110,14 @@ function Gold() {
                             </S.StockTop>
                             <S.StockMid>
                                 <S.StockMidLeft>
-                                    <GoldGraph data={makeGoldGraphData(goldDetail.priceHistory)} />
+                                    {/* <GoldGraph data={makeGoldGraphData(goldDetail.priceHistory)} /> */}
+                                    <ChartSectionItem data={dataChange(goldData.priceHistory)} />
                                     <S.StockMidLeftPrice>
-                                        현재가 : {goldDetail.price}
+                                        현재가 : {goldDetail.price.toLocaleString()}
                                         {goldDetail.rate >= 0 ? (
-                                            <span style={{ color: '#DF7D46' }}> (+{goldDetail.rate}%)</span>
+                                            <span style={{ color: 'rgb(82,165,155)' }}> (+{goldDetail.rate}%)</span>
                                         ) : (
-                                            <span style={{ color: '#DF7D46' }}> ({goldDetail.rate}%)</span>
+                                            <span style={{ color: 'rgb(221,94,86)' }}> ({goldDetail.rate}%)</span>
                                         )}
                                     </S.StockMidLeftPrice>
                                 </S.StockMidLeft>
@@ -165,7 +179,7 @@ function Gold() {
                     )}
                 </Modal>
             ) : (
-                <div style={{ position: 'absolute', left: '40%', top: '50%', height: '50px', backgroundColor: 'brown' }}>금 거래소에서 다른 사람이 거래중</div>
+                <OtherPerson />
             )}
         </>
     );

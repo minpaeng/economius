@@ -25,19 +25,16 @@ function PlayerPlaceAll() {
 
     const PlayerRanking = useRecoilValue(PlayerRankingState);
 
-    console.log(PlayerRanking);
-
     function rankingCheck(PlayerRanking) {
         const returnRank = [];
         for (let i = 0; i < PlayerRanking?.length; i++) {
             returnRank.push(PlayerRanking?.indexOf(UserIdArr[i]) + 1);
         }
-        console.log(returnRank);
+
         return returnRank;
     }
 
     const Rank = rankingCheck(PlayerRanking);
-    console.log(Rank);
 
     return (
         <>

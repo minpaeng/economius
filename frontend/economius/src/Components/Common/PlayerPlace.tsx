@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { PortfolioState, ClickUserPortfolioState } from '../../recoil/game/atom';
 import { isPortfolioState, SideBarTypeState } from '../../recoil/animation/atom';
-import { effectAudioPopup, effectAudioClick } from '/src/Audio';
 
 const PlayerLayout = styled.div`
     display: flex;
@@ -70,7 +69,6 @@ function PlayerPlace({ borderRadius, top, left, bgColor, idx, character, borderW
                         setClickUserId(userId);
                         setSideBarType('portfolio');
                         setIsPortfolio(true);
-                        effectAudioClick.play();
                     }}
                 >
                     <PlayerRanking Ranking={Ranking} />
@@ -83,7 +81,6 @@ function PlayerPlace({ borderRadius, top, left, bgColor, idx, character, borderW
                         setClickUserId(userId);
                         setSideBarType('portfolio');
                         setIsPortfolio(true);
-                        effectAudioClick.play();
                     }}
                 >
                     <PlayerChracter character={character} />
