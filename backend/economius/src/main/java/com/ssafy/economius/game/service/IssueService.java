@@ -19,12 +19,12 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class OracleService {
+public class IssueService {
 
     private final GameRepository gameRepository;
     private final GameValidator gameValidator;
 
-    public IssueResponse oracle(int roomId) {
+    public IssueResponse issue(int roomId) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
 
         Issue nextIssue = game.getNextIssue();

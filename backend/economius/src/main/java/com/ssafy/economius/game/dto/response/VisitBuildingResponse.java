@@ -10,6 +10,7 @@ import lombok.Getter;
 @Builder
 public class VisitBuildingResponse {
 
+    private Long player;
     private int buildingId;
     private int buildingPrice;
     private int changeAmount;

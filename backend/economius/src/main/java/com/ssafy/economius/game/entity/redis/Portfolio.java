@@ -34,8 +34,8 @@ public class Portfolio {
     public void updateTotalMoney() {
         this.totalMoney =
             gold.getEarningPrice() +
-                savings.getTotalPrice() +
-                buildings.getEarningPrice() +
+                savings.getTotalPrice() + 
+                buildings.getTotalPrice() +
                 stocks.getEarningPrice() +
                 money;
     }

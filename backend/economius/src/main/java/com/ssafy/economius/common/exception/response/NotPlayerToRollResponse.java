@@ -1,15 +1,17 @@
 package com.ssafy.economius.common.exception.response;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
-@Data
+@Getter
 @AllArgsConstructor
-@NoArgsConstructor
+@Builder
 public class NotPlayerToRollResponse {
 
+    private int code;
+    private String message;
     private int roomId;
     private Long requestPlayer;
-    private Long playerToRoll;
+    private Long currentPlayerToRoll;
 }

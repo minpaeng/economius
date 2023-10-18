@@ -133,7 +133,6 @@ public class GameService {
 
     public CalculateResponse calculate(int roomId, Long player) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
-
         game.updatePrize();
         int prize = game.getPrizeByPlayer(player);
 
@@ -141,15 +140,14 @@ public class GameService {
         PortfolioSavings savings = portfolio.getSavings();
         PortfolioInsurances insurances = portfolio.getInsurances();
         savings.updateSavings();
-
         int finishSaving = savings.calculateFinishSaving();
         int savingPrice = savings.calculateSavingPrice();
         int insurancePrice = insurances.calculateInsurancePrice();
         int money = portfolio.getMoney();
         int income = (finishSaving - savingPrice - insurancePrice + SALARY.getValue());
+        log.info("===== 적금 만기 금액 : {} =====", finishSaving);
         int tax = (int) (income * (double) game.getTax().get(prize) / 100);
         portfolio.setMoney(money + income - tax);
-
         ReceiptDto receipt = ReceiptDto.builder()
             .tax(tax)
             .salary(SALARY.getValue())
@@ -161,7 +159,6 @@ public class GameService {
             .build();
 
         portfolio.updateTotalMoney();
-
         gameRepository.save(game);
 
         return CalculateResponse.builder()

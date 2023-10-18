@@ -2,6 +2,7 @@ package com.ssafy.economius.common.exception.validator;
 
 import com.ssafy.economius.common.exception.CustomWebsocketException;
 import com.ssafy.economius.common.exception.CustomWebsocketRoomException;
+import com.ssafy.economius.common.exception.NotPlayerToRollException;
 import com.ssafy.economius.common.exception.message.GameRoomMessage;
 import com.ssafy.economius.game.entity.redis.Game;
 import lombok.extern.slf4j.Slf4j;
@@ -79,6 +80,34 @@ public class GameValidator {
     public void canStartGame(List<Long> players, Long hostPlayer, int roomId) {
         notHostRequest(roomId, hostPlayer, players);
         underStartLimit(players.size(), roomId);
+    }
+
+    public void checkRequestPlayerToFinish(int roomId, Long player, Long playerToFinish) {
+        if (!playerToFinish.equals(player)) {
+            log.error(roomId + " finishTurn 부적절한 플레이어 호출 : " + player + " != " + playerToFinish);
+
+            throw NotPlayerToRollException.builder()
+                    .roomId(roomId)
+                    .requestPlayer(player)
+                    .playerToRoll(playerToFinish)
+                    .code(GameRoomMessage.INVALID_CURRENT_PLAYER_TO_ROLL.getCode())
+                    .message(GameRoomMessage.INVALID_CURRENT_PLAYER_TO_ROLL.getMessage())
+                    .build();
+        }
+    }
+
+    public void checkMovePlayerStatus(Long player, int roomId, Long playerToMove) {
+        if (!player.equals(playerToMove)) {
+            log.error(roomId + "번 방 movePlayer 부적절한 호출. 현재 플레이어: " + playerToMove + ", 요청자: " + player);
+
+            throw NotPlayerToRollException.builder()
+                    .roomId(roomId)
+                    .requestPlayer(player)
+                    .playerToRoll(playerToMove)
+                    .code(GameRoomMessage.INVALID_MOVE_PLAYER.getCode())
+                    .message(GameRoomMessage.INVALID_MOVE_PLAYER.getMessage())
+                    .build();
+        }
     }
 
     private void checkRoomLimit(Game game, int roomId, Long player) {

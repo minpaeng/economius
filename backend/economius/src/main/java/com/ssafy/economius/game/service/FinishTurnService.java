@@ -10,7 +10,6 @@ import static com.ssafy.economius.game.enums.RateEnum.ISSUE_COUNT;
 import static com.ssafy.economius.game.enums.RateEnum.STOCK_RATE_LOWER_BOUND;
 import static com.ssafy.economius.game.enums.RateEnum.STOCK_RATE_UPPER_BOUND;
 
-import com.ssafy.economius.common.exception.NotPlayerToRollException;
 import com.ssafy.economius.common.exception.validator.GameValidator;
 import com.ssafy.economius.game.controller.IssueController;
 import com.ssafy.economius.game.dto.response.FinishTurnResponse;
@@ -40,10 +39,10 @@ public class FinishTurnService {
     private final ModelMapper modelMapper;
     private final IssueController issueController;
 
-    public FinishTurnResponse finish(int roomId, Long player) {
+    public synchronized FinishTurnResponse finish(int roomId, Long player) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
-
-        checkRequestPlayerToFinish(roomId, player, game.getCapablePlayerToFinish());
+        gameValidator.checkRequestPlayerToFinish(roomId, player, game.getCapablePlayerToFinish());
+        game.updatePlayerToRoll();
 
         int gameTurn = game.updateGameTurn();
 //        if(gameTurn == -1) {
@@ -54,12 +53,21 @@ public class FinishTurnService {
         log.info("===" + gameTurn + "턴 종료, " + round + "라운드 시작 준비중===");
 
         // todo 각종 이벤트 로직 구현
+        // 주식가격 재 산정
+        stockRearrange(game, round);
+
+        // 새로운 라운드일경우
+        setNewRoundEffect(game, roomId, gameTurn, round);
+
         // 플레이어 순위 재산정
         game.sortPlayersByTotalMoney();
 
-        // 주식가격 재 산정
-        stockRearrange(game, round);
-        // 새로운 라운드일경우
+        game.getPortfolios().values().forEach(Portfolio::updateTotalMoney);
+        gameRepository.save(game);
+        return modelMapper.map(game, FinishTurnResponse.class);
+    }
+
+    private void setNewRoundEffect(Game game, int roomId, int gameTurn, int round) {
         if (gameTurn % 4 == 0) {
             log.info("새로운 라운드 시작: " + round);
             goldRearrange(game);
@@ -67,24 +75,8 @@ public class FinishTurnService {
             interestRateRearrange(game);
 
             changePrevIssue(game, round);
-            checkIssueRound(game, round, roomId);
             applyIssueEffect(game, round);
-        }
-
-        game.getPortfolios().values().forEach(Portfolio::updateTotalMoney);
-        gameRepository.save(game);
-        return modelMapper.map(game, FinishTurnResponse.class);
-    }
-
-    private void checkRequestPlayerToFinish(int roomId, Long player, Long playerToFinish) {
-        if (!playerToFinish.equals(player)) {
-            log.info(roomId + " finishTurn 부적절한 플레이어 호출 : " + player + " != " + playerToFinish);
-
-            throw NotPlayerToRollException.builder()
-                .playerToRoll(playerToFinish)
-                .roomId(roomId)
-                .requestPlayer(player)
-                .build();
+            checkIssueRound(game, round, roomId);
         }
     }
 

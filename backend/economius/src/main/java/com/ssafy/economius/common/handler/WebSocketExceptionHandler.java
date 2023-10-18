@@ -8,7 +8,6 @@ import com.ssafy.economius.common.exception.response.AlreadyJoinResponse;
 import com.ssafy.economius.common.exception.response.NotPlayerToRollResponse;
 import com.ssafy.economius.common.exception.response.WebsocketErrorResponse;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,15 +19,19 @@ import java.util.Map;
 public class WebSocketExceptionHandler {
 
     private final SimpMessagingTemplate template;
-    private final ModelMapper modelMapper;
 
     @MessageExceptionHandler(NotPlayerToRollException.class)
     public void handleNotPlayerToRollException(NotPlayerToRollException e) {
         template.convertAndSend(
-            "/sub/" + e.getRoomId(),
-            modelMapper.map(e, NotPlayerToRollResponse.class),
-            Map.of("success", false)
-        );
+                "/sub/" + e.getRoomId(),
+            NotPlayerToRollResponse.builder()
+                    .code(e.getCode())
+                    .message(e.getMessage())
+                    .roomId(e.getRoomId())
+                    .requestPlayer(e.getRequestPlayer())
+                    .currentPlayerToRoll(e.getPlayerToRoll())
+                    .build(),
+            Map.of("success", false));
     }
 
     @MessageExceptionHandler(CustomWebsocketException.class)

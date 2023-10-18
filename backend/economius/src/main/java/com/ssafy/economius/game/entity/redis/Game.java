@@ -161,8 +161,8 @@ public class Game {
     public void updatePrize() {
         List<Entry<Long, Portfolio>> entries = new LinkedList<>(portfolios.entrySet());
         entries.sort((o1, o2) -> Integer.compare(
-            o2.getValue().getTotalMoney(),
-            o1.getValue().getTotalMoney()));
+                o2.getValue().getTotalMoney(),
+                o1.getValue().getTotalMoney()));
 
         int prize = 0;
         for (Entry<Long, Portfolio> entry : entries) {

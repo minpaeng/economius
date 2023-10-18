@@ -31,8 +31,9 @@ public class StockService {
     public SelectStockResponse stockDetail(int roomId, int stockId) {
         Game game = gameValidator.checkValidGameRoom(gameRepository.findById(roomId), roomId);
         Stock stock = game.getStocks().get(stockId);
+        Long player = game.getCurrentPlayerToRoll();
 
-        return getSelectStockResponse(stock);
+        return getSelectStockResponse(player, stock);
     }
 
     public BuyItemResponse buyItem(int roomId, int stockId, Long buyPlayer) {
@@ -131,12 +132,13 @@ public class StockService {
             .build();
     }
 
-    private SelectStockResponse getSelectStockResponse(Stock stock) {
+    private SelectStockResponse getSelectStockResponse(Long player, Stock stock) {
         List<PriceDto> priceHistory = stock.getPriceHistory().stream()
             .map(this::priceMappingToDto)
             .collect(Collectors.toList());
 
         return SelectStockResponse.builder()
+            .player(player)
             .stockId(stock.getStockId())
             .stockIndustryId(stock.getStockIndustryId())
             .name(stock.getName())

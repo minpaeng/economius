@@ -36,8 +36,10 @@ public class EventService {
         // 이벤트 랜덤 선정
         Random random = new Random();
 
-        // 이벤트 카테고리 선정 (money stock)
+        // 이벤트 카테고리 선정 (money or stock) - 실제 로직
         int randomCategory = random.nextInt(2);
+        // 이벤트 카테고리 선정 (money or stock) - 시연용 로직
+        //int randomCategory = random.nextInt(1);
 
         // 세부 이벤트 선정 및 적용
         EventDto eventDto = EventDto.builder().build();

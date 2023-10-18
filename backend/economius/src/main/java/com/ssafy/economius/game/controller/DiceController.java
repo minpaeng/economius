@@ -5,6 +5,7 @@ import com.ssafy.economius.game.dto.request.MovePlayerRequest;
 import com.ssafy.economius.game.dto.request.ViewMovementCardRequest;
 import com.ssafy.economius.game.dto.response.MovePlayerResponse;
 import com.ssafy.economius.game.dto.response.ViewMovementCardResponse;
+import com.ssafy.economius.game.repository.redis.GameRepository;
 import com.ssafy.economius.game.service.DiceService;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class DiceController {
 
     private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
     private final DiceService diceService;
+    private final GameRepository gameRepository;
 
     @MessageMapping(value = "/{roomId}/diceSequence")
     public void getDiceSequence(@DestinationVariable int roomId) {
@@ -39,7 +41,7 @@ public class DiceController {
         log.info(roomId + ": viewMovementCard 호출 -> " + viewMovementCardRequest.toString());
 
         ViewMovementCardResponse viewMovementCardResponse = diceService.makeMovementCard(
-            viewMovementCardRequest.getPlayer());
+            roomId, viewMovementCardRequest.getPlayer());
 
         log.info(roomId + ": viewMovementCard 결과 -> " + viewMovementCardResponse.toString());
         Map<String, Object> headers = Map.of("success", true, "type", "viewMovementCard");
@@ -53,7 +55,8 @@ public class DiceController {
         MovePlayerResponse movePlayerResponse = diceService.movePlayer(roomId,
             movePlayerRequest.getPlayer(), movePlayerRequest.getMovementCount());
 
-        log.info(roomId + ": movePlayer 결과 -> " + movePlayerResponse.toString());
+        log.info(roomId + ": movePlayer 결과 -> " + movePlayerResponse.toString() +
+                ", 다음 차례: " + gameRepository.findById(roomId).get().getCurrentPlayerToRoll());
         Map<String, Object> headers = Map.of("success", true, "type", "movePlayer");
         template.convertAndSend("/sub/" + roomId, movePlayerResponse, headers);
     }
