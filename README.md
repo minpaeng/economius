@@ -1,6 +1,6 @@
 <div align="center">
   <br />
-  <img src="https://github.com/minpaeng/economius/assets/68097132/1ee42af9-8238-4edd-ad93-ec6e87e8bd24" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/5e9d150d-d990-45b2-a1e4-e0d2fa1e9651" width="80%"/>
   <br />
 </div>
 
@@ -62,7 +62,7 @@
 ### 시스템 구성도
 <div align="center">
   <br />
-  <img src="https://github.com/minpaeng/economius/assets/68097132/fccbdbb4-9e64-48b1-871a-663dd1cc6ba6" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/7d6aa7cf-7d4d-4e82-ac37-18dc0bf1365d" width="80%"/>
   <br />
 </div>
 
@@ -73,7 +73,7 @@
 
 <div align="center">
   <br />
-  <img src="https://github.com/minpaeng/economius/assets/68097132/8d5d1077-97d5-4847-abf2-bf02f3b5a711" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/c9119207-ba45-4c06-b238-7f5e8f3581e8" width="80%"/>
   <br />
 </div>
 
@@ -227,11 +227,11 @@
 
 <div align="center">
   <br />
-  <img src="https://github.com/minpaeng/economius/assets/68097132/1957f4ec-23cb-4642-ae5d-5f68198e075c" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/d5e55105-e374-4201-900b-dd32031effcf" width="80%"/>
   <br />
 
   <br />
-  <img src="https://github.com/minpaeng/economius/assets/68097132/edf1f238-3ee1-4169-afb6-185cb56a7009" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/ed375665-7d9b-4cd7-90f8-aed1b12a1e32" width="80%"/>
   <br />
 </div>
 
@@ -244,7 +244,7 @@
 ### 2. 게임 방 생성 및 입장
 <div align="center">
   <br />
-  <img src="https://github.com/qkdk/economius/assets/86948395/04f5f735-db1b-4b73-9350-9756dd93df92" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/c25bccde-89a2-42a6-a038-339efb5b5198" width="80%"/>
   <br />
 </div>
 
@@ -258,7 +258,7 @@
 ### 3. 게임 화면
 <div align="center">
   <br />
-  <img src="https://github.com/minpaeng/economius/assets/68097132/96a233fe-1e8e-4dd7-8748-7990b239b905" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/21d821a5-a0d3-4584-b359-8203c960ce87" width="80%"/>
   <br />
 </div>
 
@@ -273,7 +273,7 @@
 
 <div align="center">
   <br />
-  <img src="https://github.com/minpaeng/economius/assets/68097132/493aee3d-83cc-4fda-8dee-4994a11c50bf" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/b27cb269-c61e-471e-92fa-9736fe019d6b" width="80%"/>
   <br />
 </div>
 
@@ -287,13 +287,13 @@
 
 <div align="center">
   <br />
-  <img src="https://github.com/minpaeng/economius/assets/68097132/faaf1e37-040c-4b47-8270-1695e16eb9f9" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/80288aac-0932-4d71-9597-b319d63277ef" width="80%"/>
   <br />
 </div>
 
 <div align="center">
   <br />
-  <img src="https://github.com/minpaeng/economius/assets/68097132/d3817c76-94e0-4de6-ad6d-d8e0d27510fa" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/1a365614-dd72-41fc-8b7e-6bc25aa78fd6" width="80%"/>
   <br />
 </div>
 
@@ -307,7 +307,7 @@
 
 <div align="center">
   <br />
-  <img src="https://github.com/minpaeng/economius/assets/68097132/4a52ae45-9ae4-4e94-9aee-c5c81a1ba70b" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/0fd19d12-3722-46ba-90fe-bc41f2026bb6" width="80%"/>
   <br />
 </div>
 
@@ -321,11 +321,11 @@
 
 <div align="center">
   <br />
-  <img src="https://github.com/minpaeng/economius/assets/68097132/d935941e-8998-44b7-9147-8b23daa2f0b8" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/3b1d6e67-e5a8-401f-867d-c064f9056222" width="80%"/>
   <br />
   
   <br />
-  <img src="https://github.com/minpaeng/economius/assets/68097132/19153582-2310-4472-bf5b-e770e95018ea" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/8d644c26-136f-49a8-941a-e973538f5abe" width="80%"/>
   <br/>
 </div>
 
@@ -338,7 +338,7 @@
 
 <div align="center">
   <br />
-  <img src="https://github.com/minpaeng/economius/assets/68097132/d923b658-5b78-4d82-b997-32535479c935" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/73af4b79-de11-4587-b5f8-efe4f58527d2" width="80%"/>
   <br />
 </div>
 
@@ -350,7 +350,7 @@
 
 <div align="center">
   <br />
-  <img src="https://github.com/minpaeng/economius/assets/68097132/bf2233ed-2847-4116-8b43-f4f363919199" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/3b23d7c6-f79f-4c02-b087-20f387965f80" width="80%"/>
   <br />
 </div>
 
