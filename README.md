@@ -1,6 +1,6 @@
 <div align="center">
   <br />
-  <img src="/uploads/6355c0b253718d167c214b81044a5bac/readme.gif" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/1ee42af9-8238-4edd-ad93-ec6e87e8bd24" width="80%"/>
   <br />
 </div>
 
@@ -8,7 +8,7 @@
  <h3><b>Economius</b></h3>
 
  <strong>게임 속에서 만들어나가는 나만의 경제 포트폴리오</strong><br>
- 삼성 청년 SW 아카데미 <strong>최우수 프로젝트</strong> 🏆<br>
+ 삼성 청년 SW 아카데미 <strong>최우수상 수상</strong> 🏆<br>
 
   2023.08.21 ~ 2023.10.06
   <br>
@@ -62,7 +62,7 @@
 ### 시스템 구성도
 <div align="center">
   <br />
-  <img src="/uploads/315928e776173f0b0d77aa49483676f0/시스템구성도.PNG" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/fccbdbb4-9e64-48b1-871a-663dd1cc6ba6" width="80%"/>
   <br />
 </div>
 
@@ -73,12 +73,135 @@
 
 <div align="center">
   <br />
-  <img src="/uploads/4a5ef6e34721ba419776d5b6592d05a5/ERD2.png" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/8d5d1077-97d5-4847-abf2-bf02f3b5a711" width="80%"/>
   <br />
 </div>
 
 
 <br>
+
+### Redis
+```javascript
+{
+  "roomId": 0,
+  "bankruptcyPlayers": [
+    0
+  ],
+  "players": [
+    0
+  ],
+  "characters": {},
+  "nicknames": {},
+  "playerSequence": [
+    0
+  ],
+  "currentPlayerToRoll": 0,
+  "gameTurn": 0,
+  "maxGameTurn": 0,
+  "portfolios": {},
+  "tax": {},
+  "locations": {},
+  "gold": {
+    "price": 0,
+    "rate": 0,
+    "priceHistory": [
+      0
+    ],
+    "rateHistory": [
+      0
+    ]
+  },
+  "buildings": {},
+  "insurances": {},
+  "stocks": {},
+  "savings": {},
+  "interestRate": {
+    "rate": 0.00,
+    "rateHistory": [
+      0.00
+    ]
+  },
+  "issueIdx": 0,
+  "issues": [
+    {
+      "issueId": 0,
+      "name": "",
+      "type": "DEPRESSION",
+      "country": "",
+      "year": "",
+      "description": "",
+      "url": "",
+      "currentAssetChanges": [
+        {
+          "issueStockId": 0,
+          "issueId": 0,
+          "issueName": "",
+          "type": "DEPRESSION",
+          "assetType": "",
+          "assetId": 0,
+          "stockType": "",
+          "changeRate": "LOWER",
+          "changeReason": ""
+        }
+      ]
+    }
+  ],
+  "currentIssue": {
+    "issueId": 0,
+    "name": "",
+    "type": "DEPRESSION",
+    "country": "",
+    "year": "",
+    "description": "",
+    "url": "",
+    "currentAssetChanges": [
+      {
+        "issueStockId": 0,
+        "issueId": 0,
+        "issueName": "",
+        "type": "DEPRESSION",
+        "assetType": "",
+        "assetId": 0,
+        "stockType": "",
+        "changeRate": "LOWER",
+        "changeReason": ""
+      }
+    ]
+  },
+  "currentPrevIssues": [
+    {
+      "prevIssueId": 0,
+      "issueId": 0,
+      "foretoken": ""
+    }
+  ],
+  "event": {
+    "eventMoney": [
+      {
+        "eventMoneyId": 0,
+        "insuranceTypeId": 0,
+        "typeCode": "",
+        "typeName": "",
+        "name": "",
+        "description": "",
+        "money": 0,
+        "url": ""
+      }
+    ],
+    "eventStock": [
+      {
+        "eventStockId": 0,
+        "stockIndustryId": 0,
+        "industry": "",
+        "name": "",
+        "description": "",
+        "rate": 0,
+        "url": ""
+      }
+    ]
+  }
+}
+```
 
 
 # 🔨 개발 환경 및 기술 스택
@@ -104,7 +227,11 @@
 
 <div align="center">
   <br />
-  <img src="/uploads/22965c9a6858e6b3a41432ee24f03470/login.gif" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/1957f4ec-23cb-4642-ae5d-5f68198e075c" width="80%"/>
+  <br />
+
+  <br />
+  <img src="https://github.com/minpaeng/economius/assets/68097132/edf1f238-3ee1-4169-afb6-185cb56a7009" width="80%"/>
   <br />
 </div>
 
@@ -117,7 +244,7 @@
 ### 2. 게임 방 생성 및 입장
 <div align="center">
   <br />
-  <img src="/uploads/f2e9c274dca23e7e723a75d4849ff1b9/loading3.gif" width="80%"/>
+  <img src="https://github.com/qkdk/economius/assets/86948395/04f5f735-db1b-4b73-9350-9756dd93df92" width="80%"/>
   <br />
 </div>
 
@@ -131,7 +258,7 @@
 ### 3. 게임 화면
 <div align="center">
   <br />
-  <img src="/uploads/00647ad4440cea8fa65969cb0de88466/image__2_.png" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/96a233fe-1e8e-4dd7-8748-7990b239b905" width="80%"/>
   <br />
 </div>
 
@@ -146,7 +273,7 @@
 
 <div align="center">
   <br />
-  <img src="/uploads/03b65b41877407ec15d9f21b6e19f166/경제이슈모달.PNG" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/493aee3d-83cc-4fda-8dee-4994a11c50bf" width="80%"/>
   <br />
 </div>
 
@@ -160,13 +287,13 @@
 
 <div align="center">
   <br />
-  <img src="/uploads/558a6c2f177d6aa0dba7153fc6f28878/포트폴리오.gif" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/faaf1e37-040c-4b47-8270-1695e16eb9f9" width="80%"/>
   <br />
 </div>
 
 <div align="center">
   <br />
-  <img src="/uploads/28bb837e78e763a33c60e7dc8f510c75/경제지표.gif" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/d3817c76-94e0-4de6-ad6d-d8e0d27510fa" width="80%"/>
   <br />
 </div>
 
@@ -180,7 +307,7 @@
 
 <div align="center">
   <br />
-  <img src="/uploads/b9bf8546729e8f0f44426f6b16272d1b/보험및적금.gif" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/4a52ae45-9ae4-4e94-9aee-c5c81a1ba70b" width="80%"/>
   <br />
 </div>
 
@@ -194,8 +321,12 @@
 
 <div align="center">
   <br />
-  <img src="/uploads/b9ae14a7f7e2b3f7c6de111d020027b3/주식.gif" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/d935941e-8998-44b7-9147-8b23daa2f0b8" width="80%"/>
   <br />
+  
+  <br />
+  <img src="https://github.com/minpaeng/economius/assets/68097132/19153582-2310-4472-bf5b-e770e95018ea" width="80%"/>
+  <br/>
 </div>
 
 * 도착한 기업 주식의 등락율을 확인할 수 있고, 이를 바탕으로 수익률을 높이는 방향으로 주식을 매수 또는 매도합니다.
@@ -207,7 +338,7 @@
 
 <div align="center">
   <br />
-  <img src="/uploads/3ab298aa460736b941c6066b906e03fe/금.gif" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/d923b658-5b78-4d82-b997-32535479c935" width="80%"/>
   <br />
 </div>
 
@@ -219,7 +350,7 @@
 
 <div align="center">
   <br />
-  <img src="/uploads/410ea80270417e7373c99f8be73cd21e/부동산.gif" width="80%"/>
+  <img src="https://github.com/minpaeng/economius/assets/68097132/bf2233ed-2847-4116-8b43-f4f363919199" width="80%"/>
   <br />
 </div>
 
